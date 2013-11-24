@@ -1,1 +1,1 @@
-ActiveRecord::Base.establish_connection(YAML.load_file(File.join(APP_ROOT, "config/database.yml"))[APP_ENV])
+ActiveRecord::Base.establish_connection(YAML.load_file(File.join(SVC_ROOT, "config/database.yml"))[SVC_ENV])

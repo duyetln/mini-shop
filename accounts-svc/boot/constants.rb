@@ -1,3 +1,6 @@
 ENV["RACK_ENV"] ||= "development"
-APP_ENV  = ENV["RACK_ENV"]
-APP_ROOT = File.expand_path File.join(File.dirname(__FILE__), "..")
+SVC_ENV  = ENV["RACK_ENV"]
+SVC_ROOT = File.expand_path File.join(File.dirname(__FILE__), "..")
+
+SVC_ENV.freeze
+SVC_ROOT.freeze

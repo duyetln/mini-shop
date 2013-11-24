@@ -1,2 +1,2 @@
-Sinatra::Base.set :env,  APP_ENV
-Sinatra::Base.set :root, APP_ROOT
+Sinatra::Base.set :env,  SVC_ENV
+Sinatra::Base.set :root, SVC_ROOT

@@ -1,1 +1,1 @@
-Bundler.require :default, APP_ENV.to_sym
+Bundler.require :default, SVC_ENV.to_sym
