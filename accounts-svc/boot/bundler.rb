@@ -1,1 +1,0 @@
-Bundler.require :default, SVC_ENV.to_sym
