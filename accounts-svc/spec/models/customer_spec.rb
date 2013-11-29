@@ -46,16 +46,12 @@ describe Customer do
   context "#confirm!" do
 
     context("confirmed user") { it("should return false") { expect(FactoryGirl.build(:customer, :confirmed).confirm!).to be_false } }
-
+    
     context "unconfirmed user" do
 
-      before(:each) { @customer = FactoryGirl.build(:customer, :unconfirmed) }
-
-      it("should return true") { expect(@customer.confirm!).to be_true }
-      it "should clear confirmation code" do
-        @customer.confirm!
-        expect(@customer.confirmation_code).to be_blank
-      end
+      before(:each) { @customer = FactoryGirl.create(:customer, :unconfirmed) }
+      it("should return true")             { expect(@customer.confirm!).to be_true }
+      it("should clear confirmation code") { @customer.confirm!; expect(@customer.confirmation_code).to be_blank }
     end
   end
 end
