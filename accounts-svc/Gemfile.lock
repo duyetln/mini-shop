@@ -16,6 +16,7 @@ GEM
     bcrypt-ruby (3.1.2)
     builder (3.0.4)
     daemons (1.1.9)
+    database_cleaner (1.2.0)
     diff-lcs (1.2.5)
     eventmachine (1.0.3)
     factory_girl (4.3.0)
@@ -53,6 +54,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord (= 3.2.15)
   bcrypt-ruby (= 3.1.2)
+  database_cleaner
   factory_girl
   mysql2
   rake

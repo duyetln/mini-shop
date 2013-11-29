@@ -14,6 +14,10 @@ RSpec.configure do |config|
   config.include SpecHelpers
   config.color_enabled = true
   config.tty = true
+
+  config.before(:suite) { DatabaseCleaner.strategy = :truncation }
+  config.before(:each)  { DatabaseCleaner.start }
+  config.after(:each)   { DatabaseCleaner.clean }
 end
 
 FactoryGirl.find_definitions
