@@ -15,6 +15,16 @@ class Customer < ActiveRecord::Base
     customer.present? && customer.confirmed? && BCrypt::Password.new(customer.password) == password ? customer : nil
   end
 
+  def confirmed?
+    self.confirmation_code.blank?
+  end
+
+  def confirm!
+    !confirmed? && self.update_attributes(confirmation_code: nil)
+  end
+
+  protected
+
   def set_uuid
     self.uuid = SecureRandom.hex(10)
   end
@@ -25,14 +35,6 @@ class Customer < ActiveRecord::Base
 
   def encrypt_password
     self.password = BCrypt::Password.create(self.password) if self.password_changed?
-  end
-
-  def confirmed?
-    self.confirmation_code.blank?
-  end
-
-  def confirm!
-    !confirmed? && self.update_attributes(confirmation_code: nil)
   end
 
 end
