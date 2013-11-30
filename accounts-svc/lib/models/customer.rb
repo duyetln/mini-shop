@@ -1,5 +1,7 @@
 class Customer < ActiveRecord::Base
 
+  attr_accessible :first_name, :last_name, :email, :birthdate, :password
+
   validates :first_name,  presence: true, format: { with: /\A[a-zA-Z]+\z/ }
   validates :last_name,   presence: true, format: { with: /\A[a-zA-Z]+\z/ }
   validates :email,       presence: true, format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }, uniqueness: true
@@ -20,7 +22,10 @@ class Customer < ActiveRecord::Base
   end
 
   def confirm!
-    self.persisted? && self.confirmation_code.present? && self.update_attributes(confirmation_code: nil)
+    if self.persisted? && self.confirmation_code.present?
+      self.confirmation_code = nil
+      self.save
+    end
   end
 
   protected
