@@ -16,11 +16,11 @@ class Customer < ActiveRecord::Base
   end
 
   def confirmed?
-    self.confirmation_code.blank?
+    self.persisted? && self.confirmation_code.blank?
   end
 
   def confirm!
-    !confirmed? && self.update_attributes(confirmation_code: nil)
+    self.persisted? && self.confirmation_code.present? && self.update_attributes(confirmation_code: nil)
   end
 
   protected
