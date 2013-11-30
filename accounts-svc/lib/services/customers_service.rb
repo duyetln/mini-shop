@@ -12,6 +12,11 @@ class CustomersService < Sinatra::Base
     customer.save ? customer.to_json(customer_response_options) : error(500)
   end
 
+  post "/customers/authenticate" do
+    customer = Customer.authenticate(params[:uuid], params[:password])
+    customer.present? ? customer.to_json(customer_response_options) : error(404)
+  end
+
   put "/customers/:uuid" do
     customer = load_customer
     customer.present? ? ( customer.update_attributes(accessible_params) ? customer.to_json(customer_response_options) : error(500) ) : error(404)
