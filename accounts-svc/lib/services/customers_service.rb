@@ -24,7 +24,7 @@ class CustomersService < Sinatra::Base
 
   put "/customers/:uuid/confirm/:confirmation_code" do
     customer = load_customer
-    customer.present? && customer.confirmation_code == params[:confirmation_code] ? ( customer.confirm! ? customer.to_json(customer_response_options) : error(500) ) : error(404)
+    customer.present? && !customer.confirmed? && customer.confirmation_code == params[:confirmation_code] ? ( customer.confirm! ? customer.to_json(customer_response_options) : error(500) ) : error(404)
   end
 
   protected 
