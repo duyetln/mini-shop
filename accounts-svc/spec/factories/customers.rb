@@ -7,16 +7,11 @@ FactoryGirl.define do
     birthdate  Date.today
     password   "password"
 
-    trait :saved do
-      uuid     SecureRandom.hex(5)
-      password BCrypt::Password.create("password")
-    end
-
-    trait :confirmed do
+    trait :confirmation_code_blank do
       confirmation_code nil
     end
 
-    trait :unconfirmed do
+    trait :confirmation_code_present do
       confirmation_code SecureRandom.hex(5)
     end
   end

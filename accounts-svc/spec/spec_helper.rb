@@ -15,7 +15,11 @@ RSpec.configure do |config|
   config.color_enabled = true
   config.tty = true
 
-  config.before(:suite) { DatabaseCleaner.strategy = :truncation }
+  config.before :suite do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with :truncation
+  end
+  
   config.before(:each)  { DatabaseCleaner.start }
   config.after(:each)   { DatabaseCleaner.clean }
 end

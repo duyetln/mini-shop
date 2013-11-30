@@ -38,20 +38,29 @@ describe Customer do
 
   context "#confirmed?" do
 
-    before(:each) { @customer = FactoryGirl.build :customer }
-    context("confirmation code blank")   { it("should return true")  { @customer.confirmation_code = nil;           expect(@customer.confirmed?).to be_true  } }
-    context("confirmation code present") { it("should return false") { @customer.confirmation_code = random_string; expect(@customer.confirmed?).to be_false } }
+    context("new user") { it("should return false") { expect(FactoryGirl.build(:customer).confirmed?).to be_false } }
+    context "persisted user" do
+
+      before(:each) { @customer = FactoryGirl.create :customer }
+      context("confirmation code blank")   { it("should return true")  { @customer.confirmation_code = nil; @customer.save; expect(@customer.confirmed?).to be_true  } }
+      context("confirmation code present") { it("should return false") {                                                    expect(@customer.confirmed?).to be_false } }
+    end
   end
 
   context "#confirm!" do
 
-    context("confirmed user") { it("should return false") { expect(FactoryGirl.build(:customer, :confirmed).confirm!).to be_false } }
-    
-    context "unconfirmed user" do
+    context("new user") { it("should return false") { expect(FactoryGirl.build(:customer).confirm!).to be_false } }
+    context "persisted user" do
 
-      before(:each) { @customer = FactoryGirl.create(:customer, :unconfirmed) }
-      it("should return true")             { expect(@customer.confirm!).to be_true }
-      it("should clear confirmation code") { @customer.confirm!; expect(@customer.confirmation_code).to be_blank }
+      before(:each) { @customer = FactoryGirl.create :customer }
+      context("confirmation code blank")   { it("should return false") { @customer.confirmation_code = nil; @customer.save; expect(@customer.confirm!).to be_false } }
+      context "confirmation code present" do 
+
+        it("should return true")  do 
+          expect(@customer.confirm!).to be_true
+          expect(@customer.confirmation_code).to be_blank
+        end
+      end
     end
   end
 end
