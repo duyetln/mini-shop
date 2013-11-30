@@ -63,4 +63,24 @@ describe Customer do
       end
     end
   end
+
+  context ".authenticate" do
+
+    before(:each) do
+      @customer = FactoryGirl.build :customer
+      @password = @customer.password
+      @customer.save
+    end
+
+    context("non-matching uuid")     { it("should return nil") { expect(Customer.authenticate(@customer.uuid + random_string, random_string)).to be_nil } }
+    context("unconfirmed user")      { it("should return nil") { expect(Customer.authenticate(@customer.uuid, @customer.password)).to be_nil } }
+    context("non-matching password") { it("should return nil") { expect(Customer.authenticate(@customer.uuid, @customer.password + random_string)).to be_nil } }
+    context "matching uuid, matching password, confirmed user" do
+
+      it "should return the customer" do
+        @customer.confirm!
+        expect(Customer.authenticate(@customer.uuid, @password)).to eq(@customer)
+      end
+    end
+  end
 end
