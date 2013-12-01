@@ -2,11 +2,11 @@ class Customer < ActiveRecord::Base
 
   attr_accessible :first_name, :last_name, :email, :birthdate, :password
 
-  validates :first_name,  presence: true, format: { with: /\A[a-zA-Z]+\z/ }
-  validates :last_name,   presence: true, format: { with: /\A[a-zA-Z]+\z/ }
-  validates :email,       presence: true, format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }, uniqueness: true
+  validates :first_name,  presence: true,                   format: { with: /\A[a-zA-Z]+\z/ }
+  validates :last_name,   presence: true,                   format: { with: /\A[a-zA-Z]+\z/ }
+  validates :email,       presence: true, uniqueness: true, format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }
   validates :birthdate,   presence: true
-  validates :password,    presence: true
+  validates :password,    presence: true, length: { minimum: 5 }
 
   before_create :set_uuid
   before_create :set_confirmation_code
