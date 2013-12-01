@@ -26,8 +26,7 @@ describe Customer do
     context "password changed" do
 
       it "should encrypt password and save" do
-        new_password = random_string
-
+        new_password       = random_string
         @customer.save
         @customer.password = new_password
         @customer.save
