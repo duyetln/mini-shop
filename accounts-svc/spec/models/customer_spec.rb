@@ -36,7 +36,7 @@ describe Customer do
     end
   end
 
-  context "#confirmed?" do
+  describe "#confirmed?" do
 
     context("new user") { it("should return false") { expect(FactoryGirl.build(:customer).confirmed?).to be_false } }
     context "persisted user" do
@@ -47,7 +47,7 @@ describe Customer do
     end
   end
 
-  context "#confirm!" do
+  describe "#confirm!" do
 
     context("new user") { it("should return false") { expect(FactoryGirl.build(:customer).confirm!).to be_false } }
     context "persisted user" do
@@ -64,7 +64,7 @@ describe Customer do
     end
   end
 
-  context ".authenticate" do
+  describe ".authenticate" do
 
     before(:each) do
       @customer = FactoryGirl.build :customer
