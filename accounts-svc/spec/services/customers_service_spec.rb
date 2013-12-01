@@ -50,9 +50,11 @@ describe CustomersService do
     context "customer not created" do
 
       it "should return 500 status" do
-        customer_hash = accessible_attributes(@customer)
+        previous_count = Customer.count
+        customer_hash  = accessible_attributes(@customer)
         post "/customers", customer_hash.except(customer_hash.keys.sample)
         expect(last_response.status).to eq(500)
+        expect(Customer.count).to eq(previous_count)
       end
     end
   end
@@ -104,6 +106,8 @@ describe CustomersService do
           customer_hash[customer_hash.keys.sample] = nil
           put "/customers/#{@customer.uuid}", customer_hash
           expect(last_response.status).to eq(500)
+          @customer.reload
+          expect(accessible_attributes(@customer)).to eq(accessible_attributes(Customer.find_by_uuid(@customer.uuid)))
         end
       end
 
@@ -137,20 +141,26 @@ describe CustomersService do
       @confirmation_code = @customer.confirmation_code
     end
 
-    context("user not found") { it("should return 404 status") { put "/customers/#{random_string}/confirm/#{@confirmation_code}"; expect(last_response.status).to eq(404) } }
+    def ensure_confirmation_status(status)
+      @customer.reload
+      expect(@customer.confirmed?).to eq(status)
+    end
+
+    context("user not found") { it("should return 404 status") { put "/customers/#{random_string}/confirm/#{@confirmation_code}"; expect(last_response.status).to eq(404); ensure_confirmation_status(false) } }
     context "user found" do
 
-      context("confirmed user")            { it("should return 404 status") { @customer.confirm!; put "/customers/#{@uuid}/confirm/#{@confirmation_code}"; expect(last_response.status).to eq(404) } }
-      context("wrong confirmation code")   { it("should return 404 status") {                     put "/customers/#{@uuid}/confirm/#{@random_code}";       expect(last_response.status).to eq(404) } }
+      context("confirmed user")            { it("should return 404 status") { @customer.confirm!; put "/customers/#{@uuid}/confirm/#{@confirmation_code}"; expect(last_response.status).to eq(404); ensure_confirmation_status(true) } }
+      context("wrong confirmation code")   { it("should return 404 status") {                     put "/customers/#{@uuid}/confirm/#{@random_code}";       expect(last_response.status).to eq(404); ensure_confirmation_status(false)} }
       context "correct confirmation code" do 
 
-        it "should return 404 status" do
+        it "should return the user" do
           put "/customers/#{@uuid}/confirm/#{@confirmation_code}"
           expect(last_response.status).to eq(200)
           expect(last_response.body).to be_present
 
           uuid = Yajl::Parser.parse(last_response.body, symbolize_keys: true)[:customer][:uuid]
           expect(uuid).to eq(@customer.uuid)
+          ensure_confirmation_status(true)
         end
       end
     end
