@@ -1,0 +1,19 @@
+source "http://rubygems.org"
+
+gem "rake"
+gem "sinatra"
+gem "mysql2"
+gem "activerecord", "3.2.15", require: "active_record"
+gem "yajl-ruby", "1.1.0", require: ["yajl", "yajl/json_gem"]
+gem "rack-parser", require: "rack/parser"
+
+group :development do
+  gem "thin"
+end
+
+group :test do
+  gem "rspec"
+  gem "factory_girl"
+  gem "database_cleaner"
+  gem "rack-test", require: "rack/test"
+end
