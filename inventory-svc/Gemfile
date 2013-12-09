@@ -3,7 +3,7 @@ source "http://rubygems.org"
 gem "rake"
 gem "sinatra"
 gem "mysql2"
-gem "activerecord", "3.2.15", require: "active_record"
+gem "activerecord", "3.2.16", require: "active_record"
 gem "yajl-ruby", "1.1.0", require: ["yajl", "yajl/json_gem"]
 gem "rack-parser", require: "rack/parser"
 
