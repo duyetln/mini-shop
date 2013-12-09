@@ -13,7 +13,7 @@ class CreateBundlingsTable < ActiveRecord::Migration
   end
 
   def down
-    remove_index :bundlings, :bundled_sku_id
+    remove_index :bundlings, :bundled_sku_type
     remove_index :bundlings, :bundled_sku_id
     remove_index :bundlings, :bundle_sku_id
     drop_table   :bundlings
