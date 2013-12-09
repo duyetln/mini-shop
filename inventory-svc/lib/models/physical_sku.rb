@@ -1,6 +1,6 @@
 class PhysicalSku < ActiveRecord::Base
+  include SkuFeatures
 
-  validates :title,    presence: true
   validates :quantity, numericality: { greater_than_or_equal_to: 0 }
 
   before_create :set_quantity
@@ -11,10 +11,6 @@ class PhysicalSku < ActiveRecord::Base
 
   def available?
     self.active? && self.quantity > 0
-  end
-
-  def fulfill!(order)
-  
   end
 
 end
