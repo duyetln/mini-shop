@@ -1,9 +1,9 @@
 class StorefrontSku < ActiveRecord::Base
-  include SkuFeatures
+  include SharedSkuModel
 
   belongs_to :sku, polymorphic: true
 
-  validates :sku,   presence: true
+  validates :sku, presence: true
 
   def available?
     self.active? && self.sku.available?

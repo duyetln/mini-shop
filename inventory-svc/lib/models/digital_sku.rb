@@ -1,4 +1,4 @@
 class DigitalSku < ActiveRecord::Base
-  include SkuFeatures
+  include SharedSkuModel
   
 end

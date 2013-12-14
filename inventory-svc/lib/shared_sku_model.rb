@@ -1,4 +1,4 @@
-module SkuFeatures
+module SharedSkuModel
   extend ActiveSupport::Concern
 
   included do
