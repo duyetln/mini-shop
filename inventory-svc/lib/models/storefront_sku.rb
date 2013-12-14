@@ -11,7 +11,7 @@ class StorefrontSku < ActiveRecord::Base
   validates :sku_type, inclusion: { in: SKU_TYPES.map(&:to_s) }
 
   def available?
-    !self.deleted? && self.active? && self.sku.available?
+    !self.removed? && self.active? && self.sku.available?
   end
 
 end

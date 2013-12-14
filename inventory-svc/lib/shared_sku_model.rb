@@ -8,14 +8,14 @@ module SharedSkuModel
 
     scope :active,   -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
-    scope :removed,  -> { where(deleted: true) }
-    scope :retained, -> { where(deleted: false) }
+    scope :removed,  -> { where(removed: true) }
+    scope :retained, -> { where(removed: false) }
 
     before_create :set_flags
   end
 
   def available?
-    !self.deleted? && self.active?
+    !self.removed? && self.active?
   end
 
   def activate!
@@ -29,7 +29,7 @@ module SharedSkuModel
   end
 
   def delete!
-    self.deleted = true
+    self.removed = true
     self.save
   end
 
@@ -49,7 +49,7 @@ module SharedSkuModel
   end
 
   def set_retained
-    self.deleted = false
+    self.removed = false
   end
 
 end
