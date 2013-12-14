@@ -3,6 +3,8 @@ class StorefrontSku < ActiveRecord::Base
 
   SKU_TYPES = [ "BundleSku", "DigitalSku", "PhysicalSku" ]
 
+  attr_accessible :sku_id, :sku_type
+
   belongs_to :sku, polymorphic: true
 
   validates :sku, presence: true
