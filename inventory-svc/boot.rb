@@ -14,4 +14,4 @@ dirs = []
 dirs << "lib/*.rb"
 dirs << "lib/models/**/*.rb"
 dirs << "lib/services/**/*.rb"
-dirs.map{ |dir| File.join(SVC_ROOT, dir) }.each { |dir| Dir[dir].each { |file| require file } }
+dirs.map{ |dir| File.join(SVC_ROOT, dir) }.each { |dir| Dir[dir].each { |file| load file } }
