@@ -17,7 +17,7 @@ module SharedSkuModel
   end
 
   def set_retained
-    self.delete = false
+    self.deleted = false
   end
 
   def available?
@@ -35,7 +35,7 @@ module SharedSkuModel
   end
 
   def delete!
-    self.delete = true
+    self.deleted = true
     self.save
   end
 
