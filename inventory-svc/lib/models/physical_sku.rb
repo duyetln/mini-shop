@@ -10,7 +10,7 @@ class PhysicalSku < ActiveRecord::Base
   end
 
   def available?
-    self.active? && self.quantity > 0
+    !self.deleted? && self.active? && self.quantity > 0
   end
 
 end

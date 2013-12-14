@@ -10,7 +10,7 @@ class BundleSku < ActiveRecord::Base
   end
 
   def available?
-    self.active? && self.bundled_skus.present? && self.bundled_skus.all?{ |s| s.available? }
+    !self.deleted? && self.active? && self.bundled_skus.present? && self.bundled_skus.all?{ |s| s.available? }
   end
 
 end

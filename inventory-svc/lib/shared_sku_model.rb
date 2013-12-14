@@ -3,18 +3,25 @@ module SharedSkuModel
 
   included do
     validates :title, presence: true
-    scope :active,   where(active: true)
-    scope :inactive, where(active: false)
+    scope :active,   -> { where(active: true) }
+    scope :inactive, -> { where(active: false) }
+    scope :removed,  -> { where(deleted: true) }
+    scope :retained, -> { where(deleted: false) }
 
     before_create :set_active 
+    before_create :set_retained
   end
 
   def set_active
     self.active = true if self.active.nil?
   end
 
+  def set_retained
+    self.delete = false
+  end
+
   def available?
-    self.active?
+    !self.deleted? && self.active?
   end
 
   def activate!
@@ -24,6 +31,11 @@ module SharedSkuModel
 
   def deactivate!
     self.active = false
+    self.save
+  end
+
+  def delete!
+    self.delete = true
     self.save
   end
 

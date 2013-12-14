@@ -6,7 +6,7 @@ class StorefrontSku < ActiveRecord::Base
   validates :sku, presence: true
 
   def available?
-    self.active? && self.sku.available?
+    !self.deleted? && self.active? && self.sku.available?
   end
 
 end
