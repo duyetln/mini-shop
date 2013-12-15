@@ -7,17 +7,17 @@ describe CustomersService do
   end
 
   def customer_response_options
-    { except: [:id, :password, :updated_at]  }
+    { except: [:password, :updated_at]  }
   end
 
-  describe "get /customers/:uuid" do
+  describe "get /customers/:id" do
 
     before(:all) { @customer = FactoryGirl.create :customer }
 
     context "customer found" do
 
       it "should return the customer" do
-        get "/customers/#{@customer.uuid}"
+        get "/customers/#{@customer.id}"
         expect(last_response.status).to eq(200)
         expect(last_response.body).to   eq(@customer.to_json(customer_response_options))
       end
@@ -49,12 +49,33 @@ describe CustomersService do
 
     context "customer not created" do
 
-      it "should return 500 status" do
-        previous_count = Customer.count
-        customer_hash  = accessible_attributes(@customer)
-        post "/customers", customer_hash.except(customer_hash.keys.sample)
-        expect(last_response.status).to eq(500)
-        expect(Customer.count).to eq(previous_count)
+      context "invalid input" do
+
+        it "should return 400 status" do
+
+          previous_count = Customer.count
+          customer_hash  = accessible_attributes(@customer)
+
+          post "/customers", customer_hash.except(customer_hash.keys.sample)
+          expect(last_response.status).to eq(400)
+          expect(Customer.count).to eq(previous_count)
+        end
+      end
+
+      context "valid input" do
+
+        it "should return 500 status" do
+
+          previous_count = Customer.count
+          customer_hash  = accessible_attributes(@customer)
+          expect(Customer).to receive(:new).with(customer_hash.as_json).and_return(@customer)
+          expect(@customer).to receive(:valid?).and_return(true)
+          expect(@customer).to receive(:save).and_return(false)
+
+          post "/customers", customer_hash
+          expect(last_response.status).to eq(500)
+          expect(Customer.count).to eq(previous_count)
+        end
       end
     end
   end
@@ -88,7 +109,7 @@ describe CustomersService do
 
   end
 
-  describe "put /customers/:uuid" do
+  describe "put /customers/:id" do
 
     before :each do
       @customer = FactoryGirl.build :customer
@@ -101,11 +122,11 @@ describe CustomersService do
 
       context "invalid input" do
 
-        it "should return 500 status" do
+        it "should return 400 status" do
           customer_hash = accessible_attributes(@customer)
           customer_hash[customer_hash.keys.sample] = nil
-          put "/customers/#{@customer.uuid}", customer_hash
-          expect(last_response.status).to eq(500)
+          put "/customers/#{@customer.id}", customer_hash
+          expect(last_response.status).to eq(400)
           @customer.reload
           expect(accessible_attributes(@customer)).to eq(accessible_attributes(Customer.find_by_uuid(@customer.uuid)))
         end
@@ -120,7 +141,7 @@ describe CustomersService do
           customer_hash["password"]   = new_password
           customer_hash["first_name"] = new_first_name
 
-          put "/customers/#{@customer.uuid}", customer_hash.slice("password", "first_name")
+          put "/customers/#{@customer.id}", customer_hash.slice("password", "first_name")
           expect(last_response.status).to eq(200)
           expect(last_response.body).to be_present
 
