@@ -14,6 +14,10 @@ module SharedSkuModel
     before_create :set_flags
   end
 
+  def self.paginate(offset=nil, limit=nil)
+    self.offset(offset || 0).limit(limit || 20)
+  end
+
   def available?
     !self.removed? && self.active?
   end
@@ -39,17 +43,9 @@ module SharedSkuModel
   protected
 
   def set_flags
-    set_active
-    set_retained
-    true
-  end
-
-  def set_active
-    self.active = true
-  end
-
-  def set_retained
+    self.active  = true
     self.removed = false
+    true
   end
 
 end
