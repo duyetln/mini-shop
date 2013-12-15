@@ -1,5 +1,5 @@
 class BundleSku < ActiveRecord::Base
-  include SharedSkuModel
+  include SkuResource
 
   has_many  :bundlings
   has_many  :physical_skus, through: :bundlings, source: :bundled_sku, source_type: "PhysicalSku"

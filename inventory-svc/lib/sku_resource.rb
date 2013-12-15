@@ -1,4 +1,4 @@
-module SharedSkuModel
+module SkuResource
   extend ActiveSupport::Concern
 
   included do
@@ -14,8 +14,12 @@ module SharedSkuModel
     before_create :set_flags
   end
 
-  def self.paginate(offset=nil, limit=nil)
-    self.offset(offset || 0).limit(limit || 20)
+  module ClassMethods
+
+    def paginate(offset=nil, limit=nil)
+      self.offset(offset || 0).limit(limit || 20)
+    end
+
   end
 
   def available?

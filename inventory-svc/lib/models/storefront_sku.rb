@@ -1,5 +1,5 @@
 class StorefrontSku < ActiveRecord::Base
-  include SharedSkuModel
+  include SkuResource
 
   SKU_TYPES = [ "BundleSku", "DigitalSku", "PhysicalSku" ]
 

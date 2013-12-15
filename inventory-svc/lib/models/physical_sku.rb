@@ -1,5 +1,5 @@
 class PhysicalSku < ActiveRecord::Base
-  include SharedSkuModel
+  include SkuResource
 
   attr_accessible :quantity
 

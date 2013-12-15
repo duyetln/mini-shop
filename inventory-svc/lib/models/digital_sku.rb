@@ -1,3 +1,3 @@
 class DigitalSku < ActiveRecord::Base
-  include SharedSkuModel
+  include SkuResource
 end
