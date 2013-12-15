@@ -34,6 +34,7 @@ module SkuSvcHelpers
         end
 
         def respond_with(resource, response_options={}, json_options=sku_response_options)
+          resource.present? || halt(404)
           status = block_given? ? yield(resource) : resource
           success_code = response_options[:success] || 200
           failure_code = response_options[:failure] || 500
