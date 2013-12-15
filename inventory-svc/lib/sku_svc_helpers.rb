@@ -33,11 +33,11 @@ module SkuSvcHelpers
           params.slice *settings.sku_class.accessible_attributes.to_a
         end
 
-        def response_with(resource, options={})
+        def response_with(resource, response_options={}, json_options=sku_response_options)
           status = block_given? ? yield(resource) : resource
-          success_code = options[:success] || 200
-          failure_code = options[:failure] || 500
-          status ? halt(success_code, resource.to_json(sku_response_options)) : halt(failure_code)
+          success_code = response_options[:success] || 200
+          failure_code = response_options[:failure] || 500
+          status ? halt(success_code, resource.to_json(json_options)) : halt(failure_code)
         end
 
       end
