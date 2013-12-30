@@ -1,6 +1,6 @@
-load File.expand_path(File.dirname(__FILE__)) + "/sku_svc_filters.rb"
-load File.expand_path(File.dirname(__FILE__)) + "/sku_svc_helpers.rb"
-load File.expand_path(File.dirname(__FILE__)) + "/sku_svc_endpoints.rb"
+require "sku_svc_filters"
+require "sku_svc_helpers"
+require "sku_svc_endpoints"
 
 module SkuService
   extend ActiveSupport::Concern
