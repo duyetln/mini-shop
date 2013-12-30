@@ -4,6 +4,16 @@ module SkuSvcEndpoints
   module ClassMethods
 
     def generate_endpoints!
+      get "/#{namespace}/ping" do
+        respond_with({
+          active:   settings.sku_class.active.count,
+          inactive: settings.sku_class.inactive.count,
+          removed:  settings.sku_class.removed.count,
+          retained: settings.sku_class.retained.count,
+          total:    settings.sku_class.count
+        })
+      end
+
       get "/#{namespace}" do
         load_skus!
         respond_with(@skus)
