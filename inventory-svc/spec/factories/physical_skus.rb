@@ -3,7 +3,7 @@ FactoryGirl.define do
     title "Title"
     description "Description"
     active true
-    quantity 5
+    quantity { rand(1..10) }
     removed false
   end
 end

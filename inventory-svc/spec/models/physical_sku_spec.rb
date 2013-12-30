@@ -9,10 +9,7 @@ describe PhysicalSku do
 
     before(:each) { @attributes = described_class.accessible_attributes.to_a.map(&:to_sym) }
     
-    it "includes quantity" do
-
-       expect(@attributes).to include(:quantity)
-    end
+    it("includes quantity") { expect(@attributes).to include(:quantity) }
   end
 
   context "#quantity" do

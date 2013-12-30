@@ -8,7 +8,7 @@ class StorefrontSku < ActiveRecord::Base
   belongs_to :sku, polymorphic: true
 
   validates :sku, presence: true
-  validates :sku_type, inclusion: { in: SKU_TYPES.map(&:to_s) }
+  validates :sku_type, inclusion: { in: SKU_TYPES }
 
   def available?
     !self.removed? && self.active? && self.sku.available?

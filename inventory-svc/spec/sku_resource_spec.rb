@@ -17,13 +17,12 @@ module SkuResourceSpec
 
     context "accessible attributes" do
 
-      it "includes title and description" do
-
-        [:title, :description].each do |attr|
-          attributes = described_class.accessible_attributes.to_a.map(&:to_sym)
-          expect(attributes).to include(attr)
-        end
+      before :each do
+        @attributes = described_class.accessible_attributes.to_a.map(&:to_sym)
       end
+
+      it("includes title")       { expect(@attributes).to include(:title) }
+      it("includes description") { expect(@attributes).to include(:description) }
     end
 
     context "#title" do

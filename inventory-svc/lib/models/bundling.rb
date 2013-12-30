@@ -8,6 +8,6 @@ class Bundling < ActiveRecord::Base
   validates :bundle_sku,    presence: true
   validates :bundle_sku_id, uniqueness: { scope: [ :bundled_sku_id, :bundled_sku_type ] }
   validates :bundled_sku,      presence: true
-  validates :bundled_sku_type, inclusion:  { in: BUNDLED_SKU_TYPES.map(&:to_s) }
+  validates :bundled_sku_type, inclusion:  { in: BUNDLED_SKU_TYPES }
 
 end
