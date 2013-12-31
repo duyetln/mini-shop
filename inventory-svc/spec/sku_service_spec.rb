@@ -4,13 +4,7 @@ shared_examples "sku service" do |sku_class|
   
   namespace = sku_class.to_s.tableize
 
-  let(:namespace)     { sku_class.to_s.tableize }
-  let(:sku_class)     { sku_class }
-  let(:sym_sku_class) { sku_class.to_s.underscore.to_sym }
-  let(:skus)          { sku_class.retained }
-  let(:parsed_result) { Yajl::Parser.parse(last_response.body, symbolize_keys: true) }
-  let(:created_sku)   { FactoryGirl.create(sym_sku_class) }
-  let(:built_sku)     { FactoryGirl.build(sym_sku_class) }
+  let(:sku_class) { sku_class }
 
   def expect_status(code)
     expect(last_response.status).to eq(code)
