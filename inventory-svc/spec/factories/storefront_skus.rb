@@ -6,7 +6,7 @@ FactoryGirl.define do
     removed false
 
     after :build do |sku, evaluator|
-      sku.sku = FactoryGirl.build([:physical_sku, :digital_sku, :bundle_sku].sample)
+      sku.sku = FactoryGirl.create([:physical_sku, :digital_sku, :bundle_sku].sample)
     end
   end
 end
