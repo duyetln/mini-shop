@@ -3,11 +3,11 @@ require "sku_resource_spec"
 
 describe StorefrontSku do
 
-  include SkuResourceSpec
+  let(:sku_class) { described_class }
 
-  before :each do
-    @associated_sku = @factory_sku.sku
-  end
+  it_behaves_like "sku resource"
+
+  before(:each) { @associated_sku = built_sku.sku }
 
   context "#available?" do
 
@@ -15,9 +15,9 @@ describe StorefrontSku do
 
       it "is false" do
 
-        expect(@factory_sku).to receive(:sku).and_return(@associated_sku)
+        expect(built_sku).to receive(:sku).and_return(@associated_sku)
         expect(@associated_sku).to receive(:available?).and_return(false)
-        expect(@factory_sku.available?).to be_false
+        expect(built_sku.available?).to be_false
       end
     end
   end

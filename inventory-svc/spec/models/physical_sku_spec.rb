@@ -3,14 +3,11 @@ require "sku_resource_spec"
 
 describe PhysicalSku do
 
-  include SkuResourceSpec
+  let(:sku_class) { described_class }
 
-  context "accessible attributes" do
+  it_behaves_like "sku resource"
 
-    before(:each) { @attributes = described_class.accessible_attributes.to_a.map(&:to_sym) }
-    
-    it("includes quantity") { expect(@attributes).to include(:quantity) }
-  end
+  context("accessible attributes") { it("includes quantity") { expect(attributes).to include(:quantity) } }
 
   context "#quantity" do
 
@@ -18,9 +15,9 @@ describe PhysicalSku do
 
       it "is not valid" do
 
-        @factory_sku.quantity = nil
-        expect(@factory_sku.valid?).to be_false
-        expect(@factory_sku.errors).to have_key(:quantity)
+        built_sku.quantity = nil
+        expect(built_sku.valid?).to be_false
+        expect(built_sku.errors).to have_key(:quantity)
       end
     end
 
@@ -28,9 +25,9 @@ describe PhysicalSku do
 
       it "is not valid" do
 
-        @factory_sku.quantity = -5
-        expect(@factory_sku.valid?).to be_false
-        expect(@factory_sku.errors).to have_key(:quantity)
+        built_sku.quantity = -5
+        expect(built_sku.valid?).to be_false
+        expect(built_sku.errors).to have_key(:quantity)
       end
     end
   end
@@ -41,8 +38,8 @@ describe PhysicalSku do
 
       it "is false" do
 
-        @factory_sku.quantity = -5
-        expect(@factory_sku.available?).to be_false
+        built_sku.quantity = -5
+        expect(built_sku.available?).to be_false
       end
     end
   end
