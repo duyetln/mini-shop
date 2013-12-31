@@ -1,5 +1,5 @@
 require "spec_helper"
-require "sku_resource_spec"
+require "sku_resource_shared"
 
 describe DigitalSku do
 

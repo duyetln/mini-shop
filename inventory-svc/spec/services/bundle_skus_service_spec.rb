@@ -1,5 +1,5 @@
 require "spec_helper"
-require "sku_service_spec"
+require "sku_service_shared"
 
 describe BundleSkusService do
 
