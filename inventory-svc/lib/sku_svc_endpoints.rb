@@ -26,7 +26,7 @@ module SkuSvcEndpoints
 
       post "/#{namespace}" do
         load_sku!
-        respond_with(@sku) { |s| s.save }
+        respond_with(@sku, failure: 400) { |s| s.save }
       end
 
       put "/#{namespace}/:id" do

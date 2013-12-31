@@ -22,11 +22,11 @@ module SkuSvcHelpers
         end
 
         def load_skus!
-          @skus = !!params[:pagination] && skus || skus.paginate(params[:offset], params[:limit])
+          @skus = !!params[:pagination] && skus.paginate(params[:offset], params[:limit]) || skus
         end
 
         def sku_response_options
-          { except: [ :updated_at ] }
+          { root: false, except: [ :updated_at ] }
         end
 
         def accessible_params
