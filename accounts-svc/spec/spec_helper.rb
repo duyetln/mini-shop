@@ -3,11 +3,15 @@ ENV["RACK_ENV"] = "test"
 require "./boot"
 
 module SpecHelpers
+  extend ActiveSupport::Concern
   include Rack::Test::Methods
 
   def app; described_class; end
-  def random_string(length=10)
-    rand(36**length).to_s(36)
+
+  included do
+    let(:random_string) { |length=10| rand(36**length).to_s(36) }
+    let(:created_customer) { FactoryGirl.create :customer }
+    let(:built_customer)   { FactoryGirl.build :customer }
   end
 end
 

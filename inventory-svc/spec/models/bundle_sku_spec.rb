@@ -7,7 +7,7 @@ describe BundleSku do
 
   it_behaves_like "sku resource"
 
-  context "factory model" do
+  describe "factory model" do
 
     it("has physical skus") { expect(built_sku.physical_skus).to be_present }
     it("has digital skus")  { expect(built_sku.digital_skus).to  be_present }
@@ -20,7 +20,7 @@ describe BundleSku do
     @digital_skus  = built_sku.digital_skus
   end
 
-  context "#available?" do
+  describe "#available?" do
 
     context "empty bundled skus" do
 

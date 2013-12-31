@@ -7,9 +7,9 @@ describe PhysicalSku do
 
   it_behaves_like "sku resource"
 
-  context("accessible attributes") { it("includes quantity") { expect(attributes).to include(:quantity) } }
+  describe("accessible attributes") { it("includes quantity") { expect(attributes).to include(:quantity) } }
 
-  context "#quantity" do
+  describe "#quantity" do
 
     context "emtpy" do
 
@@ -32,7 +32,7 @@ describe PhysicalSku do
     end
   end
 
-  context "#available?" do
+  describe "#available?" do
 
     context "negative quantity" do
 

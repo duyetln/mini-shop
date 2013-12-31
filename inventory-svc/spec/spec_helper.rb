@@ -7,11 +7,9 @@ module SpecHelpers
   include Rack::Test::Methods
 
   def app; described_class; end
-  def random_string(length=10)
-    rand(36**length).to_s(36)
-  end
 
   included do
+    let(:random_string) { |length=10| rand(36**length).to_s(36) }
     let(:sym_sku_class) { sku_class.to_s.underscore.to_sym }
     let(:skus)          { sku_class.retained }
     let(:created_sku)   { FactoryGirl.create(sym_sku_class) }

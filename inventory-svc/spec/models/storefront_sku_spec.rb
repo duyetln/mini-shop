@@ -9,7 +9,7 @@ describe StorefrontSku do
 
   before(:each) { @associated_sku = built_sku.sku }
 
-  context "#available?" do
+  describe "#available?" do
 
     context "unavailable sku" do
 

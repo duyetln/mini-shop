@@ -1,63 +1,83 @@
 require "spec_helper"
 
-describe Customer do
+describe Customer do 
+
+  context "factory model" do
+
+    it("is valid")           { expect(built_customer.valid?).to be_true }
+    it("saves successfully") { expect(built_customer.save).to be_true }
+  end
 
   describe "#save" do
 
-    before(:each) { @customer = FactoryGirl.build :customer }
-    after(:each)  { @customer.destroy }
-
-    context("blank first_name") { it("should not save") { @customer.first_name  = nil; expect(@customer.save).to be_false } }
-    context("blank last_name")  { it("should not save") { @customer.last_name   = nil; expect(@customer.save).to be_false } }
-    context("blank birthdate")  { it("should not save") { @customer.birthdate   = nil; expect(@customer.save).to be_false } }
-    context("blank email")      { it("should not save") { @customer.email       = nil; expect(@customer.save).to be_false } }
-    context("blank password")   { it("should not save") { @customer.password    = nil; expect(@customer.save).to be_false } }
+    context("blank first_name") { it("does not save") { built_customer.first_name  = nil; expect(built_customer.save).to be_false } }
+    context("blank last_name")  { it("does not save") { built_customer.last_name   = nil; expect(built_customer.save).to be_false } }
+    context("blank birthdate")  { it("does not save") { built_customer.birthdate   = nil; expect(built_customer.save).to be_false } }
+    context("blank email")      { it("does not save") { built_customer.email       = nil; expect(built_customer.save).to be_false } }
+    context("blank password")   { it("does not save") { built_customer.password    = nil; expect(built_customer.save).to be_false } }
     
     context "valid input" do
 
-      before(:each) { @password = @customer.password; expect(@customer.save).to eq(true) }
+      before(:each) { @password = built_customer.password; expect(built_customer.save).to eq(true) }
 
-      it("should set uuid")               { expect(@customer.uuid).to                           be_present    } 
-      it("should set confirmation_code")  { expect(@customer.confirmation_code).to              be_present    }
-      it("should set password")           { expect(@customer.password).to                       be_present    }
-      it("should encrypt password")       { expect(BCrypt::Password.new(@customer.password)).to eq(@password) }
+      it("sets uuid")              { expect(built_customer.uuid).to be_present } 
+      it("sets confirmation_code") { expect(built_customer.confirmation_code).to be_present }
+      it("sets password")          { expect(built_customer.password).to be_present }
+      it("encrypts password")      { expect(BCrypt::Password.new(built_customer.password)).to eq(@password) }
     end
 
     context "password changed" do
 
-      it "should encrypt password and save" do
-        new_password       = random_string
-        @customer.save
-        @customer.password = new_password
-        @customer.save
-        expect(BCrypt::Password.new(@customer.password)).to eq(new_password)
+      it "encrypts password and saves" do
+
+        created_customer.password = random_string
+        created_customer.save
+        expect(BCrypt::Password.new(created_customer.password)).to eq(random_string)
       end
     end
   end
 
   describe "#confirmed?" do
 
-    context("new user") { it("should return false") { expect(FactoryGirl.build(:customer).confirmed?).to be_false } }
+    context("new user") { it("returns false") { expect(built_customer.confirmed?).to be_false } }
+
     context "persisted user" do
 
-      before(:each) { @customer = FactoryGirl.create :customer }
-      context("confirmation code blank")   { it("should return true")  { @customer.confirmation_code = nil; @customer.save; expect(@customer.confirmed?).to be_true  } }
-      context("confirmation code present") { it("should return false") {                                                    expect(@customer.confirmed?).to be_false } }
+      context "confirmation code blank" do
+        
+        it "returns true" do
+
+          created_customer.confirmation_code = nil
+          created_customer.save; expect(created_customer.confirmed?).to be_true
+        end
+      end
+
+      context("confirmation code present") { it("returns false") { expect(created_customer.confirmed?).to be_false } }
     end
   end
 
   describe "#confirm!" do
 
-    context("new user") { it("should return false") { expect(FactoryGirl.build(:customer).confirm!).to be_false } }
+    context("new user") { it("returns false") { expect(built_customer.confirm!).to be_false } }
+    
     context "persisted user" do
 
-      before(:each) { @customer = FactoryGirl.create :customer }
-      context("confirmation code blank")   { it("should return false") { @customer.confirmation_code = nil; @customer.save; expect(@customer.confirm!).to be_false } }
+      context "confirmation code blank" do
+
+        it "returns false" do
+
+          created_customer.confirmation_code = nil
+          created_customer.save
+          expect(created_customer.confirm!).to be_false
+        end
+      end
+
       context "confirmation code present" do 
 
-        it("should return true")  do 
-          expect(@customer.confirm!).to be_true
-          expect(@customer.confirmation_code).to be_blank
+        it("should return true")  do
+
+          expect(created_customer.confirm!).to be_true
+          expect(created_customer.confirmation_code).to be_blank
         end
       end
     end
@@ -65,20 +85,20 @@ describe Customer do
 
   describe ".authenticate" do
 
-    before(:each) do
-      @customer = FactoryGirl.build :customer
-      @password = @customer.password
-      @customer.save
+    before :each do
+      @password = built_customer.password
+      built_customer.save
     end
 
-    context("non-matching uuid")     { it("should return nil") { expect(Customer.authenticate(@customer.uuid + random_string, random_string)).to be_nil } }
-    context("unconfirmed user")      { it("should return nil") { expect(Customer.authenticate(@customer.uuid, @customer.password)).to be_nil } }
-    context("non-matching password") { it("should return nil") { expect(Customer.authenticate(@customer.uuid, @customer.password + random_string)).to be_nil } }
+    context("non-matching uuid")     { it("returns nil") { expect(Customer.authenticate(built_customer.uuid + random_string, random_string)).to be_nil } }
+    context("unconfirmed user")      { it("returns nil") { expect(Customer.authenticate(built_customer.uuid, built_customer.password)).to be_nil } }
+    context("non-matching password") { it("returns nil") { expect(Customer.authenticate(built_customer.uuid, built_customer.password + random_string)).to be_nil } }
     context "matching uuid, matching password, confirmed user" do
 
-      it "should return the customer" do
-        @customer.confirm!
-        expect(Customer.authenticate(@customer.uuid, @password)).to eq(@customer)
+      it "returns the customer" do
+        
+        built_customer.confirm!
+        expect(Customer.authenticate(built_customer.uuid, @password)).to eq(built_customer)
       end
     end
   end
