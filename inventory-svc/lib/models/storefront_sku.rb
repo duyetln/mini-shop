@@ -6,9 +6,13 @@ class StorefrontSku < ActiveRecord::Base
   attr_accessible :sku_id, :sku_type
 
   belongs_to :sku, polymorphic: true
+  belongs_to :price
 
-  validates :sku, presence: true
+  validates :price, presence: true
+  validates :sku,   presence: true
   validates :sku_type, inclusion: { in: SKU_TYPES }
+
+  delegate :amount, to: :price
 
   def available?
     !self.removed? && self.active? && self.sku.available?
