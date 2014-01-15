@@ -25,6 +25,7 @@ RSpec.configure do |config|
   config.include SpecHelpers
   config.color_enabled = true
   config.tty = true
+  config.order = "random"
 
   config.before(:suite) { DatabaseCleaner.strategy = :truncation }  
   config.before(:each)  { DatabaseCleaner.start }
