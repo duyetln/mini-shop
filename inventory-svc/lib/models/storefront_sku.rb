@@ -3,7 +3,7 @@ class StorefrontSku < ActiveRecord::Base
 
   SKU_TYPES = [ "BundleSku", "DigitalSku", "PhysicalSku" ]
 
-  attr_accessible :sku_id, :sku_type
+  attr_accessible :sku_id, :sku_type, :price_id
 
   belongs_to :sku, polymorphic: true
   belongs_to :price
