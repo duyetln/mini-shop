@@ -1,7 +1,7 @@
 class CreatePricepointPricesTable < ActiveRecord::Migration
   def up
     create_table :pricepoint_prices do |t|
-      t.decimal  :amount, precision: 8, scale: 4
+      t.decimal  :amount, precision: 20, scale: 4
       t.integer  :pricepoint_id
       t.integer  :currency_id
     end
