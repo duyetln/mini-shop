@@ -1,6 +1,6 @@
-class CreateCustomersTable < ActiveRecord::Migration
+class CreateUsersTable < ActiveRecord::Migration
   def up
-    create_table  :customers do |t|
+    create_table  :users do |t|
       t.string    :uuid
       t.string    :first_name
       t.string    :last_name
@@ -11,11 +11,11 @@ class CreateCustomersTable < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index     :customers, :uuid
+    add_index     :users, :uuid
   end
 
   def down
-    remove_index  :customers, :uuid
-    drop_table    :customers
+    remove_index  :users, :uuid
+    drop_table    :users
   end
 end

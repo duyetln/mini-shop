@@ -1,4 +1,4 @@
-class Customer < ActiveRecord::Base
+class User < ActiveRecord::Base
 
   attr_accessible :first_name, :last_name, :email, :birthdate, :password
 
@@ -13,8 +13,8 @@ class Customer < ActiveRecord::Base
   before_save   :encrypt_password
 
   def self.authenticate(uuid, password)
-    customer = self.find_by_uuid(uuid)
-    customer.present? && customer.confirmed? && BCrypt::Password.new(customer.password) == password ? customer : nil
+    user = self.find_by_uuid(uuid)
+    user.present? && user.confirmed? && BCrypt::Password.new(user.password) == password ? user : nil
   end
 
   def confirmed?

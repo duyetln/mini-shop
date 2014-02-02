@@ -10,8 +10,8 @@ module SpecHelpers
 
   included do
     let(:random_string) { |length=10| rand(36**length).to_s(36) }
-    let(:created_customer) { FactoryGirl.create :customer }
-    let(:built_customer)   { FactoryGirl.build :customer }
+    let(:created_user) { FactoryGirl.create :user }
+    let(:built_user)   { FactoryGirl.build :user }
   end
 end
 
