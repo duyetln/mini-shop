@@ -7,6 +7,6 @@ class Currency < ActiveRecord::Base
   before_save :upcase_code
 
   def upcase_code
-    self.code.upcase!
+    code.upcase!
   end
 end

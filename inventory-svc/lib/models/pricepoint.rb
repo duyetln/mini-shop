@@ -7,6 +7,6 @@ class Pricepoint < ActiveRecord::Base
   validates :name, uniqueness: true
 
   def amount(currency)
-    self.pricepoint_prices.where(currency_id: currency.id).first.try(:amount)
+    pricepoint_prices.where(currency_id: currency.id).first.try(:amount)
   end
 end

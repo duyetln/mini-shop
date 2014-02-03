@@ -13,18 +13,18 @@ class User < ActiveRecord::Base
   before_save   :encrypt_password
 
   def self.authenticate(uuid, password)
-    user = self.find_by_uuid(uuid)
+    user = find_by_uuid(uuid)
     user.present? && user.confirmed? && BCrypt::Password.new(user.password) == password ? user : nil
   end
 
   def confirmed?
-    self.persisted? && self.confirmation_code.blank?
+    persisted? && confirmation_code.blank?
   end
 
   def confirm!
-    if self.persisted? && self.confirmation_code.present?
+    if persisted? && confirmation_code.present?
       self.confirmation_code = nil
-      self.save
+      save
     end
   end
 
@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
   end
 
   def encrypt_password
-    self.password = BCrypt::Password.create(self.password) if self.password_changed?
+    self.password = BCrypt::Password.create(password) if password_changed?
   end
 
 end
