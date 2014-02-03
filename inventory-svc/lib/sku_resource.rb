@@ -27,18 +27,24 @@ module SkuResource
   end
 
   def activate!
-    self.active = true
-    save
+    if persisted?
+      self.active = true
+      save
+    end
   end
 
   def deactivate!
-    self.active = false
-    save
+    if persisted?
+      self.active = false
+      save
+    end
   end
 
   def delete!
-    self.removed = true
-    save
+    if persisted?
+      self.removed = true
+      save
+    end
   end
 
   def fulfill!(order)
