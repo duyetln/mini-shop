@@ -34,34 +34,73 @@ shared_examples "sku resource" do
     context("inactive") { it("is false") { built_sku.active  = false; expect(built_sku.available?).to be_false } }
   end
 
-  describe "#activate!" do
+  context "persisted" do
 
-    it "sets active to true and saves" do
+    before(:each) { expect(built_sku).to receive(:persisted?).and_return(true) }
 
-      expect(built_sku).to receive(:active=).with(true)
-      expect(built_sku).to receive(:save)
-      built_sku.activate!
+    describe "#activate!" do
+
+      it "sets active to true and saves" do
+
+        expect(built_sku).to receive(:active=).with(true)
+        expect(built_sku).to receive(:save)
+        built_sku.activate!
+      end
+    end
+
+    describe "#deactivate!" do
+
+      it "sets active to false and saves" do
+
+        expect(built_sku).to receive(:active=).with(false)
+        expect(built_sku).to receive(:save)
+        built_sku.deactivate!
+      end
+    end
+
+    describe "#delete!" do
+
+      it "sets removed to true and saves" do
+
+        expect(built_sku).to receive(:removed=).with(true)
+        expect(built_sku).to receive(:save)
+        built_sku.delete!
+      end
     end
   end
 
-  describe "#deactivate!" do
+  context "non persisted" do
 
-    it "sets active to false and saves" do
+    before(:each) { expect(built_sku.persisted?).to be_false }
 
-      expect(built_sku).to receive(:active=).with(false)
-      expect(built_sku).to receive(:save)
-      built_sku.deactivate!
+    describe "#activate!" do
+
+      it "sets active to true and saves" do
+
+        expect(built_sku).to_not receive(:active=)
+        expect(built_sku).to_not receive(:save)
+        built_sku.activate!
+      end
+    end
+
+    describe "#deactivate!" do
+
+      it "sets active to false and saves" do
+
+        expect(built_sku).to_not receive(:active=)
+        expect(built_sku).to_not receive(:save)
+        built_sku.deactivate!
+      end
+    end
+
+    describe "#delete!" do
+
+      it "sets removed to true and saves" do
+
+        expect(built_sku).to_not receive(:removed=)
+        expect(built_sku).to_not receive(:save)
+        built_sku.delete!
+      end
     end
   end
-
-  describe "#delete!" do
-
-    it "sets removed to true and saves" do
-
-      expect(built_sku).to receive(:removed=).with(true)
-      expect(built_sku).to receive(:save)
-      built_sku.delete!
-    end
-  end
-
 end
