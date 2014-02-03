@@ -17,28 +17,28 @@ module SkuResource
   module ClassMethods
 
     def paginate(offset=nil, limit=nil)
-      offset(offset || 0).limit(limit || 20)
+      self.offset(offset || 0).limit(limit || 20)
     end
 
   end
 
   def available?
-    !removed? && active?
+    !self.removed? && self.active?
   end
 
   def activate!
-    active = true
-    save
+    self.active = true
+    self.save
   end
 
   def deactivate!
-    active = false
-    save
+    self.active = false
+    self.save
   end
 
   def delete!
-    removed = true
-    save
+    self.removed = true
+    self.save
   end
 
   def fulfill!(order)
@@ -47,8 +47,8 @@ module SkuResource
   protected
 
   def set_flags
-    active  = true
-    removed = false
+    self.active  = true
+    self.removed = false
     true
   end
 

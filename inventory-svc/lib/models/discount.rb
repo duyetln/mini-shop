@@ -6,7 +6,7 @@ class Discount < ActiveRecord::Base
   validates :name, uniqueness: true
 
   def current_rate
-    rate_at(DateTime.now)
+    self.rate_at(DateTime.now)
   end
 
   def rate_at(datetime)
@@ -16,13 +16,13 @@ class Discount < ActiveRecord::Base
     
     case
     when  start_set &&  end_set
-      start_at <= datetime && datetime <= end_at ? rate : zero_rate
+      self.start_at <= datetime && datetime <= self.end_at ? self.rate : zero_rate
     when  start_set && !end_set
-      start_at <= datetime ? rate : zero_rate
+      self.start_at <= datetime ? self.rate : zero_rate
     when !start_set &&  end_set then
-      datetime <= end_at ? rate : zero_rate
+      datetime <= self.end_at ? self.rate : zero_rate
     when !start_set && !end_set
-      rate
+      self.rate
     end
   end
 

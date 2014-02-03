@@ -15,7 +15,7 @@ class StorefrontSku < ActiveRecord::Base
   delegate :amount, to: :price
 
   def available?
-    !removed? && active? && sku.available?
+    !self.removed? && self.active? && self.sku.available?
   end
 
 end

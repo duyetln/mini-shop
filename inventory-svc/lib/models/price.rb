@@ -10,7 +10,7 @@ class Price < ActiveRecord::Base
   def amount(currency)
     zero = BigDecimal.new("0.0")
 
-    ( pricepoint.amount(currency) || zero ) * ( 1 - discount.try(:current_rate) )
+    ( self.pricepoint.amount(currency) || zero ) * ( 1 - self.discount.try(:current_rate) )
   end
 
 end
