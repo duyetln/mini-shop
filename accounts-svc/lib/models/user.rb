@@ -8,9 +8,8 @@ class User < ActiveRecord::Base
   validates :birthdate,   presence: true
   validates :password,    presence: true, length: { minimum: 5 }
 
-  before_create :set_uuid
-  before_create :set_confirmation_code
-  before_save   :encrypt_password
+  before_create :set_values
+  before_save   :encrypt_password, if: :password_changed?
 
   def self.authenticate(uuid, password)
     user = find_by_uuid(uuid)
@@ -30,16 +29,13 @@ class User < ActiveRecord::Base
 
   protected
 
-  def set_uuid
-    self.uuid = SecureRandom.hex(10)
-  end
-
-  def set_confirmation_code
-    self.confirmation_code = SecureRandom.hex
+  def set_values
+    self.uuid = SecureRandom.hex.upcase
+    self.confirmation_code = SecureRandom.hex.upcase
   end
 
   def encrypt_password
-    self.password = BCrypt::Password.create(password) if password_changed?
+    self.password = BCrypt::Password.create(password)
   end
 
 end

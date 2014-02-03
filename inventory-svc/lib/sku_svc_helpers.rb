@@ -9,7 +9,7 @@ module SkuSvcHelpers
         protected
 
         def skus
-          settings.sku_class.retained
+          settings.sku_class.kept
         end
 
         def find_sku!

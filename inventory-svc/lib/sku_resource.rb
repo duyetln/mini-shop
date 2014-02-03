@@ -9,9 +9,9 @@ module SkuResource
     scope :active,   -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
     scope :removed,  -> { where(removed: true) }
-    scope :retained, -> { where(removed: false) }
+    scope :kept, -> { where(removed: false) }
 
-    before_create :set_flags
+    before_create :set_values
   end
 
   module ClassMethods
@@ -52,7 +52,7 @@ module SkuResource
 
   protected
 
-  def set_flags
+  def set_values
     self.active  = true
     self.removed = false
     true

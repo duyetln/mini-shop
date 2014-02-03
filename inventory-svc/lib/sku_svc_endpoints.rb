@@ -9,7 +9,7 @@ module SkuSvcEndpoints
           active:   settings.sku_class.active.count,
           inactive: settings.sku_class.inactive.count,
           removed:  settings.sku_class.removed.count,
-          retained: settings.sku_class.retained.count,
+          kept: settings.sku_class.kept.count,
           total:    settings.sku_class.count
         })
       end
