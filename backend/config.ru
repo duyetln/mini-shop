@@ -7,6 +7,7 @@ class ApplicationService < Sinatra::Base
   use DigitalSkusService
   use BundleSkusService
   use StorefrontSkusService
+  use CustomersService
 end
 
 map("/svc") { run ApplicationService }

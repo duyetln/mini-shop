@@ -59,8 +59,8 @@ class Purchase < ActiveRecord::Base
     !submitted?
   end
 
-  [:amount, :tax].each do
-    defined_method method do
+  [:amount, :tax].each do |method|
+    define_method method do
       orders.kept.reduce(BigDecimal.new("0")) { |sum,order| sum += order.send(method) }
     end
   end
