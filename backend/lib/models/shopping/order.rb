@@ -6,6 +6,8 @@ class Order < ActiveRecord::Base
   attr_accessible :item_type, :item_id, :currency_id, :quantity
 
   belongs_to :purchase
+  belongs_to :item, polymorphic: :sku
+  belongs_to :currency
 
   validates :purchase_id, presence: true
   validates :item_type,   presence: true
@@ -25,16 +27,6 @@ class Order < ActiveRecord::Base
   delegate :payment_method,   to: :purchase
   delegate :billing_address,  to: :purchase
   delegate :shipping_address, to: :purchase
-
-  # stubbed
-  def item
-    true
-  end
-
-  # stubbed
-  def currency
-    true
-  end
 
   def delete!
     if persisted? && purchase.pending?

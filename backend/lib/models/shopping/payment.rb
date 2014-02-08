@@ -5,6 +5,9 @@ class Payment < ActiveRecord::Base
 
   attr_accessible :user_id, :payment_method_id, :billing_address_id, :amount, :currency_id
 
+  belongs_to :user
+  belongs_to :currency
+
   validates :user_id,             presence: true
   validates :payment_method_id,   presence: true
   validates :billing_address_id,  presence: true
@@ -18,16 +21,6 @@ class Payment < ActiveRecord::Base
   validates :currency,          presence: true
 
   before_create :set_values
-
-  # stubbed
-  def user
-    true
-  end
-
-  # stubbed
-  def currency
-    true
-  end
 
   protected
 

@@ -2,10 +2,14 @@ class PaymentMethod < ActiveRecord::Base
 
   attr_accessible :user_id, :name, :balance
 
+  belongs_to :user
+
   validates :user_id, presence: true
   validates :name,    presence: true
   validates :balance, presence: true
   validates :balance, numericality: { greater_than_or_equal_to: 0 }
+
+  validates :user, presence: true
 
   def enough?(amount=0)
     balance >= amount

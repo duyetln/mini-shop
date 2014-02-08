@@ -8,6 +8,7 @@ class Purchase < ActiveRecord::Base
   belongs_to :billing_address,  class_name: Address
   belongs_to :shipping_address, class_name: Address
   belongs_to :payment
+  belongs_to :user
 
   before_validation :set_values, on: :create
 
@@ -63,11 +64,6 @@ class Purchase < ActiveRecord::Base
     define_method method do
       orders.kept.reduce(BigDecimal.new("0")) { |sum,order| sum += order.send(method) }
     end
-  end
-
-  # stubbed
-  def user
-    true
   end
 
   def submit!
