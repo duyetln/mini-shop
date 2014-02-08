@@ -1,15 +1,15 @@
 module SkuResource
   extend ActiveSupport::Concern
 
+  include ActivableScope
+  include Activable
+  include RemovableScope
+  include Removable
+
   included do
     attr_accessible :title, :description
 
     validates :title, presence: true
-
-    scope :active,   -> { where(active: true) }
-    scope :inactive, -> { where(active: false) }
-    scope :removed,  -> { where(removed: true) }
-    scope :kept, -> { where(removed: false) }
 
     before_create :set_values
   end
@@ -45,9 +45,6 @@ module SkuResource
       self.removed = true
       save
     end
-  end
-
-  def fulfill!(order)
   end
 
   protected

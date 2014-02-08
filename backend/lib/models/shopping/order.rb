@@ -1,5 +1,8 @@
 class Order < ActiveRecord::Base
 
+  include RemovableScope
+  include Removable
+
   attr_accessible :item_type, :item_id, :currency_id, :quantity
 
   belongs_to :purchase
@@ -22,9 +25,6 @@ class Order < ActiveRecord::Base
   delegate :payment_method,   to: :purchase
   delegate :billing_address,  to: :purchase
   delegate :shipping_address, to: :purchase
-
-  scope :removed,  -> { where(removed: true) }
-  scope :kept, -> { where(removed: false) }  
 
   # stubbed
   def item
