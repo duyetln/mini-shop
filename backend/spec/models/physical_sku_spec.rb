@@ -16,7 +16,7 @@ describe PhysicalSku do
       it "is not valid" do
 
         built_sku.quantity = nil
-        expect(built_sku.valid?).to be_false
+        expect(built_sku).to_not be_valid
         expect(built_sku.errors).to have_key(:quantity)
       end
     end
@@ -26,7 +26,7 @@ describe PhysicalSku do
       it "is not valid" do
 
         built_sku.quantity = -5
-        expect(built_sku.valid?).to be_false
+        expect(built_sku).to_not be_valid
         expect(built_sku.errors).to have_key(:quantity)
       end
     end
@@ -39,7 +39,7 @@ describe PhysicalSku do
       it "is false" do
 
         built_sku.quantity = -5
-        expect(built_sku.available?).to be_false
+        expect(built_sku).to_not be_available
       end
     end
   end

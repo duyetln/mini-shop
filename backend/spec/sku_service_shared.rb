@@ -6,14 +6,6 @@ shared_examples "sku service" do |sku_class|
 
   let(:sku_class) { sku_class }
 
-  def expect_status(code)
-    expect(last_response.status).to eq(code)
-  end
-
-  def expect_empty_response
-    expect(last_response.body).to be_empty
-  end
-
   describe "get /#{namespace}/ping" do
 
     it "returns 200 status" do
@@ -91,11 +83,12 @@ shared_examples "sku service" do |sku_class|
   end
 
   describe "post /#{namespace}" do
+
     context "valid parameters" do
 
       it "creates the sku and returns it" do
 
-        expect{ post "/#{namespace}", built_sku.attributes }.to change{sku_class.count}.by(1)
+        expect{ post "/#{namespace}", built_sku.attributes }.to change{ sku_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(sku_class.last.id)
       end
@@ -105,7 +98,7 @@ shared_examples "sku service" do |sku_class|
 
       it "ignores invalid parameters and creates the sku" do
 
-        expect{ post "/#{namespace}", built_sku.attributes.merge(foo: :baz) }.to change{sku_class.count}.by(1)
+        expect{ post "/#{namespace}", built_sku.attributes.merge(foo: :baz) }.to change{ sku_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(sku_class.last.id)
       end
@@ -115,7 +108,7 @@ shared_examples "sku service" do |sku_class|
 
       it "returns 400 status" do
 
-        expect{ post "/#{namespace}" }.to_not change{sku_class.count}
+        expect{ post "/#{namespace}" }.to_not change{ sku_class.count }
         expect_status(400)
         expect_empty_response
       end
@@ -125,11 +118,11 @@ shared_examples "sku service" do |sku_class|
 
       it "does not update the removed flag" do
 
-        expect{post "/#{namespace}", built_sku.attributes.merge(removed: true) }.to change{sku_class.count}.by(1)
+        expect{ post "/#{namespace}", built_sku.attributes.merge(removed: true) }.to change{ sku_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(sku_class.last.id)
         expect(parsed_result[:removed]).to be_false
-        expect(sku_class.last.removed?).to be_false
+        expect(sku_class.last).to_not be_removed
       end
     end
 
@@ -137,11 +130,11 @@ shared_examples "sku service" do |sku_class|
 
       it "does not update the active flag" do
 
-        expect{ post "/#{namespace}", built_sku.attributes.merge(active: false) }.to change{sku_class.count}.by(1)
+        expect{ post "/#{namespace}", built_sku.attributes.merge(active: false) }.to change{ sku_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(sku_class.last.id)
         expect(parsed_result[:active]).to be_true
-        expect(sku_class.last.active?).to be_true
+        expect(sku_class.last).to be_active
       end
     end
   end
@@ -152,11 +145,12 @@ shared_examples "sku service" do |sku_class|
 
       context "non-deleted sku" do
 
+        let(:new_title) { "New title" }
+
         context "valid parameters" do
 
           it "updates the sku and returns it" do
 
-            new_title = "New Title"
             put "/#{namespace}/#{created_sku.id}", title: new_title
             expect_status(200)
             expect(parsed_result[:title]).to eq(new_title)
@@ -169,7 +163,6 @@ shared_examples "sku service" do |sku_class|
 
           it "ignores invalid parameters and updates the sku" do
 
-            new_title = "New Title"
             put "/#{namespace}/#{created_sku.id}", title: new_title, foo: :baz
             expect_status(200)
             expect(parsed_result[:title]).to eq(new_title)
@@ -186,7 +179,7 @@ shared_examples "sku service" do |sku_class|
             expect_status(200)
             expect(parsed_result[:removed]).to be_false
             created_sku.reload
-            expect(created_sku.removed?).to be_false
+            expect(created_sku).to_not be_removed
           end
         end
 
@@ -198,7 +191,7 @@ shared_examples "sku service" do |sku_class|
             expect_status(200)
             expect(parsed_result[:active]).to be_true
             created_sku.reload
-            expect(created_sku.active?).to be_true
+            expect(created_sku).to be_active
           end
         end
       end
@@ -238,7 +231,7 @@ shared_examples "sku service" do |sku_class|
           expect_status(200)
           expect(parsed_result[:removed]).to be_true
           created_sku.reload
-          expect(created_sku.removed?).to be_true
+          expect(created_sku).to be_removed
         end
       end
 
@@ -278,7 +271,7 @@ shared_examples "sku service" do |sku_class|
           expect_status(200)
           expect(parsed_result[:active]).to be_true
           created_sku.reload
-          expect(created_sku.active?).to be_true
+          expect(created_sku).to be_active
         end
       end
 
@@ -317,7 +310,7 @@ shared_examples "sku service" do |sku_class|
           expect_status(200)
           expect(parsed_result[:active]).to be_false
           created_sku.reload
-          expect(created_sku.active?).to be_false
+          expect(created_sku).to_not be_active
         end
       end
 

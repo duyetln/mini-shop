@@ -2,10 +2,10 @@ shared_examples "sku resource" do
 
   describe "factory model" do
 
-    it("is valid")            { expect(built_sku.valid?).to be_true }
-    it("is available")        { expect(built_sku.available?).to be_true }
-    it("is active")           { expect(built_sku.active?).to be_true }
-    it("is not removed")      { expect(built_sku.removed?).to be_false }
+    it("is valid")            { expect(built_sku).to be_valid }
+    it("is available")        { expect(built_sku).to be_available }
+    it("is active")           { expect(built_sku).to be_active }
+    it("is not removed")      { expect(built_sku).to_not be_removed }
     it("saves successfully")  { expect(built_sku.save).to be_true }
   end
 
@@ -22,7 +22,7 @@ shared_examples "sku resource" do
       it "is not valid" do
 
         built_sku.title = nil
-        expect(built_sku.valid?).to be_false
+        expect(built_sku).to_not be_valid
         expect(built_sku.errors).to have_key(:title)
       end
     end
@@ -30,8 +30,8 @@ shared_examples "sku resource" do
 
   describe "#available?" do
 
-    context("removed")  { it("is false") { built_sku.removed = true;  expect(built_sku.available?).to be_false } }
-    context("inactive") { it("is false") { built_sku.active  = false; expect(built_sku.available?).to be_false } }
+    context("removed")  { it("is false") { built_sku.removed = true;  expect(built_sku).to_not be_available } }
+    context("inactive") { it("is false") { built_sku.active  = false; expect(built_sku).to_not be_available } }
   end
 
   context "persisted" do
@@ -71,7 +71,7 @@ shared_examples "sku resource" do
 
   context "non persisted" do
 
-    before(:each) { expect(built_sku.persisted?).to be_false }
+    before(:each) { expect(built_sku).to_not be_persisted }
 
     describe "#activate!" do
 

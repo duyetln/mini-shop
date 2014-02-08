@@ -21,6 +21,18 @@ module SpecHelpers
 
     let(:created_user) { FactoryGirl.create :user }
     let(:built_user)   { FactoryGirl.build :user }
+
+    def expect_status(code)
+      expect(last_response.status).to eq(code)
+    end
+
+    def expect_empty_response
+      expect(last_response.body).to be_empty
+    end
+
+    def expect_response(body)
+      expect(last_response.body).to eq(body)
+    end
   end
 end
 
