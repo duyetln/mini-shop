@@ -1,4 +1,4 @@
-class UsersService < Sinatra::Base
+class UsersSvc < Sinatra::Base
 
   before { content_type :json }
 

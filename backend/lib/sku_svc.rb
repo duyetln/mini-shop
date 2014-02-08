@@ -2,7 +2,7 @@ require "sku_svc_filters"
 require "sku_svc_helpers"
 require "sku_svc_endpoints"
 
-module SkuService
+module SkuSvc
   extend ActiveSupport::Concern
 
   include SkuSvcFilters

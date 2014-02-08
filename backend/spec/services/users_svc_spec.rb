@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe UsersService do
+describe UsersSvc do
 
   def user_response_options
     { except: [:password, :updated_at]  }

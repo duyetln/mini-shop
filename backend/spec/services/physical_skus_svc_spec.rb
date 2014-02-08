@@ -1,7 +1,7 @@
 require "spec_helper"
-require "sku_service_shared"
+require "sku_svc_shared"
 
-describe PhysicalSkusService do
+describe PhysicalSkusSvc do
 
   it_behaves_like "sku service", PhysicalSku
 end
