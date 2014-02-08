@@ -15,7 +15,7 @@ class UsersService < Sinatra::Base
     end
 
     def user_response_options
-      { except: [:password, :updated_at] }
+      { root: false, except: [:password, :updated_at] }
     end
 
     def load_user!
