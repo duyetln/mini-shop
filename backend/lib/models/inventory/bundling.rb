@@ -1,13 +1,13 @@
 class Bundling < ActiveRecord::Base
 
-  BUNDLED_SKU_TYPES = [ "DigitalSku", "PhysicalSku" ]
+  BUNDLED_ITEM_TYPES = [ "DigitalItem", "PhysicalItem" ]
 
-  belongs_to :bundle_sku
-  belongs_to :bundled_sku, polymorphic: true
+  belongs_to :bundle_item
+  belongs_to :bundled_item, polymorphic: true
 
-  validates :bundle_sku,    presence: true
-  validates :bundle_sku_id, uniqueness: { scope: [ :bundled_sku_id, :bundled_sku_type ] }
-  validates :bundled_sku,      presence: true
-  validates :bundled_sku_type, inclusion:  { in: BUNDLED_SKU_TYPES }
+  validates :bundle_item,    presence: true
+  validates :bundle_item_id, uniqueness: { scope: [ :bundled_item_id, :bundled_item_type ] }
+  validates :bundled_item,      presence: true
+  validates :bundled_item_type, inclusion:  { in: BUNDLED_ITEM_TYPES }
 
 end

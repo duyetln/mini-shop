@@ -6,7 +6,7 @@ class Order < ActiveRecord::Base
   attr_accessible :item_type, :item_id, :currency_id, :quantity
 
   belongs_to :purchase
-  belongs_to :item, polymorphic: :sku
+  belongs_to :item, polymorphic: :item
   belongs_to :currency
 
   validates :purchase_id, presence: true
