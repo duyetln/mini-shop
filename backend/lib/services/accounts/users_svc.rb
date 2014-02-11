@@ -57,9 +57,9 @@ class UsersSvc < Sinatra::Base
     respond_with(@user, failure: 400) { |c| c.update_attributes(accessible_params) }
   end
 
-  put "/users/:uuid/confirm/:confirmation_code" do
+  put "/users/:uuid/confirm/:actv_code" do
     find_user_by_uuid!
-    !@user.confirmed? && @user.confirmation_code == params[:confirmation_code] || halt(404)
+    !@user.confirmed? && @user.actv_code == params[:actv_code] || halt(404)
     respond_with(@user) { |c| c.confirm! }
   end
 

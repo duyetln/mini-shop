@@ -17,12 +17,12 @@ class User < ActiveRecord::Base
   end
 
   def confirmed?
-    persisted? && confirmation_code.blank?
+    persisted? && actv_code.blank?
   end
 
   def confirm!
-    if persisted? && confirmation_code.present?
-      self.confirmation_code = nil
+    if persisted? && actv_code.present?
+      self.actv_code = nil
       save
     end
   end
@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
 
   def set_values
     self.uuid = SecureRandom.hex.upcase
-    self.confirmation_code = SecureRandom.hex.upcase
+    self.actv_code = SecureRandom.hex.upcase
   end
 
   def encrypt_password

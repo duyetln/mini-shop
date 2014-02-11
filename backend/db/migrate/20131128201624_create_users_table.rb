@@ -7,7 +7,7 @@ class CreateUsersTable < ActiveRecord::Migration
       t.string    :email
       t.date      :birthdate
       t.string    :password
-      t.string    :confirmation_code
+      t.string    :actv_code
       t.timestamps
     end
 

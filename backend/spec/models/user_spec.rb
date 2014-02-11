@@ -21,7 +21,7 @@ describe User do
       before(:each) { @password = built_user.password; expect(built_user.save).to eq(true) }
 
       it("sets uuid")              { expect(built_user.uuid).to be_present } 
-      it("sets confirmation_code") { expect(built_user.confirmation_code).to be_present }
+      it("sets actv_code") { expect(built_user.actv_code).to be_present }
       it("sets password")          { expect(built_user.password).to be_present }
       it("encrypts password")      { expect(BCrypt::Password.new(built_user.password)).to eq(@password) }
     end
@@ -47,7 +47,7 @@ describe User do
         
         it "returns true" do
 
-          created_user.confirmation_code = nil
+          created_user.actv_code = nil
           created_user.save; expect(created_user.confirmed?).to be_true
         end
       end
@@ -66,7 +66,7 @@ describe User do
 
         it "returns false" do
 
-          created_user.confirmation_code = nil
+          created_user.actv_code = nil
           created_user.save
           expect(created_user.confirm!).to be_false
         end
@@ -77,7 +77,7 @@ describe User do
         it("should return true")  do
 
           expect(created_user.confirm!).to be_true
-          expect(created_user.confirmation_code).to be_blank
+          expect(created_user.actv_code).to be_blank
         end
       end
     end

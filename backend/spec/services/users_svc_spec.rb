@@ -136,13 +136,13 @@ describe UsersSvc do
     end
   end
 
-  describe "put /users/:uuid/confirm/:confirmation_code" do
+  describe "put /users/:uuid/confirm/:actv_code" do
 
     context "user not found" do
 
       it "returns 404 status" do
 
-        put "/users/#{random_string}/confirm/#{created_user.confirmation_code}"
+        put "/users/#{random_string}/confirm/#{created_user.actv_code}"
         created_user.reload
         expect_status(404)
         expect(created_user).to_not be_confirmed
@@ -157,7 +157,7 @@ describe UsersSvc do
         
           created_user.confirm!
 
-          put "/users/#{created_user.uuid}/confirm/#{created_user.confirmation_code}"
+          put "/users/#{created_user.uuid}/confirm/#{created_user.actv_code}"
           created_user.reload
           expect_status(404)
           expect(created_user).to be_confirmed
@@ -179,7 +179,7 @@ describe UsersSvc do
 
         it "returns the user" do
 
-          put "/users/#{created_user.uuid}/confirm/#{created_user.confirmation_code}"
+          put "/users/#{created_user.uuid}/confirm/#{created_user.actv_code}"
           created_user.reload
           expect_status(200)
           expect(parsed_result[:uuid]).to eq(created_user.uuid)

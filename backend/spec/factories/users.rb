@@ -7,12 +7,12 @@ FactoryGirl.define do
     birthdate  Date.today
     password   "password"
 
-    trait :confirmation_code_blank do
-      confirmation_code nil
+    trait :actv_code_blank do
+      actv_code nil
     end
 
-    trait :confirmation_code_present do
-      confirmation_code SecureRandom.hex(5)
+    trait :actv_code_present do
+      actv_code SecureRandom.hex(5)
     end
   end
 end
