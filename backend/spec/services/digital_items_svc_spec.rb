@@ -1,5 +1,5 @@
 require "spec_helper"
-require "item_svc_shared"
+require "item_svc_helper"
 
 describe DigitalItemsSvc do
 

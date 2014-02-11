@@ -1,5 +1,5 @@
 require "spec_helper"
-require "item_resource_shared"
+require "item_resource_helper"
 
 describe PhysicalItem do
 
