@@ -44,3 +44,12 @@ module Fulfillable
     end
   end
 end
+
+module Displayable
+
+  [:title, :description].each do |method|
+    define_method method do
+      raise "#{method} must be implemented"
+    end
+  end
+end

@@ -49,9 +49,6 @@ module SkuSvcEndpoints
         respond_with(@sku) { |s| s.deactivate! }
       end
 
-      post "/#{namespace}/:id/fulfill" do
-        find_sku!
-      end
     end
 
   end
