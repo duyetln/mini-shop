@@ -25,6 +25,7 @@ class Order < ActiveRecord::Base
   validate  :pending_purchase
 
   before_create :set_values
+  before_save   :set_amount
 
   delegate :payment_method,   to: :purchase
   delegate :billing_address,  to: :purchase
@@ -47,7 +48,10 @@ class Order < ActiveRecord::Base
 
   def set_values
     self.uuid = SecureRandom.hex.upcase
-    #set amount
+  end
+
+  def set_amount
+    self.amount = item.amount(currency) if currency_changed?
   end
 
 end
