@@ -41,7 +41,7 @@ class Purchase < ActiveRecord::Base
   end
 
   def add_order(item_type, item_id, currency_id, quantity)
-    if pending?
+    if persisted? && pending?
       order = orders.kept.where(item_type: item_type, item_id: item_id).first_or_initialize
       order.currency_id = currency_id
       order.quantity    = quantity
@@ -50,7 +50,7 @@ class Purchase < ActiveRecord::Base
   end
 
   def remove_order(order_id)
-    if pending?
+    if persisted? && pending?
       order = orders.kept.find_by_id(order_id) || orders.kept.find_by_uuid(order_id)
       order.present? && order.delete! ? order : nil
     end
