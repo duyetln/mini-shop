@@ -7,6 +7,8 @@ class Price < ActiveRecord::Base
   validates :name, presence: true
   validates :name, uniqueness: true
 
+  delegate :discounted?, to: :discount, allow_nil: true
+
   def amount(currency)
     zero = BigDecimal.new("0.0")
 

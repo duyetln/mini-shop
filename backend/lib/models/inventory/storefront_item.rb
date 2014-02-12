@@ -9,10 +9,11 @@ class StorefrontItem < ActiveRecord::Base
   belongs_to :price
 
   validates :price, presence: true
-  validates :item,   presence: true
+  validates :item,  presence: true
   validates :item_type, inclusion: { in: ITEM_TYPES }
 
   delegate :amount, to: :price
+  delegate :discounted?, to: :price
 
   def available?
     !removed? && active? && item.available?

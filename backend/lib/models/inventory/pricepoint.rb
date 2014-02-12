@@ -7,6 +7,7 @@ class Pricepoint < ActiveRecord::Base
   validates :name, uniqueness: true
 
   def amount(currency)
-    pricepoint_prices.where(currency_id: currency.id).first.try(:amount)
+    currency_id = currency.instance_of?(Currency) && currency.id || Currency.find_by_code(currency).try(:id)
+    pricepoint_prices.where(currency_id: currency_id).first.try(:amount)
   end
 end

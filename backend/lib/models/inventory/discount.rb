@@ -5,11 +5,7 @@ class Discount < ActiveRecord::Base
   validates :name, presence: true
   validates :name, uniqueness: true
 
-  def current_rate
-    rate_at(DateTime.now)
-  end
-
-  def rate_at(datetime)
+  def rate_at(datetime=DateTime.now)
     zero_rate = BigDecimal.new("0.0")
     start_set = start_at.present?
     end_set   = end_at.present?
@@ -26,8 +22,10 @@ class Discount < ActiveRecord::Base
     end
   end
 
-  def discounted?
-    current_rate > 0.0
+  def discounted?(dt=DateTime.now)
+    rate_at(dt) > 0.0
   end
+
+  alias_method :current_rate, :rate_at
 
 end
