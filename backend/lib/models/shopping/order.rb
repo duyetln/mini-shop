@@ -24,8 +24,8 @@ class Order < ActiveRecord::Base
 
   validate  :pending_purchase
 
-  before_create :set_values
-  before_save   :set_amount
+  before_create :set_uuid
+  before_save   :set_values
 
   delegate :payment_method,   to: :purchase
   delegate :billing_address,  to: :purchase
@@ -46,12 +46,14 @@ class Order < ActiveRecord::Base
     errors.add(:purchase, "can't have submitted status on save") unless purchase_pending?
   end
 
-  def set_values
+  def set_uuid
     self.uuid = SecureRandom.hex.upcase
   end
 
-  def set_amount
-    self.amount = item.amount(currency) if currency_changed?
+  def set_values
+    self.amount = item.amount(currency) if currency_id_changed?
+    self.tax_rate ||= ( 5 + rand(15) ) / 100.0
+    self.tax = amount * quantity * tax_rate if amount_changed? || quantity_changed?
   end
 
 end
