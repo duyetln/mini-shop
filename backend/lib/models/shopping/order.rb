@@ -16,7 +16,7 @@ class Order < ActiveRecord::Base
   validates :quantity,    presence: true
   validates :quantity,    numericality: { greater_than_or_equal_to: 0 }
 
-  validates :purchase_id, uniqueness: { scope: [ :item_type, :item_id, :currency_id ] }, unless: :removed?
+  validates :purchase_id, uniqueness: { scope: [ :item_type, :item_id ] }, unless: :removed?
 
   validates :purchase, presence: true
   validates :item,     presence: true
