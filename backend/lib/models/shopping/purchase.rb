@@ -28,6 +28,8 @@ class Purchase < ActiveRecord::Base
   scope :submitted, -> { where(submitted: true) }
   scope :pending,   -> { where(submitted: false) }
 
+  delegate :currency, to: :payment_method, prefix: true
+
   def self.pending_purchase(user_id)
     where(user_id: user_id).pending.first_or_create
   end
@@ -61,8 +63,10 @@ class Purchase < ActiveRecord::Base
   end
 
   [:amount, :tax].each do |method|
-    define_method method do
-      orders.kept.reduce(BigDecimal.new("0")) { |sum,order| sum += order.send(method) }
+    define_method method do |currency=nil|
+      currency ||= payment_method_currency
+      currency   = currency.code unless currency.instance_of?(String)
+      orders.kept.reduce(BigDecimal("0.0")) { |s,o| s += Currency.exchange(o.send(method), o.currency.code, currency) } 
     end
   end
 
