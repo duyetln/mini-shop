@@ -34,7 +34,7 @@ class Order < ActiveRecord::Base
   delegate :pending?,         to: :purchase, prefix: true
 
   def delete!
-    if persisted? && purchase.pending?
+    if persisted? && purchase_pending?
       self.removed = true
       save
     end
