@@ -12,6 +12,8 @@ ActiveRecord::Base.establish_connection(YAML.load_file(File.join(SVC_ROOT, "conf
 Sinatra::Base.set :env,  SVC_ENV
 Sinatra::Base.set :root, SVC_ROOT
 
+CURRENCY_RATES = YAML.load_file(File.join(SVC_ROOT, "config/currency_rates.yml"))
+
 dirs = []
 dirs << "lib/*.rb"
 dirs << "lib/models/**/*.rb"
