@@ -36,6 +36,25 @@ module Removable
   end
 end
 
+module CommittableScope
+  extend ActiveSupport::Concern
+
+  included do
+
+    scope :committed, -> { where(committed: true) }
+    scope :pending,   -> { where(committed: false) }
+  end
+end
+
+module Committable
+
+  [:commit!].each do |method|
+    define_method method do
+      raise "#{method} must be implemented"
+    end
+  end
+end
+
 module Fulfillable
 
   [:fulfill!, :unfulfill!].each do |method|
