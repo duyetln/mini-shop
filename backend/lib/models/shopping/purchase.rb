@@ -1,5 +1,8 @@
 class Purchase < ActiveRecord::Base
 
+  include CommittableScope
+  include Committable
+
   attr_accessible :user_id, :payment_method_id, :billing_address_id, :shipping_address_id
 
   has_many :orders
@@ -24,9 +27,6 @@ class Purchase < ActiveRecord::Base
   validates :payment_method,   presence: true, if: :committed?
   validates :billing_address,  presence: true, if: :committed?
   validates :shipping_address, presence: true, if: :committed?
-
-  scope :committed, -> { where(committed: true) }
-  scope :pending,   -> { where(committed: false) }
 
   delegate :currency, to: :payment_method, prefix: true
 
