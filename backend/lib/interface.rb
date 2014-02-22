@@ -22,8 +22,8 @@ module RemovableScope
 
   included do
 
-    scope :removed,  -> { where(removed: true) }
-    scope :kept,     -> { where(removed: false) }
+    scope :deleted,  -> { where(deleted: true) }
+    scope :kept,     -> { where(deleted: false) }
   end
 end
 

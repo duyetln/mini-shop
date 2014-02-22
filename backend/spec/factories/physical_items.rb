@@ -4,6 +4,6 @@ FactoryGirl.define do
     description "Description"
     active true
     quantity { rand(1..10) }
-    removed false
+    deleted false
   end
 end

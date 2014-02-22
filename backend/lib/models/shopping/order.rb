@@ -16,7 +16,7 @@ class Order < ActiveRecord::Base
   validates :quantity,    presence: true
   validates :quantity,    numericality: { greater_than_or_equal_to: 0 }
 
-  validates :purchase_id, uniqueness: { scope: [ :item_type, :item_id ] }, unless: :removed?
+  validates :purchase_id, uniqueness: { scope: [ :item_type, :item_id ] }, unless: :deleted?
 
   validates :purchase, presence: true
   validates :item,     presence: true
@@ -34,8 +34,8 @@ class Order < ActiveRecord::Base
   delegate :pending?,         to: :purchase, prefix: true
 
   def delete!
-    if persisted? && !removed? && purchase_pending?
-      self.removed = true
+    if persisted? && !deleted? && purchase_pending?
+      self.deleted = true
       save
     end
   end

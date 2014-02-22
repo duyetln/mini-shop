@@ -5,7 +5,7 @@ shared_examples "item resource" do
     it("is valid")            { expect(built_item).to be_valid }
     it("is available")        { expect(built_item).to be_available }
     it("is active")           { expect(built_item).to be_active }
-    it("is not removed")      { expect(built_item).to_not be_removed }
+    it("is not deleted")      { expect(built_item).to_not be_deleted }
     it("saves successfully")  { expect(built_item.save).to be_true }
   end
 
@@ -30,7 +30,7 @@ shared_examples "item resource" do
 
   describe "#available?" do
 
-    context("removed")  { it("is false") { built_item.removed = true;  expect(built_item).to_not be_available } }
+    context("deleted")  { it("is false") { built_item.deleted = true;  expect(built_item).to_not be_available } }
     context("inactive") { it("is false") { built_item.active  = false; expect(built_item).to_not be_available } }
   end
 
@@ -44,11 +44,11 @@ shared_examples "item resource" do
     end
   end
 
-  shared_examples "item not allowed to modify removed flag" do
+  shared_examples "item not allowed to modify deleted flag" do
 
-    it "does not modify removed flag" do
+    it "does not modify deleted flag" do
 
-      expect(test_item).to_not receive(:removed=)
+      expect(test_item).to_not receive(:deleted=)
       expect(test_item).to_not receive(:save)
       test_item.send(action)
     end
@@ -106,28 +106,28 @@ shared_examples "item resource" do
 
     context "kept" do
 
-      before(:each) { expect(built_item).to receive(:removed?).and_return(false) }
+      before(:each) { expect(built_item).to receive(:deleted?).and_return(false) }
 
       describe "#delete!" do
 
-        it "sets removed to true and saves" do
+        it "sets deleted to true and saves" do
 
-          expect(built_item).to receive(:removed=).with(true)
+          expect(built_item).to receive(:deleted=).with(true)
           expect(built_item).to receive(:save)
           built_item.delete!
         end
       end
     end
 
-    context "removed" do
+    context "deleted" do
 
-      before(:each) { expect(built_item).to receive(:removed?).and_return(true) }
+      before(:each) { expect(built_item).to receive(:deleted?).and_return(true) }
 
       describe "#delete!" do
 
         let(:action) { :delete! }
 
-        it_behaves_like "item not allowed to modify removed flag"
+        it_behaves_like "item not allowed to modify deleted flag"
       end
     end
   end
@@ -156,7 +156,7 @@ shared_examples "item resource" do
 
       let(:action) { :delete! }
 
-      it_behaves_like "item not allowed to modify removed flag"
+      it_behaves_like "item not allowed to modify deleted flag"
     end
   end
 end

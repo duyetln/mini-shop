@@ -9,7 +9,7 @@ class CreateOrdersTable < ActiveRecord::Migration
       t.decimal  :amount, precision: 20, scale: 4
       t.decimal  :tax, precision: 20, scale: 4
       t.integer  :quantity
-      t.boolean  :removed
+      t.boolean  :deleted
       t.datetime :created_at
     end
 

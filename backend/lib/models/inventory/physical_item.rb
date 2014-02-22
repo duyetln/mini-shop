@@ -7,7 +7,7 @@ class PhysicalItem < ActiveRecord::Base
   validates :quantity, numericality: { greater_than_or_equal_to: 0 }
 
   def available?
-    !removed? && active? && quantity > 0
+    !deleted? && active? && quantity > 0
   end
 
 end

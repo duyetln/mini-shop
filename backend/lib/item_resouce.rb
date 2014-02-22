@@ -23,7 +23,7 @@ module ItemResource
   end
 
   def available?
-    !removed? && active?
+    !deleted? && active?
   end
 
   def activate!
@@ -41,8 +41,8 @@ module ItemResource
   end
 
   def delete!
-    if persisted? && !removed?
-      self.removed = true
+    if persisted? && !deleted?
+      self.deleted = true
       save
     end
   end
@@ -51,7 +51,7 @@ module ItemResource
 
   def set_values
     self.active  = true
-    self.removed = false
+    self.deleted = false
     true
   end
 

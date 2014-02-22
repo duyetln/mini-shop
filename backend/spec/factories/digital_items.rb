@@ -3,6 +3,6 @@ FactoryGirl.define do
     title "Title"
     description "Description"
     active true
-    removed false
+    deleted false
   end
 end

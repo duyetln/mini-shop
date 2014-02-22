@@ -8,7 +8,7 @@ module ItemSvcEndpoints
         respond_with({
           active:   settings.item_class.active.count,
           inactive: settings.item_class.inactive.count,
-          removed:  settings.item_class.removed.count,
+          deleted:  settings.item_class.deleted.count,
           kept: settings.item_class.kept.count,
           total:    settings.item_class.count
         })

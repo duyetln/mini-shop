@@ -114,15 +114,15 @@ shared_examples "item service" do |item_class|
       end
     end
 
-    context "removed flag included" do
+    context "deleted flag included" do
 
-      it "does not update the removed flag" do
+      it "does not update the deleted flag" do
 
-        expect{ post "/#{namespace}", built_item.attributes.merge(removed: true) }.to change{ item_class.count }.by(1)
+        expect{ post "/#{namespace}", built_item.attributes.merge(deleted: true) }.to change{ item_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(item_class.last.id)
-        expect(parsed_result[:removed]).to be_false
-        expect(item_class.last).to_not be_removed
+        expect(parsed_result[:deleted]).to be_false
+        expect(item_class.last).to_not be_deleted
       end
     end
 
@@ -171,15 +171,15 @@ shared_examples "item service" do |item_class|
           end
         end
 
-        context "removed flag included" do
+        context "deleted flag included" do
 
-          it "does not update the removed flag" do
+          it "does not update the deleted flag" do
 
-            put "/#{namespace}/#{created_item.id}", removed: true
+            put "/#{namespace}/#{created_item.id}", deleted: true
             expect_status(200)
-            expect(parsed_result[:removed]).to be_false
+            expect(parsed_result[:deleted]).to be_false
             created_item.reload
-            expect(created_item).to_not be_removed
+            expect(created_item).to_not be_deleted
           end
         end
 
@@ -229,9 +229,9 @@ shared_examples "item service" do |item_class|
 
           delete "/#{namespace}/#{created_item.id}"
           expect_status(200)
-          expect(parsed_result[:removed]).to be_true
+          expect(parsed_result[:deleted]).to be_true
           created_item.reload
-          expect(created_item).to be_removed
+          expect(created_item).to be_deleted
         end
       end
 

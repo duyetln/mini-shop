@@ -10,7 +10,7 @@ class BundleItem < ActiveRecord::Base
   end
 
   def available?
-    !removed? && active? && bundled_items.present? && bundled_items.all?(&:available?)
+    !deleted? && active? && bundled_items.present? && bundled_items.all?(&:available?)
   end
 
 end
