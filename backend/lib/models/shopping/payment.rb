@@ -25,8 +25,14 @@ class Payment < ActiveRecord::Base
 
   before_create :set_values
 
+  delegate :currency, to: :payment_method, prefix: true
+
+  def pending?
+    !committed?
+  end
+
   def commit!
-    if persisted?
+    if persisted? && pending?
       self.committed    = true
       self.committed_at = DateTime.now
       save

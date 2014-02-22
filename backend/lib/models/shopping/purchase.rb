@@ -64,14 +64,14 @@ class Purchase < ActiveRecord::Base
 
   [:amount, :tax].each do |method|
     define_method method do |currency=nil|
+      currency   = Currency.find_by_code(currency) unless currency.instance_of?(Currency)
       currency ||= payment_method_currency
-      currency   = currency.code unless currency.instance_of?(String)
-      orders.kept.reduce(BigDecimal("0.0")) { |s,o| s += Currency.exchange(o.send(method), o.currency.code, currency) } 
+      orders.kept.reduce(BigDecimal("0.0")) { |s,o| s += Currency.exchange(o.send(method), o.currency.code, currency.code) } 
     end
   end
 
   def commit!
-    if persisted?
+    if persisted? && pending?
       self.committed    = true
       self.committed_at = DateTime.now
       save

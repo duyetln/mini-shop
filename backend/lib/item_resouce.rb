@@ -27,21 +27,21 @@ module ItemResource
   end
 
   def activate!
-    if persisted?
+    if persisted? && !active?
       self.active = true
       save
     end
   end
 
   def deactivate!
-    if persisted?
+    if persisted? && active?
       self.active = false
       save
     end
   end
 
   def delete!
-    if persisted?
+    if persisted? && !removed?
       self.removed = true
       save
     end
