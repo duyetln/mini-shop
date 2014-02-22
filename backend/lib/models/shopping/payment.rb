@@ -1,5 +1,8 @@
 class Payment < ActiveRecord::Base
 
+  include CommittableScope
+  include Committable
+
   belongs_to :payment_method
   belongs_to :billing_address
 
@@ -22,10 +25,20 @@ class Payment < ActiveRecord::Base
 
   before_create :set_values
 
+  def commit!
+    if persisted?
+      self.committed    = true
+      self.committed_at = DateTime.now
+      save
+    end
+  end
+
   protected
 
   def set_values
     self.uuid = SecureRandom.hex.upcase
+    self.committed    = false
+    self.committed_at = nil
     self.refunded = false
     true
   end

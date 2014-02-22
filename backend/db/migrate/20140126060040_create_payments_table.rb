@@ -7,6 +7,8 @@ class CreatePaymentsTable < ActiveRecord::Migration
       t.integer  :billing_address_id
       t.decimal  :amount, precision: 20, scale: 4
       t.integer  :currency_id
+      t.boolean  :committed
+      t.datetime :committed_at
       t.boolean  :refunded
       t.datetime :created_at
     end
