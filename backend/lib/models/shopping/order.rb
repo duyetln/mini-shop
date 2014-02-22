@@ -30,7 +30,7 @@ class Order < ActiveRecord::Base
   delegate :payment_method,   to: :purchase
   delegate :billing_address,  to: :purchase
   delegate :shipping_address, to: :purchase
-  delegate :submitted?,       to: :purchase, prefix: true
+  delegate :committed?,       to: :purchase, prefix: true
   delegate :pending?,         to: :purchase, prefix: true
 
   def delete!
@@ -43,7 +43,7 @@ class Order < ActiveRecord::Base
   protected
 
   def pending_purchase
-    errors.add(:purchase, "can't have submitted status on save") unless purchase_pending?
+    errors.add(:purchase, "can't have committed status on save") unless purchase_pending?
   end
 
   def set_uuid

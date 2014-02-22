@@ -6,8 +6,8 @@ class CreatePurchasesTable < ActiveRecord::Migration
       t.integer  :billing_address_id
       t.integer  :shipping_address_id
       t.integer  :payment_id
-      t.boolean  :submitted
-      t.datetime :submitted_at
+      t.boolean  :committed
+      t.datetime :committed_at
       t.datetime :created_at
     end
 

@@ -12,21 +12,21 @@ class Purchase < ActiveRecord::Base
 
   before_validation :set_values, on: :create
 
-  validates :submitted, uniqueness: { scope: :user_id }, unless: :submitted?
-  validates :submitted_at, presence: true, if: :submitted?
+  validates :committed, uniqueness: { scope: :user_id }, unless: :committed?
+  validates :committed_at, presence: true, if: :committed?
 
   validates :user_id,             presence: true 
-  validates :payment_method_id,   presence: true, if: :submitted?
-  validates :billing_address_id,  presence: true, if: :submitted?
-  validates :shipping_address_id, presence: true, if: :submitted?
+  validates :payment_method_id,   presence: true, if: :committed?
+  validates :billing_address_id,  presence: true, if: :committed?
+  validates :shipping_address_id, presence: true, if: :committed?
 
   validates :user,             presence: true
-  validates :payment_method,   presence: true, if: :submitted?
-  validates :billing_address,  presence: true, if: :submitted?
-  validates :shipping_address, presence: true, if: :submitted?
+  validates :payment_method,   presence: true, if: :committed?
+  validates :billing_address,  presence: true, if: :committed?
+  validates :shipping_address, presence: true, if: :committed?
 
-  scope :submitted, -> { where(submitted: true) }
-  scope :pending,   -> { where(submitted: false) }
+  scope :committed, -> { where(committed: true) }
+  scope :pending,   -> { where(committed: false) }
 
   delegate :currency, to: :payment_method, prefix: true
 
@@ -59,7 +59,7 @@ class Purchase < ActiveRecord::Base
   end
 
   def pending?
-    !submitted?
+    !committed?
   end
 
   [:amount, :tax].each do |method|
@@ -70,16 +70,16 @@ class Purchase < ActiveRecord::Base
     end
   end
 
-  def submit!
+  def commit!
     if persisted?
-      self.submitted    = true
-      self.submitted_at = DateTime.now
+      self.committed    = true
+      self.committed_at = DateTime.now
       save
     end
   end
 
   def fulfill!
-    if persisted? && submitted?
+    if persisted? && committed?
 
     end
   end
@@ -87,8 +87,8 @@ class Purchase < ActiveRecord::Base
   protected
 
   def set_values
-    self.submitted    = false
-    self.submitted_at = nil
+    self.committed    = false
+    self.committed_at = nil
     true
   end
 end
