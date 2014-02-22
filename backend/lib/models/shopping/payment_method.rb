@@ -4,6 +4,7 @@ class PaymentMethod < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :currency
+  has_many   :payments
 
   validates :user_id, presence: true
   validates :name,    presence: true
@@ -15,8 +16,14 @@ class PaymentMethod < ActiveRecord::Base
 
   validates :user, presence: true
 
-  def enough?(amount=0)
-    balance >= amount
+  def pending_balance
+    balance - payments.pending.reduce(BigDecimal("0.0")) { |s,p| s += Currency.exchange(p.amount, p.currency.code, currency.code) } 
+  end
+
+  def enough?(amount=0, currency=nil)
+    currency   = Currency.find_by_code(currency) unless currency.instance_of?(Currency)
+    currency ||= self.currency
+    pending_balance >= Currency.exchange(amount, currency.code, self.currency.code)
   end
   
 end
