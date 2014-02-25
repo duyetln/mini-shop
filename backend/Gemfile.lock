@@ -33,6 +33,7 @@ GEM
     factory_girl (4.3.0)
       activesupport (>= 3.0.0)
     i18n (0.6.9)
+    json (1.8.1)
     method_source (0.8.2)
     multi_json (1.8.4)
     mysql2 (0.3.15)
@@ -49,6 +50,9 @@ GEM
     pry-stack_explorer (0.4.9.1)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
+    pry-theme (1.0.2)
+      coderay (~> 1.1)
+      json (~> 1.8)
     rack (1.5.2)
     rack-parser (0.6.0)
       rack
@@ -91,6 +95,7 @@ DEPENDENCIES
   pry-debugger
   pry-remote
   pry-stack_explorer
+  pry-theme
   rack-parser
   rack-test
   rake
