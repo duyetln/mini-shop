@@ -8,6 +8,7 @@ class Order < ActiveRecord::Base
   belongs_to :purchase
   belongs_to :item, polymorphic: :item
   belongs_to :currency
+  has_one    :fulfillment
 
   validates :purchase_id, presence: true
   validates :item_type,   presence: true
