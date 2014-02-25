@@ -5,6 +5,7 @@ module ItemResource
   include Activable
   include RemovableScope
   include Removable
+  include Fulfillable
 
   included do
     attr_accessible :title, :description
