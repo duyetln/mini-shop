@@ -43,7 +43,7 @@ class Order < ActiveRecord::Base
   protected
 
   def pending_purchase
-    errors.add(:purchase, "can't have committed status on save") unless purchase_pending?
+    errors.add(:purchase, "can't be already commited on save") unless purchase_pending?
   end
 
   def set_uuid
