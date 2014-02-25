@@ -9,7 +9,6 @@ gem "yajl-ruby", "1.1.0", require: ["yajl", "yajl/json_gem"]
 gem "rack-parser", require: "rack/parser"
 
 group :development do
-  gem "pry-theme"
   gem "thin"
   gem "pry"
   gem "pry-remote"
