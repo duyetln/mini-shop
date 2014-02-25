@@ -10,4 +10,8 @@ class PhysicalItem < ActiveRecord::Base
     !deleted? && active? && quantity > 0
   end
 
+  def fulfill!(order)
+    ShippingFulfillment.create(order_id: order.id).fulfill!
+  end
+
 end

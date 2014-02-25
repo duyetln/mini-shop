@@ -14,6 +14,7 @@ class StorefrontItem < ActiveRecord::Base
 
   delegate :amount, to: :price
   delegate :discounted?, to: :price
+  delegate :fulfill!, to: :item
 
   def available?
     !deleted? && active? && item.available?
