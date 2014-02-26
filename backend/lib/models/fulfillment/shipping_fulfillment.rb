@@ -7,6 +7,6 @@ class ShippingFulfillment < Fulfillment
     shipment.user = order.user
     shipment.item = order.item
     shipment.shipping_address = order.shipping_address
-    shipment.save
+    shipment.save!
   end
 end

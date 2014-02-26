@@ -6,6 +6,6 @@ class OnlineFulfillment < Fulfillment
     ownership = Ownership.new
     ownership.user = order.user
     ownership.item = order.item
-    ownership.save
+    ownership.save!
   end
 end

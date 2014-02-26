@@ -1,5 +1,8 @@
 class Fulfillment < ActiveRecord::Base
 
+  class FulfillmentFailure < StandardError; end
+  class UnfulfillmentFailure < StandardError; end
+
   attr_accessible :order_id
 
   belongs_to :order
@@ -11,15 +14,13 @@ class Fulfillment < ActiveRecord::Base
   before_create :set_values
 
   def fulfill!
-    if pending? && process!
+    if persisted? && !fulfilled? && process!
       self.fulfilled    = true
       self.fulfilled_at = DateTime.now
-      save
+      save!
     end
-  end
 
-  def pending?
-    !fulfilled?
+    persisted? && fulfilled? || ( raise FulfillmentFailure )
   end
 
   protected
@@ -33,4 +34,5 @@ class Fulfillment < ActiveRecord::Base
     self.fulfilled_at = nil
     true
   end
+
 end
