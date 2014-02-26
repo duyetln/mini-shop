@@ -4,6 +4,7 @@ class CreateShipmentsTable < ActiveRecord::Migration
       t.integer  :user_id
       t.string   :item_type
       t.integer  :item_id
+      t.integer  :quantity
       t.integer  :shipping_address_id
       t.datetime :created_at
     end
