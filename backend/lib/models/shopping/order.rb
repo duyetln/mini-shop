@@ -28,6 +28,7 @@ class Order < ActiveRecord::Base
   before_create :set_uuid
   before_save   :set_values
 
+  delegate :user,             to: :purchase
   delegate :payment_method,   to: :purchase
   delegate :billing_address,  to: :purchase
   delegate :shipping_address, to: :purchase
@@ -39,6 +40,10 @@ class Order < ActiveRecord::Base
       self.deleted = true
       save
     end
+  end
+
+  def fulfill!
+    item.fulfill!(self)
   end
 
   protected
