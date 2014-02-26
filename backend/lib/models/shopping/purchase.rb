@@ -8,8 +8,8 @@ class Purchase < ActiveRecord::Base
   has_many :orders
 
   belongs_to :payment_method
-  belongs_to :billing_address,  class_name: Address
-  belongs_to :shipping_address, class_name: Address
+  belongs_to :billing_address,  class_name: "Address"
+  belongs_to :shipping_address, class_name: "Address"
   belongs_to :payment
   belongs_to :user
 
