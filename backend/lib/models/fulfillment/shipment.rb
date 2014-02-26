@@ -1,6 +1,6 @@
 class Shipment < ActiveRecord::Base
 
-  attr_accessible :user_id, :item_type, :item_id, :shipping_address_id
+  attr_accessible :user_id, :item_type, :item_id, :quantity, :shipping_address_id
 
   belongs_to :user
   belongs_to :item, polymorphic: true
@@ -9,6 +9,8 @@ class Shipment < ActiveRecord::Base
   validates :user_id,   presence: true
   validates :item_type, presence: true
   validates :item_id,   presence: true
+  validates :quantity,  presence: true
+  validates :quantity,  numericality: { greater_than_or_equal_to: 0 }
   validates :shipping_address_id, presence: true
 
   validates :user, presence: true
