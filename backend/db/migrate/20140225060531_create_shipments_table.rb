@@ -2,6 +2,7 @@ class CreateShipmentsTable < ActiveRecord::Migration
   def up
     create_table :shipments do |t|
       t.integer  :user_id
+      t.integer  :order_id
       t.string   :item_type
       t.integer  :item_id
       t.integer  :quantity
