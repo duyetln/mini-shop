@@ -2,8 +2,10 @@ class CreateOwnershipsTable < ActiveRecord::Migration
   def up
     create_table :ownerships do |t|
       t.integer  :user_id
+      t.integer  :order_id
       t.string   :item_type
       t.string   :item_id
+      t.integer  :quantity
       t.datetime :created_at
     end
 
