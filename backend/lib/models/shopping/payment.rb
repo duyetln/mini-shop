@@ -1,8 +1,5 @@
 class Payment < ActiveRecord::Base
 
-  include CommittableScope
-  include Committable
-
   belongs_to :payment_method
   belongs_to :billing_address
 
@@ -22,6 +19,9 @@ class Payment < ActiveRecord::Base
   validates :payment_method,    presence: true
   validates :billing_address,   presence: true
   validates :currency,          presence: true
+
+  scope :committed, -> { where(committed: true) }
+  scope :pending,   -> { where(committed: false) }
 
   before_create :set_values
 

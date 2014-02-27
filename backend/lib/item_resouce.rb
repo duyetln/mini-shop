@@ -1,16 +1,15 @@
 module ItemResource
   extend ActiveSupport::Concern
 
-  include ActivableScope
-  include Activable
-  include DeletableScope
-  include Deletable
-  include Fulfillable
-
   included do
     attr_accessible :title, :description
 
     validates :title, presence: true
+
+    scope :active,   -> { where(active: true) }
+    scope :inactive, -> { where(active: false) }
+    scope :deleted,  -> { where(deleted: true) }
+    scope :kept,     -> { where(deleted: false) }
 
     before_create :set_values
   end
