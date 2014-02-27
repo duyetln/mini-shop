@@ -11,7 +11,11 @@ class PhysicalItem < ActiveRecord::Base
   end
 
   def fulfill!(order)
-    ShippingFulfillment.create(order_id: order.id).fulfill!
+    fulfillment = ShippingFulfillment.new
+    fulfillment.order = order
+    fulfillment.item  = self
+    fulfillment.save!
+    fulfillment.fufill!
   end
 
 end

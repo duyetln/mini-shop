@@ -2,6 +2,10 @@ class DigitalItem < ActiveRecord::Base
   include ItemResource
 
   def fulfill!(order)
-    OnlineFulfillment.create(order_id: order.id).fulfill!
+    fulfillment = OnlineFulfillment.new
+    fulfillment.order = order
+    fulfillment.item  = self
+    fulfillment.save!
+    fulfillment.fufill!
   end
 end
