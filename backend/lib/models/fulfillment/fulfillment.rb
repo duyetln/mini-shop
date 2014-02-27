@@ -7,7 +7,6 @@ class Fulfillment < ActiveRecord::Base
 
   belongs_to :order
 
-  validates :order_id, uniqueness: true
   validates :order_id, presence: true
   validates :order,    presence: true
 
