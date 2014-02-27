@@ -1,8 +1,5 @@
 class Order < ActiveRecord::Base
 
-  include DeletableScope
-  include Deletable
-
   attr_accessible :item_type, :item_id, :currency_id, :quantity
 
   belongs_to :purchase
@@ -25,6 +22,9 @@ class Order < ActiveRecord::Base
 
   validate  :pending_purchase
 
+  scope :deleted,  -> { where(deleted: true) }
+  scope :kept,     -> { where(deleted: false) }
+
   before_create :set_uuid
   before_save   :set_values
 
@@ -44,6 +44,10 @@ class Order < ActiveRecord::Base
 
   def fulfill!
     item.fulfill!(self)
+  end
+
+  def kept?
+    !deleted?
   end
 
   protected

@@ -33,6 +33,10 @@ module ItemResource
     end
   end
 
+  def inactive?
+    !active?
+  end
+
   def deactivate!
     if persisted? && active?
       self.active = false
@@ -45,6 +49,10 @@ module ItemResource
       self.deleted = true
       save
     end
+  end
+
+  def kept?
+    !deleted?
   end
 
   protected
