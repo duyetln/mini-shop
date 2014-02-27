@@ -17,7 +17,7 @@ module Activable
   end
 end
 
-module RemovableScope
+module DeletableScope
   extend ActiveSupport::Concern
 
   included do
@@ -27,7 +27,7 @@ module RemovableScope
   end
 end
 
-module Removable
+module Deletable
 
   [:delete!].each do |method|
     define_method method do
@@ -72,3 +72,4 @@ module Displayable
     end
   end
 end
+

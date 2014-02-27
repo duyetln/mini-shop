@@ -3,8 +3,8 @@ module ItemResource
 
   include ActivableScope
   include Activable
-  include RemovableScope
-  include Removable
+  include DeletableScope
+  include Deletable
   include Fulfillable
 
   included do

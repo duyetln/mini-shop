@@ -1,7 +1,7 @@
 class Order < ActiveRecord::Base
 
-  include RemovableScope
-  include Removable
+  include DeletableScope
+  include Deletable
 
   attr_accessible :item_type, :item_id, :currency_id, :quantity
 
