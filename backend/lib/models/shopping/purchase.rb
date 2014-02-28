@@ -48,7 +48,9 @@ class Purchase < ActiveRecord::Base
 
   def remove(item)
     if persisted? && pending?
-      order = orders.kept.detect{|o| o.item == item} || orders.kept.detect{|o| o == item }
+      order = 
+        orders.kept.detect{ |o| o.item == item } || 
+        orders.kept.detect{ |o| o      == item }
       order.present? && order.delete! ? order : nil
     end
   end
@@ -58,10 +60,8 @@ class Purchase < ActiveRecord::Base
   end
 
   [:amount, :tax].each do |method|
-    define_method method do |currency=nil|
-      currency   = Currency.find_by_code(currency) unless currency.instance_of?(Currency)
-      currency ||= payment_method_currency
-      orders.kept.reduce(BigDecimal("0.0")) { |s,o| s += Currency.exchange(o.send(method), o.currency.code, currency.code) } 
+    define_method method do |currency=payment_method_currency|
+      orders.kept.reduce(BigDecimal("0.0")) { |s,o| s += Currency.exchange(o.send(method), o.currency, currency) } 
     end
   end
 

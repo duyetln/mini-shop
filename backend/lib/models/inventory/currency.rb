@@ -6,11 +6,11 @@ class Currency < ActiveRecord::Base
 
   before_save :upcase_code
 
-  def self.exchange(amount, src_unit, dst_unit)
+  def self.exchange(amount, src_curr, dst_curr)
 
     amount   = BigDecimal.new(amount.to_s)
-    src_unit = src_unit.upcase.to_sym
-    dst_unit = dst_unit.upcase.to_sym
+    src_unit = src_curr.code.upcase.to_sym
+    dst_unit = dst_curr.code.upcase.to_sym
 
     src_rate = CURRENCY_RATES[:USD][src_unit]
     dst_rate = CURRENCY_RATES[:USD][dst_unit]
