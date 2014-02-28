@@ -10,6 +10,9 @@ class CreateOrdersTable < ActiveRecord::Migration
       t.decimal  :tax, precision: 20, scale: 4
       t.integer  :quantity
       t.boolean  :deleted
+      t.integer  :status
+      t.datetime :fulfilled_at
+      t.datetime :reversed_at
       t.datetime :created_at
     end
 

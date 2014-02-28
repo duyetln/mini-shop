@@ -5,8 +5,9 @@ class CreateFulfillmentsTable < ActiveRecord::Migration
       t.integer  :order_id
       t.string   :item_type
       t.integer  :item_id
-      t.boolean  :fulfilled
+      t.integer  :status
       t.datetime :fulfilled_at
+      t.datetime :reversed_at
       t.datetime :created_at
     end
 
