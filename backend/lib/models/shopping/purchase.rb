@@ -30,30 +30,25 @@ class Purchase < ActiveRecord::Base
 
   delegate :currency, to: :payment_method, prefix: true
 
-  def self.pending_purchase(user_id)
-    where(user_id: user_id).pending.first_or_create
+  def self.pending_purchase(user)
+    where(user_id: user.id).pending.first_or_create
   end
 
-  def self.add_order(user_id, item_type, item_id, currency_id, quantity)
-    pending_purchase(user_id).add_order(item_type, item_id, currency_id, quantity)
-  end
-
-  def self.remove_order(user_id, order_id)
-    pending_purchase(user_id).remove_order(order_id)
-  end
-
-  def add_order(item_type, item_id, currency_id, quantity)
+  def add(item, currency, quantity=nil)
     if persisted? && pending?
-      order = orders.kept.where(item_type: item_type, item_id: item_id).first_or_initialize
-      order.currency_id = currency_id
-      order.quantity    = quantity
+      order = orders.kept.where(item_type: item.class, item_id: item.id).first_or_initialize
+      order.currency   = currency
+      order.quantity ||= 0
+      quantity.present? ? 
+        order.quantity  = quantity :
+        order.quantity += 1
       order.save ? order : nil
     end
   end
 
-  def remove_order(order_id)
+  def remove(item)
     if persisted? && pending?
-      order = orders.kept.find_by_id(order_id) || orders.kept.find_by_uuid(order_id)
+      order = orders.kept.detect{|o| o.item == item} || orders.kept.detect{|o| o == item }
       order.present? && order.delete! ? order : nil
     end
   end
