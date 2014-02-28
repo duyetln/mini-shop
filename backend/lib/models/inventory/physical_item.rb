@@ -15,7 +15,7 @@ class PhysicalItem < ActiveRecord::Base
     fulfillment.order = order
     fulfillment.item  = self
     fulfillment.save!
-    fulfillment.fufill!
+    fulfillment.fulfill!
   end
 
 end

@@ -1,7 +1,7 @@
 class Payment < ActiveRecord::Base
 
   belongs_to :payment_method
-  belongs_to :billing_address
+  belongs_to :billing_address, class_name: "Address"
 
   attr_accessible :user_id, :payment_method_id, :billing_address_id, :amount, :currency_id
 
@@ -33,9 +33,11 @@ class Payment < ActiveRecord::Base
 
   def commit!
     if persisted? && pending?
+      payment_method.balance -= Currency.exchange(amount, currency.code, payment_method_currency.code)
+      payment_method.save!
       self.committed    = true
       self.committed_at = DateTime.now
-      save
+      save!
     end
   end
 

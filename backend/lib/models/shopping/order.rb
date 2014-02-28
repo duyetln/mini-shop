@@ -43,7 +43,7 @@ class Order < ActiveRecord::Base
   end
 
   def fulfill!
-    item.fulfill!(self)
+    quantity.times { item.fulfill!(self) }
   end
 
   def kept?
@@ -61,9 +61,9 @@ class Order < ActiveRecord::Base
   end
 
   def set_values
-    self.amount = item.amount(currency) if currency_id_changed?
+    self.amount = item.amount(currency) * quantity if currency_id_changed? || quantity_changed?
     self.tax_rate ||= ( 5 + rand(15) ) / 100.0
-    self.tax = amount * quantity * tax_rate if amount_changed? || quantity_changed?
+    self.tax = amount * tax_rate if amount_changed?
   end
 
 end
