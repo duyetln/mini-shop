@@ -13,8 +13,8 @@ class BundleItem < ActiveRecord::Base
     !deleted? && active? && bundled_items.present? && bundled_items.all?(&:available?)
   end
 
-  def fulfill!(order)
-    bundled_items.all?{ |item| item.fulfill!(order) }
+  def prepare!(order)
+    bundled_items.all?{ |item| item.prepare!(order) }
   end
 
 end

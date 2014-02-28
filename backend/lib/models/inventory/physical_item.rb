@@ -10,12 +10,11 @@ class PhysicalItem < ActiveRecord::Base
     !deleted? && active? && quantity > 0
   end
 
-  def fulfill!(order)
+  def prepare!(order)
     fulfillment = ShippingFulfillment.new
     fulfillment.order = order
     fulfillment.item  = self
     fulfillment.save!
-    fulfillment.fulfill!
   end
 
 end
