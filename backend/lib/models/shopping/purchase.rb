@@ -81,10 +81,10 @@ class Purchase < ActiveRecord::Base
   def fulfill!
     if persisted? && committed?
       if payment_method.enough?(amount)
-        begin
-          ActiveRecord::Base.transaction do
-            payment = create_payment(
-              attributes.slice(
+        # begin
+          # ActiveRecord::Base.transaction do
+            payment = create_payment!(
+              attributes.symbolize_keys.slice(
                 :user_id, 
                 :payment_method_id, 
                 :billing_address_id
@@ -95,11 +95,11 @@ class Purchase < ActiveRecord::Base
             )
 
             payment.commit! if orders.kept.all?{ |order| order.fulfill! }
-          end
-          true
-        rescue Fulfillment::FulfillmentFailure => ex
-          false
-        end
+          # end
+          # true
+        # rescue Fulfillment::FulfillmentFailure => ex
+        #   false
+        # end
       end
     end
   end
