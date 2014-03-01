@@ -33,7 +33,7 @@ class Payment < ActiveRecord::Base
 
   def commit!
     if persisted? && pending?
-      payment_method.balance -= Currency.exchange(amount, currency.code, payment_method_currency.code)
+      payment_method.balance -= Currency.exchange(amount, currency, payment_method_currency)
       payment_method.save!
       self.committed    = true
       self.committed_at = DateTime.now

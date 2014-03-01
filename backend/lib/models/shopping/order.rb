@@ -114,7 +114,12 @@ class Order < ActiveRecord::Base
   protected
 
   def pending_purchase
-    errors.add(:purchase, "can't be already commited on save") unless purchase_pending?
+    if !status_changed? && 
+      !fulfilled_at_changed? && 
+      !reversed_at_changed? && 
+      changed?
+      errors.add(:purchase, "can't be already commited on save") unless purchase_pending?
+    end
   end
 
   def set_uuid

@@ -17,13 +17,11 @@ class PaymentMethod < ActiveRecord::Base
   validates :user, presence: true
 
   def pending_balance
-    balance - payments.pending.reduce(BigDecimal("0.0")) { |s,p| s += Currency.exchange(p.amount, p.currency.code, currency.code) } 
+    balance - payments.pending.reduce(BigDecimal("0.0")) { |s,p| s += Currency.exchange(p.amount, p.currency, currency) } 
   end
 
-  def enough?(amount=0, currency=nil)
-    currency   = Currency.find_by_code(currency) unless currency.instance_of?(Currency)
-    currency ||= self.currency
-    pending_balance >= Currency.exchange(amount, currency.code, self.currency.code)
+  def enough?(amount=0, input_currency=currency)
+    pending_balance >= Currency.exchange(amount, input_currency, currency)
   end
   
 end
