@@ -11,10 +11,7 @@ class PhysicalItem < ActiveRecord::Base
   end
 
   def prepare!(order)
-    fulfillment = ShippingFulfillment.new
-    fulfillment.order = order
-    fulfillment.item  = self
-    fulfillment.save!
+    ShippingFulfillment.prepare!(order, self)
   end
 
 end
