@@ -2,10 +2,16 @@ class Order < ActiveRecord::Base
 
   attr_accessible :item_type, :item_id, :currency_id, :quantity
 
+  STATUS = {
+    prepared: 0,
+    fulfilled: 1,
+    reversed: 2
+  }
+
   belongs_to :purchase
   belongs_to :item, polymorphic: :item
   belongs_to :currency
-  has_one    :fulfillment
+  has_many   :fulfillments
 
   validates :purchase_id, presence: true
   validates :item_type,   presence: true
@@ -35,6 +41,12 @@ class Order < ActiveRecord::Base
   delegate :committed?,       to: :purchase, prefix: true
   delegate :pending?,         to: :purchase, prefix: true
 
+  STATUS.each do |key, value|
+    define_method "#{key}?" do
+      status == value
+    end
+  end
+
   def delete!
     if persisted? && !deleted? && purchase_pending?
       self.deleted = true
@@ -42,8 +54,57 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def prepare!
+    if status.nil?
+      begin
+        self.class.transaction do
+          quantity.times { 
+            item.prepare!(self) 
+          } || ( 
+            raise Fulfillment::PreparationFailure 
+          )
+          self.status = STATUS[:prepared]
+          save!
+        end
+      rescue => err
+      end
+    end
+  end
+
   def fulfill!
-    quantity.times { item.fulfill!(self) }
+    if prepared?
+      begin
+        self.class.transaction do
+          fulfillments.all? { |f| 
+            f.fulfill! 
+          } || ( 
+            raise Fulfillment::FulfillmentFailure 
+          )
+          self.status = STATUS[:fulfilled]
+          self.fulfilled_at = DateTime.now
+          save!
+        end
+      rescue => err
+      end
+    end
+  end
+
+  def reverse!
+    if fulfilled?
+      begin
+        self.class.transaction do
+          fulfillments.all? { |f| 
+            f.reverse! 
+          } || ( 
+            raise Fulfillment::ReversalFailure 
+          )
+          self.status = STATUS[:reversed]
+          self.reversed_at = DateTime.now
+          save!
+        end
+      rescue => err
+      end
+    end
   end
 
   def kept?
