@@ -2,7 +2,7 @@ class ShippingFulfillment < Fulfillment
 
   protected
 
-  def process!
+  def process_fulfillment!
     shipment = Shipment.where(
       order_id: order.id, 
       item_type: item.class, 

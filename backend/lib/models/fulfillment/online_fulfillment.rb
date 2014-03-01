@@ -2,7 +2,7 @@ class OnlineFulfillment < Fulfillment
 
   protected
 
-  def process!
+  def process_fulfillment!
     ownership = Ownership.where(
       order_id: order.id, 
       item_type: item.class, 

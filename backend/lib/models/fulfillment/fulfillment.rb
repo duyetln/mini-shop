@@ -1,9 +1,16 @@
 class Fulfillment < ActiveRecord::Base
 
+  class PreparationFailure < StandardError; end
   class FulfillmentFailure < StandardError; end
-  class UnfulfillmentFailure < StandardError; end
+  class ReversalFailure    < StandardError; end
 
   attr_accessible :order_id, :item_type, :item_id
+
+  STATUS = {
+    prepared: 0,
+    fulfilled: 1,
+    reversed: 2
+  }
 
   ITEM_TYPES = [ "PhysicalItem", "DigitalItem" ]
 
@@ -20,25 +27,53 @@ class Fulfillment < ActiveRecord::Base
 
   before_create :set_values
 
+  STATUS.each do |key, value|
+    define_method "#{key}?" do
+      status == value
+    end
+  end
+
+  def self.prepare!(order, item)
+    fulfillment = new
+    fulfillment.order = order
+    fulfillment.item  = item
+    fulfillment.save!
+
+    fulfillment.prepared? || ( raise PreparationFailure )
+  end
+
   def fulfill!
-    if persisted? && !fulfilled? && process!
-      self.fulfilled    = true
+    if persisted? && prepared? && process_fulfillment!
+      self.status = STATUS[:fulfilled]
       self.fulfilled_at = DateTime.now
       save!
     end
+    fulfilled? || ( raise FulfillmentFailure )
+  end
 
-    persisted? && fulfilled? || ( raise FulfillmentFailure )
+  def reverse!
+    if persisted? && fulfilled? && process_reversal!
+      self.status = STATUS[:reversed]
+      self.reversed_at = DateTime.now
+      save!
+    end
+    reversed? || ( raise ReversalFailure )
   end
 
   protected
 
-  def process!
+  def process_fulfillment!
+    raise "Must be implemented in derived class"
+  end
+
+  def process_reversal!
     raise "Must be implemented in derived class"
   end
 
   def set_values
-    self.fulfilled    = false
+    self.status = STATUS[:prepared]
     self.fulfilled_at = nil
+    self.reversed_at  = nil
     true
   end
 
