@@ -1,12 +1,10 @@
 class Order < ActiveRecord::Base
 
-  attr_accessible :item_type, :item_id, :currency_id, :quantity
+  include Enum
 
-  STATUS = {
-    prepared: 0,
-    fulfilled: 1,
-    reversed: 2
-  }
+  enum :status, [ :prepared, :fulfilled, :reversed ]
+
+  attr_accessible :item_type, :item_id, :currency_id, :quantity
 
   belongs_to :purchase
   belongs_to :item, polymorphic: :item
@@ -40,12 +38,6 @@ class Order < ActiveRecord::Base
   delegate :shipping_address, to: :purchase
   delegate :committed?,       to: :purchase, prefix: true
   delegate :pending?,         to: :purchase, prefix: true
-
-  STATUS.each do |key, value|
-    define_method "#{key}?" do
-      status == value
-    end
-  end
 
   def delete!
     if persisted? && !deleted? && purchase_pending?

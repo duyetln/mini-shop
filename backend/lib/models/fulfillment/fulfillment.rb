@@ -4,13 +4,11 @@ class Fulfillment < ActiveRecord::Base
   class FulfillmentFailure < StandardError; end
   class ReversalFailure    < StandardError; end
 
-  attr_accessible :order_id, :item_type, :item_id
+  include Enum
 
-  STATUS = {
-    prepared: 0,
-    fulfilled: 1,
-    reversed: 2
-  }
+  enum :status, [ :prepared, :fulfilled, :reversed ]
+
+  attr_accessible :order_id, :item_type, :item_id
 
   ITEM_TYPES = [ "PhysicalItem", "DigitalItem" ]
 
@@ -26,12 +24,6 @@ class Fulfillment < ActiveRecord::Base
   validates :item,  presence: true
 
   before_create :set_values
-
-  STATUS.each do |key, value|
-    define_method "#{key}?" do
-      status == value
-    end
-  end
 
   def self.prepare!(order, item)
     fulfillment = new
