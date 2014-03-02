@@ -6,7 +6,7 @@ shared_examples "item resource" do
     it("is available")        { expect(built_item).to be_available }
     it("is active")           { expect(built_item).to be_active }
     it("is not deleted")      { expect(built_item).to_not be_deleted }
-    it("saves successfully")  { expect(built_item.save).to be_true }
+    it("saves successfully")  { expect(created_item).to be_present}
   end
 
   describe "accessible attributes" do

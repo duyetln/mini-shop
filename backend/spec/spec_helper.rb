@@ -11,10 +11,10 @@ module SpecHelpers
   included do
     let(:random_string) { |length=10| rand(36**length).to_s(36) }
     let(:sym_item_class) { item_class.to_s.underscore.to_sym }
-    let(:items)          { item_class.kept }
-    let(:created_item)   { FactoryGirl.create(sym_item_class) }
-    let(:built_item)     { FactoryGirl.build(sym_item_class) }
-    let(:attributes)    { item_class.accessible_attributes.to_a.map(&:to_sym) }
+    let(:items)        { item_class.kept }
+    let(:created_item) { FactoryGirl.create(sym_item_class) }
+    let(:built_item)   { FactoryGirl.build(sym_item_class) }
+    let(:attributes)   { item_class.accessible_attributes.to_a.map(&:to_sym) }
     
     let(:namespace)     { item_class.to_s.tableize }
     let(:parsed_result) { Yajl::Parser.parse(last_response.body, symbolize_keys: true) }

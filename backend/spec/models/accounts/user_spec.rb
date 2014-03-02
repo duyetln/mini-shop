@@ -2,10 +2,10 @@ require "spec_helper"
 
 describe User do 
 
-  context "factory model" do
+  describe "factory model" do
 
     it("is valid")           { expect(built_user.valid?).to be_true }
-    it("saves successfully") { expect(built_user.save).to be_true }
+    it("saves successfully") { expect(created_user).to be_present }
   end
 
   describe "#save" do
