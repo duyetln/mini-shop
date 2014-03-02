@@ -3,7 +3,8 @@ ENV["RACK_ENV"] ||= "development"
 SVC_ENV  = ENV["RACK_ENV"]
 SVC_ROOT = File.expand_path File.dirname(__FILE__)
 
-$:.unshift *Dir[File.join(SVC_ROOT, "lib/**/")]
+$:.unshift SVC_ROOT
+$:.unshift File.join(SVC_ROOT, "lib")
 
 Bundler.require :default, SVC_ENV.to_sym
 

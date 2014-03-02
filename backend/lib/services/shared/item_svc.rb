@@ -1,6 +1,6 @@
-require "item_svc_filters"
-require "item_svc_helpers"
-require "item_svc_endpoints"
+require "services/shared/item_svc_filters"
+require "services/shared/item_svc_helpers"
+require "services/shared/item_svc_endpoints"
 
 module ItemSvc
   extend ActiveSupport::Concern

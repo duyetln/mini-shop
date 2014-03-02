@@ -15,7 +15,7 @@ namespace :db do
 
   desc "Populate database with sample data"
   task :seed do
-    require File.join(SVC_ROOT, "db/seeds")
+    require "db/seeds"
   end
 
 end

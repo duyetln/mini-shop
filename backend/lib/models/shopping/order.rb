@@ -1,3 +1,5 @@
+require "models/shared/enum"
+
 class Order < ActiveRecord::Base
 
   include Enum

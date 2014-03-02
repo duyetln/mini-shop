@@ -1,3 +1,5 @@
+require "services/shared/item_svc"
+
 class PhysicalItemsSvc < Sinatra::Base
   include ItemSvc
 

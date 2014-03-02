@@ -1,3 +1,5 @@
+require "models/shared/item_resource"
+
 class StorefrontItem < ActiveRecord::Base
   include ItemResource
 

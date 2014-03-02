@@ -1,3 +1,5 @@
+require "models/shared/enum"
+
 class Fulfillment < ActiveRecord::Base
 
   class PreparationFailure < StandardError; end
