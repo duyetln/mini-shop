@@ -4,9 +4,10 @@ require "spec_helper"
 
   describe model do
 
-    let(:instance) { described_class.new }
-
-    it("responds to prepare!") { expect(instance).to respond_to(:prepare!).with(1).argument }
+    context "instance" do
+      let(:it) { described_class.new }
+      it("responds to prepare!") { expect(it).to respond_to(:prepare!).with(1).argument }
+    end
   end
 end
 
@@ -14,11 +15,12 @@ end
 
   describe model do
 
-    let(:instance) { described_class.new }
-
-    it("responds to prepare!") { expect(instance).to respond_to(:prepare!).with(0).argument }
-    it("responds to fulfill!") { expect(instance).to respond_to(:fulfill!).with(0).argument }
-    it("responds to reverse!") { expect(instance).to respond_to(:reverse!).with(0).argument }
+    context "instance" do
+      let(:it) { described_class.new }
+      it("responds to prepare!") { expect(it).to respond_to(:prepare!).with(0).argument }
+      it("responds to fulfill!") { expect(it).to respond_to(:fulfill!).with(0).argument }
+      it("responds to reverse!") { expect(it).to respond_to(:reverse!).with(0).argument }
+    end
   end
 end
 
@@ -26,11 +28,15 @@ end
 
   describe model do
 
-    let(:instance) { described_class.new }
-    let(:klass) { described_class }
+    context "class" do
+      let(:it) { described_class }
+      it("responds to prepare!") { expect(it).to respond_to(:prepare!).with(2).argument }
+    end
 
-    it("responds to prepare!") { expect(klass).to respond_to(:prepare!).with(2).argument }
-    it("responds to fulfill!") { expect(instance).to respond_to(:fulfill!).with(0).argument }
-    it("responds to reverse!") { expect(instance).to respond_to(:reverse!).with(0).argument }
+    context "instance" do
+      let(:it) { described_class.new }
+      it("responds to fulfill!") { expect(it).to respond_to(:fulfill!).with(0).argument }
+      it("responds to reverse!") { expect(it).to respond_to(:reverse!).with(0).argument }
+    end
   end
 end

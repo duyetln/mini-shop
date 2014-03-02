@@ -4,9 +4,10 @@ require "spec_helper"
 
   describe model do
 
-    let(:instance) { described_class.new }
-
-    it("responds to title") { expect(instance).to respond_to(:title) }
-    it("responds to description") { expect(instance).to respond_to(:description) }
+    context "instance" do
+      let(:it) { described_class.new }
+      it("responds to title") { expect(it).to respond_to(:title).with(0).argument }
+      it("responds to description") { expect(it).to respond_to(:description).with(0).argument }
+    end
   end
 end

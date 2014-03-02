@@ -4,15 +4,18 @@ require "spec_helper"
 
   describe model do
 
-    let(:instance) { described_class.new }
-    let(:klass) { described_class }
+    context "class" do
+      let(:it) { described_class }
+      it("responds to active") { expect(it).to respond_to(:active).with(0).argument }
+      it("responds to inactive") { expect(it).to respond_to(:inactive).with(0).argument }
+    end
 
-    it("responds to active") { expect(klass).to respond_to(:active) }
-    it("responds to inactive") { expect(klass).to respond_to(:inactive) }
-
-    it("responds to active?") { expect(instance).to respond_to(:active?) }
-    it("responds to inactive?") { expect(instance).to respond_to(:inactive?) }
-    it("responds to activate!") { expect(instance).to respond_to(:activate!) }
-    it("responds to deactivate!") { expect(instance).to respond_to(:deactivate!) }
+    context "instance" do
+      let(:it) { described_class.new }
+      it("responds to active?") { expect(it).to respond_to(:active?).with(0).argument }
+      it("responds to inactive?") { expect(it).to respond_to(:inactive?).with(0).argument }
+      it("responds to activate!") { expect(it).to respond_to(:activate!).with(0).argument }
+      it("responds to deactivate!") { expect(it).to respond_to(:deactivate!).with(0).argument }
+    end
   end
 end

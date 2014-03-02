@@ -4,14 +4,17 @@ require "spec_helper"
 
   describe model do
 
-    let(:instance) { described_class.new }
-    let(:klass) { described_class }
+    context "class" do
+      let(:it) { described_class }
+      it("responds to deleted") { expect(it).to respond_to(:deleted).with(0).argument }
+      it("responds to kept") { expect(it).to respond_to(:kept).with(0).argument }
+    end
 
-    it("responds to deleted") { expect(klass).to respond_to(:deleted) }
-    it("responds to kept") { expect(klass).to respond_to(:kept) }
-
-    it("responds to deleted?") { expect(instance).to respond_to(:deleted?) }
-    it("responds to kept?") { expect(instance).to respond_to(:kept?) }
-    it("responds to delete!") { expect(instance).to respond_to(:delete!) }
+    context "instance" do
+      let(:it) { described_class.new }
+      it("responds to deleted?") { expect(it).to respond_to(:deleted?).with(0).argument }
+      it("responds to kept?") { expect(it).to respond_to(:kept?).with(0).argument }
+      it("responds to delete!") { expect(it).to respond_to(:delete!).with(0).argument }
+    end
   end
 end
