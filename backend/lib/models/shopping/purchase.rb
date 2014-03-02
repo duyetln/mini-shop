@@ -68,30 +68,32 @@ class Purchase < ActiveRecord::Base
     end
   end
 
+  def prepare!
+    if persisted? && committed?
+      orders.kept.all?{ |order| order.prepare! }
+    end
+  end
+
   def fulfill!
     if persisted? && committed?
       if payment_method.enough?(amount)
-        # begin
-          # ActiveRecord::Base.transaction do
-            payment = create_payment!(
-              attributes.symbolize_keys.slice(
-                :user_id, 
-                :payment_method_id, 
-                :billing_address_id
-              ).merge(
-                amount: amount, 
-                currency_id: payment_method_currency.id
-              )
-            )
+        payment = create_payment!(
+          attributes.symbolize_keys.slice(
+            :user_id, 
+            :payment_method_id, 
+            :billing_address_id
+          ).merge(
+            amount: amount, 
+            currency_id: payment_method_currency.id
+          )
+        )
 
-            payment.commit! if orders.kept.all?{ |order| order.fulfill! }
-          # end
-          # true
-        # rescue Fulfillment::FulfillmentFailure => ex
-        #   false
-        # end
+        payment.commit! if orders.kept.all?{ |order| order.fulfill! }
       end
     end
+  end
+
+  def reverse!
   end
 
   protected

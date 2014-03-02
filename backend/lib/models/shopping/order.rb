@@ -56,6 +56,8 @@ class Order < ActiveRecord::Base
           save!
         end
       rescue => err
+        puts err.message
+        puts err.backtrace.inspect
       end
     end
   end
@@ -74,6 +76,8 @@ class Order < ActiveRecord::Base
           save!
         end
       rescue => err
+        puts err.message
+        puts err.backtrace.inspect
       end
     end
   end
@@ -92,6 +96,8 @@ class Order < ActiveRecord::Base
           save!
         end
       rescue => err
+        puts err.message
+        puts err.backtrace.inspect
       end
     end
   end
