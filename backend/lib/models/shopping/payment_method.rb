@@ -6,15 +6,11 @@ class PaymentMethod < ActiveRecord::Base
   belongs_to :currency
   has_many   :payments
 
-  validates :user_id, presence: true
-  validates :name,    presence: true
-  validates :balance, presence: true
-  validates :balance, numericality: { greater_than_or_equal_to: 0 }
-
-  validates :currency_id, presence: true
-  validates :currency,    presence: true
-
-  validates :user, presence: true
+  validates :name,     presence: true
+  validates :balance,  presence: true
+  validates :currency, presence: true
+  validates :user,     presence: true
+  validates :balance,  numericality: { greater_than_or_equal_to: 0 }
 
   def pending_balance
     balance - payments.pending.reduce(BigDecimal("0.0")) { |s,p| s += Currency.exchange(p.amount, p.currency, currency) } 

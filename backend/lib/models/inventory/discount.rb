@@ -1,8 +1,9 @@
 class Discount < ActiveRecord::Base
 
-  validates :rate, numericality: { greater_than_or_equal_to: 0 }
   validates :rate, presence: true
   validates :name, presence: true
+
+  validates :rate, numericality: { greater_than_or_equal_to: 0 }
   validates :name, uniqueness: true
 
   def rate_at(datetime=DateTime.now)

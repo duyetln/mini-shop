@@ -8,17 +8,13 @@ class Payment < ActiveRecord::Base
   belongs_to :user
   belongs_to :currency
 
-  validates :user_id,             presence: true
-  validates :payment_method_id,   presence: true
-  validates :billing_address_id,  presence: true
-  validates :currency_id,         presence: true
-  validates :amount,  presence: true
   validates :amount,  numericality: { greater_than: 0 }
 
-  validates :user,              presence: true
-  validates :payment_method,    presence: true
-  validates :billing_address,   presence: true
-  validates :currency,          presence: true
+  validates :user,            presence: true
+  validates :payment_method,  presence: true
+  validates :billing_address, presence: true
+  validates :currency, presence: true
+  validates :amount,   presence: true
 
   scope :committed, -> { where(committed: true) }
   scope :pending,   -> { where(committed: false) }

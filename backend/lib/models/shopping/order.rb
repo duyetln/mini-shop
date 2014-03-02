@@ -11,18 +11,13 @@ class Order < ActiveRecord::Base
   belongs_to :currency
   has_many   :fulfillments
 
-  validates :purchase_id, presence: true
-  validates :item_type,   presence: true
-  validates :item_id,     presence: true
-  validates :currency_id, presence: true
-  validates :quantity,    presence: true
-  validates :quantity,    numericality: { greater_than_or_equal_to: 0 }
-
-  validates :purchase_id, uniqueness: { scope: [ :item_type, :item_id ] }, unless: :deleted?
-
   validates :purchase, presence: true
   validates :item,     presence: true
   validates :currency, presence: true
+  validates :quantity, presence: true
+
+  validates :quantity, numericality: { greater_than_or_equal_to: 0 }
+  validates :purchase_id, uniqueness: { scope: [ :item_type, :item_id ] }, unless: :deleted?
 
   validate  :pending_purchase
 

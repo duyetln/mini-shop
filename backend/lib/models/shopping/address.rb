@@ -4,11 +4,9 @@ class Address < ActiveRecord::Base
 
   belongs_to :user
 
-  validates :user_id, presence: true
+  validates :user,    presence: true
   validates :line1,   presence: true
   validates :city,    presence: true
   validates :country, presence: true
-
-  validates :user,    presence: true
   
 end

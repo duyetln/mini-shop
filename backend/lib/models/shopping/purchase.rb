@@ -12,18 +12,13 @@ class Purchase < ActiveRecord::Base
 
   before_validation :set_values, on: :create
 
-  validates :committed, uniqueness: { scope: :user_id }, unless: :committed?
-  validates :committed_at, presence: true, if: :committed?
-
-  validates :user_id,             presence: true 
-  validates :payment_method_id,   presence: true, if: :committed?
-  validates :billing_address_id,  presence: true, if: :committed?
-  validates :shipping_address_id, presence: true, if: :committed?
-
   validates :user,             presence: true
   validates :payment_method,   presence: true, if: :committed?
   validates :billing_address,  presence: true, if: :committed?
   validates :shipping_address, presence: true, if: :committed?
+
+  validates :committed, uniqueness: { scope: :user_id }, unless: :committed?
+  validates :committed_at, presence: true, if: :committed?
 
   scope :committed, -> { where(committed: true) }
   scope :pending,   -> { where(committed: false) }
