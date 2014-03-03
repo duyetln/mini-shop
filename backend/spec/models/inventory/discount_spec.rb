@@ -95,7 +95,7 @@ describe Discount do
 
     let(:discount) { FactoryGirl.build :discount, :random } 
 
-    it "is the same as #rate_at" do
+    it "delegates to #rate_at" do
 
       expect(discount.current_rate).to eq(discount.rate_at)
     end
