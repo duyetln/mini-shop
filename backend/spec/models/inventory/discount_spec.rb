@@ -22,7 +22,7 @@ describe Discount do
       end
     end
 
-    context "start date is befor end date" do
+    context "start date is before end date" do
 
       it "is valid" do
 

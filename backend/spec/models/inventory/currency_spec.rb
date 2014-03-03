@@ -46,7 +46,7 @@ describe Currency do
 
     let(:amount) { rand(50) }
 
-    context "difference currencies" do
+    context "different currencies" do
 
       let(:src_curr) { eur }
       let(:dest_curr) { gbp }
