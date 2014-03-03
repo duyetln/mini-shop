@@ -5,8 +5,8 @@ require "spec_helper"
   describe model do
 
     context "instance" do
-      let(:it) { described_class.new }
-      it("responds to prepare!") { expect(it).to respond_to(:prepare!).with(1).argument }
+      let(:subject) { described_class.new }
+      it { should respond_to(:prepare!).with(1).argument }
     end
   end
 end
@@ -16,10 +16,10 @@ end
   describe model do
 
     context "instance" do
-      let(:it) { described_class.new }
-      it("responds to prepare!") { expect(it).to respond_to(:prepare!).with(0).argument }
-      it("responds to fulfill!") { expect(it).to respond_to(:fulfill!).with(0).argument }
-      it("responds to reverse!") { expect(it).to respond_to(:reverse!).with(0).argument }
+      let(:subject) { described_class.new }
+      it { should respond_to(:prepare!).with(0).argument }
+      it { should respond_to(:fulfill!).with(0).argument }
+      it { should respond_to(:reverse!).with(0).argument }
     end
   end
 end
@@ -29,14 +29,14 @@ end
   describe model do
 
     context "class" do
-      let(:it) { described_class }
-      it("responds to prepare!") { expect(it).to respond_to(:prepare!).with(2).argument }
+      let(:subject) { described_class }
+      it { should respond_to(:prepare!).with(2).argument }
     end
 
     context "instance" do
-      let(:it) { described_class.new }
-      it("responds to fulfill!") { expect(it).to respond_to(:fulfill!).with(0).argument }
-      it("responds to reverse!") { expect(it).to respond_to(:reverse!).with(0).argument }
+      let(:subject) { described_class.new }
+      it { should respond_to(:fulfill!).with(0).argument }
+      it { should respond_to(:reverse!).with(0).argument }
     end
   end
 end
