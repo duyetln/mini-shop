@@ -4,7 +4,7 @@ FactoryGirl.define do
     pricepoint { FactoryGirl.create :pricepoint } 
 
     trait :discounted do
-      discount { FactoryGir.create :discount, :random }
+      discount { FactoryGirl.create :discount, :random }
     end
   end
 end
