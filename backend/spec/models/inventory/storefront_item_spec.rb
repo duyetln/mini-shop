@@ -22,4 +22,22 @@ describe StorefrontItem do
     end
   end
 
+  describe "#amount" do
+
+    let(:currency) { built_item.price.pricepoint.currencies.sample }
+
+    it "delegates to Price#amount" do
+
+      expect(built_item.amount(currency)).to eq(built_item.price.amount(currency))
+    end
+  end
+
+  describe "#discounted?" do
+
+    it "delegates to Price#discounted?" do
+
+      expect(built_item.discounted?).to eq(built_item.price.discounted?)
+    end
+  end
+
 end
