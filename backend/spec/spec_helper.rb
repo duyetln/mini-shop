@@ -9,7 +9,7 @@ module SpecHelpers
   def app; described_class; end
 
   included do
-    let(:random_string) { |length=10| rand(36**length).to_s(36) }
+    let(:random_string) { |length=10| Faker::Lorem.characters(length) }
     let(:sym_item_class) { item_class.to_s.underscore.to_sym }
     let(:items)        { item_class.kept }
     let(:created_item) { FactoryGirl.create(sym_item_class) }
