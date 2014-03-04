@@ -29,7 +29,7 @@ module ItemResource
   def activate!
     if persisted? && !active?
       self.active = true
-      save
+      save!
     end
   end
 
@@ -40,14 +40,14 @@ module ItemResource
   def deactivate!
     if persisted? && active?
       self.active = false
-      save
+      save!
     end
   end
 
   def delete!
     if persisted? && !deleted?
       self.deleted = true
-      save
+      save!
     end
   end
 
