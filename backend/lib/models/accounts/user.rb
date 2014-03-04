@@ -1,12 +1,20 @@
 class User < ActiveRecord::Base
 
   attr_accessible :first_name, :last_name, :email, :birthdate, :password
+  attr_readonly :uuid
 
-  validates :first_name,  presence: true,                   format: { with: /\A[a-zA-Z]+\z/ }
-  validates :last_name,   presence: true,                   format: { with: /\A[a-zA-Z]+\z/ }
-  validates :email,       presence: true, uniqueness: true, format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }
-  validates :birthdate,   presence: true
-  validates :password,    presence: true, length: { minimum: 5 }
+  validates :first_name, presence: true
+  validates :last_name,  presence: true                   
+  validates :email,      presence: true 
+  validates :birthdate,  presence: true
+  validates :password,   presence: true
+
+  validates :first_name, format: { with: /\A[a-zA-Z]+\z/ }
+  validates :last_name,  format: { with: /\A[a-zA-Z]+\z/ }
+  validates :email,      format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }
+
+  validates :email, uniqueness: true
+  validates :password, length: { minimum: 5 }
 
   before_create :set_values
   before_save   :encrypt_password, if: :password_changed?
