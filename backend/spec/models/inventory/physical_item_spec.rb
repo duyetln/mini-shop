@@ -7,39 +7,20 @@ describe PhysicalItem do
 
   it_behaves_like "item resource"
 
-  describe("accessible attributes") { it("includes quantity") { expect(attributes).to include(:quantity) } }
+  it { should allow_mass_assignment_of(:quantity) }
+  it { should validate_presence_of(:quantity) }
 
-  describe "#quantity" do
-
-    context "emtpy" do
-
-      it "is not valid" do
-
-        built_item.quantity = nil
-        expect(built_item).to_not be_valid
-        expect(built_item.errors).to have_key(:quantity)
-      end
-    end
-
-    context "negative value" do
-
-      it "is not valid" do
-
-        built_item.quantity = -5
-        expect(built_item).to_not be_valid
-        expect(built_item.errors).to have_key(:quantity)
-      end
-    end
-  end
+  it { should validate_numericality_of(:quantity).is_greater_than_or_equal_to(0) }
 
   describe "#available?" do
 
-    context "negative quantity" do
+    context "zero quantity" do
 
       it "is false" do
 
-        built_item.quantity = -5
-        expect(built_item).to_not be_available
+        created_item.quantity = 0
+        created_item.save
+        expect(created_item).to_not be_available
       end
     end
   end
