@@ -1,162 +1,115 @@
 shared_examples "item resource" do
 
+  it { should allow_mass_assignment_of(:title) }
+  it { should allow_mass_assignment_of(:description) }
+
+  it { should validate_presence_of(:title) }
+
   describe "factory model" do
 
-    it("is valid")            { expect(built_item).to be_valid }
-    it("is available")        { expect(built_item).to be_available }
-    it("is active")           { expect(built_item).to be_active }
-    it("is not deleted")      { expect(built_item).to_not be_deleted }
-    it("saves successfully")  { expect(created_item).to be_present}
+    it("is valid") { expect(built_item).to be_valid }
+    it("saves successfully") { expect(created_item).to be_present}
   end
 
-  describe "accessible attributes" do
+  context "new item" do
 
-    it("includes title")       { expect(attributes).to include(:title) }
-    it("includes description") { expect(attributes).to include(:description) }
+    it("is inactive") { expect(built_item.active?).to be_false }
+    it("is not deleted") { expect(built_item.deleted?).to be_false }
+
+    describe "#activate!" do
+
+      it "cannot be executed" do
+
+        expect(built_item.activate!).to_not be_true
+      end
+
+      it "cannot change active status" do
+
+        expect{ built_item.activate! }.to_not change{ built_item.active }
+      end
+    end
+
+    describe "#deactivate!" do
+
+      it "cannot be executed" do
+
+        expect(built_item.deactivate!).to_not be_true
+      end
+
+      it "cannot change active status" do
+
+        expect{ built_item.deactivate! }.to_not change{ built_item.active }
+      end
+    end
+
+    describe "#delete!" do
+
+      it "cannot be executed" do
+
+        expect(built_item.delete!).to_not be_true
+      end
+
+      it "cannot change deleted status" do
+
+        expect{ built_item.delete! }.to_not change{ built_item.deleted }
+      end
+    end
   end
 
-  describe "#title" do
+  context "created item" do
 
-    context "empty" do
+    it("is active") { expect(created_item.active?).to be_true }
+    it("is not deleted") { expect(created_item.deleted?).to be_false }
 
-      it "is not valid" do
+    describe "#deactivate!" do
 
-        built_item.title = nil
-        expect(built_item).to_not be_valid
-        expect(built_item.errors).to have_key(:title)
+      it "can be executed" do
+
+        expect(created_item.deactivate!).to be_true
+      end
+
+      it "changes active status to false" do
+
+        expect{ created_item.deactivate! }.to change{ created_item.active }
+        expect(created_item.active?).to be_false
+      end
+    end
+
+    describe "#activate!" do
+
+      it "can be executed" do
+
+        created_item.deactivate!
+        expect(created_item.activate!).to be_true
+      end
+
+      it "changes active status to true" do
+
+        created_item.deactivate!
+        expect{ created_item.activate! }.to change{ created_item.active }
+        expect(created_item.active?).to be_true
+      end
+    end
+
+    describe "#delete!" do
+
+      it "can be executed" do
+
+        expect(created_item.delete!).to be_true
+      end
+
+      it "changes deleted status to true" do
+
+        expect{ created_item.delete! }.to change{ created_item.deleted }
+        expect(created_item.deleted?).to be_true
       end
     end
   end
 
   describe "#available?" do
 
-    context("deleted")  { it("is false") { built_item.deleted = true;  expect(built_item).to_not be_available } }
-    context("inactive") { it("is false") { built_item.active  = false; expect(built_item).to_not be_available } }
+    context("deleted")  { it("is false") { created_item.delete!;     expect(created_item).to_not be_available } }
+    context("inactive") { it("is false") { created_item.deactivate!; expect(created_item).to_not be_available } }
   end
 
-  shared_examples "item not allowed to modify active flag" do
-
-    it "does not modify active flag" do
-
-      expect(test_item).to_not receive(:active=)
-      expect(test_item).to_not receive(:save)
-      test_item.send(action)
-    end
-  end
-
-  shared_examples "item not allowed to modify deleted flag" do
-
-    it "does not modify deleted flag" do
-
-      expect(test_item).to_not receive(:deleted=)
-      expect(test_item).to_not receive(:save)
-      test_item.send(action)
-    end
-  end
-
-  context "persisted" do
-
-    before(:each) { expect(built_item).to receive(:persisted?).and_return(true) }
-
-    let(:test_item) { built_item }
-
-    context "inactive" do
-
-      before(:each) { expect(built_item).to receive(:active?).and_return(false) }
-
-      describe "#activate!" do
-
-        it "sets active to true and saves" do
-
-          expect(built_item).to receive(:active=).with(true)
-          expect(built_item).to receive(:save)
-          built_item.activate!
-        end
-      end
-
-      describe "#deactivate!" do
-
-        let(:action) { :deactivate! }
-
-        it_behaves_like "item not allowed to modify active flag"
-      end
-    end
-
-    context "active" do
-
-      before(:each) { expect(built_item).to receive(:active?).and_return(true) }
-
-      describe "#activate!" do
-
-        let(:action) { :activate! }
-
-        it_behaves_like "item not allowed to modify active flag"
-      end
-
-      describe "#deactivate!" do
-
-        it "sets active to false and saves" do
-
-          expect(built_item).to receive(:active=).with(false)
-          expect(built_item).to receive(:save)
-          built_item.deactivate!
-        end
-      end
-    end
-
-    context "kept" do
-
-      before(:each) { expect(built_item).to receive(:deleted?).and_return(false) }
-
-      describe "#delete!" do
-
-        it "sets deleted to true and saves" do
-
-          expect(built_item).to receive(:deleted=).with(true)
-          expect(built_item).to receive(:save)
-          built_item.delete!
-        end
-      end
-    end
-
-    context "deleted" do
-
-      before(:each) { expect(built_item).to receive(:deleted?).and_return(true) }
-
-      describe "#delete!" do
-
-        let(:action) { :delete! }
-
-        it_behaves_like "item not allowed to modify deleted flag"
-      end
-    end
-  end
-
-  context "non persisted" do
-
-    before(:each) { expect(built_item).to_not be_persisted }
-
-    let(:test_item) { built_item }
-
-    describe "#activate!" do
-
-      let(:action) { :activate! }
-
-      it_behaves_like "item not allowed to modify active flag"
-    end
-
-    describe "#deactivate!" do
-
-      let (:action) { :deactivate! }
-
-      it_behaves_like "item not allowed to modify active flag"
-    end
-
-    describe "#delete!" do
-
-      let(:action) { :delete! }
-
-      it_behaves_like "item not allowed to modify deleted flag"
-    end
-  end
 end
