@@ -7,48 +7,40 @@ describe BundleItem do
 
   it_behaves_like "item resource"
 
-  describe "factory model" do
-
-    it("has physical items") { expect(built_item.physical_items).to be_present }
-    it("has digital items")  { expect(built_item.digital_items).to  be_present }
-    it("has bundled items")  { expect(built_item.bundled_items).to  be_present }
-  end
-
-  before :each do
-    @bundled_items  = built_item.bundled_items
-    @physical_items = built_item.physical_items
-    @digital_items  = built_item.digital_items
-  end
-
   describe "#available?" do
 
-    context "empty bundled items" do
+    context "items not present" do
 
       it "is false" do
 
-        expect(built_item).to receive(:bundled_items).and_return(@bundled_items)
-        expect(@bundled_items).to receive(:present?).and_return(false)
-        expect(built_item.available?).to be_false
+        expect(created_item.items).to_not be_present
+        expect(created_item).to_not be_available
       end
     end
 
-    context "unavailable physical item" do
+    context "items present" do
 
-      it "is false" do
+      let(:item) { FactoryGirl.create [:physical_item, :digital_item].sample }
 
-        physical_item = @physical_items.sample
-        expect(physical_item).to receive(:available?).and_return(false)
-        expect(built_item.available?).to be_false
+      before :each do
+        created_item.add_or_update(item)
       end
-    end
 
-    context "unavailable digital item" do
+      context "items unavailable" do
 
-      it "is false" do
+        it "is false" do
 
-        digital_item = @digital_items.sample
-        expect(digital_item).to receive(:available?).and_return(false)
-        expect(built_item.available?).to be_false
+          item.send([ :deactivate!, :delete! ].sample)
+          expect(created_item).to_not be_available
+        end
+      end
+
+      context "items available" do
+
+        it "is true" do
+          
+          expect(created_item).to be_available
+        end
       end
     end
   end
