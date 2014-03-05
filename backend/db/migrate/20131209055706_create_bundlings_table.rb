@@ -1,22 +1,22 @@
 class CreateBundlingsTable < ActiveRecord::Migration
   def up
     create_table :bundlings do |t|
-      t.integer  :bundle_item_id
-      t.integer  :bundled_item_id
-      t.string   :bundled_item_type
+      t.integer  :bundle_id
+      t.integer  :item_id
+      t.string   :item_type
       t.integer  :quantity
       t.timestamps
     end
 
-    add_index    :bundlings, :bundle_item_id
-    add_index    :bundlings, :bundled_item_id
-    add_index    :bundlings, :bundled_item_type
+    add_index    :bundlings, :bundle_id
+    add_index    :bundlings, :item_id
+    add_index    :bundlings, :item_type
   end
 
   def down
-    remove_index :bundlings, :bundled_item_type
-    remove_index :bundlings, :bundled_item_id
-    remove_index :bundlings, :bundle_item_id
+    remove_index :bundlings, :item_type
+    remove_index :bundlings, :item_id
+    remove_index :bundlings, :bundle_id
     drop_table   :bundlings
   end
 end

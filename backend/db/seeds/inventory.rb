@@ -12,8 +12,8 @@ sc2_digital = DigitalItem.where(title: "StarCraft 2 Digital Edition").first_or_c
 deluxe_ed    = BundleItem.where(title: "StarCraft 2 Deluxe Edition").first_or_create
 collector_ed = BundleItem.where(title: "StarCraft 2 Collector's Edition").first_or_create
 
-[sc2_digital, skin, pet, wings].each { |asset| deluxe_ed.bundlings.where(bundled_item_type: asset.class, bundled_item_id: asset.id).first_or_create }
-[sc2_retail, art_book, mousepad, dvd_set, soundtrack, skin, pet, wings].each { |asset| collector_ed.bundlings.where(bundled_item_type: asset.class, bundled_item_id: asset.id).first_or_create }
+[sc2_digital, skin, pet, wings].each { |asset| deluxe_ed.bundlings.where(item_type: asset.class, item_id: asset.id).first_or_create }
+[sc2_retail, art_book, mousepad, dvd_set, soundtrack, skin, pet, wings].each { |asset| collector_ed.bundlings.where(item_type: asset.class, item_id: asset.id).first_or_create }
 
 usd = Currency.where(code: "USD").first_or_create
 eur = Currency.where(code: "EUR").first_or_create

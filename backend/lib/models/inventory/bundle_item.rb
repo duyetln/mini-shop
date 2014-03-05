@@ -4,8 +4,8 @@ class BundleItem < ActiveRecord::Base
   include ItemResource
 
   has_many :bundlings
-  has_many :physical_items, through: :bundlings, source: :bundled_item, source_type: "PhysicalItem"
-  has_many :digital_items,  through: :bundlings, source: :bundled_item, source_type: "DigitalItem"
+  has_many :physical_items, through: :bundlings, source: :item, source_type: "PhysicalItem"
+  has_many :digital_items,  through: :bundlings, source: :item, source_type: "DigitalItem"
 
   def bundled_items
     physical_items + digital_items
