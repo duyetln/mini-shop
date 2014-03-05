@@ -1,4 +1,8 @@
+require "models/shared/itemable"
+
 class Bundling < ActiveRecord::Base
+  
+  include Itemable
 
   belongs_to :bundle, class_name: "BundleItem"
   belongs_to :item, polymorphic: true

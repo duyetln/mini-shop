@@ -1,8 +1,10 @@
 require "models/shared/enum"
+require "models/shared/itemable"
 
 class Order < ActiveRecord::Base
 
   include Enum
+  include Itemable
 
   enum :status, [ :prepared, :fulfilled, :reversed ]
 

@@ -1,4 +1,8 @@
+require "models/shared/itemable"
+
 class Shipment < ActiveRecord::Base
+
+  include Itemable
 
   attr_accessible :user_id, :order_id, :item_type, :item_id, :quantity, :shipping_address_id
 
