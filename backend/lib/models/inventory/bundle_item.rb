@@ -1,22 +1,32 @@
 require "models/shared/item_resource"
 
 class BundleItem < ActiveRecord::Base
+
   include ItemResource
 
-  has_many :bundlings
-  has_many :physical_items, through: :bundlings, source: :item, source_type: "PhysicalItem"
-  has_many :digital_items,  through: :bundlings, source: :item, source_type: "DigitalItem"
+  has_many :bundlings, foreign_key: :bundle_id
 
-  def bundled_items
-    physical_items + digital_items
+  def add_or_update(item, qty=1, acc=true)
+    bundlings.add_or_update(item, qty, acc) if persisted? && !deleted?
+  end
+
+  def remove(item)
+    if persisted? && !deleted?
+      bundling = bundlings.get(item)
+      bundling.present? && bundlings.destroy(bundling) 
+    end
+  end
+
+  def items
+    bundlings.map(&:item)
   end
 
   def available?
-    !deleted? && active? && bundled_items.present? && bundled_items.all?(&:available?)
+    !deleted? && active? && items.present? && items.all?(&:available?)
   end
 
   def prepare!(order)
-    bundled_items.all?{ |item| item.prepare!(order) }
+    items.all?{ |item| item.prepare!(order) }
   end
 
 end
