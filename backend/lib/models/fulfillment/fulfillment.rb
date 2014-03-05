@@ -17,7 +17,7 @@ class Fulfillment < ActiveRecord::Base
 
   validates :order, presence: true
   validates :item,  presence: true
-  validates :item_type, inclusion: { in: [ "PhysicalItem", "DigitalItem" ] }
+  validates :item_type, inclusion: { in: %w{ PhysicalItem DigitalItem } }
 
   before_create :set_values
 

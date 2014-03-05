@@ -14,7 +14,7 @@ class Shipment < ActiveRecord::Base
   validates :shipping_address, presence: true
 
   validates :order_id,  uniqueness: { scope: [ :item_type, :item_id ] }
-  validates :item_type, inclusion: { in: [ "PhysicalItem" ] }
+  validates :item_type, inclusion: { in: %w{ PhysicalItem } }
   validates :quantity,  numericality: { greater_than: 0 }
 
 end

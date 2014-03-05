@@ -12,6 +12,6 @@ class Ownership < ActiveRecord::Base
   validates :quantity, presence: true
 
   validates :order_id,  uniqueness: { scope: [ :item_type, :item_id ] }
-  validates :item_type, inclusion: { in: [ "DigitalItem" ] }
+  validates :item_type, inclusion: { in: %w{ DigitalItem } }
   validates :quantity,  numericality: { greater_than: 0 }
 end

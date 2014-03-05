@@ -10,7 +10,7 @@ class StorefrontItem < ActiveRecord::Base
 
   validates :price, presence: true
   validates :item,  presence: true
-  validates :item_type, inclusion: { in: [ "BundleItem", "DigitalItem", "PhysicalItem" ] }
+  validates :item_type, inclusion: { in: %w{ BundleItem DigitalItem PhysicalItem } }
 
   delegate :amount, to: :price
   delegate :discounted?, to: :price

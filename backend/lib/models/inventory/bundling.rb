@@ -8,7 +8,7 @@ class Bundling < ActiveRecord::Base
   validates :quantity, presence: true
 
   validates :bundle_id, uniqueness: { scope: [ :item_id, :item_type ] }
-  validates :item_type, inclusion: { in: [ "DigitalItem", "PhysicalItem" ] }
+  validates :item_type, inclusion: { in: %w{ DigitalItem PhysicalItem } }
   validates :quantity, numericality: { greater_than_or_equal_to: 0 }
 
 end
