@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :discount, class: Discount do
-  name { SecureRandom.hex }
+    name { SecureRandom.hex }
 
     trait :none do
       rate 0.0
