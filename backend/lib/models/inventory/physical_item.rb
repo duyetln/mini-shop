@@ -1,6 +1,7 @@
 require "models/shared/item_resource"
 
 class PhysicalItem < ActiveRecord::Base
+
   include ItemResource
 
   attr_accessible :quantity

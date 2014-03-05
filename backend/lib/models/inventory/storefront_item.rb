@@ -1,6 +1,7 @@
 require "models/shared/item_resource"
 
 class StorefrontItem < ActiveRecord::Base
+
   include ItemResource
 
   attr_accessible :item_id, :item_type, :price_id
