@@ -7,17 +7,38 @@ describe StorefrontItem do
 
   it_behaves_like "item resource"
 
-  before(:each) { @associated_item = built_item.item }
+  it { should allow_mass_assignment_of(:item_type) }
+  it { should allow_mass_assignment_of(:item_id) }
+  it { should allow_mass_assignment_of(:price_id) }
+
+  it { should validate_presence_of(:price) }
+  it { should validate_presence_of(:item) }
+  it { should ensure_inclusion_of(:item_type).in_array(%w{ BundleItem DigitalItem PhysicalItem }) }
+
 
   describe "#available?" do
 
-    context "unavailable item" do
+    let(:item) { FactoryGirl.create [:bundle_item, :physical_item, :digital_item].sample }
+
+    before :each do
+      expect(created_item).to receive(:item).and_return(item)
+    end
+
+    context "item unavailable" do
 
       it "is false" do
 
-        expect(built_item).to receive(:item).and_return(@associated_item)
-        expect(@associated_item).to receive(:available?).and_return(false)
-        expect(built_item.available?).to be_false
+        expect(item).to receive(:available?).and_return(false)
+        expect(created_item).to_not be_available
+      end
+    end
+
+    context "item available" do
+
+      it "is true" do
+
+        expect(item).to receive(:available?).and_return(true)
+        expect(created_item).to be_available
       end
     end
   end
