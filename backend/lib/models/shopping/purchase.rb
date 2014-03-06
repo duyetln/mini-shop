@@ -1,4 +1,8 @@
+require "models/shared/committable"
+
 class Purchase < ActiveRecord::Base
+
+  include Committable
 
   attr_accessible :user_id, :payment_method_id, :billing_address_id, :shipping_address_id
 
@@ -19,9 +23,6 @@ class Purchase < ActiveRecord::Base
 
   validates :committed, uniqueness: { scope: :user_id }, unless: :committed?
   validates :committed_at, presence: true, if: :committed?
-
-  scope :committed, -> { where(committed: true) }
-  scope :pending,   -> { where(committed: false) }
 
   delegate :currency, to: :payment_method, prefix: true
 
@@ -50,21 +51,9 @@ class Purchase < ActiveRecord::Base
     end
   end
 
-  def pending?
-    !committed?
-  end
-
   [:amount, :tax].each do |method|
     define_method method do |currency=payment_method_currency|
       orders.kept.reduce(BigDecimal("0.0")) { |s,o| s += Currency.exchange(o.send(method), o.currency, currency) } 
-    end
-  end
-
-  def commit!
-    if persisted? && pending?
-      self.committed    = true
-      self.committed_at = DateTime.now
-      save
     end
   end
 

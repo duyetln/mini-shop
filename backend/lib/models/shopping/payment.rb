@@ -1,4 +1,8 @@
+require "models/shared/committable"
+
 class Payment < ActiveRecord::Base
+
+  include Committable
 
   belongs_to :payment_method
   belongs_to :billing_address, class_name: "Address"
@@ -16,24 +20,15 @@ class Payment < ActiveRecord::Base
   validates :currency, presence: true
   validates :amount,   presence: true
 
-  scope :committed, -> { where(committed: true) }
-  scope :pending,   -> { where(committed: false) }
-
   before_create :set_values
 
   delegate :currency, to: :payment_method, prefix: true
-
-  def pending?
-    !committed?
-  end
 
   def commit!
     if persisted? && pending?
       payment_method.balance -= Currency.exchange(amount, currency, payment_method_currency)
       payment_method.save!
-      self.committed    = true
-      self.committed_at = DateTime.now
-      save!
+      super
     end
   end
 

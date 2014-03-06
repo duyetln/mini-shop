@@ -1,8 +1,10 @@
 require "models/shared/item_resource"
+require "models/shared/orderable"
 
 class StorefrontItem < ActiveRecord::Base
 
   include ItemResource
+  include Orderable
 
   attr_accessible :item_id, :item_type, :price_id
 

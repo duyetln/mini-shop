@@ -1,15 +1,18 @@
+require "models/shared/activable"
+require "models/shared/deletable"
+require "models/shared/displayable"
+
 module ItemResource
+
   extend ActiveSupport::Concern
+  include Activable
+  include Deletable
+  include Displayable
 
   included do
     attr_accessible :title, :description
 
     validates :title, presence: true
-
-    scope :active,   -> { where(active: true) }
-    scope :inactive, -> { where(active: false) }
-    scope :deleted,  -> { where(deleted: true) }
-    scope :kept,     -> { where(deleted: false) }
 
     before_create :set_values
   end
@@ -24,35 +27,6 @@ module ItemResource
 
   def available?
     !deleted? && active?
-  end
-
-  def activate!
-    if persisted? && !active?
-      self.active = true
-      save!
-    end
-  end
-
-  def inactive?
-    !active?
-  end
-
-  def deactivate!
-    if persisted? && active?
-      self.active = false
-      save!
-    end
-  end
-
-  def delete!
-    if persisted? && !deleted?
-      self.deleted = true
-      save!
-    end
-  end
-
-  def kept?
-    !deleted?
   end
 
   protected

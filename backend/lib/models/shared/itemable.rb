@@ -1,4 +1,5 @@
 module Itemable
+  
   extend ActiveSupport::Concern
 
   module ClassMethods
@@ -24,6 +25,22 @@ module Itemable
       record
     end
 
+  end
+
+  [:item, :item_type, :item_id, :quantity].each do |method|
+    class_eval <<-EOF
+      def #{method}(*args)
+        defined?(super) ? super : ( raise "#{__method__} must be defined in derived class" )
+      end
+    EOF
+  end
+
+  [:item=, :item_type=, :item_id=, :quantity=].each do |method|
+    class_eval <<-EOF
+      def #{method}(*args)
+        defined?(super) ? super : ( raise "#{__method__} must be defined in derived class" )
+      end
+    EOF
   end
 
 end
