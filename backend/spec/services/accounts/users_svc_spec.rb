@@ -69,14 +69,19 @@ describe UsersSvc do
 
   describe "post /users/authenticate" do
 
-    let(:uuid) { created_user.uuid }
     let(:password) { built_user.password }
+    let(:uuid) { user.uuid }
+    let :user do
+      built_user.password = password
+      built_user.save
+      built_user
+    end
 
     context "user authenticated" do
 
       it "returns the user" do
         
-        created_user.confirm!
+        user.confirm!
         post "/users/authenticate", { uuid: uuid, password: password }
         expect_status(200)
         expect(parsed_result[:uuid]).to eq(uuid)
@@ -85,9 +90,9 @@ describe UsersSvc do
 
     context "user not authenticated" do
 
-      context("not confirmed")  { it("returns 404 status") {                        post "/users/authenticate", { uuid: uuid,           password: password };       expect_status(404); expect_empty_response } }
-      context("wrong uuid")     { it("returns 404 status") { created_user.confirm!; post "/users/authenticate", { uuid: random_string,  password: password };       expect_status(404); expect_empty_response } }
-      context("wrong password") { it("returns 404 status") { created_user.confirm!; post "/users/authenticate", { uuid: uuid,           password: random_string };  expect_status(404); expect_empty_response } }
+      context("not confirmed")  { it("returns 404 status") {                post "/users/authenticate", { uuid: uuid,          password: password };       expect_status(404); expect_empty_response } }
+      context("wrong uuid")     { it("returns 404 status") { user.confirm!; post "/users/authenticate", { uuid: random_string, password: password };       expect_status(404); expect_empty_response } }
+      context("wrong password") { it("returns 404 status") { user.confirm!; post "/users/authenticate", { uuid: uuid,          password: random_string };  expect_status(404); expect_empty_response } }
     end
 
   end

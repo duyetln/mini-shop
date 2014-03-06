@@ -42,9 +42,17 @@ RSpec.configure do |config|
   config.tty = true
   config.order = "random"
 
-  config.before(:suite) { DatabaseCleaner.strategy = :truncation }  
-  config.before(:each)  { DatabaseCleaner.start }
-  config.after(:each)   { DatabaseCleaner.clean }
+  config.before :suite do
+    begin
+      DatabaseCleaner.strategy = :truncation, { pre_count: true, reset_ids: true }
+      DatabaseCleaner.start
+      FactoryGirl.lint
+    ensure
+      DatabaseCleaner.clean
+    end
+  end
+  config.before(:each) { DatabaseCleaner.start }
+  config.after(:each)  { DatabaseCleaner.clean }
 end
 
 FactoryGirl.find_definitions
