@@ -25,10 +25,13 @@ class Payment < ActiveRecord::Base
   delegate :currency, to: :payment_method, prefix: true
 
   def commit!
-    if persisted? && pending?
-      payment_method.balance -= Currency.exchange(amount, currency, payment_method_currency)
+    if super
+      payment_method.balance -= Currency.exchange(
+        amount, 
+        currency, 
+        payment_method_currency
+      )
       payment_method.save!
-      super
     end
   end
 

@@ -10,7 +10,7 @@ class PhysicalItem < ActiveRecord::Base
   validates :quantity, numericality: { greater_than_or_equal_to: 0 }
 
   def available?
-    !deleted? && active? && quantity > 0
+    super && quantity > 0
   end
 
   def prepare!(order)

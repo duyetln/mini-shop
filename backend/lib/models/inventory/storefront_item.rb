@@ -20,7 +20,7 @@ class StorefrontItem < ActiveRecord::Base
   delegate :prepare!, to: :item
 
   def available?
-    !deleted? && active? && item.available?
+    super && item.available?
   end
 
 end

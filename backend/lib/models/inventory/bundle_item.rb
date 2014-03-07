@@ -22,7 +22,7 @@ class BundleItem < ActiveRecord::Base
   end
 
   def available?
-    !deleted? && active? && items.present? && items.all?(&:available?)
+    super && items.present? && items.all?(&:available?)
   end
 
   def prepare!(order)
