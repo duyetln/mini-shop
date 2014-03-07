@@ -2,6 +2,9 @@ require "spec_helper"
 
 describe Pricepoint do
 
+  it { should have_many(:pricepoint_prices) }
+  it { should have_many(:currencies).through(:pricepoint_prices) }
+
   it { should validate_uniqueness_of(:name) }
   it { should validate_presence_of(:name) }
 

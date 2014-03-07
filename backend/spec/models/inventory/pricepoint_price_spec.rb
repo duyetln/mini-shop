@@ -2,6 +2,9 @@ require "spec_helper"
 
 describe PricepointPrice do
 
+  it { should belong_to(:pricepoint) }
+  it { should belong_to(:currency) }
+
   it { should validate_presence_of(:amount) }
   it { should validate_presence_of(:pricepoint) }
   it { should validate_presence_of(:currency) }

@@ -7,6 +7,8 @@ describe BundleItem do
 
   it_behaves_like "item resource"
 
+  it { should have_many(:bundlings).with_foreign_key(:bundle_id) }
+
   describe "#available?" do
 
     context "items not present" do

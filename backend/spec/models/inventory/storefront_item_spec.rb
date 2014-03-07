@@ -7,6 +7,9 @@ describe StorefrontItem do
 
   it_behaves_like "item resource"
 
+  it { should belong_to(:item) }
+  it { should belong_to(:price) }
+
   it { should allow_mass_assignment_of(:item_type) }
   it { should allow_mass_assignment_of(:item_id) }
   it { should allow_mass_assignment_of(:price_id) }
