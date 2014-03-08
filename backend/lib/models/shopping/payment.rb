@@ -20,7 +20,7 @@ class Payment < ActiveRecord::Base
   validates :currency, presence: true
   validates :amount,   presence: true
 
-  before_create :set_values
+  after_initialize :initialize_values
 
   delegate :currency, to: :payment_method, prefix: true
 
@@ -37,11 +37,12 @@ class Payment < ActiveRecord::Base
 
   protected
 
-  def set_values
-    self.uuid = SecureRandom.hex.upcase
-    self.committed    = false
-    self.committed_at = nil
-    self.refunded = false
-    true
+  def initialize_values
+    if new_record?
+      self.uuid = SecureRandom.hex.upcase
+      self.committed    = false
+      self.committed_at = nil
+      self.refunded = false
+    end
   end
 end

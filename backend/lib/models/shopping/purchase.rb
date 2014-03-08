@@ -14,7 +14,7 @@ class Purchase < ActiveRecord::Base
   belongs_to :payment
   belongs_to :user
 
-  before_validation :set_values, on: :create
+  after_initialize :initialize_values
 
   validates :user,             presence: true
   validates :payment_method,   presence: true, if: :committed?
@@ -87,9 +87,10 @@ class Purchase < ActiveRecord::Base
 
   protected
 
-  def set_values
-    self.committed    = false
-    self.committed_at = nil
-    true
+  def initialize_values
+    if new_record?
+      self.committed    = false
+      self.committed_at = nil
+    end
   end
 end

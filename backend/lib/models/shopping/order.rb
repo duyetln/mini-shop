@@ -28,8 +28,8 @@ class Order < ActiveRecord::Base
   scope :deleted,  -> { where(deleted: true) }
   scope :kept,     -> { where(deleted: false) }
 
-  before_create :set_uuid
-  before_save   :set_values
+  after_initialize :initialize_values
+  before_save :set_values
 
   delegate :user,             to: :purchase
   delegate :payment_method,   to: :purchase
@@ -118,8 +118,10 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def set_uuid
-    self.uuid = SecureRandom.hex.upcase
+  def initialize_values
+    if new_record?
+      self.uuid = SecureRandom.hex.upcase
+    end
   end
 
   def set_values

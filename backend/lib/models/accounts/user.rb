@@ -16,8 +16,8 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true
   validates :password, length: { minimum: 5 }
 
-  before_create :set_values
-  before_save   :encrypt_password, if: :password_changed?
+  after_initialize :initialize_values
+  before_save :encrypt_password, if: :password_changed?
 
   def self.authenticate(uuid, password)
     user = find_by_uuid(uuid)
@@ -37,9 +37,11 @@ class User < ActiveRecord::Base
 
   protected
 
-  def set_values
-    self.uuid = SecureRandom.hex.upcase
-    self.actv_code = SecureRandom.hex.upcase
+  def initialize_values
+    if new_record?
+      self.uuid = SecureRandom.hex.upcase
+      self.actv_code = SecureRandom.hex.upcase
+    end
   end
 
   def encrypt_password

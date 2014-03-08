@@ -19,7 +19,7 @@ class Fulfillment < ActiveRecord::Base
   validates :item,  presence: true
   validates :item_type, inclusion: { in: %w{ PhysicalItem DigitalItem } }
 
-  before_create :set_values
+  after_initialize :initialize_values
 
   def self.prepare!(order, item)
     fulfillment = new
@@ -58,11 +58,12 @@ class Fulfillment < ActiveRecord::Base
     raise "Must be implemented in derived class"
   end
 
-  def set_values
-    self.status = STATUS[:prepared]
-    self.fulfilled_at = nil
-    self.reversed_at  = nil
-    true
+  def initialize_values
+    if new_record?
+      self.status = STATUS[:prepared]
+      self.fulfilled_at = nil
+      self.reversed_at  = nil
+    end
   end
 
 end

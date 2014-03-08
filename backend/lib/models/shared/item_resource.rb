@@ -14,7 +14,7 @@ module ItemResource
 
     validates :title, presence: true
 
-    before_create :set_values
+    after_initialize :initialize_values
   end
 
   module ClassMethods
@@ -31,10 +31,11 @@ module ItemResource
 
   protected
 
-  def set_values
-    self.active  = true
-    self.deleted = false
-    true
+  def initialize_values
+    if new_record?
+      self.active  = true
+      self.deleted = false
+    end
   end
 
 end
