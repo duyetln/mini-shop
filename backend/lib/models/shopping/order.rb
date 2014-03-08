@@ -1,26 +1,22 @@
 require "models/shared/enum"
-require "models/shared/itemable"
+require "models/shared/item_combinable"
 
 class Order < ActiveRecord::Base
 
   include Enum
-  include Itemable
+  include ItemCombinable
 
   enum :status, [ :prepared, :fulfilled, :reversed ]
 
-  attr_accessible :item_type, :item_id, :currency_id, :quantity
+  attr_accessible :currency_id
 
   belongs_to :purchase
-  belongs_to :item, polymorphic: :item
   belongs_to :currency
   has_many   :fulfillments
 
   validates :purchase, presence: true
-  validates :item,     presence: true
   validates :currency, presence: true
-  validates :quantity, presence: true
 
-  validates :quantity, numericality: { greater_than_or_equal_to: 0 }
   validates :purchase_id, uniqueness: { scope: [ :item_type, :item_id ] }, unless: :deleted?
 
   validate  :pending_purchase
