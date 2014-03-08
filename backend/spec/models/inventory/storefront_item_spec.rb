@@ -48,11 +48,11 @@ describe StorefrontItem do
 
   describe "#amount" do
 
-    let(:currency) { built_item.price.pricepoint.currencies.sample }
+    let(:currency) { new_item.price.pricepoint.currencies.sample }
 
     it "delegates to Price#amount" do
 
-      expect(built_item.amount(currency)).to eq(built_item.price.amount(currency))
+      expect(new_item.amount(currency)).to eq(new_item.price.amount(currency))
     end
   end
 
@@ -60,7 +60,7 @@ describe StorefrontItem do
 
     it "delegates to Price#discounted?" do
 
-      expect(built_item.discounted?).to eq(built_item.price.discounted?)
+      expect(new_item.discounted?).to eq(new_item.price.discounted?)
     end
   end
 

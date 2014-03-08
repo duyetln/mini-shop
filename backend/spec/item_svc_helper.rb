@@ -88,7 +88,7 @@ shared_examples "item service" do |item_class|
 
       it "creates the item and returns it" do
 
-        expect{ post "/#{namespace}", built_item.attributes }.to change{ item_class.count }.by(1)
+        expect{ post "/#{namespace}", new_item.attributes }.to change{ item_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(item_class.last.id)
       end
@@ -98,7 +98,7 @@ shared_examples "item service" do |item_class|
 
       it "ignores invalid parameters and creates the item" do
 
-        expect{ post "/#{namespace}", built_item.attributes.merge(foo: :baz) }.to change{ item_class.count }.by(1)
+        expect{ post "/#{namespace}", new_item.attributes.merge(foo: :baz) }.to change{ item_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(item_class.last.id)
       end
@@ -118,7 +118,7 @@ shared_examples "item service" do |item_class|
 
       it "does not update the deleted flag" do
 
-        expect{ post "/#{namespace}", built_item.attributes.merge(deleted: true) }.to change{ item_class.count }.by(1)
+        expect{ post "/#{namespace}", new_item.attributes.merge(deleted: true) }.to change{ item_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(item_class.last.id)
         expect(parsed_result[:deleted]).to be_false
@@ -130,7 +130,7 @@ shared_examples "item service" do |item_class|
 
       it "does not update the active flag" do
 
-        expect{ post "/#{namespace}", built_item.attributes.merge(active: false) }.to change{ item_class.count }.by(1)
+        expect{ post "/#{namespace}", new_item.attributes.merge(active: false) }.to change{ item_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(item_class.last.id)
         expect(parsed_result[:active]).to be_true

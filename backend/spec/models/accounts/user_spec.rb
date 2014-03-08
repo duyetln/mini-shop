@@ -20,15 +20,15 @@ describe User do
 
   describe "factory model" do
 
-    it("is valid") { expect(built_user.valid?).to be_true }
+    it("is valid") { expect(new_user.valid?).to be_true }
     it("saves successfully") { expect(created_user).to be_present }
   end
 
-  let(:password) { built_user.password }
+  let(:password) { new_user.password }
   let :user do
-    built_user.password = password
-    built_user.save
-    built_user
+    new_user.password = password
+    new_user.save
+    new_user
   end
 
   describe "#save" do
@@ -66,7 +66,7 @@ describe User do
 
     context "new user" do 
 
-      it("returns false") { expect(built_user.confirmed?).to be_false }
+      it("returns false") { expect(new_user.confirmed?).to be_false }
     end
 
     context "persisted user" do
@@ -92,7 +92,7 @@ describe User do
 
     context "new user" do
 
-      it("returns false") { expect(built_user.confirm!).to be_false }
+      it("returns false") { expect(new_user.confirm!).to be_false }
     end
     
     context "persisted user" do

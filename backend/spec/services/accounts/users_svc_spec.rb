@@ -35,7 +35,7 @@ describe UsersSvc do
 
       it "creates the user and returns it" do
 
-        expect{ post "/users", built_user.attributes }.to change{ User.count }.by(1)
+        expect{ post "/users", new_user.attributes }.to change{ User.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(User.last.id)
         expect(parsed_result[:uuid]).to eq(User.last.uuid)
@@ -57,11 +57,11 @@ describe UsersSvc do
 
       it "returns 500 status" do
 
-        expect(User).to receive(:new).with(an_instance_of(Hash)).and_return(built_user)
-        expect(built_user).to receive(:valid?).and_return(true)
-        expect(built_user).to receive(:save).and_return(false)
+        expect(User).to receive(:new).with(an_instance_of(Hash)).and_return(new_user)
+        expect(new_user).to receive(:valid?).and_return(true)
+        expect(new_user).to receive(:save).and_return(false)
 
-        expect{ post "/users", built_user.attributes }.to_not change{ User.count }
+        expect{ post "/users", new_user.attributes }.to_not change{ User.count }
         expect_status(500)
       end
     end
@@ -69,12 +69,12 @@ describe UsersSvc do
 
   describe "post /users/authenticate" do
 
-    let(:password) { built_user.password }
+    let(:password) { new_user.password }
     let(:uuid) { user.uuid }
     let :user do
-      built_user.password = password
-      built_user.save
-      built_user
+      new_user.password = password
+      new_user.save
+      new_user
     end
 
     context "user authenticated" do

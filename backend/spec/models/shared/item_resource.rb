@@ -15,25 +15,25 @@ shared_examples "item resource" do
 
   describe "factory model" do
 
-    it("is valid") { expect(built_item).to be_valid }
+    it("is valid") { expect(new_item).to be_valid }
     it("saves successfully") { expect(created_item).to be_present}
   end
 
   context "new item" do
 
-    it("is inactive") { expect(built_item.active?).to be_true }
-    it("is not deleted") { expect(built_item.deleted?).to be_false }
+    it("is inactive") { expect(new_item.active?).to be_true }
+    it("is not deleted") { expect(new_item.deleted?).to be_false }
 
     describe "#activate!" do
 
       it "cannot be executed" do
 
-        expect(built_item.activate!).to_not be_true
+        expect(new_item.activate!).to_not be_true
       end
 
       it "cannot change active status" do
 
-        expect{ built_item.activate! }.to_not change{ built_item.active }
+        expect{ new_item.activate! }.to_not change{ new_item.active }
       end
     end
 
@@ -41,12 +41,12 @@ shared_examples "item resource" do
 
       it "cannot be executed" do
 
-        expect(built_item.deactivate!).to_not be_true
+        expect(new_item.deactivate!).to_not be_true
       end
 
       it "cannot change active status" do
 
-        expect{ built_item.deactivate! }.to_not change{ built_item.active }
+        expect{ new_item.deactivate! }.to_not change{ new_item.active }
       end
     end
 
@@ -54,12 +54,12 @@ shared_examples "item resource" do
 
       it "cannot be executed" do
 
-        expect(built_item.delete!).to_not be_true
+        expect(new_item.delete!).to_not be_true
       end
 
       it "cannot change deleted status" do
 
-        expect{ built_item.delete! }.to_not change{ built_item.deleted }
+        expect{ new_item.delete! }.to_not change{ new_item.deleted }
       end
     end
   end
