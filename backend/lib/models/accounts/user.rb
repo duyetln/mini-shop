@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   def confirm!
     if persisted? && actv_code.present?
       self.actv_code = nil
-      save
+      save!
     end
   end
 
