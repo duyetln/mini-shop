@@ -3,11 +3,7 @@ require "models/shared/item_resource"
 class PhysicalItem < ActiveRecord::Base
 
   include ItemResource
-
-  attr_accessible :quantity
-
-  validates :quantity, presence: true
-  validates :quantity, numericality: { greater_than_or_equal_to: 0 }
+  include Quantifiable
 
   def available?
     super && quantity > 0
