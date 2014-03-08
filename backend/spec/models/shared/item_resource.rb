@@ -1,9 +1,17 @@
+require "spec/models/shared/activable"
+require "spec/models/shared/deletable"
+require "spec/models/shared/displayable"
+
 shared_examples "item resource" do
 
   it { should allow_mass_assignment_of(:title) }
   it { should allow_mass_assignment_of(:description) }
 
   it { should validate_presence_of(:title) }
+
+  it_behaves_like "activable object"
+  it_behaves_like "deletable object"
+  it_behaves_like "displayable object"
 
   describe "factory model" do
 

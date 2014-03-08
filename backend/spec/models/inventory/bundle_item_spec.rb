@@ -1,5 +1,5 @@
 require "spec_helper"
-require "item_resource_helper"
+require "spec/models/shared/item_resource"
 
 describe BundleItem do
 
