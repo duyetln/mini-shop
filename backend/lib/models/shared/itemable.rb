@@ -2,32 +2,17 @@ module Itemable
   
   extend ActiveSupport::Concern
 
-  module ClassMethods
+  included do
 
-    def add_or_update(item, qty=1, acc=true, conds={})
-      record = where({
-        item_type: item.class, 
-        item_id: item.id
-      }.merge(conds)).first_or_initialize
+    attr_accessible :item_type, :item_id
+    attr_readonly   :item_type, :item_id
 
-      record.quantity ||= 0
-      acc ? 
-        record.quantity += qty.to_i : 
-        record.quantity  = qty.to_i
+    belongs_to :item, polymorphic: true
 
-      yield record if block_given?
-      record.save! ? record : nil
-    end
-
-    def get(item)
-      record = detect{ |r| r.item == item } || detect{ |r| r == item }
-      yield record if block_given?
-      record
-    end
-
+    validates :item, presence: true
   end
 
-  [:item, :item_type, :item_id, :quantity].each do |method|
+  [:item, :item_type, :item_id].each do |method|
     class_eval <<-EOF
       def #{method}(*args)
         defined?(super) ? super : ( raise "#{__method__} must be defined in derived class" )
@@ -35,7 +20,7 @@ module Itemable
     EOF
   end
 
-  [:item=, :item_type=, :item_id=, :quantity=].each do |method|
+  [:item=, :item_type=, :item_id=].each do |method|
     class_eval <<-EOF
       def #{method}(*args)
         defined?(super) ? super : ( raise "#{__method__} must be defined in derived class" )
