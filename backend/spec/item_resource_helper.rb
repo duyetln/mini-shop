@@ -13,7 +13,7 @@ shared_examples "item resource" do
 
   context "new item" do
 
-    it("is inactive") { expect(built_item.active?).to be_false }
+    it("is inactive") { expect(built_item.active?).to be_true }
     it("is not deleted") { expect(built_item.deleted?).to be_false }
 
     describe "#activate!" do

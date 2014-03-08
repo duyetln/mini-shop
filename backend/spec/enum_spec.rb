@@ -37,11 +37,11 @@ describe Enum do
 
     it "queries status correctly" do
 
-      test_instance.status = 0
+      test_instance.status = test_instance.class::STATUS[:foo]
       expect(test_instance).to be_foo
       expect(test_instance).to_not be_bar
 
-      test_instance.status = 1
+      test_instance.status = test_instance.class::STATUS[:bar]
       expect(test_instance).to_not be_foo
       expect(test_instance).to be_bar
     end
