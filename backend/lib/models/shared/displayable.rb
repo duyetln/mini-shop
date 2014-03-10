@@ -4,8 +4,6 @@ module Displayable
 
   included do
 
-    attr_accessible :title, :description  if ( [:title, :description] - self.column_names.map(&:to_sym) ).blank?
-
     validates :title, presence: true
   end
 
