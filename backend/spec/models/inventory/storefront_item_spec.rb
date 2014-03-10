@@ -14,6 +14,7 @@ describe StorefrontItem do
   it { should allow_mass_assignment_of(:item_id) }
   it { should allow_mass_assignment_of(:price_id) }
 
+  it { should validate_presence_of(:name) }
   it { should validate_presence_of(:price) }
   it { should validate_presence_of(:item) }
   it { should ensure_inclusion_of(:item_type).in_array(%w{ BundleItem DigitalItem PhysicalItem }) }

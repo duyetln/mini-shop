@@ -1,8 +1,7 @@
 class CreateStorefrontItemsTable < ActiveRecord::Migration
   def up
     create_table :storefront_items do |t|
-      t.string   :title
-      t.string   :description
+      t.string   :name
       t.boolean  :active
       t.integer  :item_id
       t.string   :item_type
