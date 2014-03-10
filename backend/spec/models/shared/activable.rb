@@ -16,6 +16,19 @@ shared_examples "activable object" do
     it { should respond_to(:deactivate!).with(0).argument }
   end
 
+  describe "#active?" do
+
+    context "new object" do
+
+      it("is true") { expect(new_object.active?).to be_true }
+    end
+
+    context "created object" do
+
+      it("is true") { expect(created_object.active?).to be_true }
+    end
+  end
+
   describe "#activate!" do
 
     context "new object" do

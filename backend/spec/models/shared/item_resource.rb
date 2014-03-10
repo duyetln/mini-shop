@@ -17,18 +17,6 @@ shared_examples "item resource" do
     it("saves successfully") { expect(created_item).to be_present}
   end
 
-  context "new item" do
-
-    it("is active") { expect(new_item.active?).to be_true }
-    it("is not deleted") { expect(new_item.deleted?).to be_false }
-  end
-
-  context "created item" do
-
-    it("is active") { expect(created_item.active?).to be_true }
-    it("is not deleted") { expect(created_item.deleted?).to be_false }
-  end
-
   describe "#available?" do
 
     context("deleted")  { it("is false") { created_item.delete!;     expect(created_item).to_not be_available } }

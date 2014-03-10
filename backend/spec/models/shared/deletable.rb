@@ -15,6 +15,19 @@ shared_examples "deletable object" do
     it { should respond_to(:delete!).with(0).argument }
   end
 
+  describe "#deleted?" do
+
+    context "new object" do
+
+      it("is false") { expect(new_object.deleted?).to be_false }
+    end
+
+    context "created object" do
+
+      it("is false") { expect(created_object.deleted?).to be_false }
+    end
+  end
+
   describe "#delete!" do
 
     context "new object" do
