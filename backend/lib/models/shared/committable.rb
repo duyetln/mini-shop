@@ -13,7 +13,7 @@ module Committable
   [:committed=, :committed_at=].each do |method|
     class_eval <<-EOF
       def #{method}(*args)
-        defined?(super) ? super : ( raise "#{__method__} must be defined in derived class" )
+        defined?(super) ? super : ( raise NotImplementedError, "#{__method__} must be defined in derived class" )
       end
     EOF
   end
@@ -21,7 +21,7 @@ module Committable
   [:commtted, :committed_at, :committed?].each do |method|
     class_eval <<-EOF
       def #{method}(*args)
-        defined?(super) ? super : ( raise "#{__method__} must be defined in derived class" )
+        defined?(super) ? super : ( raise NotImplementedError, "#{__method__} must be defined in derived class" )
       end
     EOF
   end
