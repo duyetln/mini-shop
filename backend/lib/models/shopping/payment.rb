@@ -40,8 +40,6 @@ class Payment < ActiveRecord::Base
   def initialize_values
     if new_record?
       self.uuid = SecureRandom.hex.upcase
-      self.committed    = false
-      self.committed_at = nil
       self.refunded = false
     end
   end

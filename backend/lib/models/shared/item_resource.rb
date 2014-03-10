@@ -9,11 +9,6 @@ module ItemResource
   include Deletable
   include Displayable
 
-  included do
-
-    after_initialize :initialize_values
-  end
-
   module ClassMethods
 
     def paginate(offset=nil, limit=nil)
@@ -24,15 +19,6 @@ module ItemResource
 
   def available?
     !deleted? && active?
-  end
-
-  protected
-
-  def initialize_values
-    if new_record?
-      self.active  = true
-      self.deleted = false
-    end
   end
 
 end

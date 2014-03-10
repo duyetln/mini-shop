@@ -6,6 +6,8 @@ module Deletable
 
     scope :deleted, -> { where(deleted: true) }
     scope :kept,    -> { where(deleted: false) }
+
+    after_initialize :set_kept
   end
 
   [:deleted, :deleted?].each do |method|
@@ -32,6 +34,14 @@ module Deletable
     if persisted? && !deleted?
       self.deleted = true
       save!
+    end
+  end
+
+  protected
+
+  def set_kept
+    if new_record?
+      self.deleted = false
     end
   end
 

@@ -14,8 +14,6 @@ class Purchase < ActiveRecord::Base
   belongs_to :payment
   belongs_to :user
 
-  after_initialize :initialize_values
-
   validates :user,             presence: true
   validates :payment_method,   presence: true, if: :committed?
   validates :billing_address,  presence: true, if: :committed?
@@ -85,12 +83,4 @@ class Purchase < ActiveRecord::Base
   def reverse!
   end
 
-  protected
-
-  def initialize_values
-    if new_record?
-      self.committed    = false
-      self.committed_at = nil
-    end
-  end
 end

@@ -6,6 +6,8 @@ module Committable
 
     scope :committed, -> { where(committed: true) }
     scope :pending,   -> { where(committed: false) }
+
+    after_initialize :set_pending
   end
 
   [:committed=, :committed_at=].each do |method|
@@ -33,6 +35,15 @@ module Committable
       self.committed    = true
       self.committed_at = DateTime.now
       save!
+    end
+  end
+
+  protected
+
+  def set_pending
+    if new_record?
+      self.committed    = false
+      self.committed_at = nil
     end
   end
 
