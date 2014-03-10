@@ -2,6 +2,13 @@ module Displayable
 
   extend ActiveSupport::Concern
 
+  included do
+
+    attr_accessible :title, :description
+
+    validates :title, presence: true
+  end
+
   [:title, :description].each do |method|
     class_eval <<-EOF
       def #{method}(*args)

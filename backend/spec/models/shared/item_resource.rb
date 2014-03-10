@@ -7,11 +7,6 @@ shared_examples "item resource" do
   let(:new_object) { new_item }
   let(:created_object) { created_item }
 
-  it { should allow_mass_assignment_of(:title) }
-  it { should allow_mass_assignment_of(:description) }
-
-  it { should validate_presence_of(:title) }
-
   it_behaves_like "activable object"
   it_behaves_like "deletable object"
   it_behaves_like "displayable object"

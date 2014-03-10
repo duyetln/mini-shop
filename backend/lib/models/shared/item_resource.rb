@@ -10,9 +10,6 @@ module ItemResource
   include Displayable
 
   included do
-    attr_accessible :title, :description
-
-    validates :title, presence: true
 
     after_initialize :initialize_values
   end
