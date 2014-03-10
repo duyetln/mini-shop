@@ -40,7 +40,7 @@ shared_examples "activable object" do
 
       it "cannot change active status" do
 
-        expect{ new_object.activate! }.to_not change{ new_object.active }
+        expect{ new_object.activate! }.to_not change{ new_object.active? }
       end
     end
 
@@ -55,7 +55,7 @@ shared_examples "activable object" do
       it "changes active status to true" do
 
         created_object.deactivate!
-        expect{ created_object.activate! }.to change{ created_object.active }
+        expect{ created_object.activate! }.to change{ created_object.active? }
         expect(created_object.active?).to be_true
       end
     end
@@ -72,7 +72,7 @@ shared_examples "activable object" do
 
       it "cannot change active status" do
 
-        expect{ new_object.deactivate! }.to_not change{ new_object.active }
+        expect{ new_object.deactivate! }.to_not change{ new_object.active? }
       end
     end
 
@@ -85,7 +85,7 @@ shared_examples "activable object" do
 
       it "changes active status to false" do
 
-        expect{ created_object.deactivate! }.to change{ created_object.active }
+        expect{ created_object.deactivate! }.to change{ created_object.active? }
         expect(created_object.active?).to be_false
       end
     end

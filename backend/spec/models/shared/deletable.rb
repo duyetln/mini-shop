@@ -39,7 +39,7 @@ shared_examples "deletable object" do
 
       it "cannot change deleted status" do
 
-        expect{ new_object.delete! }.to_not change{ new_object.deleted }
+        expect{ new_object.delete! }.to_not change{ new_object.deleted? }
       end
     end
 
@@ -52,7 +52,7 @@ shared_examples "deletable object" do
 
       it "changes deleted status to true" do
 
-        expect{ created_object.delete! }.to change{ created_object.deleted }
+        expect{ created_object.delete! }.to change{ created_object.deleted? }
         expect(created_object.deleted?).to be_true
       end
     end
