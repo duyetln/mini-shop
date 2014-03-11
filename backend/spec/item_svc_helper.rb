@@ -145,17 +145,15 @@ shared_examples "item service" do |item_class|
 
       context "non-deleted item" do
 
-        let(:new_title) { "New title" }
-
         context "valid parameters" do
 
           it "updates the item and returns it" do
 
-            put "/#{namespace}/#{created_item.id}", title: new_title
+            put "/#{namespace}/#{created_item.id}", { key => value }
             expect_status(200)
-            expect(parsed_result[:title]).to eq(new_title)
+            expect(parsed_result[key]).to eq(value)
             created_item.reload
-            expect(created_item.title).to eq(new_title)
+            expect(created_item.send(key)).to eq(value)
           end
         end
 
@@ -163,11 +161,11 @@ shared_examples "item service" do |item_class|
 
           it "ignores invalid parameters and updates the item" do
 
-            put "/#{namespace}/#{created_item.id}", title: new_title, foo: :baz
+            put "/#{namespace}/#{created_item.id}", { key => value, foo: :baz }
             expect_status(200)
-            expect(parsed_result[:title]).to eq(new_title)
+            expect(parsed_result[key]).to eq(value)
             created_item.reload
-            expect(created_item.title).to eq(new_title)
+            expect(created_item.send(key)).to eq(value)
           end
         end
 

@@ -30,7 +30,7 @@ module ItemSvcHelpers
         end
 
         def accessible_params
-          params.slice *settings.item_class.accessible_attributes.to_a
+          params.slice *settings.item_class.column_names
         end
 
         def respond_with(resource, response_options={}, json_options=item_response_options)

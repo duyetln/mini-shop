@@ -24,7 +24,7 @@ class UsersSvc < Sinatra::Base
     end
 
     def accessible_params
-      params.slice *User.accessible_attributes.to_a
+      params.slice *User.column_names
     end
 
     def respond_with(resource, response_options={}, json_options=user_response_options)
