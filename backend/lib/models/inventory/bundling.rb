@@ -4,6 +4,8 @@ class Bundling < ActiveRecord::Base
   
   include ItemCombinable
 
+  attr_readonly :bundle_id
+
   belongs_to :bundle, class_name: "BundleItem"
 
   validates :bundle, presence: true

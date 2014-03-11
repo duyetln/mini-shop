@@ -7,7 +7,8 @@ class Payment < ActiveRecord::Base
   belongs_to :payment_method
   belongs_to :billing_address, class_name: "Address"
 
-  attr_accessible :user_id, :payment_method_id, :billing_address_id, :amount, :currency_id
+  attr_protected :uuid, :refunded
+  attr_readonly :uuid, :user_id, :payment_method_id, :billing_address_id, :amount, :currency_id
 
   belongs_to :user
   belongs_to :currency

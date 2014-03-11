@@ -4,7 +4,7 @@ class Ownership < ActiveRecord::Base
 
   include ItemCombinable
 
-  attr_accessible :user_id, :order_id
+  attr_readonly :user_id, :order_id
 
   belongs_to :user
   belongs_to :order

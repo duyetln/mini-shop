@@ -1,5 +1,7 @@
 class Currency < ActiveRecord::Base
   
+  attr_readonly :code
+
   validates :code, length: { is: 3 }
   validates :code, presence: true
   validates :code, uniqueness: true

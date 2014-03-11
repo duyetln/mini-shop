@@ -12,7 +12,8 @@ class Fulfillment < ActiveRecord::Base
 
   enum :status, [ :prepared, :fulfilled, :reversed ]
 
-  attr_accessible :order_id
+  attr_protected :status, :fulfilled_at, :reversed_at
+  attr_readonly :order_id
 
   belongs_to :order
 

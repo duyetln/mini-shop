@@ -4,6 +4,8 @@ module Committable
 
   included do
 
+    attr_protected :committed, :committed_at
+
     scope :committed, -> { where(committed: true) }
     scope :pending,   -> { where(committed: false) }
 

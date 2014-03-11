@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
-  attr_accessible :first_name, :last_name, :email, :birthdate, :password
+  attr_protected :uuid, :actv_code
   attr_readonly :uuid
 
   validates :first_name, presence: true

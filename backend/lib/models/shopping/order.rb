@@ -8,7 +8,8 @@ class Order < ActiveRecord::Base
 
   enum :status, [ :prepared, :fulfilled, :reversed ]
 
-  attr_accessible :currency_id
+  attr_protected :uuid, :purchase_id, :status, :fulfilled_at, :reversed_at
+  attr_readonly :uuid, :purchase_id
 
   belongs_to :purchase
   belongs_to :currency

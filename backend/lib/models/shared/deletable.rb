@@ -4,6 +4,8 @@ module Deletable
 
   included do
 
+    attr_protected :deleted
+
     scope :deleted, -> { where(deleted: true) }
     scope :kept,    -> { where(deleted: false) }
 

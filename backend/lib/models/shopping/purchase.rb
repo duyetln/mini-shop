@@ -3,8 +3,8 @@ require "models/shared/committable"
 class Purchase < ActiveRecord::Base
 
   include Committable
-
-  attr_accessible :user_id, :payment_method_id, :billing_address_id, :shipping_address_id
+  
+  attr_readonly :user_id
 
   has_many :orders
 

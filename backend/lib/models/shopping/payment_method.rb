@@ -1,7 +1,6 @@
 class PaymentMethod < ActiveRecord::Base
 
-  attr_accessible :user_id, :name, :currency_id, :balance
-  attr_readonly   :user_id, :name, :currency_id
+  attr_readonly :user_id, :name, :currency_id
 
   belongs_to :user
   belongs_to :currency

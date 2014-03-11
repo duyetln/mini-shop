@@ -4,8 +4,7 @@ module Itemable
 
   included do
 
-    attr_accessible :item_type, :item_id
-    attr_readonly   :item_type, :item_id
+    attr_readonly :item_type, :item_id
 
     belongs_to :item, polymorphic: true
 

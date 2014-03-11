@@ -4,6 +4,8 @@ module Activable
 
   included do
 
+    attr_protected :active
+
     scope :active,   -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
 

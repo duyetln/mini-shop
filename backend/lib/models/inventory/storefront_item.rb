@@ -7,8 +7,6 @@ class StorefrontItem < ActiveRecord::Base
   include Orderable
   include Itemable
 
-  attr_accessible :price_id, :name
-
   belongs_to :price
 
   validates :name, presence: true
