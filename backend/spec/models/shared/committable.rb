@@ -1,5 +1,8 @@
 shared_examples "committable object" do
 
+  it { should_not allow_mass_assignment_of(:committed) }
+  it { should_not allow_mass_assignment_of(:committed_at) }
+
   context "class" do
     let(:subject) { described_class }
     it { should respond_to(:committed).with(0).argument }

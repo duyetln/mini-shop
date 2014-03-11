@@ -2,11 +2,13 @@ require "spec_helper"
 
 describe Address do
 
-  [:user_id, :line1, :line2, :line3, :city, :region, :postal_code, :country].each do |attr|
-
-    it { should allow_mass_assignment_of(attr) }
-    it { should have_readonly_attribute(attr) }
-  end
+  it { should have_readonly_attribute(:user_id) }
+  it { should have_readonly_attribute(:line1) }
+  it { should have_readonly_attribute(:line2) }
+  it { should have_readonly_attribute(:line3) }
+  it { should have_readonly_attribute(:city) }
+  it { should have_readonly_attribute(:postal_code) }
+  it { should have_readonly_attribute(:country) }
 
   it { should belong_to(:user) }
   

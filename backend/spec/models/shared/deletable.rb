@@ -1,5 +1,7 @@
 shared_examples "deletable object" do
 
+  it { should_not allow_mass_assignment_of(:deleted) }
+
   context "class" do
     let(:subject) { described_class }
     it { should respond_to(:deleted).with(0).argument }

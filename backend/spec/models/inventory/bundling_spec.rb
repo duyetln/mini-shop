@@ -5,6 +5,8 @@ describe Bundling do
 
   it_behaves_like "item combinable object"
 
+  it { should have_readonly_attribute(:bundle_id) }
+
   it { should belong_to(:bundle).class_name("BundleItem") }
 
   it { should validate_presence_of(:bundle) }

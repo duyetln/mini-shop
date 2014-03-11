@@ -1,5 +1,7 @@
 shared_examples "activable object" do
 
+  it { should_not allow_mass_assignment_of(:active) }
+
   context "class" do
     let(:subject) { described_class }
     it { should respond_to(:active).with(0).argument }
