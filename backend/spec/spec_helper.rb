@@ -12,8 +12,8 @@ module SpecHelpers
     let(:random_string) { |length=10| Faker::Lorem.characters(length) }
     let(:sym_item_class) { item_class.to_s.underscore.to_sym }
     let(:items)        { item_class.kept }
-    let(:created_item) { FactoryGirl.create(sym_item_class) }
-    let(:new_item)   { FactoryGirl.build(sym_item_class) }
+    let(:saved_model) { FactoryGirl.create(sym_item_class) }
+    let(:new_model)   { FactoryGirl.build(sym_item_class) }
     let(:attributes)   { item_class.accessible_attributes.to_a.map(&:to_sym) }
     
     let(:namespace)     { item_class.to_s.tableize }

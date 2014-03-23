@@ -14,12 +14,12 @@ describe BundleItem do
     context "items not present" do
 
       before :each do
-        expect(created_item).to receive(:items).and_return([ ])
+        expect(saved_model).to receive(:items).and_return([ ])
       end
 
       it "is false" do
 
-        expect(created_item).to_not be_available
+        expect(saved_model).to_not be_available
       end
     end
 
@@ -29,8 +29,8 @@ describe BundleItem do
 
         it "is false" do
 
-          created_item.items.sample.send([:delete!, :deactivate!].sample)
-          expect(created_item).to_not be_available
+          saved_model.items.sample.send([:delete!, :deactivate!].sample)
+          expect(saved_model).to_not be_available
         end
       end
 
@@ -38,7 +38,7 @@ describe BundleItem do
 
         it "is true" do
           
-          expect(created_item).to be_available
+          expect(saved_model).to be_available
         end
       end
     end

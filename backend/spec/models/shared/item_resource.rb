@@ -4,8 +4,8 @@ require "spec/models/shared/displayable"
 
 shared_examples "item resource" do
 
-  let(:new_object) { new_item }
-  let(:created_object) { created_item }
+  let(:new_object) { new_model }
+  let(:created_object) { saved_model }
 
   it_behaves_like "activable object"
   it_behaves_like "deletable object"
@@ -13,14 +13,14 @@ shared_examples "item resource" do
 
   describe "factory model" do
 
-    it("is valid") { expect(new_item).to be_valid }
-    it("saves successfully") { expect(created_item).to be_present}
+    it("is valid") { expect(new_model).to be_valid }
+    it("saves successfully") { expect(saved_model).to be_present}
   end
 
   describe "#available?" do
 
-    context("deleted")  { it("is false") { created_item.delete!;     expect(created_item).to_not be_available } }
-    context("inactive") { it("is false") { created_item.deactivate!; expect(created_item).to_not be_available } }
+    context("deleted")  { it("is false") { saved_model.delete!;     expect(saved_model).to_not be_available } }
+    context("inactive") { it("is false") { saved_model.deactivate!; expect(saved_model).to_not be_available } }
   end
 
 end

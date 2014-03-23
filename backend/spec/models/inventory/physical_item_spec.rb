@@ -18,9 +18,9 @@ describe PhysicalItem do
 
       it "is false" do
 
-        created_item.quantity = 0
-        created_item.save
-        expect(created_item).to_not be_available
+        saved_model.quantity = 0
+        saved_model.save
+        expect(saved_model).to_not be_available
       end
     end
   end

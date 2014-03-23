@@ -25,7 +25,7 @@ describe StorefrontItem do
     let(:item) { FactoryGirl.create [:bundle_item, :physical_item, :digital_item].sample }
 
     before :each do
-      expect(created_item).to receive(:item).and_return(item)
+      expect(saved_model).to receive(:item).and_return(item)
     end
 
     context "item unavailable" do
@@ -33,7 +33,7 @@ describe StorefrontItem do
       it "is false" do
 
         expect(item).to receive(:available?).and_return(false)
-        expect(created_item).to_not be_available
+        expect(saved_model).to_not be_available
       end
     end
 
@@ -42,18 +42,18 @@ describe StorefrontItem do
       it "is true" do
 
         expect(item).to receive(:available?).and_return(true)
-        expect(created_item).to be_available
+        expect(saved_model).to be_available
       end
     end
   end
 
   describe "#amount" do
 
-    let(:currency) { new_item.price.pricepoint.currencies.sample }
+    let(:currency) { new_model.price.pricepoint.currencies.sample }
 
     it "delegates to Price#amount" do
 
-      expect(new_item.amount(currency)).to eq(new_item.price.amount(currency))
+      expect(new_model.amount(currency)).to eq(new_model.price.amount(currency))
     end
   end
 
@@ -61,7 +61,7 @@ describe StorefrontItem do
 
     it "delegates to Price#discounted?" do
 
-      expect(new_item.discounted?).to eq(new_item.price.discounted?)
+      expect(new_model.discounted?).to eq(new_model.price.discounted?)
     end
   end
 

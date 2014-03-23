@@ -52,9 +52,9 @@ shared_examples "item service" do |item_class|
 
         it "returns the item" do
 
-          get "/#{namespace}/#{created_item.id}"
+          get "/#{namespace}/#{saved_model.id}"
           expect_status(200)
-          expect(parsed_result[:id]).to eq(created_item.id)
+          expect(parsed_result[:id]).to eq(saved_model.id)
         end
       end
 
@@ -62,8 +62,8 @@ shared_examples "item service" do |item_class|
 
         it "returns 404 status" do
 
-          created_item.delete!
-          get "/#{namespace}/#{created_item.id}"
+          saved_model.delete!
+          get "/#{namespace}/#{saved_model.id}"
           expect_status(404)
           expect_empty_response
         end
@@ -88,7 +88,7 @@ shared_examples "item service" do |item_class|
 
       it "creates the item and returns it" do
 
-        expect{ post "/#{namespace}", new_item.attributes }.to change{ item_class.count }.by(1)
+        expect{ post "/#{namespace}", new_model.attributes }.to change{ item_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(item_class.last.id)
       end
@@ -98,7 +98,7 @@ shared_examples "item service" do |item_class|
 
       it "ignores invalid parameters and creates the item" do
 
-        expect{ post "/#{namespace}", new_item.attributes.merge(foo: :baz) }.to change{ item_class.count }.by(1)
+        expect{ post "/#{namespace}", new_model.attributes.merge(foo: :baz) }.to change{ item_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(item_class.last.id)
       end
@@ -118,7 +118,7 @@ shared_examples "item service" do |item_class|
 
       it "does not update the deleted flag" do
 
-        expect{ post "/#{namespace}", new_item.attributes.merge(deleted: true) }.to change{ item_class.count }.by(1)
+        expect{ post "/#{namespace}", new_model.attributes.merge(deleted: true) }.to change{ item_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(item_class.last.id)
         expect(parsed_result[:deleted]).to be_false
@@ -130,7 +130,7 @@ shared_examples "item service" do |item_class|
 
       it "does not update the active flag" do
 
-        expect{ post "/#{namespace}", new_item.attributes.merge(active: false) }.to change{ item_class.count }.by(1)
+        expect{ post "/#{namespace}", new_model.attributes.merge(active: false) }.to change{ item_class.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(item_class.last.id)
         expect(parsed_result[:active]).to be_true
@@ -149,11 +149,11 @@ shared_examples "item service" do |item_class|
 
           it "updates the item and returns it" do
 
-            put "/#{namespace}/#{created_item.id}", { key => value }
+            put "/#{namespace}/#{saved_model.id}", { key => value }
             expect_status(200)
             expect(parsed_result[key]).to eq(value)
-            created_item.reload
-            expect(created_item.send(key)).to eq(value)
+            saved_model.reload
+            expect(saved_model.send(key)).to eq(value)
           end
         end
 
@@ -161,11 +161,11 @@ shared_examples "item service" do |item_class|
 
           it "ignores invalid parameters and updates the item" do
 
-            put "/#{namespace}/#{created_item.id}", { key => value, foo: :baz }
+            put "/#{namespace}/#{saved_model.id}", { key => value, foo: :baz }
             expect_status(200)
             expect(parsed_result[key]).to eq(value)
-            created_item.reload
-            expect(created_item.send(key)).to eq(value)
+            saved_model.reload
+            expect(saved_model.send(key)).to eq(value)
           end
         end
 
@@ -173,11 +173,11 @@ shared_examples "item service" do |item_class|
 
           it "does not update the deleted flag" do
 
-            put "/#{namespace}/#{created_item.id}", deleted: true
+            put "/#{namespace}/#{saved_model.id}", deleted: true
             expect_status(200)
             expect(parsed_result[:deleted]).to be_false
-            created_item.reload
-            expect(created_item).to_not be_deleted
+            saved_model.reload
+            expect(saved_model).to_not be_deleted
           end
         end
 
@@ -185,11 +185,11 @@ shared_examples "item service" do |item_class|
 
           it "does not update the active flag" do
 
-            put "/#{namespace}/#{created_item.id}", active: false
+            put "/#{namespace}/#{saved_model.id}", active: false
             expect_status(200)
             expect(parsed_result[:active]).to be_true
-            created_item.reload
-            expect(created_item).to be_active
+            saved_model.reload
+            expect(saved_model).to be_active
           end
         end
       end
@@ -198,8 +198,8 @@ shared_examples "item service" do |item_class|
 
         it "returns 404 status" do
 
-          created_item.delete!
-          put "/#{namespace}/#{created_item.id}"
+          saved_model.delete!
+          put "/#{namespace}/#{saved_model.id}"
           expect_status(404)
           expect_empty_response
         end
@@ -225,11 +225,11 @@ shared_examples "item service" do |item_class|
 
         it "deletes the item and returns it" do
 
-          delete "/#{namespace}/#{created_item.id}"
+          delete "/#{namespace}/#{saved_model.id}"
           expect_status(200)
           expect(parsed_result[:deleted]).to be_true
-          created_item.reload
-          expect(created_item).to be_deleted
+          saved_model.reload
+          expect(saved_model).to be_deleted
         end
       end
 
@@ -237,8 +237,8 @@ shared_examples "item service" do |item_class|
 
         it "returns 404 status" do
 
-          created_item.delete!
-          delete "/#{namespace}/#{created_item.id}"
+          saved_model.delete!
+          delete "/#{namespace}/#{saved_model.id}"
           expect_status(404)
           expect_empty_response
         end
@@ -264,12 +264,12 @@ shared_examples "item service" do |item_class|
 
         it "activates the item and returns it" do
 
-          created_item.deactivate!
-          put "/#{namespace}/#{created_item.id}/activate"
+          saved_model.deactivate!
+          put "/#{namespace}/#{saved_model.id}/activate"
           expect_status(200)
           expect(parsed_result[:active]).to be_true
-          created_item.reload
-          expect(created_item).to be_active
+          saved_model.reload
+          expect(saved_model).to be_active
         end
       end
 
@@ -277,8 +277,8 @@ shared_examples "item service" do |item_class|
 
         it "returns 404 status" do
 
-          created_item.delete!
-          put "/#{namespace}/#{created_item.id}/activate"
+          saved_model.delete!
+          put "/#{namespace}/#{saved_model.id}/activate"
           expect_status(404)
           expect_empty_response
         end
@@ -304,11 +304,11 @@ shared_examples "item service" do |item_class|
 
         it "deactivates the item and returns it" do
 
-          put "/#{namespace}/#{created_item.id}/deactivate"
+          put "/#{namespace}/#{saved_model.id}/deactivate"
           expect_status(200)
           expect(parsed_result[:active]).to be_false
-          created_item.reload
-          expect(created_item).to_not be_active
+          saved_model.reload
+          expect(saved_model).to_not be_active
         end
       end
 
@@ -316,8 +316,8 @@ shared_examples "item service" do |item_class|
 
         it "returns 404 status" do
 
-          created_item.delete!
-          put "/#{namespace}/#{created_item.id}/deactivate"
+          saved_model.delete!
+          put "/#{namespace}/#{saved_model.id}/deactivate"
           expect_status(404)
           expect_empty_response
         end
