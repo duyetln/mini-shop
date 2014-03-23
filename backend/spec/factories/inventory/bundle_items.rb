@@ -5,7 +5,7 @@ FactoryGirl.define do
 
     after(:create) do |bundle_item|
       3.times do
-        bundle_item.add_or_update(create([ :digital_item, :physical_item ].sample))
+        bundle_item.add_or_update(create [ :digital_item, :physical_item ].sample )
       end
     end
   end
