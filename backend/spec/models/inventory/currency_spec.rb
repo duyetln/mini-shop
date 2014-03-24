@@ -21,13 +21,12 @@ end
 
 describe Currency do
 
-  let(:built_currency) { FactoryGirl.build :usd }
-  let(:created_currency) { FactoryGirl.create :usd }
+  let(:model_args) { [ :usd ] }
 
   describe "factory model" do
 
-    it("is valid") { expect(built_currency).to be_valid }
-    it("saves successfully") { expect(created_currency).to be_present }
+    it("is valid") { expect(new_model).to be_valid }
+    it("saves successfully") { expect(saved_model).to be_present }
   end
 
   it { should validate_uniqueness_of(:code) }
@@ -36,7 +35,7 @@ describe Currency do
 
   it "upcases code after saving" do 
 
-    expect(created_currency.code).to match(/\A[A-Z]+\Z/)
+    expect(saved_model.code).to match(/\A[A-Z]+\Z/)
   end
 
   describe ".exchange" do

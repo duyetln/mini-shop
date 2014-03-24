@@ -10,15 +10,13 @@ describe Pricepoint do
 
   describe "#amount" do
 
-    let(:pricepoint) { FactoryGirl.create :pricepoint }
-
     context "currency found" do
 
       it "returns correct amount" do
 
-        currency = pricepoint.currencies.sample
-        pricepoint_price = pricepoint.pricepoint_prices.where(currency_id: currency.id).first
-        expect(pricepoint.amount(currency)).to eq(pricepoint_price.amount)
+        currency = saved_model.currencies.sample
+        pricepoint_price = saved_model.pricepoint_prices.where(currency_id: currency.id).first
+        expect(saved_model.amount(currency)).to eq(pricepoint_price.amount)
       end
     end
 
@@ -26,7 +24,7 @@ describe Pricepoint do
 
       it "returns nil" do
 
-        expect(pricepoint.amount(Currency.new)).to eq(nil)
+        expect(saved_model.amount(Currency.new)).to eq(nil)
       end
     end
   end

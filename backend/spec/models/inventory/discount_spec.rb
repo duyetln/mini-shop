@@ -10,15 +10,15 @@ describe Discount do
 
   describe "discount dates" do
 
-    let(:discount) { FactoryGirl.build :discount, :half }
+    let(:model_args) { [ :discount, :half ] }
 
     context "start date is after end date" do
 
       it "is valid" do
 
-        discount.start_at = 5.days.from_now
-        discount.end_at   = 5.days.ago
-        expect(discount).to_not be_valid
+        new_model.start_at = 5.days.from_now
+        new_model.end_at   = 5.days.ago
+        expect(new_model).to_not be_valid
       end
     end
 
@@ -26,16 +26,16 @@ describe Discount do
 
       it "is valid" do
 
-        discount.start_at = 5.days.ago
-        discount.end_at   = 5.days.from_now
-        expect(discount).to be_valid
+        new_model.start_at = 5.days.ago
+        new_model.end_at   = 5.days.from_now
+        expect(new_model).to be_valid
       end
     end
   end
 
   describe "#rate_at" do
 
-    let(:discount) { FactoryGirl.build :discount, :random, time }
+    let(:model_args) { [ :discount, :random, time ] }
 
     context "past" do
 
@@ -43,7 +43,7 @@ describe Discount do
 
       it "returns 0 rate" do
 
-        expect(discount.rate_at).to eq(0)
+        expect(new_model.rate_at).to eq(0)
       end
     end
 
@@ -53,7 +53,7 @@ describe Discount do
 
       it "returns saved rate" do
 
-        expect(discount.rate_at).to eq(discount.rate)
+        expect(new_model.rate_at).to eq(new_model.rate)
       end
     end
 
@@ -63,21 +63,21 @@ describe Discount do
 
       it "returns 0 rate" do
 
-        expect(discount.rate_at).to eq(0)
+        expect(new_model.rate_at).to eq(0)
       end
     end
   end
 
   describe "#discounted?" do
 
-    let(:discount) { FactoryGirl.build :discount, :random } 
+    let(:model_args) { [ :discount, :random ] } 
 
     context "#rate_at is non-zero" do
 
       it "is false" do
 
-        expect(discount).to receive(:rate_at).and_return(rand(10)+1)
-        expect(discount.discounted?).to be_true
+        expect(new_model).to receive(:rate_at).and_return(rand(10)+1)
+        expect(new_model.discounted?).to be_true
       end
     end
 
@@ -85,19 +85,19 @@ describe Discount do
 
       it "is true" do
 
-        expect(discount).to receive(:rate_at).and_return(0)
-        expect(discount.discounted?).to be_false
+        expect(new_model).to receive(:rate_at).and_return(0)
+        expect(new_model.discounted?).to be_false
       end
     end
   end
 
   describe "#current_rate" do
 
-    let(:discount) { FactoryGirl.build :discount, :random } 
+    let(:model_args) { [ :discount, :random ] } 
 
     it "delegates to #rate_at" do
 
-      expect(discount.current_rate).to eq(discount.rate_at)
+      expect(new_model.current_rate).to eq(new_model.rate_at)
     end
   end
 end

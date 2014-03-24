@@ -18,13 +18,11 @@ describe Payment do
   it { should validate_presence_of(:currency) }
   it { should validate_presence_of(:amount) }
 
-  let(:payment) { FactoryGirl.create(:payment) }
-
   describe "#payment_method_currency" do
 
     it "delegates to #payment_method" do
 
-      expect(payment.payment_method_currency).to eq(payment.payment_method.currency)
+      expect(saved_model.payment_method_currency).to eq(saved_model.payment_method.currency)
     end
   end
 
@@ -34,7 +32,7 @@ describe Payment do
 
       it "is present" do
 
-        expect(FactoryGirl.create(:payment).uuid).to be_present
+        expect(saved_model.uuid).to be_present
       end
     end
 
@@ -42,7 +40,7 @@ describe Payment do
 
       it "is present" do
 
-        expect(FactoryGirl.build(:payment).uuid).to be_present
+        expect(new_model.uuid).to be_present
       end
     end
   end
@@ -53,7 +51,7 @@ describe Payment do
 
       it "is false" do
 
-        expect(FactoryGirl.create(:payment)).to_not be_refunded
+        expect(saved_model).to_not be_refunded
       end
     end
 
@@ -61,7 +59,7 @@ describe Payment do
 
       it "is false" do
 
-        expect(FactoryGirl.build(:payment)).to_not be_refunded
+        expect(new_model).to_not be_refunded
       end
     end
   end
@@ -70,9 +68,9 @@ describe Payment do
 
     it "subtracts payment amount from payment method" do
 
-      payment_method = payment.payment_method
-      amount = Currency.exchange(payment.amount, payment.currency, payment_method.currency)
-      expect{ payment.commit! }.to change{ payment.payment_method.balance }.by(-amount)
+      payment_method = saved_model.payment_method
+      amount = Currency.exchange(saved_model.amount, saved_model.currency, payment_method.currency)
+      expect{ saved_model.commit! }.to change{ saved_model.payment_method.balance }.by(-amount)
     end
   end
   
