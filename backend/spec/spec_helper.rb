@@ -9,17 +9,18 @@ module SpecHelpers
   def app; described_class; end
 
   included do
+    # misc helpers
     let(:random_string) { |length=10| Faker::Lorem.characters(length) }
+
+    # unit test helpers
     let(:args) { [ described_class.to_s.underscore.to_sym ] }
-    let(:items) { item_class.kept }
     let(:saved_model) { FactoryGirl.create(*args) }
     let(:new_model) { FactoryGirl.build(*args) }
     
+    # service test helpers
+    let(:items) { item_class.kept }
     let(:namespace) { described_class.to_s.tableize }
     let(:parsed_result) { Yajl::Parser.parse(last_response.body, symbolize_keys: true) }
-
-    let(:created_user) { FactoryGirl.create :user }
-    let(:new_user) { FactoryGirl.build :user }
 
     def expect_status(code)
       expect(last_response.status).to eq(code)

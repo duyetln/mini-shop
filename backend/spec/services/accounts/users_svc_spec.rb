@@ -6,15 +6,17 @@ describe UsersSvc do
     { except: [:password, :updated_at]  }
   end
 
+  let(:args) { [ :user ] }
+
   describe "get /users/:id" do
 
     context "valid id" do
 
       it "returns the user" do
 
-        get "/users/#{created_user.id}"
+        get "/users/#{saved_model.id}"
         expect_status(200)
-        expect(parsed_result[:id]).to eq(created_user.id)
+        expect(parsed_result[:id]).to eq(saved_model.id)
       end
     end
 
@@ -35,7 +37,7 @@ describe UsersSvc do
 
       it "creates the user and returns it" do
 
-        expect{ post "/users", new_user.attributes }.to change{ User.count }.by(1)
+        expect{ post "/users", new_model.attributes }.to change{ User.count }.by(1)
         expect_status(200)
         expect(parsed_result[:id]).to eq(User.last.id)
         expect(parsed_result[:uuid]).to eq(User.last.uuid)
@@ -57,11 +59,11 @@ describe UsersSvc do
 
       it "returns 500 status" do
 
-        expect(User).to receive(:new).with(an_instance_of(Hash)).and_return(new_user)
-        expect(new_user).to receive(:valid?).and_return(true)
-        expect(new_user).to receive(:save).and_return(false)
+        expect(User).to receive(:new).with(an_instance_of(Hash)).and_return(new_model)
+        expect(new_model).to receive(:valid?).and_return(true)
+        expect(new_model).to receive(:save).and_return(false)
 
-        expect{ post "/users", new_user.attributes }.to_not change{ User.count }
+        expect{ post "/users", new_model.attributes }.to_not change{ User.count }
         expect_status(500)
       end
     end
@@ -69,12 +71,12 @@ describe UsersSvc do
 
   describe "post /users/authenticate" do
 
-    let(:password) { new_user.password }
+    let(:password) { new_model.password }
     let(:uuid) { user.uuid }
     let :user do
-      new_user.password = password
-      new_user.save
-      new_user
+      new_model.password = password
+      new_model.save
+      new_model
     end
 
     context "user authenticated" do
@@ -116,9 +118,9 @@ describe UsersSvc do
         it "returns 400 status" do
 
           expect{ 
-            put "/users/#{created_user.id}", first_name: nil
-            created_user.reload 
-          }.to_not change{ created_user }
+            put "/users/#{saved_model.id}", first_name: nil
+            saved_model.reload 
+          }.to_not change{ saved_model }
           expect_status(400)
         end
       end
@@ -130,12 +132,12 @@ describe UsersSvc do
 
         it "returns the user" do
 
-          put "/users/#{created_user.id}", password: new_password, first_name: new_first_name
-          created_user.reload
+          put "/users/#{saved_model.id}", password: new_password, first_name: new_first_name
+          saved_model.reload
           expect_status(200)
-          expect(parsed_result[:uuid]).to eq(created_user.uuid)
-          expect(created_user.first_name).to eq(new_first_name)
-          expect(BCrypt::Password.new(created_user.password)).to eq(new_password)
+          expect(parsed_result[:uuid]).to eq(saved_model.uuid)
+          expect(saved_model.first_name).to eq(new_first_name)
+          expect(BCrypt::Password.new(saved_model.password)).to eq(new_password)
         end
       end
     end
@@ -147,10 +149,10 @@ describe UsersSvc do
 
       it "returns 404 status" do
 
-        put "/users/#{random_string}/confirm/#{created_user.actv_code}"
-        created_user.reload
+        put "/users/#{random_string}/confirm/#{saved_model.actv_code}"
+        saved_model.reload
         expect_status(404)
-        expect(created_user).to_not be_confirmed
+        expect(saved_model).to_not be_confirmed
       end
     end
 
@@ -160,12 +162,12 @@ describe UsersSvc do
 
         it "returns 404 status" do
         
-          created_user.confirm!
+          saved_model.confirm!
 
-          put "/users/#{created_user.uuid}/confirm/#{created_user.actv_code}"
-          created_user.reload
+          put "/users/#{saved_model.uuid}/confirm/#{saved_model.actv_code}"
+          saved_model.reload
           expect_status(404)
-          expect(created_user).to be_confirmed
+          expect(saved_model).to be_confirmed
         end
       end
 
@@ -173,10 +175,10 @@ describe UsersSvc do
 
         it "returns 404 status" do 
 
-          put "/users/#{created_user.uuid}/confirm/#{random_string}"
-          created_user.reload
+          put "/users/#{saved_model.uuid}/confirm/#{random_string}"
+          saved_model.reload
           expect_status(404)
-          expect(created_user).to_not be_confirmed
+          expect(saved_model).to_not be_confirmed
         end
       end
 
@@ -184,11 +186,11 @@ describe UsersSvc do
 
         it "returns the user" do
 
-          put "/users/#{created_user.uuid}/confirm/#{created_user.actv_code}"
-          created_user.reload
+          put "/users/#{saved_model.uuid}/confirm/#{saved_model.actv_code}"
+          saved_model.reload
           expect_status(200)
-          expect(parsed_result[:uuid]).to eq(created_user.uuid)
-          expect(created_user).to be_confirmed
+          expect(parsed_result[:uuid]).to eq(saved_model.uuid)
+          expect(saved_model).to be_confirmed
         end
       end
     end

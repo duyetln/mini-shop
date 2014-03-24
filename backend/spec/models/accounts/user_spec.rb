@@ -23,24 +23,24 @@ describe User do
 
   describe "factory model" do
 
-    it("is valid") { expect(new_user.valid?).to be_true }
-    it("saves successfully") { expect(created_user).to be_present }
+    it("is valid") { expect(new_model.valid?).to be_true }
+    it("saves successfully") { expect(saved_model).to be_present }
   end
 
-  let(:password) { new_user.password }
+  let(:password) { new_model.password }
   let :user do
-    new_user.password = password
-    new_user.save
-    new_user
+    new_model.password = password
+    new_model.save
+    new_model
   end
 
   describe "#save" do
 
     context "new user" do
 
-      it("sets uuid") { expect(created_user.uuid).to be_present } 
-      it("sets actv_code") { expect(created_user.actv_code).to be_present }
-      it("sets password") { expect(created_user.password).to be_present }
+      it("sets uuid") { expect(saved_model.uuid).to be_present } 
+      it("sets actv_code") { expect(saved_model.actv_code).to be_present }
+      it("sets password") { expect(saved_model.password).to be_present }
 
       it "encrypts password" do 
         
@@ -50,16 +50,16 @@ describe User do
 
     context "created user" do
 
-      it("doesn't change uuid") { expect{ created_user.save }.to_not change{ created_user.uuid } }
+      it("doesn't change uuid") { expect{ saved_model.save }.to_not change{ saved_model.uuid } }
 
       context "password changed" do
 
         it "encrypts new password" do
 
           new_password = Faker::Lorem.characters(20)
-          created_user.password = new_password
-          expect(created_user.save).to be_true
-          expect(BCrypt::Password.new(created_user.password)).to eq(new_password)
+          saved_model.password = new_password
+          expect(saved_model.save).to be_true
+          expect(BCrypt::Password.new(saved_model.password)).to eq(new_password)
         end
       end
     end
@@ -69,7 +69,7 @@ describe User do
 
     context "new user" do 
 
-      it("returns false") { expect(new_user.confirmed?).to be_false }
+      it("returns false") { expect(new_model.confirmed?).to be_false }
     end
 
     context "persisted user" do
@@ -78,15 +78,15 @@ describe User do
         
         it "returns true" do
 
-          created_user.actv_code = nil
-          created_user.save;
-          expect(created_user.confirmed?).to be_true
+          saved_model.actv_code = nil
+          saved_model.save;
+          expect(saved_model.confirmed?).to be_true
         end
       end
 
       context "confirmation code present" do
 
-        it("returns false") { expect(created_user.confirmed?).to be_false }
+        it("returns false") { expect(saved_model.confirmed?).to be_false }
       end
     end
   end
@@ -95,7 +95,7 @@ describe User do
 
     context "new user" do
 
-      it("returns false") { expect(new_user.confirm!).to be_false }
+      it("returns false") { expect(new_model.confirm!).to be_false }
     end
     
     context "persisted user" do
@@ -104,9 +104,9 @@ describe User do
 
         it "returns false" do
 
-          created_user.actv_code = nil
-          created_user.save
-          expect(created_user.confirm!).to be_false
+          saved_model.actv_code = nil
+          saved_model.save
+          expect(saved_model.confirm!).to be_false
         end
       end
 
@@ -114,13 +114,13 @@ describe User do
 
         it "returns true" do
 
-          expect(created_user.confirm!).to be_true
+          expect(saved_model.confirm!).to be_true
         end
 
         it "clears the activation code" do
 
-          created_user.confirm!
-          expect(created_user.actv_code).to be_blank
+          saved_model.confirm!
+          expect(saved_model.actv_code).to be_blank
         end
       end
     end
