@@ -44,15 +44,21 @@ RSpec.configure do |config|
 
   config.before :suite do
     begin
-      DatabaseCleaner.strategy = :truncation, { pre_count: true, reset_ids: true }
-      DatabaseCleaner.start
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.clean_with :truncation
       FactoryGirl.lint
     ensure
-      DatabaseCleaner.clean
+      DatabaseCleaner.clean_with :truncation
     end
   end
-  config.before(:each) { DatabaseCleaner.start }
-  config.after(:each)  { DatabaseCleaner.clean }
+
+  config.before :each do
+    DatabaseCleaner.start
+  end
+
+  config.after :each do
+    DatabaseCleaner.clean
+  end
 end
 
 FactoryGirl.find_definitions
