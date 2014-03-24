@@ -16,7 +16,7 @@ describe UsersSvc do
 
         get "/users/#{saved_model.id}"
         expect_status(200)
-        expect(parsed_result[:id]).to eq(saved_model.id)
+        expect(parsed_response[:id]).to eq(saved_model.id)
       end
     end
 
@@ -39,8 +39,8 @@ describe UsersSvc do
 
         expect{ post "/users", new_model.attributes }.to change{ User.count }.by(1)
         expect_status(200)
-        expect(parsed_result[:id]).to eq(User.last.id)
-        expect(parsed_result[:uuid]).to eq(User.last.uuid)
+        expect(parsed_response[:id]).to eq(User.last.id)
+        expect(parsed_response[:uuid]).to eq(User.last.uuid)
       end
     end
 
@@ -86,7 +86,7 @@ describe UsersSvc do
         user.confirm!
         post "/users/authenticate", { uuid: uuid, password: password }
         expect_status(200)
-        expect(parsed_result[:uuid]).to eq(uuid)
+        expect(parsed_response[:uuid]).to eq(uuid)
       end
     end
 
@@ -135,7 +135,7 @@ describe UsersSvc do
           put "/users/#{saved_model.id}", password: new_password, first_name: new_first_name
           saved_model.reload
           expect_status(200)
-          expect(parsed_result[:uuid]).to eq(saved_model.uuid)
+          expect(parsed_response[:uuid]).to eq(saved_model.uuid)
           expect(saved_model.first_name).to eq(new_first_name)
           expect(BCrypt::Password.new(saved_model.password)).to eq(new_password)
         end
@@ -189,7 +189,7 @@ describe UsersSvc do
           put "/users/#{saved_model.uuid}/confirm/#{saved_model.actv_code}"
           saved_model.reload
           expect_status(200)
-          expect(parsed_result[:uuid]).to eq(saved_model.uuid)
+          expect(parsed_response[:uuid]).to eq(saved_model.uuid)
           expect(saved_model).to be_confirmed
         end
       end

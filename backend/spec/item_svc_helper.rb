@@ -26,8 +26,8 @@ shared_examples "item service" do |item_class|
 
         get "/#{namespace}", pagination: true, offset: offset, limit: limit
         expect_status(200)
-        expect(parsed_result.count).to eq(limit)
-        expect(parsed_result.first[:id]).to eq(offset + 1)
+        expect(parsed_response.count).to eq(limit)
+        expect(parsed_response.first[:id]).to eq(offset + 1)
       end
     end
 
@@ -37,7 +37,7 @@ shared_examples "item service" do |item_class|
 
         get "/#{namespace}"
         expect_status(200)
-        expect(parsed_result.count).to eq(items.count)
+        expect(parsed_response.count).to eq(items.count)
       end
     end
   end
@@ -52,7 +52,7 @@ shared_examples "item service" do |item_class|
 
           get "/#{namespace}/#{saved_model.id}"
           expect_status(200)
-          expect(parsed_result[:id]).to eq(saved_model.id)
+          expect(parsed_response[:id]).to eq(saved_model.id)
         end
       end
 
@@ -88,7 +88,7 @@ shared_examples "item service" do |item_class|
 
         expect{ post "/#{namespace}", new_model.attributes }.to change{ item_class.count }.by(1)
         expect_status(200)
-        expect(parsed_result[:id]).to eq(item_class.last.id)
+        expect(parsed_response[:id]).to eq(item_class.last.id)
       end
     end
 
@@ -98,7 +98,7 @@ shared_examples "item service" do |item_class|
 
         expect{ post "/#{namespace}", new_model.attributes.merge(foo: :baz) }.to change{ item_class.count }.by(1)
         expect_status(200)
-        expect(parsed_result[:id]).to eq(item_class.last.id)
+        expect(parsed_response[:id]).to eq(item_class.last.id)
       end
     end
 
@@ -118,8 +118,8 @@ shared_examples "item service" do |item_class|
 
         expect{ post "/#{namespace}", new_model.attributes.merge(deleted: true) }.to change{ item_class.count }.by(1)
         expect_status(200)
-        expect(parsed_result[:id]).to eq(item_class.last.id)
-        expect(parsed_result[:deleted]).to be_false
+        expect(parsed_response[:id]).to eq(item_class.last.id)
+        expect(parsed_response[:deleted]).to be_false
         expect(item_class.last).to_not be_deleted
       end
     end
@@ -130,8 +130,8 @@ shared_examples "item service" do |item_class|
 
         expect{ post "/#{namespace}", new_model.attributes.merge(active: false) }.to change{ item_class.count }.by(1)
         expect_status(200)
-        expect(parsed_result[:id]).to eq(item_class.last.id)
-        expect(parsed_result[:active]).to be_true
+        expect(parsed_response[:id]).to eq(item_class.last.id)
+        expect(parsed_response[:active]).to be_true
         expect(item_class.last).to be_active
       end
     end
@@ -149,7 +149,7 @@ shared_examples "item service" do |item_class|
 
             put "/#{namespace}/#{saved_model.id}", { key => value }
             expect_status(200)
-            expect(parsed_result[key]).to eq(value)
+            expect(parsed_response[key]).to eq(value)
             saved_model.reload
             expect(saved_model.send(key)).to eq(value)
           end
@@ -161,7 +161,7 @@ shared_examples "item service" do |item_class|
 
             put "/#{namespace}/#{saved_model.id}", { key => value, foo: :baz }
             expect_status(200)
-            expect(parsed_result[key]).to eq(value)
+            expect(parsed_response[key]).to eq(value)
             saved_model.reload
             expect(saved_model.send(key)).to eq(value)
           end
@@ -173,7 +173,7 @@ shared_examples "item service" do |item_class|
 
             put "/#{namespace}/#{saved_model.id}", deleted: true
             expect_status(200)
-            expect(parsed_result[:deleted]).to be_false
+            expect(parsed_response[:deleted]).to be_false
             saved_model.reload
             expect(saved_model).to_not be_deleted
           end
@@ -185,7 +185,7 @@ shared_examples "item service" do |item_class|
 
             put "/#{namespace}/#{saved_model.id}", active: false
             expect_status(200)
-            expect(parsed_result[:active]).to be_true
+            expect(parsed_response[:active]).to be_true
             saved_model.reload
             expect(saved_model).to be_active
           end
@@ -225,7 +225,7 @@ shared_examples "item service" do |item_class|
 
           delete "/#{namespace}/#{saved_model.id}"
           expect_status(200)
-          expect(parsed_result[:deleted]).to be_true
+          expect(parsed_response[:deleted]).to be_true
           saved_model.reload
           expect(saved_model).to be_deleted
         end
@@ -265,7 +265,7 @@ shared_examples "item service" do |item_class|
           saved_model.deactivate!
           put "/#{namespace}/#{saved_model.id}/activate"
           expect_status(200)
-          expect(parsed_result[:active]).to be_true
+          expect(parsed_response[:active]).to be_true
           saved_model.reload
           expect(saved_model).to be_active
         end
@@ -304,7 +304,7 @@ shared_examples "item service" do |item_class|
 
           put "/#{namespace}/#{saved_model.id}/deactivate"
           expect_status(200)
-          expect(parsed_result[:active]).to be_false
+          expect(parsed_response[:active]).to be_false
           saved_model.reload
           expect(saved_model).to_not be_active
         end

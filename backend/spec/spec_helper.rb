@@ -20,7 +20,7 @@ module SpecHelpers
     # service test helpers
     let(:items) { item_class.kept }
     let(:namespace) { described_class.to_s.tableize }
-    let(:parsed_result) { Yajl::Parser.parse(last_response.body, symbolize_keys: true) }
+    let(:parsed_response) { Yajl::Parser.parse(last_response.body, symbolize_keys: true) }
 
     def expect_status(code)
       expect(last_response.status).to eq(code)
