@@ -2,7 +2,7 @@ shared_examples "item service" do |item_class|
   
   namespace = item_class.to_s.tableize
 
-  let(:args) { [ item_class.to_s.underscore.to_sym ] }
+  let(:model_args) { [ item_class.to_s.underscore.to_sym ] }
 
   describe "get /#{namespace}/ping" do
 
@@ -15,7 +15,7 @@ shared_examples "item service" do |item_class|
 
   describe "get /#{namespace}" do
 
-    before(:each) { 10.times { FactoryGirl.create(*args) } }
+    before(:each) { 10.times { FactoryGirl.create(*model_args) } }
 
     let(:offset) { 2 }
     let(:limit)  { 5 }

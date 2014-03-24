@@ -6,7 +6,7 @@ describe UsersSvc do
     { except: [:password, :updated_at]  }
   end
 
-  let(:args) { [ :user ] }
+  let(:model_args) { [ :user ] }
 
   describe "get /users/:id" do
 

@@ -13,9 +13,9 @@ module SpecHelpers
     let(:random_string) { |length=10| Faker::Lorem.characters(length) }
 
     # unit test helpers
-    let(:args) { [ described_class.to_s.underscore.to_sym ] }
-    let(:saved_model) { FactoryGirl.create(*args) }
-    let(:new_model) { FactoryGirl.build(*args) }
+    let(:model_args) { [ described_class.to_s.underscore.to_sym ] }
+    let(:saved_model) { FactoryGirl.create(*model_args) }
+    let(:new_model) { FactoryGirl.build(*model_args) }
     
     # service test helpers
     let(:items) { item_class.kept }
