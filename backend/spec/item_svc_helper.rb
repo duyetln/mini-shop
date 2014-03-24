@@ -27,7 +27,7 @@ shared_examples "item service" do |item_class|
         get "/#{namespace}", pagination: true, offset: offset, limit: limit
         expect_status(200)
         expect(parsed_response.count).to eq(limit)
-        expect(parsed_response.first[:id]).to eq(offset + 1)
+        expect(parsed_response.first[:id]).to eq(item_class.limit(offset).last.id + 1)
       end
     end
 
