@@ -1,10 +1,8 @@
 shared_examples "item service" do |item_class|
-
-  class << self; attr_accessor :namespace; end
   
   namespace = item_class.to_s.tableize
 
-  let(:item_class) { item_class }
+  let(:args) { [ item_class.to_s.underscore.to_sym ] }
 
   describe "get /#{namespace}/ping" do
 
@@ -17,7 +15,7 @@ shared_examples "item service" do |item_class|
 
   describe "get /#{namespace}" do
 
-    before(:each) { 10.times { FactoryGirl.create(sym_item_class) } }
+    before(:each) { 10.times { FactoryGirl.create(*args) } }
 
     let(:offset) { 2 }
     let(:limit)  { 5 }

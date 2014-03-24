@@ -10,17 +10,16 @@ module SpecHelpers
 
   included do
     let(:random_string) { |length=10| Faker::Lorem.characters(length) }
-    let(:sym_item_class) { item_class.to_s.underscore.to_sym }
-    let(:items)        { item_class.kept }
-    let(:saved_model) { FactoryGirl.create(sym_item_class) }
-    let(:new_model)   { FactoryGirl.build(sym_item_class) }
-    let(:attributes)   { item_class.accessible_attributes.to_a.map(&:to_sym) }
+    let(:args) { [ described_class.to_s.underscore.to_sym ] }
+    let(:items) { item_class.kept }
+    let(:saved_model) { FactoryGirl.create(*args) }
+    let(:new_model) { FactoryGirl.build(*args) }
     
-    let(:namespace)     { item_class.to_s.tableize }
+    let(:namespace) { described_class.to_s.tableize }
     let(:parsed_result) { Yajl::Parser.parse(last_response.body, symbolize_keys: true) }
 
     let(:created_user) { FactoryGirl.create :user }
-    let(:new_user)   { FactoryGirl.build :user }
+    let(:new_user) { FactoryGirl.build :user }
 
     def expect_status(code)
       expect(last_response.status).to eq(code)
