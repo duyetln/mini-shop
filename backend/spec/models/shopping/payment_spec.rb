@@ -3,7 +3,7 @@ require "spec/models/shared/committable"
 
 describe Payment do
 
-  it_behaves_like "committable object"
+  it_behaves_like "committable model"
 
   it { should belong_to(:payment_method) }
   it { should belong_to(:billing_address).class_name("Address") }

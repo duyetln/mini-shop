@@ -1,4 +1,4 @@
-shared_examples "deletable object" do
+shared_examples "deletable model" do
 
   it { should_not allow_mass_assignment_of(:deleted) }
 

@@ -1,4 +1,4 @@
-shared_examples "committable object" do
+shared_examples "committable model" do
 
   it { should_not allow_mass_assignment_of(:committed) }
   it { should_not allow_mass_assignment_of(:committed_at) }

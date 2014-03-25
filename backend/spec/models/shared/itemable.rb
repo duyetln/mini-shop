@@ -1,4 +1,4 @@
-shared_examples "itemable object" do
+shared_examples "itemable model" do
 
   it { should allow_mass_assignment_of(:item_type) }
   it { should allow_mass_assignment_of(:item_id) }

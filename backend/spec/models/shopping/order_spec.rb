@@ -3,6 +3,6 @@ require "spec/models/shared/item_combinable"
 
 describe Order do
 
-  # it_behaves_like "item combinable object"
+  # it_behaves_like "item combinable model"
 
 end

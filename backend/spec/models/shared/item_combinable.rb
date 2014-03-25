@@ -1,10 +1,10 @@
 require "spec/models/shared/itemable"
 require "spec/models/shared/quantifiable"
 
-shared_examples "item combinable object" do
+shared_examples "item combinable model" do
 
-  it_behaves_like "itemable object"
-  it_behaves_like "quantifiable object"
+  it_behaves_like "itemable model"
+  it_behaves_like "quantifiable model"
 
   context "class" do
     let(:subject) { described_class }

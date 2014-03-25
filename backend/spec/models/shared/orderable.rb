@@ -1,4 +1,4 @@
-shared_examples "orderable object" do
+shared_examples "orderable model" do
 
   context "instance" do
     let(:subject) { described_class.new }

@@ -4,9 +4,9 @@ require "spec/models/shared/displayable"
 
 shared_examples "item resource" do
 
-  it_behaves_like "activable object"
-  it_behaves_like "deletable object"
-  it_behaves_like "displayable object"
+  it_behaves_like "activable model"
+  it_behaves_like "deletable model"
+  it_behaves_like "displayable model"
 
   describe "factory model" do
 

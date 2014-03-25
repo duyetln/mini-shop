@@ -1,4 +1,4 @@
-shared_examples "displayable object" do
+shared_examples "displayable model" do
 
   context "instance" do
     let(:subject) { described_class.new }

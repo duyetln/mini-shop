@@ -5,7 +5,7 @@ describe Purchase do
 
   let(:model_args) { [ :purchase, :ready ] }
 
-  it_behaves_like "committable object"
+  it_behaves_like "committable model"
 
   it { should have_readonly_attribute(:user_id) }
 
