@@ -4,9 +4,6 @@ require "spec/models/shared/displayable"
 
 shared_examples "item resource" do
 
-  let(:new_object) { new_model }
-  let(:created_object) { saved_model }
-
   it_behaves_like "activable object"
   it_behaves_like "deletable object"
   it_behaves_like "displayable object"

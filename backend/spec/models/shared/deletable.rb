@@ -19,62 +19,62 @@ shared_examples "deletable object" do
 
   describe "#deleted?" do
 
-    context "new object" do
+    context "new model" do
 
-      it("is false") { expect(new_object.deleted?).to be_false }
+      it("is false") { expect(new_model.deleted?).to be_false }
     end
 
-    context "created object" do
+    context "saved model" do
 
-      it("is false") { expect(created_object.deleted?).to be_false }
+      it("is false") { expect(saved_model.deleted?).to be_false }
     end
   end
 
   describe "#delete!" do
 
-    context "new object" do
+    context "new model" do
 
       it "cannot be executed" do
 
-        expect(new_object.delete!).to_not be_true
+        expect(new_model.delete!).to_not be_true
       end
 
       it "cannot change deleted status" do
 
-        expect{ new_object.delete! }.to_not change{ new_object.deleted? }
+        expect{ new_model.delete! }.to_not change{ new_model.deleted? }
       end
     end
 
-    context "created object" do
+    context "saved model" do
 
       it "can be executed" do
 
-        expect(created_object.delete!).to be_true
+        expect(saved_model.delete!).to be_true
       end
 
       it "changes deleted status to true" do
 
-        expect{ created_object.delete! }.to change{ created_object.deleted? }
-        expect(created_object.deleted?).to be_true
+        expect{ saved_model.delete! }.to change{ saved_model.deleted? }
+        expect(saved_model.deleted?).to be_true
       end
     end
   end
 
   describe "#kept?" do
 
-    context "new object" do
+    context "new model" do
 
       it "opposites #deleted?" do
 
-        expect(new_object.kept?).to eq(!new_object.deleted?)
+        expect(new_model.kept?).to eq(!new_model.deleted?)
       end
     end
 
-    context "created object" do
+    context "saved model" do
 
       it "opposites #deleted?" do
 
-        expect(created_object.kept?).to eq(!created_object.deleted?)
+        expect(saved_model.kept?).to eq(!saved_model.deleted?)
       end
     end
   end
