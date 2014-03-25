@@ -23,6 +23,7 @@ describe Payment do
     it "delegates to #payment_method" do
 
       expect(saved_model.payment_method_currency).to eq(saved_model.payment_method.currency)
+      expect(new_model.payment_method_currency).to eq(new_model.payment_method.currency)
     end
   end
 

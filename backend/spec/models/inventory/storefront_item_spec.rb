@@ -53,6 +53,7 @@ describe StorefrontItem do
 
     it "delegates to Price#amount" do
 
+      expect(saved_model.amount(currency)).to eq(saved_model.price.amount(currency))
       expect(new_model.amount(currency)).to eq(new_model.price.amount(currency))
     end
   end
@@ -61,6 +62,7 @@ describe StorefrontItem do
 
     it "delegates to Price#discounted?" do
 
+      expect(saved_model.discounted?).to eq(saved_model.price.discounted?)
       expect(new_model.discounted?).to eq(new_model.price.discounted?)
     end
   end

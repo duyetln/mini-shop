@@ -49,6 +49,7 @@ describe Price do
       it "returns correct amount" do
 
         expect(saved_model.amount(currency)).to eq(saved_model.pricepoint.amount(currency))
+        expect(new_model.amount(currency)).to eq(new_model.pricepoint.amount(currency))
       end
     end
   end

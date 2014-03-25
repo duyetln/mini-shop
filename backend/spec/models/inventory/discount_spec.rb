@@ -97,6 +97,7 @@ describe Discount do
 
     it "delegates to #rate_at" do
 
+      expect(saved_model.current_rate).to eq(saved_model.rate_at)
       expect(new_model.current_rate).to eq(new_model.rate_at)
     end
   end
