@@ -3,6 +3,8 @@ require "spec/models/shared/committable"
 
 describe Purchase do
 
+  let(:model_args) { [ :purchase, :ready ] }
+
   it_behaves_like "committable object"
 
   it { should have_readonly_attribute(:user_id) }
@@ -18,18 +20,17 @@ describe Purchase do
 
   context "pending" do
 
+    let(:model_args) { [ :purchase ] }
     let(:subject) { saved_model }
 
     it { should be_pending }
     it { should_not validate_presence_of(:payment_method) }
     it { should_not validate_presence_of(:billing_address) }
     it { should_not validate_presence_of(:shipping_address) }
-    it { should validate_uniqueness_of(:committed).scoped_to(:user_id) }
   end
 
   context "committed" do
 
-    let(:model_args) { [ :purchase, :ready ] }
     let :subject do
       saved_model.commit!
       saved_model
@@ -42,8 +43,6 @@ describe Purchase do
   end
 
   describe "#payment_method_currency" do
-
-    let(:model_args) { [ :purchase, :ready ] }
 
     it "delegates to #payment_method" do
 
