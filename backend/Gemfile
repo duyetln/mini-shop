@@ -17,6 +17,7 @@ group :development do
 end
 
 group :test do
+  gem "timecop"
   gem "faker"
   gem "rspec"
   gem "shoulda-matchers"
