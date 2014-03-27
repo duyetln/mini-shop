@@ -67,61 +67,41 @@ describe User do
 
   describe "#confirmed?" do
 
-    context "new user" do 
+    it "checks blank-ness of #active_code" do
 
-      it("returns false") { expect(new_model.confirmed?).to be_false }
-    end
-
-    context "persisted user" do
-
-      context "confirmation code blank" do
-        
-        it "returns true" do
-
-          saved_model.actv_code = nil
-          saved_model.save;
-          expect(saved_model.confirmed?).to be_true
-        end
-      end
-
-      context "confirmation code present" do
-
-        it("returns false") { expect(saved_model.confirmed?).to be_false }
-      end
+      expect(saved_model.confirmed?).to eq(saved_model.actv_code.blank?)
     end
   end
 
   describe "#confirm!" do
 
-    context "new user" do
-
-      it("returns false") { expect(new_model.confirm!).to be_false }
+    before :each do
+      expect(saved_model).to receive(:confirmed?).and_return(confirmed)
     end
-    
-    context "persisted user" do
 
-      context "confirmation code blank" do
+    context "confirmed" do
 
-        it "returns false" do
+      let(:confirmed) { true }
 
-          saved_model.actv_code = nil
-          saved_model.save
-          expect(saved_model.confirm!).to be_false
-        end
+      it "returns false" do
+
+        expect(saved_model.confirm!).to be_false
+      end
+    end
+
+    context "not confirmed" do 
+
+      let(:confirmed) { false }
+
+      it "returns true" do
+
+        expect(saved_model.confirm!).to be_true
       end
 
-      context "confirmation code present" do 
+      it "clears the activation code" do
 
-        it "returns true" do
-
-          expect(saved_model.confirm!).to be_true
-        end
-
-        it "clears the activation code" do
-
-          saved_model.confirm!
-          expect(saved_model.actv_code).to be_blank
-        end
+        saved_model.confirm!
+        expect(saved_model.actv_code).to be_blank
       end
     end
   end
