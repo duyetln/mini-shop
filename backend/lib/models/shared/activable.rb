@@ -33,14 +33,14 @@ module Activable
   end
 
   def activate!
-    if persisted? && inactive?
+    if inactive?
       self.active = true
       save!
     end
   end
 
   def deactivate!
-    if persisted? && active?
+    if active?
       self.active = false
       save!
     end
