@@ -24,12 +24,10 @@ class User < ActiveRecord::Base
     user.present? && user.confirmed? && BCrypt::Password.new(user.password) == password ? user : nil
   end
 
-  def confirmed?
-    persisted? && actv_code.blank?
-  end
+  def confirmed?; actv_code.blank?; end
 
   def confirm!
-    if persisted? && actv_code.present?
+    if !confirmed?
       self.actv_code = nil
       save!
     end
