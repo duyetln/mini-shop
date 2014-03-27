@@ -33,7 +33,7 @@ module Deletable
   end
 
   def delete!
-    if persisted? && !deleted?
+    if kept?
       self.deleted = true
       save!
     end
