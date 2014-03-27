@@ -22,57 +22,49 @@ shared_examples "committable model" do
 
   describe "#committed?" do
 
-    context "new model" do
+    it "equals #committed" do
 
-      it("is false") { expect(new_model).to_not be_committed }
-    end
-
-    context "saved model" do
-
-      it("is false") { expect(saved_model).to_not be_committed }
+      expect(saved_model.committed?).to eq(saved_model.committed)
     end
   end
 
   describe "#pending?" do
 
-    context "new model" do
+    it "opposites #committed?" do
 
-      it "opposites #committed?" do
-
-        expect(new_model.pending?).to eq(!new_model.committed?)
-      end
-    end
-
-    context "saved model" do
-
-      it "opposites #committed?" do
-
-        expect(saved_model.pending?).to eq(!saved_model.committed?)
-      end
+      expect(saved_model.pending?).to eq(!new_model.committed?)
     end
   end
 
   describe "#commit!" do
 
-    context "new model" do
+    before :each do
+      saved_model.committed = committed
+    end
+
+    context "committed" do
+
+      let(:committed) { true }
 
       it "cannot be executed" do
 
-        expect(new_model.commit!).to_not be_true
+        expect(saved_model.commit!).to_not be_true
       end
 
       it "cannot change committed status" do
 
-        expect{ new_model.commit! }.to_not change{ new_model.committed? }
+        expect{ saved_model.commit! }.to_not change{ saved_model.committed? }
       end
 
       it "cannot change committed_at" do
 
-        expect{ new_model.commit! }.to_not change{ new_model.committed_at }
+        expect{ saved_model.commit! }.to_not change{ saved_model.committed_at }
       end
     end
 
-    context "saved model" do
+    context "pending" do
+
+      let(:committed) { false }
 
       it "can be executed" do
 
@@ -81,8 +73,7 @@ shared_examples "committable model" do
 
       it "changes committed status to true" do
 
-        expect{ saved_model.commit! }.to change{ saved_model.committed? }
-        expect(saved_model.committed?).to be_true
+        expect{ saved_model.commit! }.to change{ saved_model.committed? }.to(!committed)
       end
 
       it "sets committed_at" do
