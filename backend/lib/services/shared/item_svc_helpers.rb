@@ -9,7 +9,7 @@ module ItemSvcHelpers
         protected
 
         def items
-          settings.item_class.kept
+          settings.item_class.unscoped.kept # temporary use "unscoped" now -- the service should be rethought
         end
 
         def find_item!
