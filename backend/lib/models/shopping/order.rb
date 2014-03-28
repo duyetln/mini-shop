@@ -5,6 +5,7 @@ class Order < ActiveRecord::Base
 
   include Enum
   include ItemCombinable
+  include Deletable
 
   enum :status, [ :prepared, :fulfilled, :reversed ]
 
@@ -21,9 +22,6 @@ class Order < ActiveRecord::Base
   validates :purchase_id, uniqueness: { scope: [ :item_type, :item_id ] }, unless: :deleted?
 
   validate  :pending_purchase
-
-  scope :deleted,  -> { where(deleted: true) }
-  scope :kept,     -> { where(deleted: false) }
 
   after_initialize :initialize_values
   before_save :set_values
@@ -98,10 +96,6 @@ class Order < ActiveRecord::Base
         puts err.backtrace.inspect
       end
     end
-  end
-
-  def kept?
-    !deleted?
   end
 
   protected
