@@ -1,5 +1,16 @@
 ENV["RACK_ENV"] = "test"
 
+require "simplecov"
+
+SimpleCov.start do
+  add_filter "/db/"
+  add_filter "/spec/"
+  add_filter "/config/"
+
+  add_group "models", "lib/models"
+  add_group "services", "lib/services"
+end
+
 require "./boot"
 
 module SpecHelpers
