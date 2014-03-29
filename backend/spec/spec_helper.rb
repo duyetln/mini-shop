@@ -32,6 +32,7 @@ module SpecHelpers
 
     # service test helpers
     let(:items) { item_class.kept }
+    let(:item) { FactoryGirl.create [:bundle_item, :physical_item, :digital_item].sample }
     let(:namespace) { described_class.to_s.tableize }
     let(:parsed_response) { Yajl::Parser.parse(last_response.body, symbolize_keys: true) }
 

@@ -18,8 +18,6 @@ describe StorefrontItem do
   it { should ensure_inclusion_of(:item_type).in_array(%w{ BundleItem DigitalItem PhysicalItem }) }
 
   describe '#available?' do
-    let(:item) { FactoryGirl.create [:bundle_item, :physical_item, :digital_item].sample }
-
     before :each do
       expect(saved_model).to receive(:item).and_return(item)
     end
