@@ -25,7 +25,6 @@ describe PaymentMethod do
   let(:payment) { FactoryGirl.create(:payment, payment_method: saved_model) }
 
   describe '#pending_balance' do
-
     context 'no payments' do
       it 'equals balance' do
         expect(saved_model.pending_balance).to eq(saved_model.balance)

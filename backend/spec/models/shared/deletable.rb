@@ -18,14 +18,12 @@ shared_examples 'deletable model' do
   end
 
   describe '#deleted?' do
-
     it 'equals #deleted' do
       expect(saved_model.deleted?).to eq(saved_model.deleted)
     end
   end
 
   describe '#delete!' do
-
     before :each do
       saved_model.deleted = deleted
     end
@@ -56,7 +54,6 @@ shared_examples 'deletable model' do
   end
 
   describe '#kept?' do
-
     it 'opposites #deleted?' do
       expect(saved_model.kept?).to eq(!saved_model.deleted?)
     end

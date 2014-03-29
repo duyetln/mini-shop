@@ -9,13 +9,11 @@ shared_examples 'item resource' do
   it_behaves_like 'displayable model'
 
   describe 'factory model' do
-
     it('is valid') { expect(new_model).to be_valid }
     it('saves successfully') { expect(saved_model).to be_present }
   end
 
   describe '#available?' do
-
     context 'deleted' do
       it 'is false' do
         saved_model.delete!

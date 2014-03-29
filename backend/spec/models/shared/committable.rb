@@ -21,21 +21,18 @@ shared_examples 'committable model' do
   end
 
   describe '#committed?' do
-
     it 'equals #committed' do
       expect(saved_model.committed?).to eq(saved_model.committed)
     end
   end
 
   describe '#pending?' do
-
     it 'opposites #committed?' do
-      expect(saved_model.pending?).to eq(!new_model.committed?)
+      expect(saved_model.pending?).to eq(!saved_model.committed?)
     end
   end
 
   describe '#commit!' do
-
     before :each do
       saved_model.committed = committed
     end

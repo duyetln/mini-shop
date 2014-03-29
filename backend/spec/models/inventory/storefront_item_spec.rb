@@ -3,8 +3,6 @@ require 'spec/models/shared/item_resource'
 
 describe StorefrontItem do
 
-  let(:item_class) { described_class }
-
   it_behaves_like 'item resource'
 
   it { should belong_to(:item) }
@@ -20,7 +18,6 @@ describe StorefrontItem do
   it { should ensure_inclusion_of(:item_type).in_array(%w{ BundleItem DigitalItem PhysicalItem }) }
 
   describe '#available?' do
-
     let(:item) { FactoryGirl.create [:bundle_item, :physical_item, :digital_item].sample }
 
     before :each do
@@ -43,7 +40,6 @@ describe StorefrontItem do
   end
 
   describe '#amount' do
-
     let(:currency) { new_model.price.pricepoint.currencies.sample }
 
     it 'delegates to Price#amount' do
@@ -53,7 +49,6 @@ describe StorefrontItem do
   end
 
   describe '#discounted?' do
-
     it 'delegates to Price#discounted?' do
       expect(saved_model.discounted?).to eq(saved_model.price.discounted?)
       expect(new_model.discounted?).to eq(new_model.price.discounted?)

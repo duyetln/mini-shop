@@ -9,7 +9,6 @@ describe Pricepoint do
   it { should validate_presence_of(:name) }
 
   describe '#amount' do
-
     context 'currency found' do
       it 'returns correct amount' do
         currency = saved_model.currencies.sample

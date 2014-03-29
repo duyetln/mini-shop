@@ -19,7 +19,6 @@ describe Payment do
   it { should validate_presence_of(:amount) }
 
   describe '#payment_method_currency' do
-
     it 'delegates to #payment_method' do
       expect(saved_model.payment_method_currency).to eq(saved_model.payment_method.currency)
       expect(new_model.payment_method_currency).to eq(new_model.payment_method.currency)
@@ -27,7 +26,6 @@ describe Payment do
   end
 
   describe '#uuid' do
-
     context 'new payment' do
       it 'is present' do
         expect(saved_model.uuid).to be_present
@@ -42,7 +40,6 @@ describe Payment do
   end
 
   describe '#refunded?' do
-
     context 'new payment' do
       it 'is false' do
         expect(saved_model).to_not be_refunded
@@ -57,7 +54,6 @@ describe Payment do
   end
 
   describe '#commit!' do
-
     it 'subtracts payment amount from payment method' do
       payment_method = saved_model.payment_method
       amount = Currency.exchange(saved_model.amount, saved_model.currency, payment_method.currency)

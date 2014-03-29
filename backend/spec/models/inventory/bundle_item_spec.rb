@@ -3,7 +3,6 @@ require 'spec/models/shared/item_resource'
 
 describe BundleItem do
 
-  let(:item_class) { described_class }
   let(:item) { FactoryGirl.create [:physical_item, :digital_item].sample }
   let(:bundlings) { saved_model.bundlings }
 
@@ -32,7 +31,6 @@ describe BundleItem do
   end
 
   describe '#available?' do
-
     context 'items not present' do
       it 'is false' do
         expect(saved_model.items).to_not be_present

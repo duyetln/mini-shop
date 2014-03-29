@@ -16,7 +16,6 @@ shared_examples 'item combinable model' do
   let(:qty) { rand(1..10) }
 
   describe '.add_or_update' do
-
     context 'accumulation' do
       it 'increments the qty' do
         expect { described_class.add_or_update(item, qty) }.to change{
@@ -41,7 +40,6 @@ shared_examples 'item combinable model' do
   end
 
   describe '.retrieve' do
-
     context 'providing the item' do
       it 'returns the model' do
         expect(described_class.retrieve(item)).to eq(saved_model)

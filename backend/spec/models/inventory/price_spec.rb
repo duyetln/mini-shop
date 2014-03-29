@@ -10,7 +10,6 @@ describe Price do
   it { should validate_uniqueness_of(:name) }
 
   describe '#discounted?' do
-
     context 'discount present' do
       let(:model_args) { [:price, :discounted] }
 
@@ -27,7 +26,6 @@ describe Price do
   end
 
   describe '#amount' do
-
     let(:currency) { saved_model.pricepoint.currencies.sample }
 
     context 'discount present' do

@@ -22,7 +22,6 @@ describe User do
   it { should ensure_length_of(:password).is_at_least(5) }
 
   describe 'factory model' do
-
     it('is valid') { expect(new_model.valid?).to be_true }
     it('saves successfully') { expect(saved_model).to be_present }
   end
@@ -35,7 +34,6 @@ describe User do
   end
 
   describe '#save' do
-
     context 'new user' do
       it('sets uuid') { expect(saved_model.uuid).to be_present }
       it('sets actv_code') { expect(saved_model.actv_code).to be_present }
@@ -47,7 +45,7 @@ describe User do
     end
 
     context 'created user' do
-      it("doesn't change uuid") { expect { saved_model.save }.to_not change { saved_model.uuid } }
+      it('does not change uuid') { expect { saved_model.save }.to_not change { saved_model.uuid } }
 
       context 'password changed' do
         it 'encrypts new password' do
@@ -61,14 +59,12 @@ describe User do
   end
 
   describe '#confirmed?' do
-
     it 'checks blank-ness of #active_code' do
       expect(saved_model.confirmed?).to eq(saved_model.actv_code.blank?)
     end
   end
 
   describe '#confirm!' do
-
     before :each do
       expect(saved_model).to receive(:confirmed?).and_return(confirmed)
     end
@@ -96,7 +92,6 @@ describe User do
   end
 
   describe '.authenticate' do
-
     context 'non-matching uuid' do
       it('returns nil') { expect(User.authenticate(random_string, random_string)).to be_nil }
     end

@@ -9,7 +9,6 @@ describe UsersSvc do
   let(:model_args) { [:user] }
 
   describe 'get /users/:id' do
-
     context 'valid id' do
       it 'returns the user' do
         get "/users/#{saved_model.id}"
@@ -28,7 +27,6 @@ describe UsersSvc do
   end
 
   describe 'post /users' do
-
     context 'valid parameters' do
       it 'creates the user and returns it' do
         expect { post '/users', new_model.attributes }.to change { User.count }.by(1)
@@ -59,7 +57,6 @@ describe UsersSvc do
   end
 
   describe 'post /users/authenticate' do
-
     let(:password) { new_model.password }
     let(:uuid) { user.uuid }
     let :user do
@@ -107,7 +104,6 @@ describe UsersSvc do
   end
 
   describe 'put /users/:id' do
-
     context 'user not found' do
       it 'returns 404 status' do
         put "/users/#{random_string}"
@@ -144,7 +140,6 @@ describe UsersSvc do
   end
 
   describe 'put /users/:uuid/confirm/:actv_code' do
-
     context 'user not found' do
       it 'returns 404 status' do
         put "/users/#{random_string}/confirm/#{saved_model.actv_code}"

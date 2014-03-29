@@ -22,7 +22,6 @@ describe Currency do
   let(:model_args) { [:usd] }
 
   describe 'factory model' do
-
     it('is valid') { expect(new_model).to be_valid }
     it('saves successfully') { expect(saved_model).to be_present }
   end
@@ -36,7 +35,6 @@ describe Currency do
   end
 
   describe '.exchange' do
-
     let(:eur) { FactoryGirl.build :eur }
     let(:gbp) { FactoryGirl.build :gbp }
 

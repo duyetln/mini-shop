@@ -19,7 +19,6 @@ describe Purchase do
   it { should validate_presence_of(:user) }
 
   context 'pending' do
-    let(:model_args) { [:purchase] }
     let(:subject) { saved_model }
 
     it { should be_pending }
@@ -41,7 +40,6 @@ describe Purchase do
   end
 
   describe '#payment_method_currency' do
-
     it 'delegates to #payment_method' do
       expect(saved_model.payment_method_currency).to eq(saved_model.payment_method.currency)
       expect(new_model.payment_method_currency).to eq(new_model.payment_method.currency)

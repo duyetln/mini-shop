@@ -19,14 +19,12 @@ shared_examples 'activable model' do
   end
 
   describe '#active?' do
-
     it 'equals #active' do
       expect(saved_model.active?).to eq(saved_model.active)
     end
   end
 
   describe '#activate!' do
-
     before :each do
       saved_model.active = active
     end
@@ -57,7 +55,6 @@ shared_examples 'activable model' do
   end
 
   describe '#deactivate!' do
-
     before :each do
       saved_model.active = active
     end
@@ -88,7 +85,6 @@ shared_examples 'activable model' do
   end
 
   describe '#inactive?' do
-
     it 'opposites #active?' do
       expect(saved_model.inactive?).to eq(!new_model.active?)
     end

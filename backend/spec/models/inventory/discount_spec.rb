@@ -9,7 +9,6 @@ describe Discount do
   it { should validate_uniqueness_of(:name) }
 
   describe 'discount dates' do
-
     let(:model_args) { [:discount, :half] }
 
     context 'start date is after end date' do
@@ -30,7 +29,6 @@ describe Discount do
   end
 
   describe '#rate_at' do
-
     let(:model_args) { [:discount, :random, time] }
 
     context 'past' do
@@ -59,7 +57,6 @@ describe Discount do
   end
 
   describe '#discounted?' do
-
     let(:model_args) { [:discount, :random] }
 
     context '#rate_at is non-zero' do
@@ -78,7 +75,6 @@ describe Discount do
   end
 
   describe '#current_rate' do
-
     let(:model_args) { [:discount, :random] }
 
     it 'delegates to #rate_at' do
