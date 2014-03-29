@@ -4,7 +4,7 @@ class CreatePhysicalItemsTable < ActiveRecord::Migration
       t.string   :title
       t.string   :description
       t.boolean  :active
-      t.integer  :quantity
+      t.integer  :qty
       t.timestamps
     end
   end

@@ -9,8 +9,8 @@ class OnlineFulfillment < Fulfillment
     ).first_or_initialize
 
     ownership.user = order.user
-    ownership.quantity ||= 0
-    ownership.quantity  += 1
+    ownership.qty ||= 0
+    ownership.qty  += 1
     ownership.save!
   end
 end

@@ -13,8 +13,8 @@ module ItemCombinable
         item_id: item.id
       }.merge(conds)).first_or_initialize(attrs)
 
-      record.quantity ||= 0
-      acc ? record.quantity += qty : record.quantity = qty
+      record.qty ||= 0
+      acc ? record.qty += qty : record.qty = qty
 
       yield record if block_given?
       record.save && record

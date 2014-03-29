@@ -42,7 +42,7 @@ class Order < ActiveRecord::Base
     if status.nil?
       begin
         self.class.transaction do
-          quantity.times { item.prepare!(self) } || (fail Fulfillment::PreparationFailure)
+          qty.times { item.prepare!(self) } || (fail Fulfillment::PreparationFailure)
           self.status = STATUS[:prepared]
           save!
         end
@@ -103,7 +103,7 @@ class Order < ActiveRecord::Base
   end
 
   def set_values
-    self.amount = item.amount(currency) * quantity if currency_id_changed? || quantity_changed?
+    self.amount = item.amount(currency) * qty if currency_id_changed? || qty_changed?
     self.tax_rate ||= (5 + rand(15)) / 100.0
     self.tax = amount * tax_rate if amount_changed?
   end

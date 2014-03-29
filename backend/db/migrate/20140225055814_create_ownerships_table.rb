@@ -5,7 +5,7 @@ class CreateOwnershipsTable < ActiveRecord::Migration
       t.integer  :order_id
       t.string   :item_type
       t.string   :item_id
-      t.integer  :quantity
+      t.integer  :qty
       t.datetime :created_at
     end
 

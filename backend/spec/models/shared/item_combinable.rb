@@ -13,29 +13,29 @@ shared_examples 'item combinable model' do
   end
 
   let(:item) { saved_model.item }
-  let(:quantity) { rand(1..10) }
+  let(:qty) { rand(1..10) }
 
   describe '.add_or_update' do
 
     context 'accumulation' do
-      it 'increments the quantity' do
-        expect { described_class.add_or_update(item, quantity) }.to change{
+      it 'increments the qty' do
+        expect { described_class.add_or_update(item, qty) }.to change{
           described_class.where(
             item_type: item.class,
             item_id: item.id
-          ).first_or_initialize.quantity
-        }.by(quantity)
+          ).first_or_initialize.qty
+        }.by(qty)
       end
     end
 
     context 'override' do
-      it 'updates the quantity' do
-        expect { described_class.add_or_update(item, quantity, false) }.to change{
+      it 'updates the qty' do
+        expect { described_class.add_or_update(item, qty, false) }.to change{
           described_class.where(
             item_type: item.class,
             item_id: item.id
-          ).first_or_initialize.quantity
-        }.to(quantity)
+          ).first_or_initialize.qty
+        }.to(qty)
       end
     end
   end

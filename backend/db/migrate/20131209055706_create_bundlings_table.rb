@@ -4,7 +4,7 @@ class CreateBundlingsTable < ActiveRecord::Migration
       t.integer  :bundle_id
       t.integer  :item_id
       t.string   :item_type
-      t.integer  :quantity
+      t.integer  :qty
       t.timestamps
     end
 

@@ -26,12 +26,12 @@ class Purchase < ActiveRecord::Base
     where(user_id: user.id).pending.first_or_create
   end
 
-  def add(item, currency, quantity = nil)
+  def add(item, currency, qty = nil)
     if persisted? && pending?
       order = orders.kept.where(item_type: item.class, item_id: item.id).first_or_initialize
       order.currency   = currency
-      order.quantity ||= 0
-      quantity.present? ? order.quantity  = quantity : order.quantity += 1
+      order.qty ||= 0
+      qty.present? ? order.qty  = qty : order.qty += 1
       order.save ? order : nil
     end
   end

@@ -1,8 +1,8 @@
-art_book    = PhysicalItem.where(title: 'StarCraft 2 Art Book').first_or_create!(quantity: 25 + rand(15))
-mousepad    = PhysicalItem.where(title: 'Zerg Rush Mousepad').first_or_create!(quantity: 25 + rand(15))
-dvd_set     = PhysicalItem.where(title: 'Behind the Scenes DVD Set').first_or_create!(quantity: 25 + rand(15))
-soundtrack  = PhysicalItem.where(title: 'StarCraft 2 Soundtrack').first_or_create!(quantity: 25 + rand(15))
-sc2_retail  = PhysicalItem.where(title: 'StarCraft 2 Retail Edition').first_or_create!(quantity: 25 + rand(15))
+art_book    = PhysicalItem.where(title: 'StarCraft 2 Art Book').first_or_create!(qty: 25 + rand(15))
+mousepad    = PhysicalItem.where(title: 'Zerg Rush Mousepad').first_or_create!(qty: 25 + rand(15))
+dvd_set     = PhysicalItem.where(title: 'Behind the Scenes DVD Set').first_or_create!(qty: 25 + rand(15))
+soundtrack  = PhysicalItem.where(title: 'StarCraft 2 Soundtrack').first_or_create!(qty: 25 + rand(15))
+sc2_retail  = PhysicalItem.where(title: 'StarCraft 2 Retail Edition').first_or_create!(qty: 25 + rand(15))
 
 skin        = DigitalItem.where(title: 'Skin, Portraits, and Decals').first_or_create!
 pet         = DigitalItem.where(title: 'World of Warcraft Banneling Pet').first_or_create!

@@ -8,7 +8,7 @@ class CreateOrdersTable < ActiveRecord::Migration
       t.integer  :currency_id
       t.decimal  :amount, precision: 20, scale: 4
       t.decimal  :tax, precision: 20, scale: 4
-      t.integer  :quantity
+      t.integer  :qty
       t.boolean  :deleted
       t.integer  :status
       t.datetime :fulfilled_at

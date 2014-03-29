@@ -9,8 +9,8 @@ class ShippingFulfillment < Fulfillment
     ).first_or_initialize
 
     shipment.user = order.user
-    shipment.quantity ||= 0
-    shipment.quantity  += 1
+    shipment.qty ||= 0
+    shipment.qty  += 1
     shipment.shipping_address = order.shipping_address
     shipment.save!
   end

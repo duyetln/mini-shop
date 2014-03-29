@@ -1,11 +1,11 @@
 shared_examples 'quantifiable model' do
 
-  it { should allow_mass_assignment_of(:quantity) }
+  it { should allow_mass_assignment_of(:qty) }
 
-  it { should validate_presence_of(:quantity) }
-  it { should validate_numericality_of(:quantity).is_greater_than_or_equal_to(0) }
+  it { should validate_presence_of(:qty) }
+  it { should validate_numericality_of(:qty).is_greater_than_or_equal_to(0) }
 
-  it { should respond_to(:quantity) }
-  it { should respond_to(:quantity=).with(1).argument }
+  it { should respond_to(:qty) }
+  it { should respond_to(:qty=).with(1).argument }
 
 end

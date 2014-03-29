@@ -5,7 +5,7 @@ class PhysicalItem < ActiveRecord::Base
   include Quantifiable
 
   def available?
-    super && quantity > 0
+    super && qty > 0
   end
 
   def prepare!(order)
