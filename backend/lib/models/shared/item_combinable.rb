@@ -1,5 +1,5 @@
-require "models/shared/itemable"
-require "models/shared/quantifiable"
+require 'models/shared/itemable'
+require 'models/shared/quantifiable'
 
 module ItemCombinable
 

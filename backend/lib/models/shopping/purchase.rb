@@ -1,4 +1,4 @@
-require "models/shared/committable"
+require 'models/shared/committable'
 
 class Purchase < ActiveRecord::Base
 
@@ -9,8 +9,8 @@ class Purchase < ActiveRecord::Base
   has_many :orders
 
   belongs_to :payment_method
-  belongs_to :billing_address,  class_name: "Address"
-  belongs_to :shipping_address, class_name: "Address"
+  belongs_to :billing_address,  class_name: 'Address'
+  belongs_to :shipping_address, class_name: 'Address'
   belongs_to :payment
   belongs_to :user
 
@@ -50,7 +50,7 @@ class Purchase < ActiveRecord::Base
 
   [:amount, :tax].each do |method|
     define_method method do |currency=payment_method_currency|
-      orders.kept.reduce(BigDecimal("0.0")) { |s,o| s += Currency.exchange(o.send(method), o.currency, currency) } 
+      orders.kept.reduce(BigDecimal('0.0')) { |s,o| s += Currency.exchange(o.send(method), o.currency, currency) } 
     end
   end
 

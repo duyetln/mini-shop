@@ -1,5 +1,5 @@
-require "models/shared/enum"
-require "models/shared/itemable"
+require 'models/shared/enum'
+require 'models/shared/itemable'
 
 class Fulfillment < ActiveRecord::Base
 
@@ -53,11 +53,11 @@ class Fulfillment < ActiveRecord::Base
   protected
 
   def process_fulfillment!
-    raise "Must be implemented in derived class"
+    raise 'Must be implemented in derived class'
   end
 
   def process_reversal!
-    raise "Must be implemented in derived class"
+    raise 'Must be implemented in derived class'
   end
 
   def initialize_values

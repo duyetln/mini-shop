@@ -1,13 +1,13 @@
-require "spec_helper"
-require "spec/models/shared/item_combinable"
+require 'spec_helper'
+require 'spec/models/shared/item_combinable'
 
 describe Bundling do
 
-  it_behaves_like "item combinable model"
+  it_behaves_like 'item combinable model'
 
   it { should have_readonly_attribute(:bundle_id) }
 
-  it { should belong_to(:bundle).class_name("BundleItem") }
+  it { should belong_to(:bundle).class_name('BundleItem') }
 
   it { should validate_presence_of(:bundle) }
 

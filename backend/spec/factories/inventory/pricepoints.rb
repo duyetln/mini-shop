@@ -3,7 +3,7 @@ FactoryGirl.define do
     name {  Faker::Lorem.characters(20) }
 
     after(:create) do |pricepoint|
-      ["USD", "EUR", "GBP"].each do |curr|
+      ['USD', 'EUR', 'GBP'].each do |curr|
         PricepointPrice.create( 
           pricepoint_id: pricepoint.id,
           amount: rand(50), 

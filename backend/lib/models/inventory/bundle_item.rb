@@ -1,4 +1,4 @@
-require "models/shared/item_resource"
+require 'models/shared/item_resource'
 
 class BundleItem < ActiveRecord::Base
 

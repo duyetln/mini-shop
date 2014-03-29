@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe Pricepoint do
 
@@ -8,11 +8,11 @@ describe Pricepoint do
   it { should validate_uniqueness_of(:name) }
   it { should validate_presence_of(:name) }
 
-  describe "#amount" do
+  describe '#amount' do
 
-    context "currency found" do
+    context 'currency found' do
 
-      it "returns correct amount" do
+      it 'returns correct amount' do
 
         currency = saved_model.currencies.sample
         pricepoint_price = saved_model.pricepoint_prices.where(currency_id: currency.id).first
@@ -20,9 +20,9 @@ describe Pricepoint do
       end
     end
 
-    context "currency not found" do
+    context 'currency not found' do
 
-      it "returns nil" do
+      it 'returns nil' do
 
         expect(saved_model.amount(Currency.new)).to eq(nil)
       end

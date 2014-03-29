@@ -1,5 +1,5 @@
-require "models/shared/item_resource"
-require "models/shared/orderable"
+require 'models/shared/item_resource'
+require 'models/shared/orderable'
 
 class StorefrontItem < ActiveRecord::Base
 

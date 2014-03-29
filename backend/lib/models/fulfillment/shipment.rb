@@ -1,4 +1,4 @@
-require "models/shared/item_combinable"
+require 'models/shared/item_combinable'
 
 class Shipment < ActiveRecord::Base
 
@@ -8,7 +8,7 @@ class Shipment < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :order
-  belongs_to :shipping_address, class_name: "Address"
+  belongs_to :shipping_address, class_name: 'Address'
 
   validates :user,  presence: true
   validates :order, presence: true

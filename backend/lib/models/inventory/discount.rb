@@ -9,7 +9,7 @@ class Discount < ActiveRecord::Base
   validate :discount_dates
 
   def rate_at(dt=DateTime.now)
-    zero_rate = BigDecimal.new("0.0")
+    zero_rate = BigDecimal.new('0.0')
     start_set = start_at.present?
     end_set   = end_at.present?
     
@@ -35,8 +35,8 @@ class Discount < ActiveRecord::Base
 
   def discount_dates
     unless ( start_at.present? && end_at.present? ? start_at <= end_at : true )
-      errors.add(:start_at, "must be before or same as end_at")
-      errors.add(:end_at, "must be after or same as start_at")
+      errors.add(:start_at, 'must be before or same as end_at')
+      errors.add(:end_at, 'must be after or same as start_at')
     end
   end
 

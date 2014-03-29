@@ -1,5 +1,5 @@
-require "models/shared/enum"
-require "models/shared/item_combinable"
+require 'models/shared/enum'
+require 'models/shared/item_combinable'
 
 class Order < ActiveRecord::Base
 

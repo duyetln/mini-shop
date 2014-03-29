@@ -1,17 +1,17 @@
-ENV["RACK_ENV"] = "test"
+ENV['RACK_ENV'] = 'test'
 
-require "simplecov"
+require 'simplecov'
 
 SimpleCov.start do
-  add_filter "/db/"
-  add_filter "/spec/"
-  add_filter "/config/"
+  add_filter '/db/'
+  add_filter '/spec/'
+  add_filter '/config/'
 
-  add_group "models", "lib/models"
-  add_group "services", "lib/services"
+  add_group 'models', 'lib/models'
+  add_group 'services', 'lib/services'
 end
 
-require "./boot"
+require './boot'
 
 module SpecHelpers
   extend ActiveSupport::Concern
@@ -51,7 +51,7 @@ RSpec.configure do |config|
   config.include SpecHelpers
   config.color_enabled = true
   config.tty = true
-  config.order = "random"
+  config.order = 'random'
 
   config.before :suite do
     begin

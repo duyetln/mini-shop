@@ -1,13 +1,13 @@
 FactoryGirl.define do
   factory :usd, class: Currency do
-    code "USD"
+    code 'USD'
   end
 
   factory :eur, class: Currency do
-    code "EUR"
+    code 'EUR'
   end
 
   factory :gbp, class: Currency do
-    code "GBP"
+    code 'GBP'
   end
 end

@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe Price do
 
@@ -9,44 +9,44 @@ describe Price do
   it { should validate_presence_of(:name) }
   it { should validate_uniqueness_of(:name) }
 
-  describe "#discounted?" do
+  describe '#discounted?' do
 
-    context "discount present" do
+    context 'discount present' do
 
       let(:model_args) { [ :price, :discounted ] }
 
-      it "delegates to Discount#discounted?" do
+      it 'delegates to Discount#discounted?' do
 
         expect(saved_model.discounted?).to eq(saved_model.discount.discounted?)
       end
     end
 
-    context "discount not present" do
+    context 'discount not present' do
 
-      it "is not discounted" do
+      it 'is not discounted' do
 
         expect(saved_model.discounted?).to be_false
       end
     end
   end
 
-  describe "#amount" do
+  describe '#amount' do
 
     let(:currency) { saved_model.pricepoint.currencies.sample }
 
-    context "discount present" do
+    context 'discount present' do
 
       let(:model_args) { [ :price, :discounted ] }
 
-      it "returns correct amount" do
+      it 'returns correct amount' do
 
         expect(saved_model.amount(currency)).to eq(saved_model.pricepoint.amount(currency) * ( 1 - saved_model.discount.current_rate) )
       end
     end
 
-    context "discount not present" do
+    context 'discount not present' do
 
-      it "returns correct amount" do
+      it 'returns correct amount' do
 
         expect(saved_model.amount(currency)).to eq(saved_model.pricepoint.amount(currency))
         expect(new_model.amount(currency)).to eq(new_model.pricepoint.amount(currency))

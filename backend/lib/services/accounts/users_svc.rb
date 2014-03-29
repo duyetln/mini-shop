@@ -37,27 +37,27 @@ class UsersSvc < Sinatra::Base
 
   end
 
-  get "/users/:id" do
+  get '/users/:id' do
     find_user_by_id!
     respond_with(@user)
   end
 
-  post "/users" do
+  post '/users' do
     load_user!
     respond_with(@user) { |c| c.save }
   end
 
-  post "/users/authenticate" do
+  post '/users/authenticate' do
     @user = User.authenticate(params[:uuid], params[:password])
     respond_with(@user)
   end
 
-  put "/users/:id" do
+  put '/users/:id' do
     find_user_by_id!
     respond_with(@user, failure: 400) { |c| c.update_attributes(accessible_params) }
   end
 
-  put "/users/:uuid/confirm/:actv_code" do
+  put '/users/:uuid/confirm/:actv_code' do
     find_user_by_uuid!
     !@user.confirmed? && @user.actv_code == params[:actv_code] || halt(404)
     respond_with(@user) { |c| c.confirm! }

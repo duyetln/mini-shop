@@ -1,24 +1,24 @@
-require "spec_helper"
-require "spec/models/shared/committable"
+require 'spec_helper'
+require 'spec/models/shared/committable'
 
 describe Purchase do
 
   let(:model_args) { [ :purchase, :ready ] }
 
-  it_behaves_like "committable model"
+  it_behaves_like 'committable model'
 
   it { should have_readonly_attribute(:user_id) }
 
   it { should have_many(:orders) }
   it { should belong_to(:payment_method) }
-  it { should belong_to(:billing_address).class_name("Address") }
-  it { should belong_to(:shipping_address).class_name("Address") }
+  it { should belong_to(:billing_address).class_name('Address') }
+  it { should belong_to(:shipping_address).class_name('Address') }
   it { should belong_to(:payment) }
   it { should belong_to(:user) }
 
   it { should validate_presence_of(:user) }
 
-  context "pending" do
+  context 'pending' do
 
     let(:model_args) { [ :purchase ] }
     let(:subject) { saved_model }
@@ -29,7 +29,7 @@ describe Purchase do
     it { should_not validate_presence_of(:shipping_address) }
   end
 
-  context "committed" do
+  context 'committed' do
 
     let :subject do
       saved_model.commit!
@@ -42,9 +42,9 @@ describe Purchase do
     it { should validate_presence_of(:shipping_address) }
   end
 
-  describe "#payment_method_currency" do
+  describe '#payment_method_currency' do
 
-    it "delegates to #payment_method" do
+    it 'delegates to #payment_method' do
 
       expect(saved_model.payment_method_currency).to eq(saved_model.payment_method.currency)
       expect(new_model.payment_method_currency).to eq(new_model.payment_method.currency) 

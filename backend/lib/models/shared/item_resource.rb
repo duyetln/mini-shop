@@ -1,6 +1,6 @@
-require "models/shared/activable"
-require "models/shared/deletable"
-require "models/shared/displayable"
+require 'models/shared/activable'
+require 'models/shared/deletable'
+require 'models/shared/displayable'
 
 module ItemResource
 

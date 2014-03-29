@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe User do
 
@@ -21,10 +21,10 @@ describe User do
   it { should validate_uniqueness_of(:email) }
   it { should ensure_length_of(:password).is_at_least(5) }
 
-  describe "factory model" do
+  describe 'factory model' do
 
-    it("is valid") { expect(new_model.valid?).to be_true }
-    it("saves successfully") { expect(saved_model).to be_present }
+    it('is valid') { expect(new_model.valid?).to be_true }
+    it('saves successfully') { expect(saved_model).to be_present }
   end
 
   let(:password) { new_model.password }
@@ -34,27 +34,27 @@ describe User do
     new_model
   end
 
-  describe "#save" do
+  describe '#save' do
 
-    context "new user" do
+    context 'new user' do
 
-      it("sets uuid") { expect(saved_model.uuid).to be_present } 
-      it("sets actv_code") { expect(saved_model.actv_code).to be_present }
-      it("sets password") { expect(saved_model.password).to be_present }
+      it('sets uuid') { expect(saved_model.uuid).to be_present } 
+      it('sets actv_code') { expect(saved_model.actv_code).to be_present }
+      it('sets password') { expect(saved_model.password).to be_present }
 
-      it "encrypts password" do 
+      it 'encrypts password' do 
         
         expect(BCrypt::Password.new(user.password)).to eq(password)
       end
     end
 
-    context "created user" do
+    context 'created user' do
 
       it("doesn't change uuid") { expect{ saved_model.save }.to_not change{ saved_model.uuid } }
 
-      context "password changed" do
+      context 'password changed' do
 
-        it "encrypts new password" do
+        it 'encrypts new password' do
 
           new_password = Faker::Lorem.characters(20)
           saved_model.password = new_password
@@ -65,40 +65,40 @@ describe User do
     end
   end
 
-  describe "#confirmed?" do
+  describe '#confirmed?' do
 
-    it "checks blank-ness of #active_code" do
+    it 'checks blank-ness of #active_code' do
 
       expect(saved_model.confirmed?).to eq(saved_model.actv_code.blank?)
     end
   end
 
-  describe "#confirm!" do
+  describe '#confirm!' do
 
     before :each do
       expect(saved_model).to receive(:confirmed?).and_return(confirmed)
     end
 
-    context "confirmed" do
+    context 'confirmed' do
 
       let(:confirmed) { true }
 
-      it "returns false" do
+      it 'returns false' do
 
         expect(saved_model.confirm!).to be_false
       end
     end
 
-    context "not confirmed" do 
+    context 'not confirmed' do 
 
       let(:confirmed) { false }
 
-      it "returns true" do
+      it 'returns true' do
 
         expect(saved_model.confirm!).to be_true
       end
 
-      it "clears the activation code" do
+      it 'clears the activation code' do
 
         saved_model.confirm!
         expect(saved_model.actv_code).to be_blank
@@ -106,26 +106,26 @@ describe User do
     end
   end
 
-  describe ".authenticate" do
+  describe '.authenticate' do
 
-    context "non-matching uuid" do
+    context 'non-matching uuid' do
 
-      it("returns nil") { expect(User.authenticate(random_string, random_string)).to be_nil }
+      it('returns nil') { expect(User.authenticate(random_string, random_string)).to be_nil }
     end
 
-    context "unconfirmed user" do
+    context 'unconfirmed user' do
 
-      it("returns nil") { expect(User.authenticate(user.uuid, password)).to be_nil }
+      it('returns nil') { expect(User.authenticate(user.uuid, password)).to be_nil }
     end
 
-    context "non-matching password" do
+    context 'non-matching password' do
 
-      it("returns nil") { expect(User.authenticate(user.uuid, random_string)).to be_nil }
+      it('returns nil') { expect(User.authenticate(user.uuid, random_string)).to be_nil }
     end
 
-    context "matching uuid, matching password, confirmed user" do
+    context 'matching uuid, matching password, confirmed user' do
 
-      it "returns the user" do
+      it 'returns the user' do
         
         user.confirm!
         expect(User.authenticate(user.uuid, password)).to eq(user)

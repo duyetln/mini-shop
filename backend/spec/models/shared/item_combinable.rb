@@ -1,12 +1,12 @@
-require "spec/models/shared/itemable"
-require "spec/models/shared/quantifiable"
+require 'spec/models/shared/itemable'
+require 'spec/models/shared/quantifiable'
 
-shared_examples "item combinable model" do
+shared_examples 'item combinable model' do
 
-  it_behaves_like "itemable model"
-  it_behaves_like "quantifiable model"
+  it_behaves_like 'itemable model'
+  it_behaves_like 'quantifiable model'
 
-  context "class" do
+  context 'class' do
     let(:subject) { described_class }
     it { should respond_to(:add_or_update).with(5).argument }
     it { should respond_to(:get).with(1).argument }
@@ -15,11 +15,11 @@ shared_examples "item combinable model" do
   let(:item) { saved_model.item }
   let(:quantity) { rand(1..10) }
 
-  describe ".add_or_update" do
+  describe '.add_or_update' do
 
-    context "accumulation" do
+    context 'accumulation' do
 
-      it "increments the quantity" do
+      it 'increments the quantity' do
 
         expect{ described_class.add_or_update(item, quantity) }.to change{ 
           described_class.where(
@@ -30,9 +30,9 @@ shared_examples "item combinable model" do
       end
     end
 
-    context "override" do
+    context 'override' do
 
-      it "updates the quantity" do
+      it 'updates the quantity' do
 
         expect{ described_class.add_or_update(item, quantity, false) }.to change{ 
           described_class.where(
@@ -44,9 +44,9 @@ shared_examples "item combinable model" do
     end
   end
 
-  describe ".get" do
+  describe '.get' do
 
-    it "returns the model storing the item" do
+    it 'returns the model storing the item' do
 
       expect(described_class.get(item)).to eq(saved_model)
     end

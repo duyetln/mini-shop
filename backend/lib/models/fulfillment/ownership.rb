@@ -1,4 +1,4 @@
-require "models/shared/item_combinable"
+require 'models/shared/item_combinable'
 
 class Ownership < ActiveRecord::Base
 

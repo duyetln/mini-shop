@@ -1,4 +1,4 @@
-require "services/shared/item_svc"
+require 'services/shared/item_svc'
 
 class BundleItemsSvc < Sinatra::Base
 
