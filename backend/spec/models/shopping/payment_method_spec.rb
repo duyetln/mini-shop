@@ -34,7 +34,7 @@ describe PaymentMethod do
     context 'pending payments' do
       it 'equals balance minus total pending payment amount' do
         pending_balance = saved_model.balance - Currency.exchange(payment.amount, payment.currency, saved_model.currency)
-        expect(saved_model.pending_balance.to_s).to eq(pending_balance.to_s)
+        expect(saved_model.pending_balance).to eq(pending_balance)
       end
     end
 
@@ -43,6 +43,15 @@ describe PaymentMethod do
         payment.commit!
         expect(saved_model.pending_balance).to eq(saved_model.balance)
       end
+    end
+  end
+
+  describe '#enough?' do
+    let(:amount) { rand(1..10) }
+
+    it 'checks against #pending_balance amount' do
+      enough = (saved_model.pending_balance >= amount)
+      expect(saved_model.enough?(amount)).to eq(enough)
     end
   end
 
