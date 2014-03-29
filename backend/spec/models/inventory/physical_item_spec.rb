@@ -15,9 +15,7 @@ describe PhysicalItem do
   describe '#available?' do
 
     context 'zero quantity' do
-
       it 'is false' do
-
         saved_model.quantity = 0
         saved_model.save
         expect(saved_model).to_not be_available

@@ -3,7 +3,6 @@ require 'spec_helper'
 shared_examples 'correct currency converter' do
 
   it 'correctly converts provided amount' do
-
     expected_amount = (
       BigDecimal.new(amount.to_s) *
       CURRENCY_RATES[:USD][dest_curr.code.to_sym] /
@@ -14,7 +13,6 @@ shared_examples 'correct currency converter' do
   end
 
   it 'returns BigDecimal value' do
-
     expect(described_class.exchange(amount, src_curr, dest_curr)).to be_a(BigDecimal)
   end
 end
@@ -34,7 +32,6 @@ describe Currency do
   it { should validate_presence_of(:code) }
 
   it 'upcases code after saving' do
-
     expect(saved_model.code).to match(/\A[A-Z]+\Z/)
   end
 
@@ -46,7 +43,6 @@ describe Currency do
     let(:amount) { rand(50) }
 
     context 'different currencies' do
-
       let(:src_curr) { eur }
       let(:dest_curr) { gbp }
 
@@ -54,7 +50,6 @@ describe Currency do
     end
 
     context 'same currency' do
-
       let(:src_curr) { eur }
       let(:dest_curr) { src_curr }
 

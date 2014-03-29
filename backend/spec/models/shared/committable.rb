@@ -23,7 +23,6 @@ shared_examples 'committable model' do
   describe '#committed?' do
 
     it 'equals #committed' do
-
       expect(saved_model.committed?).to eq(saved_model.committed)
     end
   end
@@ -31,7 +30,6 @@ shared_examples 'committable model' do
   describe '#pending?' do
 
     it 'opposites #committed?' do
-
       expect(saved_model.pending?).to eq(!new_model.committed?)
     end
   end
@@ -43,41 +41,33 @@ shared_examples 'committable model' do
     end
 
     context 'committed' do
-
       let(:committed) { true }
 
       it 'cannot be executed' do
-
         expect(saved_model.commit!).to_not be_true
       end
 
       it 'cannot change committed status' do
-
         expect { saved_model.commit! }.to_not change { saved_model.committed? }
       end
 
       it 'cannot change committed_at' do
-
         expect { saved_model.commit! }.to_not change { saved_model.committed_at }
       end
     end
 
     context 'pending' do
-
       let(:committed) { false }
 
       it 'can be executed' do
-
         expect(saved_model.commit!).to be_true
       end
 
       it 'changes committed status to true' do
-
         expect { saved_model.commit! }.to change { saved_model.committed? }.to(!committed)
       end
 
       it 'sets committed_at' do
-
         expect { saved_model.commit! }.to change { saved_model.committed_at }
         expect(saved_model.committed_at).to be_present
       end

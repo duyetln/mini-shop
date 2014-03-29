@@ -27,26 +27,20 @@ describe PaymentMethod do
   describe '#pending_balance' do
 
     context 'no payments' do
-
       it 'equals balance' do
-
         expect(saved_model.pending_balance).to eq(saved_model.balance)
       end
     end
 
     context 'pending payments' do
-
       it 'equals balance minus total pending payment amount' do
-
         pending_balance = saved_model.balance - Currency.exchange(payment.amount, payment.currency, saved_model.currency)
         expect(saved_model.pending_balance.to_s).to eq(pending_balance.to_s)
       end
     end
 
     context 'committed payments' do
-
       it 'equals balance' do
-
         payment.commit!
         expect(saved_model.pending_balance).to eq(saved_model.balance)
       end

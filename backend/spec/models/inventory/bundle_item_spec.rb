@@ -12,32 +12,25 @@ describe BundleItem do
   describe '#available?' do
 
     context 'items not present' do
-
       before :each do
         expect(saved_model).to receive(:items).and_return([])
       end
 
       it 'is false' do
-
         expect(saved_model).to_not be_available
       end
     end
 
     context 'items present' do
-
       context 'items unavailable' do
-
         it 'is false' do
-
           saved_model.items.sample.send([:delete!, :deactivate!].sample)
           expect(saved_model).to_not be_available
         end
       end
 
       context 'items available' do
-
         it 'is true' do
-
           expect(saved_model).to be_available
         end
       end

@@ -21,7 +21,6 @@ shared_examples 'activable model' do
   describe '#active?' do
 
     it 'equals #active' do
-
       expect(saved_model.active?).to eq(saved_model.active)
     end
   end
@@ -33,31 +32,25 @@ shared_examples 'activable model' do
     end
 
     context 'active' do
-
       let(:active) { true }
 
       it 'cannot be executed' do
-
         expect(saved_model.activate!).to_not be_true
       end
 
       it 'cannot change active status' do
-
         expect { saved_model.activate! }.to_not change { saved_model.active? }
       end
     end
 
     context 'inactive' do
-
       let(:active) { false }
 
       it 'can be executed' do
-
         expect(saved_model.activate!).to be_true
       end
 
       it 'changes active status to true' do
-
         expect { saved_model.activate! }.to change { saved_model.active? }.to(!active)
       end
     end
@@ -70,31 +63,25 @@ shared_examples 'activable model' do
     end
 
     context 'inactive' do
-
       let(:active) { false }
 
       it 'cannot be executed' do
-
         expect(saved_model.deactivate!).to_not be_true
       end
 
       it 'cannot change active status' do
-
         expect { saved_model.deactivate! }.to_not change { saved_model.active? }
       end
     end
 
     context 'active' do
-
       let(:active) { true }
 
       it 'can be executed' do
-
         expect(saved_model.deactivate!).to be_true
       end
 
       it 'changes active status to false' do
-
         expect { saved_model.deactivate! }.to change { saved_model.active? }.to(!active)
       end
     end
@@ -103,7 +90,6 @@ shared_examples 'activable model' do
   describe '#inactive?' do
 
     it 'opposites #active?' do
-
       expect(saved_model.inactive?).to eq(!new_model.active?)
     end
   end

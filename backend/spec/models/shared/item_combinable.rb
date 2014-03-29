@@ -18,9 +18,7 @@ shared_examples 'item combinable model' do
   describe '.add_or_update' do
 
     context 'accumulation' do
-
       it 'increments the quantity' do
-
         expect { described_class.add_or_update(item, quantity) }.to change{
           described_class.where(
             item_type: item.class,
@@ -31,9 +29,7 @@ shared_examples 'item combinable model' do
     end
 
     context 'override' do
-
       it 'updates the quantity' do
-
         expect { described_class.add_or_update(item, quantity, false) }.to change{
           described_class.where(
             item_type: item.class,
@@ -47,7 +43,6 @@ shared_examples 'item combinable model' do
   describe '.get' do
 
     it 'returns the model storing the item' do
-
       expect(described_class.get(item)).to eq(saved_model)
     end
   end

@@ -21,7 +21,6 @@ describe Payment do
   describe '#payment_method_currency' do
 
     it 'delegates to #payment_method' do
-
       expect(saved_model.payment_method_currency).to eq(saved_model.payment_method.currency)
       expect(new_model.payment_method_currency).to eq(new_model.payment_method.currency)
     end
@@ -30,17 +29,13 @@ describe Payment do
   describe '#uuid' do
 
     context 'new payment' do
-
       it 'is present' do
-
         expect(saved_model.uuid).to be_present
       end
     end
 
     context 'saved payment' do
-
       it 'is present' do
-
         expect(new_model.uuid).to be_present
       end
     end
@@ -49,17 +44,13 @@ describe Payment do
   describe '#refunded?' do
 
     context 'new payment' do
-
       it 'is false' do
-
         expect(saved_model).to_not be_refunded
       end
     end
 
     context 'saved payment' do
-
       it 'is false' do
-
         expect(new_model).to_not be_refunded
       end
     end
@@ -68,7 +59,6 @@ describe Payment do
   describe '#commit!' do
 
     it 'subtracts payment amount from payment method' do
-
       payment_method = saved_model.payment_method
       amount = Currency.exchange(saved_model.amount, saved_model.currency, payment_method.currency)
       expect { saved_model.commit! }.to change { saved_model.payment_method.balance }.by(-amount)
