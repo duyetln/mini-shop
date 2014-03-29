@@ -6,14 +6,11 @@ class BundleItem < ActiveRecord::Base
   has_many :bundlings, foreign_key: :bundle_id
 
   def add_or_update(item, qty = 1, acc = true)
-    bundlings.add_or_update(item, qty, acc) if persisted? && !deleted?
+    bundlings.add_or_update(item, qty, acc) if kept?
   end
 
   def remove(item)
-    if persisted? && !deleted?
-      bundling = bundlings.get(item)
-      bundling.present? && bundlings.destroy(bundling)
-    end
+    bundlings.retrieve(item) { |bundling| bundling.destroy } if kept?
   end
 
   def items
