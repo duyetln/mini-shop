@@ -9,7 +9,7 @@ shared_examples 'item combinable model' do
   context 'class' do
     let(:subject) { described_class }
     it { should respond_to(:add_or_update).with(5).argument }
-    it { should respond_to(:get).with(1).argument }
+    it { should respond_to(:retrieve).with(1).argument }
   end
 
   let(:item) { saved_model.item }
@@ -40,10 +40,24 @@ shared_examples 'item combinable model' do
     end
   end
 
-  describe '.get' do
+  describe '.retrieve' do
 
-    it 'returns the model storing the item' do
-      expect(described_class.get(item)).to eq(saved_model)
+    context 'providing the item' do
+      it 'returns the model' do
+        expect(described_class.retrieve(item)).to eq(saved_model)
+      end
+    end
+
+    context 'providing the model' do
+      it 'returns the model' do
+        expect(described_class.retrieve(saved_model)).to eq(saved_model)
+      end
+    end
+
+    context 'providing the model id' do
+      it 'returns the model' do
+        expect(described_class.retrieve(saved_model.id)).to eq(saved_model)
+      end
     end
   end
 end
