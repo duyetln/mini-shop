@@ -1,5 +1,4 @@
 class PaymentMethod < ActiveRecord::Base
-
   attr_readonly :user_id, :name, :currency_id
 
   belongs_to :user
@@ -13,11 +12,10 @@ class PaymentMethod < ActiveRecord::Base
   validates :balance,  numericality: { greater_than_or_equal_to: 0 }
 
   def pending_balance
-    balance - payments.pending.reduce(BigDecimal.new('0.0')) { |s,p| s += Currency.exchange(p.amount, p.currency, currency) } 
+    balance - payments.pending.reduce(BigDecimal.new('0.0')) { |a, e| a += Currency.exchange(e.amount, e.currency, currency) }
   end
 
-  def enough?(amount=0, input_currency=currency)
+  def enough?(amount = 0, input_currency = currency)
     pending_balance >= Currency.exchange(amount, input_currency, currency)
   end
-  
 end

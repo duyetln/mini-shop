@@ -1,5 +1,4 @@
 class PricepointPrice < ActiveRecord::Base
-
   attr_readonly :pricepoint_id, :currency_id
 
   belongs_to :pricepoint

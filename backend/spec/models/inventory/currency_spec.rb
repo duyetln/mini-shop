@@ -4,10 +4,10 @@ shared_examples 'correct currency converter' do
 
   it 'correctly converts provided amount' do
 
-    expected_amount = ( 
-      BigDecimal.new(amount.to_s) * 
-      CURRENCY_RATES[:USD][dest_curr.code.to_sym] / 
-      CURRENCY_RATES[:USD][src_curr.code.to_sym] 
+    expected_amount = (
+      BigDecimal.new(amount.to_s) *
+      CURRENCY_RATES[:USD][dest_curr.code.to_sym] /
+      CURRENCY_RATES[:USD][src_curr.code.to_sym]
     ).ceil(4)
 
     expect(described_class.exchange(amount, src_curr, dest_curr)).to eq(expected_amount)
@@ -21,7 +21,7 @@ end
 
 describe Currency do
 
-  let(:model_args) { [ :usd ] }
+  let(:model_args) { [:usd] }
 
   describe 'factory model' do
 
@@ -33,7 +33,7 @@ describe Currency do
   it { should ensure_length_of(:code).is_equal_to(3) }
   it { should validate_presence_of(:code) }
 
-  it 'upcases code after saving' do 
+  it 'upcases code after saving' do
 
     expect(saved_model.code).to match(/\A[A-Z]+\Z/)
   end

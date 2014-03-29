@@ -6,7 +6,7 @@ describe UsersSvc do
     { except: [:password, :updated_at]  }
   end
 
-  let(:model_args) { [ :user ] }
+  let(:model_args) { [:user] }
 
   describe 'get /users/:id' do
 
@@ -32,24 +32,23 @@ describe UsersSvc do
   end
 
   describe 'post /users' do
-    
+
     context 'valid parameters' do
 
       it 'creates the user and returns it' do
 
-        expect{ post '/users', new_model.attributes }.to change{ User.count }.by(1)
+        expect { post '/users', new_model.attributes }.to change { User.count }.by(1)
         expect_status(200)
         expect(parsed_response[:id]).to eq(User.last.id)
         expect(parsed_response[:uuid]).to eq(User.last.uuid)
       end
     end
 
-
     context 'missing parameters' do
 
       it 'returns 400 status' do
 
-        expect{ post '/users' }.to_not change{ User.count }
+        expect { post '/users' }.to_not change { User.count }
         expect_status(400)
         expect_empty_response
       end
@@ -63,7 +62,7 @@ describe UsersSvc do
         expect(new_model).to receive(:valid?).and_return(true)
         expect(new_model).to receive(:save).and_return(false)
 
-        expect{ post '/users', new_model.attributes }.to_not change{ User.count }
+        expect { post '/users', new_model.attributes }.to_not change { User.count }
         expect_status(500)
       end
     end
@@ -82,9 +81,8 @@ describe UsersSvc do
     context 'user authenticated' do
 
       it 'returns the user' do
-        
         user.confirm!
-        post '/users/authenticate', { uuid: uuid, password: password }
+        post '/users/authenticate',  uuid: uuid, password: password
         expect_status(200)
         expect(parsed_response[:uuid]).to eq(uuid)
       end
@@ -92,18 +90,39 @@ describe UsersSvc do
 
     context 'user not authenticated' do
 
-      context('not confirmed')  { it('returns 404 status') {                post '/users/authenticate', { uuid: uuid,          password: password };       expect_status(404); expect_empty_response } }
-      context('wrong uuid')     { it('returns 404 status') { user.confirm!; post '/users/authenticate', { uuid: random_string, password: password };       expect_status(404); expect_empty_response } }
-      context('wrong password') { it('returns 404 status') { user.confirm!; post '/users/authenticate', { uuid: uuid,          password: random_string };  expect_status(404); expect_empty_response } }
-    end
+      context 'not confirmed' do
+        it 'returns 404 status' do
+          post '/users/authenticate',  uuid: uuid, password: password
+          expect_status(404)
+          expect_empty_response
+        end
+      end
 
+      context 'wrong uuid' do
+        it 'returns 404 status' do
+          user.confirm!
+          post '/users/authenticate',  uuid: random_string, password: password
+          expect_status(404)
+          expect_empty_response
+        end
+      end
+
+      context 'wrong password' do
+        it 'returns 404 status' do
+          user.confirm!
+          post '/users/authenticate',  uuid: uuid, password: random_string
+          expect_status(404)
+          expect_empty_response
+        end
+      end
+    end
   end
 
   describe 'put /users/:id' do
 
     context 'user not found' do
 
-      it 'returns 404 status' do 
+      it 'returns 404 status' do
 
         put "/users/#{random_string}"
         expect_status(404)
@@ -117,10 +136,10 @@ describe UsersSvc do
 
         it 'returns 400 status' do
 
-          expect{ 
+          expect do
             put "/users/#{saved_model.id}", first_name: nil
-            saved_model.reload 
-          }.to_not change{ saved_model }
+            saved_model.reload
+          end.to_not change { saved_model }
           expect_status(400)
         end
       end
@@ -158,10 +177,10 @@ describe UsersSvc do
 
     context 'user found' do
 
-      context 'confirmed user' do 
+      context 'confirmed user' do
 
         it 'returns 404 status' do
-        
+
           saved_model.confirm!
 
           put "/users/#{saved_model.uuid}/confirm/#{saved_model.actv_code}"
@@ -171,9 +190,9 @@ describe UsersSvc do
         end
       end
 
-      context 'wrong confirmation code' do 
+      context 'wrong confirmation code' do
 
-        it 'returns 404 status' do 
+        it 'returns 404 status' do
 
           put "/users/#{saved_model.uuid}/confirm/#{random_string}"
           saved_model.reload
@@ -182,7 +201,7 @@ describe UsersSvc do
         end
       end
 
-      context 'correct confirmation code' do 
+      context 'correct confirmation code' do
 
         it 'returns the user' do
 

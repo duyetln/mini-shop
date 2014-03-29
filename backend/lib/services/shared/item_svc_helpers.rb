@@ -2,7 +2,6 @@ module ItemSvcHelpers
   extend ActiveSupport::Concern
 
   module ClassMethods
-
     def generate_helpers!
       helpers do
 
@@ -26,14 +25,14 @@ module ItemSvcHelpers
         end
 
         def item_response_options
-          { root: false, except: [ :updated_at ] }
+          { root: false, except: [:updated_at] }
         end
 
         def accessible_params
-          params.slice *settings.item_class.column_names
+          params.slice(*settings.item_class.column_names)
         end
 
-        def respond_with(resource, response_options={}, json_options=item_response_options)
+        def respond_with(resource, response_options = {}, json_options = item_response_options)
           resource.present? || halt(404)
           status = block_given? ? yield(resource) : resource
           success_code = response_options[:success] || 200
@@ -43,7 +42,5 @@ module ItemSvcHelpers
 
       end
     end
-
   end
-
 end

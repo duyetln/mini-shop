@@ -1,8 +1,8 @@
 shared_examples 'item service' do |item_class|
-  
+
   namespace = item_class.to_s.tableize
 
-  let(:model_args) { [ item_class.to_s.underscore.to_sym ] }
+  let(:model_args) { [item_class.to_s.underscore.to_sym] }
 
   describe "get /#{namespace}/ping" do
 
@@ -86,7 +86,7 @@ shared_examples 'item service' do |item_class|
 
       it 'creates the item and returns it' do
 
-        expect{ post "/#{namespace}", new_model.attributes }.to change{ item_class.count }.by(1)
+        expect { post "/#{namespace}", new_model.attributes }.to change { item_class.count }.by(1)
         expect_status(200)
         expect(parsed_response[:id]).to eq(item_class.last.id)
       end
@@ -96,7 +96,7 @@ shared_examples 'item service' do |item_class|
 
       it 'ignores invalid parameters and creates the item' do
 
-        expect{ post "/#{namespace}", new_model.attributes.merge(foo: :baz) }.to change{ item_class.count }.by(1)
+        expect { post "/#{namespace}", new_model.attributes.merge(foo: :baz) }.to change { item_class.count }.by(1)
         expect_status(200)
         expect(parsed_response[:id]).to eq(item_class.last.id)
       end
@@ -106,7 +106,7 @@ shared_examples 'item service' do |item_class|
 
       it 'returns 400 status' do
 
-        expect{ post "/#{namespace}" }.to_not change{ item_class.count }
+        expect { post "/#{namespace}" }.to_not change { item_class.count }
         expect_status(400)
         expect_empty_response
       end
@@ -116,7 +116,7 @@ shared_examples 'item service' do |item_class|
 
       it 'does not update the deleted flag' do
 
-        expect{ post "/#{namespace}", new_model.attributes.merge(deleted: true) }.to change{ item_class.count }.by(1)
+        expect { post "/#{namespace}", new_model.attributes.merge(deleted: true) }.to change { item_class.count }.by(1)
         expect_status(200)
         expect(parsed_response[:id]).to eq(item_class.last.id)
         expect(parsed_response[:deleted]).to be_false
@@ -128,7 +128,7 @@ shared_examples 'item service' do |item_class|
 
       it 'does not update the active flag' do
 
-        expect{ post "/#{namespace}", new_model.attributes.merge(active: false) }.to change{ item_class.count }.by(1)
+        expect { post "/#{namespace}", new_model.attributes.merge(active: false) }.to change { item_class.count }.by(1)
         expect_status(200)
         expect(parsed_response[:id]).to eq(item_class.last.id)
         expect(parsed_response[:active]).to be_true
@@ -147,7 +147,7 @@ shared_examples 'item service' do |item_class|
 
           it 'updates the item and returns it' do
 
-            put "/#{namespace}/#{saved_model.id}", { key => value }
+            put "/#{namespace}/#{saved_model.id}",  key => value
             expect_status(200)
             expect(parsed_response[key]).to eq(value)
             saved_model.reload
@@ -159,7 +159,7 @@ shared_examples 'item service' do |item_class|
 
           it 'ignores invalid parameters and updates the item' do
 
-            put "/#{namespace}/#{saved_model.id}", { key => value, foo: :baz }
+            put "/#{namespace}/#{saved_model.id}",  key => value, foo: :baz
             expect_status(200)
             expect(parsed_response[key]).to eq(value)
             saved_model.reload

@@ -1,5 +1,4 @@
 class Price < ActiveRecord::Base
-
   belongs_to :pricepoint
   belongs_to :discount
 
@@ -12,7 +11,6 @@ class Price < ActiveRecord::Base
   def amount(currency)
     zero = BigDecimal.new('0.0')
 
-    ( pricepoint.amount(currency) || zero ) * ( 1 - ( discount.try(:current_rate) || zero ) )
+    (pricepoint.amount(currency) || zero) * (1 - (discount.try(:current_rate) || zero))
   end
-
 end

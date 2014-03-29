@@ -11,13 +11,24 @@ shared_examples 'item resource' do
   describe 'factory model' do
 
     it('is valid') { expect(new_model).to be_valid }
-    it('saves successfully') { expect(saved_model).to be_present}
+    it('saves successfully') { expect(saved_model).to be_present }
   end
 
   describe '#available?' do
 
-    context('deleted')  { it('is false') { saved_model.delete!;     expect(saved_model).to_not be_available } }
-    context('inactive') { it('is false') { saved_model.deactivate!; expect(saved_model).to_not be_available } }
+    context 'deleted' do
+      it 'is false' do
+        saved_model.delete!
+        expect(saved_model).to_not be_available
+      end
+    end
+
+    context 'inactive' do
+      it 'is false' do
+        saved_model.deactivate!
+        expect(saved_model).to_not be_available
+      end
+    end
   end
 
 end

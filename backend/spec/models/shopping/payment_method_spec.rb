@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe PaymentMethod do
 
-  it { should allow_mass_assignment_of(:user_id) } 
+  it { should allow_mass_assignment_of(:user_id) }
   it { should allow_mass_assignment_of(:name) }
   it { should allow_mass_assignment_of(:currency_id) }
   it { should allow_mass_assignment_of(:balance) }
@@ -39,7 +39,7 @@ describe PaymentMethod do
       it 'equals balance minus total pending payment amount' do
 
         pending_balance = saved_model.balance - Currency.exchange(payment.amount, payment.currency, saved_model.currency)
-        expect(saved_model.pending_balance.to_s).to eq(pending_balance.to_s)        
+        expect(saved_model.pending_balance.to_s).to eq(pending_balance.to_s)
       end
     end
 

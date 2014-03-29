@@ -21,11 +21,11 @@ shared_examples 'item combinable model' do
 
       it 'increments the quantity' do
 
-        expect{ described_class.add_or_update(item, quantity) }.to change{ 
+        expect { described_class.add_or_update(item, quantity) }.to change{
           described_class.where(
-            item_type: item.class, 
+            item_type: item.class,
             item_id: item.id
-          ).first_or_initialize.quantity 
+          ).first_or_initialize.quantity
         }.by(quantity)
       end
     end
@@ -34,11 +34,11 @@ shared_examples 'item combinable model' do
 
       it 'updates the quantity' do
 
-        expect{ described_class.add_or_update(item, quantity, false) }.to change{ 
+        expect { described_class.add_or_update(item, quantity, false) }.to change{
           described_class.where(
-            item_type: item.class, 
+            item_type: item.class,
             item_id: item.id
-          ).first_or_initialize.quantity 
+          ).first_or_initialize.quantity
         }.to(quantity)
       end
     end

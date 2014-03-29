@@ -42,7 +42,7 @@ shared_examples 'deletable model' do
 
       it 'cannot change deleted status' do
 
-        expect{ saved_model.delete! }.to_not change{ saved_model.deleted? }
+        expect { saved_model.delete! }.to_not change { saved_model.deleted? }
       end
     end
 
@@ -57,7 +57,7 @@ shared_examples 'deletable model' do
 
       it 'changes deleted status to true' do
 
-        expect{ saved_model.delete! }.to change{ saved_model.deleted? }.to(!deleted)
+        expect { saved_model.delete! }.to change { saved_model.deleted? }.to(!deleted)
       end
     end
   end

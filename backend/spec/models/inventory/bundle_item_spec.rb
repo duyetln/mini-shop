@@ -14,7 +14,7 @@ describe BundleItem do
     context 'items not present' do
 
       before :each do
-        expect(saved_model).to receive(:items).and_return([ ])
+        expect(saved_model).to receive(:items).and_return([])
       end
 
       it 'is false' do
@@ -37,7 +37,7 @@ describe BundleItem do
       context 'items available' do
 
         it 'is true' do
-          
+
           expect(saved_model).to be_available
         end
       end

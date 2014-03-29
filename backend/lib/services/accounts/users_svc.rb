@@ -1,10 +1,9 @@
 class UsersSvc < Sinatra::Base
-
   before { content_type :json }
 
   helpers do
 
-    protected 
+    protected
 
     def find_user_by_id!
       @user = User.find_by_id(params[:id]) || halt(404)
@@ -24,10 +23,10 @@ class UsersSvc < Sinatra::Base
     end
 
     def accessible_params
-      params.slice *User.column_names
+      params.slice(*User.column_names)
     end
 
-    def respond_with(resource, response_options={}, json_options=user_response_options)
+    def respond_with(resource, response_options = {}, json_options = user_response_options)
       resource.present? || halt(404)
       status = block_given? ? yield(resource) : resource
       success_code = response_options[:success] || 200
@@ -62,5 +61,4 @@ class UsersSvc < Sinatra::Base
     !@user.confirmed? && @user.actv_code == params[:actv_code] || halt(404)
     respond_with(@user) { |c| c.confirm! }
   end
-
 end

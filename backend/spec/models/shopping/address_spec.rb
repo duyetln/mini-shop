@@ -11,9 +11,9 @@ describe Address do
   it { should have_readonly_attribute(:country) }
 
   it { should belong_to(:user) }
-  
+
   it { should validate_presence_of(:user) }
-  it { should validate_presence_of(:line1) } 
+  it { should validate_presence_of(:line1) }
   it { should validate_presence_of(:city) }
   it { should validate_presence_of(:country) }
 

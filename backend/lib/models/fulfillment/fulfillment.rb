@@ -2,7 +2,6 @@ require 'models/shared/enum'
 require 'models/shared/itemable'
 
 class Fulfillment < ActiveRecord::Base
-
   class PreparationFailure < StandardError; end
   class FulfillmentFailure < StandardError; end
   class ReversalFailure    < StandardError; end
@@ -10,7 +9,7 @@ class Fulfillment < ActiveRecord::Base
   include Enum
   include Itemable
 
-  enum :status, [ :prepared, :fulfilled, :reversed ]
+  enum :status, [:prepared, :fulfilled, :reversed]
 
   attr_protected :status, :fulfilled_at, :reversed_at
   attr_readonly :order_id
@@ -29,7 +28,7 @@ class Fulfillment < ActiveRecord::Base
     fulfillment.item  = item
     fulfillment.save!
 
-    fulfillment.prepared? || ( raise PreparationFailure )
+    fulfillment.prepared? || (fail PreparationFailure)
   end
 
   def fulfill!
@@ -38,7 +37,7 @@ class Fulfillment < ActiveRecord::Base
       self.fulfilled_at = DateTime.now
       save!
     end
-    fulfilled? || ( raise FulfillmentFailure )
+    fulfilled? || (fail FulfillmentFailure)
   end
 
   def reverse!
@@ -47,17 +46,17 @@ class Fulfillment < ActiveRecord::Base
       self.reversed_at = DateTime.now
       save!
     end
-    reversed? || ( raise ReversalFailure )
+    reversed? || (fail ReversalFailure)
   end
 
   protected
 
   def process_fulfillment!
-    raise 'Must be implemented in derived class'
+    fail 'Must be implemented in derived class'
   end
 
   def process_reversal!
-    raise 'Must be implemented in derived class'
+    fail 'Must be implemented in derived class'
   end
 
   def initialize_values
@@ -67,5 +66,4 @@ class Fulfillment < ActiveRecord::Base
       self.reversed_at  = nil
     end
   end
-
 end

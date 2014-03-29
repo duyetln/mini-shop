@@ -5,7 +5,7 @@ describe Enum do
   before :all do
     class TestClass
       include Enum
-      enum :status, [ :foo, :bar ]
+      enum :status, [:foo, :bar]
       attr_accessor :status
     end
   end
@@ -25,7 +25,7 @@ describe Enum do
 
     it 'sets the constant with correct values' do
 
-      expect(test_class::STATUS).to eq({ foo: 0, bar: 1 })
+      expect(test_class::STATUS).to eq(foo: 0, bar: 1)
     end
   end
 

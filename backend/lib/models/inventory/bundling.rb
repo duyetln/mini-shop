@@ -1,7 +1,6 @@
 require 'models/shared/item_combinable'
 
 class Bundling < ActiveRecord::Base
-  
   include ItemCombinable
 
   attr_readonly :bundle_id
@@ -10,7 +9,6 @@ class Bundling < ActiveRecord::Base
 
   validates :bundle, presence: true
 
-  validates :bundle_id, uniqueness: { scope: [ :item_type, :item_id ] }
+  validates :bundle_id, uniqueness: { scope: [:item_type, :item_id] }
   validates :item_type, inclusion: { in: %w{ DigitalItem PhysicalItem } }
-
 end

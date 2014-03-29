@@ -1,5 +1,4 @@
 class Currency < ActiveRecord::Base
-  
   attr_readonly :code
 
   validates :code, length: { is: 3 }
@@ -9,7 +8,6 @@ class Currency < ActiveRecord::Base
   before_save :upcase_code
 
   def self.exchange(amount, src_curr, dst_curr)
-
     amount   = BigDecimal.new(amount.to_s)
     src_unit = src_curr.code.upcase.to_sym
     dst_unit = dst_curr.code.upcase.to_sym
@@ -17,7 +15,7 @@ class Currency < ActiveRecord::Base
     src_rate = CURRENCY_RATES[:USD][src_unit]
     dst_rate = CURRENCY_RATES[:USD][dst_unit]
 
-    ( amount * dst_rate / src_rate ).ceil(4)
+    (amount * dst_rate / src_rate).ceil(4)
   end
 
   protected

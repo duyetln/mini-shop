@@ -23,8 +23,8 @@ krw = Currency.where(code: 'KRW').first_or_create!
 gbp = Currency.where(code: 'GBP').first_or_create!
 
 no_discount           = Discount.where(name: 'No discount', rate: 0.0).first_or_create!
-black_friday_discount = Discount.where(name: 'Black Friday Discount', rate: 0.75).first_or_create!(start_at: DateTime.new(2013,11,25), end_at: DateTime.new(2013,12,9))
-christmas_discount    = Discount.where(name: 'Christmas Discount', rate: 0.5).first_or_create!(start_at: DateTime.new(2013,12,23), end_at: DateTime.new(2013,12,30))
+black_friday_discount = Discount.where(name: 'Black Friday Discount', rate: 0.75).first_or_create!(start_at: DateTime.new(2013, 11, 25), end_at: DateTime.new(2013, 12, 9))
+christmas_discount    = Discount.where(name: 'Christmas Discount', rate: 0.5).first_or_create!(start_at: DateTime.new(2013, 12, 23), end_at: DateTime.new(2013, 12, 30))
 
 sc2_standard_pp = Pricepoint.where(name: 'SC2 Standard Pricepoint').first_or_create!
 deluxe_ed_pp    = Pricepoint.where(name: 'SC2 Deluxe Pricepoint').first_or_create!
@@ -53,4 +53,3 @@ StorefrontItem.where(item_type: sc2_retail.class,   item_id: sc2_retail.id,    p
 StorefrontItem.where(item_type: sc2_digital.class,  item_id: sc2_digital.id,   price_id: sc2_standard_price.id).first_or_create!(name: 'StarCraft 2 Digital Edition')
 StorefrontItem.where(item_type: deluxe_ed.class,    item_id: deluxe_ed.id,     price_id: deluxe_ed_price.id).first_or_create!(name: 'StarCraft 2 Deluxe Edition')
 StorefrontItem.where(item_type: collector_ed.class, item_id: collector_ed.id,  price_id: collector_ed_price.id).first_or_create!(name: "StarCraft 2 Collector's Edition")
-

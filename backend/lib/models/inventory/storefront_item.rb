@@ -2,7 +2,6 @@ require 'models/shared/item_resource'
 require 'models/shared/orderable'
 
 class StorefrontItem < ActiveRecord::Base
-
   include ItemResource
   include Orderable
   include Itemable
@@ -22,5 +21,4 @@ class StorefrontItem < ActiveRecord::Base
   def available?
     super && item.available?
   end
-
 end

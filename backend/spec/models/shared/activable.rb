@@ -43,7 +43,7 @@ shared_examples 'activable model' do
 
       it 'cannot change active status' do
 
-        expect{ saved_model.activate! }.to_not change{ saved_model.active? }
+        expect { saved_model.activate! }.to_not change { saved_model.active? }
       end
     end
 
@@ -58,7 +58,7 @@ shared_examples 'activable model' do
 
       it 'changes active status to true' do
 
-        expect{ saved_model.activate! }.to change{ saved_model.active? }.to(!active)
+        expect { saved_model.activate! }.to change { saved_model.active? }.to(!active)
       end
     end
   end
@@ -80,7 +80,7 @@ shared_examples 'activable model' do
 
       it 'cannot change active status' do
 
-        expect{ saved_model.deactivate! }.to_not change{ saved_model.active? }
+        expect { saved_model.deactivate! }.to_not change { saved_model.active? }
       end
     end
 
@@ -95,13 +95,13 @@ shared_examples 'activable model' do
 
       it 'changes active status to false' do
 
-        expect{ saved_model.deactivate! }.to change{ saved_model.active? }.to(!active)
+        expect { saved_model.deactivate! }.to change { saved_model.active? }.to(!active)
       end
     end
   end
 
   describe '#inactive?' do
-      
+
     it 'opposites #active?' do
 
       expect(saved_model.inactive?).to eq(!new_model.active?)

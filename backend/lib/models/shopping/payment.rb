@@ -1,7 +1,6 @@
 require 'models/shared/committable'
 
 class Payment < ActiveRecord::Base
-
   include Committable
 
   belongs_to :payment_method
@@ -28,8 +27,8 @@ class Payment < ActiveRecord::Base
   def commit!
     if super
       payment_method.balance -= Currency.exchange(
-        amount, 
-        currency, 
+        amount,
+        currency,
         payment_method_currency
       )
       payment_method.save!

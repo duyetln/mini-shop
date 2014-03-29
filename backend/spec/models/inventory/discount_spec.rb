@@ -10,7 +10,7 @@ describe Discount do
 
   describe 'discount dates' do
 
-    let(:model_args) { [ :discount, :half ] }
+    let(:model_args) { [:discount, :half] }
 
     context 'start date is after end date' do
 
@@ -35,7 +35,7 @@ describe Discount do
 
   describe '#rate_at' do
 
-    let(:model_args) { [ :discount, :random, time ] }
+    let(:model_args) { [:discount, :random, time] }
 
     context 'past' do
 
@@ -70,13 +70,13 @@ describe Discount do
 
   describe '#discounted?' do
 
-    let(:model_args) { [ :discount, :random ] } 
+    let(:model_args) { [:discount, :random] }
 
     context '#rate_at is non-zero' do
 
       it 'is false' do
 
-        expect(new_model).to receive(:rate_at).and_return(rand(10)+1)
+        expect(new_model).to receive(:rate_at).and_return(rand(10) + 1)
         expect(new_model.discounted?).to be_true
       end
     end
@@ -93,7 +93,7 @@ describe Discount do
 
   describe '#current_rate' do
 
-    let(:model_args) { [ :discount, :random ] } 
+    let(:model_args) { [:discount, :random] }
 
     it 'delegates to #rate_at' do
 

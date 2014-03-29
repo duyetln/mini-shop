@@ -2,16 +2,15 @@ module ItemSvcEndpoints
   extend ActiveSupport::Concern
 
   module ClassMethods
-
     def generate_endpoints!
       get "/#{namespace}/ping" do
-        respond_with({
+        respond_with(
           active:   settings.item_class.active.count,
           inactive: settings.item_class.inactive.count,
           deleted:  settings.item_class.deleted.count,
           kept: settings.item_class.kept.count,
           total:    settings.item_class.count
-        })
+        )
       end
 
       get "/#{namespace}" do
@@ -48,9 +47,6 @@ module ItemSvcEndpoints
         find_item!
         respond_with(@item) { |s| s.deactivate! }
       end
-
     end
-
   end
-
 end

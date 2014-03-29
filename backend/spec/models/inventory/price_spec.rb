@@ -13,7 +13,7 @@ describe Price do
 
     context 'discount present' do
 
-      let(:model_args) { [ :price, :discounted ] }
+      let(:model_args) { [:price, :discounted] }
 
       it 'delegates to Discount#discounted?' do
 
@@ -36,11 +36,11 @@ describe Price do
 
     context 'discount present' do
 
-      let(:model_args) { [ :price, :discounted ] }
+      let(:model_args) { [:price, :discounted] }
 
       it 'returns correct amount' do
 
-        expect(saved_model.amount(currency)).to eq(saved_model.pricepoint.amount(currency) * ( 1 - saved_model.discount.current_rate) )
+        expect(saved_model.amount(currency)).to eq(saved_model.pricepoint.amount(currency) * (1 - saved_model.discount.current_rate))
       end
     end
 

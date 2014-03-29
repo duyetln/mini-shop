@@ -1,5 +1,4 @@
 module Quantifiable
-
   extend ActiveSupport::Concern
 
   included do
@@ -11,7 +10,7 @@ module Quantifiable
   [:quantity].each do |method|
     class_eval <<-EOF
       def #{method}(*args)
-        defined?(super) ? super : ( raise NotImplementedError, "#{__method__} must be defined in derived class" )
+        defined?(super) ? super : (raise NotImplementedError, "#{__method__} must be defined in derived class")
       end
     EOF
   end
@@ -19,9 +18,8 @@ module Quantifiable
   [:quantity=].each do |method|
     class_eval <<-EOF
       def #{method}(*args)
-        defined?(super) ? super : ( raise NotImplementedError, "#{__method__} must be defined in derived class" )
+        defined?(super) ? super : (raise NotImplementedError, "#{__method__} must be defined in derived class")
       end
     EOF
   end
-  
 end

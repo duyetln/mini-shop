@@ -2,13 +2,12 @@ module Enum
   extend ActiveSupport::Concern
 
   module ClassMethods
-
     def enum(field, *values)
       values.flatten!
       const_name = "#{field}".upcase
       const_set(
-        const_name, 
-        values.reduce({}) do |hash,status| 
+        const_name,
+        values.reduce({}) do |hash, status|
           hash[status.to_sym] = values.index(status)
           hash
         end
@@ -20,7 +19,5 @@ module Enum
         end
       end
     end
-
   end
-
 end

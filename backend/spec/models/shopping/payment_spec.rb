@@ -71,8 +71,8 @@ describe Payment do
 
       payment_method = saved_model.payment_method
       amount = Currency.exchange(saved_model.amount, saved_model.currency, payment_method.currency)
-      expect{ saved_model.commit! }.to change{ saved_model.payment_method.balance }.by(-amount)
+      expect { saved_model.commit! }.to change { saved_model.payment_method.balance }.by(-amount)
     end
   end
-  
+
 end

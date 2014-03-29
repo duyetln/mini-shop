@@ -1,11 +1,10 @@
 class User < ActiveRecord::Base
-
   attr_protected :uuid, :actv_code
   attr_readonly :uuid
 
   validates :first_name, presence: true
-  validates :last_name,  presence: true                   
-  validates :email,      presence: true 
+  validates :last_name,  presence: true
+  validates :email,      presence: true
   validates :birthdate,  presence: true
   validates :password,   presence: true
 
@@ -24,10 +23,12 @@ class User < ActiveRecord::Base
     user.present? && user.confirmed? && BCrypt::Password.new(user.password) == password ? user : nil
   end
 
-  def confirmed?; actv_code.blank?; end
+  def confirmed?
+    actv_code.blank?
+  end
 
   def confirm!
-    if !confirmed?
+    unless confirmed?
       self.actv_code = nil
       save!
     end
@@ -45,5 +46,4 @@ class User < ActiveRecord::Base
   def encrypt_password
     self.password = BCrypt::Password.create(password)
   end
-
 end

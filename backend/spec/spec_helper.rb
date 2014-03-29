@@ -17,17 +17,19 @@ module SpecHelpers
   extend ActiveSupport::Concern
   include Rack::Test::Methods
 
-  def app; described_class; end
+  def app
+    described_class
+  end
 
   included do
     # misc helpers
-    let(:random_string) { |length=10| Faker::Lorem.characters(length) }
+    let(:random_string) { |length = 10| Faker::Lorem.characters(length) }
 
     # unit test helpers
-    let(:model_args) { [ described_class.to_s.underscore.to_sym ] }
+    let(:model_args) { [described_class.to_s.underscore.to_sym] }
     let(:saved_model) { FactoryGirl.create(*model_args) }
     let(:new_model) { FactoryGirl.build(*model_args) }
-    
+
     # service test helpers
     let(:items) { item_class.kept }
     let(:namespace) { described_class.to_s.tableize }

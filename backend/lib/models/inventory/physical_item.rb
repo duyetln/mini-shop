@@ -1,7 +1,6 @@
 require 'models/shared/item_resource'
 
 class PhysicalItem < ActiveRecord::Base
-
   include ItemResource
   include Quantifiable
 
@@ -12,5 +11,4 @@ class PhysicalItem < ActiveRecord::Base
   def prepare!(order)
     ShippingFulfillment.prepare!(order, self)
   end
-
 end

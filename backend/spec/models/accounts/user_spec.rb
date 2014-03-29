@@ -38,19 +38,19 @@ describe User do
 
     context 'new user' do
 
-      it('sets uuid') { expect(saved_model.uuid).to be_present } 
+      it('sets uuid') { expect(saved_model.uuid).to be_present }
       it('sets actv_code') { expect(saved_model.actv_code).to be_present }
       it('sets password') { expect(saved_model.password).to be_present }
 
-      it 'encrypts password' do 
-        
+      it 'encrypts password' do
+
         expect(BCrypt::Password.new(user.password)).to eq(password)
       end
     end
 
     context 'created user' do
 
-      it("doesn't change uuid") { expect{ saved_model.save }.to_not change{ saved_model.uuid } }
+      it("doesn't change uuid") { expect { saved_model.save }.to_not change { saved_model.uuid } }
 
       context 'password changed' do
 
@@ -89,7 +89,7 @@ describe User do
       end
     end
 
-    context 'not confirmed' do 
+    context 'not confirmed' do
 
       let(:confirmed) { false }
 
@@ -126,7 +126,7 @@ describe User do
     context 'matching uuid, matching password, confirmed user' do
 
       it 'returns the user' do
-        
+
         user.confirm!
         expect(User.authenticate(user.uuid, password)).to eq(user)
       end

@@ -1,7 +1,6 @@
 require 'models/shared/item_combinable'
 
 class Shipment < ActiveRecord::Base
-
   include ItemCombinable
 
   attr_readonly :user_id, :order_id, :shipping_address_id
@@ -14,7 +13,6 @@ class Shipment < ActiveRecord::Base
   validates :order, presence: true
   validates :shipping_address, presence: true
 
-  validates :order_id,  uniqueness: { scope: [ :item_type, :item_id ] }
+  validates :order_id,  uniqueness: { scope: [:item_type, :item_id] }
   validates :item_type, inclusion: { in: %w{ PhysicalItem } }
-
 end

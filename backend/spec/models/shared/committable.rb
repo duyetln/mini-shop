@@ -53,12 +53,12 @@ shared_examples 'committable model' do
 
       it 'cannot change committed status' do
 
-        expect{ saved_model.commit! }.to_not change{ saved_model.committed? }
+        expect { saved_model.commit! }.to_not change { saved_model.committed? }
       end
 
       it 'cannot change committed_at' do
 
-        expect{ saved_model.commit! }.to_not change{ saved_model.committed_at }
+        expect { saved_model.commit! }.to_not change { saved_model.committed_at }
       end
     end
 
@@ -73,12 +73,12 @@ shared_examples 'committable model' do
 
       it 'changes committed status to true' do
 
-        expect{ saved_model.commit! }.to change{ saved_model.committed? }.to(!committed)
+        expect { saved_model.commit! }.to change { saved_model.committed? }.to(!committed)
       end
 
       it 'sets committed_at' do
 
-        expect{ saved_model.commit! }.to change{ saved_model.committed_at }
+        expect { saved_model.commit! }.to change { saved_model.committed_at }
         expect(saved_model.committed_at).to be_present
       end
     end

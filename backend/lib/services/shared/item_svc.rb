@@ -10,13 +10,10 @@ module ItemSvc
   include ItemSvcEndpoints
 
   module ClassMethods
-
     def generate!
       generate_filters!
       generate_helpers!
       generate_endpoints!
     end
-
   end
-
 end
