@@ -10,7 +10,6 @@ describe BundleItem do
   it { should have_many(:bundlings).with_foreign_key(:bundle_id) }
 
   describe '#add_or_update' do
-    let(:qty) { rand(1..10) }
     let(:acc) { [true, false].sample }
 
     context 'kept' do

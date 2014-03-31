@@ -13,7 +13,6 @@ shared_examples 'item combinable model' do
   end
 
   let(:item) { saved_model.item }
-  let(:qty) { rand(1..10) }
 
   describe '.add_or_update' do
     context 'accumulation' do
