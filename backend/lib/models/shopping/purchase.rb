@@ -20,40 +20,35 @@ class Purchase < ActiveRecord::Base
 
   validates :committed, uniqueness: { scope: :user_id }, unless: :committed?
 
-  delegate :currency, to: :payment_method, prefix: true
+  delegate :currency, to: :payment_method, prefix: true, allow_nil: true
 
   def self.pending_purchase(user)
     where(user_id: user.id).pending.first_or_create
   end
 
-  def add(item, currency, qty = nil)
-    if persisted? && pending?
-      order = orders.kept.where(item_type: item.class, item_id: item.id).first_or_initialize
-      order.currency   = currency
-      order.qty ||= 0
-      qty.present? ? order.qty  = qty : order.qty += 1
-      order.save ? order : nil
-    end
+  def add_or_update(item, currency, qty = 1)
+    orders.add_or_update(item, qty, false) { |order| order.currency = currency } if pending?
   end
 
   def remove(item)
-    if persisted? && pending?
-      order =
-        orders.kept.find { |o| o.item == item } ||
-        orders.kept.find { |o| o      == item }
-      order.present? && order.delete! ? order : nil
-    end
+    orders.retrieve(item) { |order| order.delete! } if pending?
   end
 
   [:amount, :tax].each do |method|
     define_method method do |currency = payment_method_currency|
-      orders.kept.reduce(BigDecimal('0.0')) { |a, e| a += Currency.exchange(e.send(method), e.currency, currency) }
+      orders.reduce(BigDecimal('0.0')) do |a, e| 
+        a += Currency.exchange(
+          e.send(method), 
+          e.currency, 
+          currency
+        )
+      end
     end
   end
 
   def prepare!
     if persisted? && committed?
-      orders.kept.all? { |order| order.prepare! }
+      orders.all? { |order| order.prepare! }
     end
   end
 
@@ -71,7 +66,7 @@ class Purchase < ActiveRecord::Base
           )
         )
 
-        payment.commit! if orders.kept.all? { |order| order.fulfill! }
+        payment.commit! if orders.all? { |order| order.fulfill! }
       end
     end
   end
