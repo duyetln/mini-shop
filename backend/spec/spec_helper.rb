@@ -36,7 +36,9 @@ module SpecHelpers
     let(:parsed_response) { Yajl::Parser.parse(last_response.body, symbolize_keys: true) }
 
     # common helpers
+    let(:user) { FactoryGirl.create :user }
     let(:item) { FactoryGirl.create [:bundle_item, :physical_item, :digital_item].sample }
+    let(:sf_item) { FactoryGirl.create :storefront_item }
     let(:qty) { rand(1..10) }
     let(:currency) { FactoryGirl.create [:usd, :eur, :gbp].sample } 
 

@@ -4,6 +4,7 @@ require 'spec/models/shared/item_resource'
 describe BundleItem do
 
   let(:bundlings) { saved_model.bundlings }
+  let(:bundling) { bundlings.sample }
 
   it_behaves_like 'item resource'
 
@@ -70,8 +71,6 @@ describe BundleItem do
       before :each do
         saved_model.add_or_update(item)
       end
-
-      let(:bundling) { bundlings.sample }
 
       it 'removes the item' do
         expect(bundlings).to receive(:retrieve).with(item).and_yield(bundling)
