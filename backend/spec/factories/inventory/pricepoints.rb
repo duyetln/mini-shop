@@ -3,11 +3,11 @@ FactoryGirl.define do
     name {  Faker::Lorem.characters(20) }
 
     after(:create) do |pricepoint|
-      %w{ USD EUR GBP }.each do |curr|
+      [:usd, :eur, :gbp].each do |curr|
         PricepointPrice.create(
           pricepoint_id: pricepoint.id,
           amount: rand(50),
-          currency_id: Currency.where(code: curr).first_or_create.id
+          currency_id: create(curr).id
         )
       end
     end

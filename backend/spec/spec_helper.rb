@@ -38,6 +38,7 @@ module SpecHelpers
     # common helpers
     let(:item) { FactoryGirl.create [:bundle_item, :physical_item, :digital_item].sample }
     let(:qty) { rand(1..10) }
+    let(:currency) { FactoryGirl.create [:usd, :eur, :gbp].sample } 
 
     def expect_status(code)
       expect(last_response.status).to eq(code)
