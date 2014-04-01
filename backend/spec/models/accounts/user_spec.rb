@@ -22,22 +22,22 @@ describe User do
   it { should ensure_length_of(:password).is_at_least(5) }
 
   describe 'factory model' do
-    it('is valid') { expect(saved_model.valid?).to be_true }
-    it('saves successfully') { expect(saved_model.save).to be_true }
+    it('is valid') { expect(model.valid?).to be_true }
+    it('saves successfully') { expect(model.save).to be_true }
   end
 
-  let(:password) { saved_model.password }
+  let(:password) { model.password }
   let :user do
-    saved_model.password = password
-    saved_model.save!
-    saved_model
+    model.password = password
+    model.save!
+    model
   end
 
   describe '#save' do
     context 'new user' do
-      it('sets uuid') { expect(saved_model.uuid).to be_present }
-      it('sets actv_code') { expect(saved_model.actv_code).to be_present }
-      it('sets password') { expect(saved_model.password).to be_present }
+      it('sets uuid') { expect(model.uuid).to be_present }
+      it('sets actv_code') { expect(model.actv_code).to be_present }
+      it('sets password') { expect(model.password).to be_present }
 
       it 'encrypts password' do
         expect(BCrypt::Password.new(user.password)).to eq(password)
@@ -45,14 +45,14 @@ describe User do
     end
 
     context 'created user' do
-      it('does not change uuid') { expect { saved_model.save! }.to_not change { saved_model.uuid } }
+      it('does not change uuid') { expect { model.save! }.to_not change { model.uuid } }
 
       context 'password changed' do
         it 'encrypts new password' do
           new_password = Faker::Lorem.characters(20)
-          saved_model.password = new_password
-          expect(saved_model.save).to be_true
-          expect(BCrypt::Password.new(saved_model.password)).to eq(new_password)
+          model.password = new_password
+          expect(model.save).to be_true
+          expect(BCrypt::Password.new(model.password)).to eq(new_password)
         end
       end
     end
@@ -60,20 +60,20 @@ describe User do
 
   describe '#confirmed?' do
     it 'checks blank-ness of #active_code' do
-      expect(saved_model.confirmed?).to eq(saved_model.actv_code.blank?)
+      expect(model.confirmed?).to eq(model.actv_code.blank?)
     end
   end
 
   describe '#confirm!' do
     before :each do
-      expect(saved_model).to receive(:confirmed?).and_return(confirmed)
+      expect(model).to receive(:confirmed?).and_return(confirmed)
     end
 
     context 'confirmed' do
       let(:confirmed) { true }
 
       it 'returns false' do
-        expect(saved_model.confirm!).to be_false
+        expect(model.confirm!).to be_false
       end
     end
 
@@ -81,12 +81,12 @@ describe User do
       let(:confirmed) { false }
 
       it 'returns true' do
-        expect(saved_model.confirm!).to be_true
+        expect(model.confirm!).to be_true
       end
 
       it 'clears the activation code' do
-        saved_model.confirm!
-        expect(saved_model.actv_code).to be_blank
+        model.confirm!
+        expect(model.actv_code).to be_blank
       end
     end
   end

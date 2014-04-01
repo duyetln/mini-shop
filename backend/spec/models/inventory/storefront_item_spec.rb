@@ -20,30 +20,30 @@ describe StorefrontItem do
   describe '#available?' do
     context 'item unavailable' do
       it 'is false' do
-        expect(saved_model.item).to receive(:available?).and_return(false)
-        expect(saved_model).to_not be_available
+        expect(model.item).to receive(:available?).and_return(false)
+        expect(model).to_not be_available
       end
     end
 
     context 'item available' do
       it 'is true' do
-        expect(saved_model.item).to receive(:available?).and_return(true)
-        expect(saved_model).to be_available
+        expect(model.item).to receive(:available?).and_return(true)
+        expect(model).to be_available
       end
     end
   end
 
   describe '#amount' do
-    let(:currency) { saved_model.price.pricepoint.pricepoint_prices.sample.currency }
+    let(:currency) { model.price.pricepoint.pricepoint_prices.sample.currency }
 
     it 'delegates to Price#amount' do
-      expect(saved_model.amount(currency)).to eq(saved_model.price.amount(currency))
+      expect(model.amount(currency)).to eq(model.price.amount(currency))
     end
   end
 
   describe '#discounted?' do
     it 'delegates to Price#discounted?' do
-      expect(saved_model.discounted?).to eq(saved_model.price.discounted?)
+      expect(model.discounted?).to eq(model.price.discounted?)
     end
   end
 

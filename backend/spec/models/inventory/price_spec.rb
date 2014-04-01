@@ -14,31 +14,31 @@ describe Price do
       let(:model_args) { [:price, :discounted] }
 
       it 'delegates to Discount#discounted?' do
-        expect(saved_model.discounted?).to eq(saved_model.discount.discounted?)
+        expect(model.discounted?).to eq(model.discount.discounted?)
       end
     end
 
     context 'discount not present' do
       it 'is not discounted' do
-        expect(saved_model.discounted?).to be_false
+        expect(model.discounted?).to be_false
       end
     end
   end
 
   describe '#amount' do
-    let(:currency) { saved_model.pricepoint.pricepoint_prices.sample.currency }
+    let(:currency) { model.pricepoint.pricepoint_prices.sample.currency }
 
     context 'discount present' do
       let(:model_args) { [:price, :discounted] }
 
       it 'returns correct amount' do
-        expect(saved_model.amount(currency)).to eq(saved_model.pricepoint.amount(currency) * (1 - saved_model.discount.current_rate))
+        expect(model.amount(currency)).to eq(model.pricepoint.amount(currency) * (1 - model.discount.current_rate))
       end
     end
 
     context 'discount not present' do
       it 'returns correct amount' do
-        expect(saved_model.amount(currency)).to eq(saved_model.pricepoint.amount(currency))
+        expect(model.amount(currency)).to eq(model.pricepoint.amount(currency))
       end
     end
   end

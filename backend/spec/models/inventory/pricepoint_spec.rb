@@ -13,14 +13,14 @@ describe Pricepoint do
   describe '#amount' do
     context 'currency found' do
       it 'returns correct amount' do
-        pricepoint_price = saved_model.pricepoint_prices.sample
-        expect(saved_model.amount(pricepoint_price.currency)).to eq(pricepoint_price.amount)
+        pricepoint_price = model.pricepoint_prices.sample
+        expect(model.amount(pricepoint_price.currency)).to eq(pricepoint_price.amount)
       end
     end
 
     context 'currency not found' do
       it 'returns nil' do
-        expect(saved_model.amount(Currency.new)).to eq(nil)
+        expect(model.amount(Currency.new)).to eq(nil)
       end
     end
   end

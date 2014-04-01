@@ -22,34 +22,34 @@ shared_examples 'committable model' do
 
   describe '#committed?' do
     it 'equals #committed' do
-      expect(saved_model.committed?).to eq(saved_model.committed)
+      expect(model.committed?).to eq(model.committed)
     end
   end
 
   describe '#pending?' do
     it 'opposites #committed?' do
-      expect(saved_model.pending?).to eq(!saved_model.committed?)
+      expect(model.pending?).to eq(!model.committed?)
     end
   end
 
   describe '#commit!' do
     before :each do
-      saved_model.committed = committed
+      model.committed = committed
     end
 
     context 'committed' do
       let(:committed) { true }
 
       it 'cannot be executed' do
-        expect(saved_model.commit!).to_not be_true
+        expect(model.commit!).to_not be_true
       end
 
       it 'cannot change committed status' do
-        expect { saved_model.commit! }.to_not change { saved_model.committed? }
+        expect { model.commit! }.to_not change { model.committed? }
       end
 
       it 'cannot change committed_at' do
-        expect { saved_model.commit! }.to_not change { saved_model.committed_at }
+        expect { model.commit! }.to_not change { model.committed_at }
       end
     end
 
@@ -57,16 +57,16 @@ shared_examples 'committable model' do
       let(:committed) { false }
 
       it 'can be executed' do
-        expect(saved_model.commit!).to be_true
+        expect(model.commit!).to be_true
       end
 
       it 'changes committed status to true' do
-        expect { saved_model.commit! }.to change { saved_model.committed? }.to(!committed)
+        expect { model.commit! }.to change { model.committed? }.to(!committed)
       end
 
       it 'sets committed_at' do
-        expect { saved_model.commit! }.to change { saved_model.committed_at }
-        expect(saved_model.committed_at).to be_present
+        expect { model.commit! }.to change { model.committed_at }
+        expect(model.committed_at).to be_present
       end
     end
   end

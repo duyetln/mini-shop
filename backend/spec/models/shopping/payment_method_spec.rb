@@ -22,26 +22,26 @@ describe PaymentMethod do
 
   it { should validate_numericality_of(:balance).is_greater_than_or_equal_to(0) }
 
-  let(:payment) { FactoryGirl.create(:payment, payment_method: saved_model) }
+  let(:payment) { FactoryGirl.create(:payment, payment_method: model) }
 
   describe '#pending_balance' do
     context 'no payments' do
       it 'equals balance' do
-        expect(saved_model.pending_balance).to eq(saved_model.balance)
+        expect(model.pending_balance).to eq(model.balance)
       end
     end
 
     context 'pending payments' do
       it 'equals balance minus total pending payment amount' do
-        pending_balance = saved_model.balance - Currency.exchange(payment.amount, payment.currency, saved_model.currency)
-        expect(saved_model.pending_balance).to eq(pending_balance)
+        pending_balance = model.balance - Currency.exchange(payment.amount, payment.currency, model.currency)
+        expect(model.pending_balance).to eq(pending_balance)
       end
     end
 
     context 'committed payments' do
       it 'equals balance' do
         payment.commit!
-        expect(saved_model.pending_balance).to eq(saved_model.balance)
+        expect(model.pending_balance).to eq(model.balance)
       end
     end
   end
@@ -50,8 +50,8 @@ describe PaymentMethod do
     let(:amount) { rand(1..10) }
 
     it 'checks against #pending_balance amount' do
-      enough = (saved_model.pending_balance >= amount)
-      expect(saved_model.enough?(amount)).to eq(enough)
+      enough = (model.pending_balance >= amount)
+      expect(model.enough?(amount)).to eq(enough)
     end
   end
 

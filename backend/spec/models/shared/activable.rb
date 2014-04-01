@@ -20,24 +20,24 @@ shared_examples 'activable model' do
 
   describe '#active?' do
     it 'equals #active' do
-      expect(saved_model.active?).to eq(saved_model.active)
+      expect(model.active?).to eq(model.active)
     end
   end
 
   describe '#activate!' do
     before :each do
-      saved_model.active = active
+      model.active = active
     end
 
     context 'active' do
       let(:active) { true }
 
       it 'cannot be executed' do
-        expect(saved_model.activate!).to_not be_true
+        expect(model.activate!).to_not be_true
       end
 
       it 'cannot change active status' do
-        expect { saved_model.activate! }.to_not change { saved_model.active? }
+        expect { model.activate! }.to_not change { model.active? }
       end
     end
 
@@ -45,29 +45,29 @@ shared_examples 'activable model' do
       let(:active) { false }
 
       it 'can be executed' do
-        expect(saved_model.activate!).to be_true
+        expect(model.activate!).to be_true
       end
 
       it 'changes active status to true' do
-        expect { saved_model.activate! }.to change { saved_model.active? }.to(!active)
+        expect { model.activate! }.to change { model.active? }.to(!active)
       end
     end
   end
 
   describe '#deactivate!' do
     before :each do
-      saved_model.active = active
+      model.active = active
     end
 
     context 'inactive' do
       let(:active) { false }
 
       it 'cannot be executed' do
-        expect(saved_model.deactivate!).to_not be_true
+        expect(model.deactivate!).to_not be_true
       end
 
       it 'cannot change active status' do
-        expect { saved_model.deactivate! }.to_not change { saved_model.active? }
+        expect { model.deactivate! }.to_not change { model.active? }
       end
     end
 
@@ -75,18 +75,18 @@ shared_examples 'activable model' do
       let(:active) { true }
 
       it 'can be executed' do
-        expect(saved_model.deactivate!).to be_true
+        expect(model.deactivate!).to be_true
       end
 
       it 'changes active status to false' do
-        expect { saved_model.deactivate! }.to change { saved_model.active? }.to(!active)
+        expect { model.deactivate! }.to change { model.active? }.to(!active)
       end
     end
   end
 
   describe '#inactive?' do
     it 'opposites #active?' do
-      expect(saved_model.inactive?).to eq(!saved_model.active?)
+      expect(model.inactive?).to eq(!model.active?)
     end
   end
 
