@@ -12,6 +12,10 @@ shared_examples 'item combinable model' do
     it { should respond_to(:retrieve).with(1).argument }
   end
 
+  before :each do
+    saved_model.save!
+  end
+
   let(:item) { saved_model.item }
 
   describe '.add_or_update' do
