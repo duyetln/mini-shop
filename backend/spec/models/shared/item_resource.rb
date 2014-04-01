@@ -9,8 +9,8 @@ shared_examples 'item resource' do
   it_behaves_like 'displayable model'
 
   describe 'factory model' do
-    it('is valid') { expect(new_model).to be_valid }
-    it('saves successfully') { expect(saved_model).to be_present }
+    it('is valid') { expect(saved_model.valid?).to be_true }
+    it('saves successfully') { expect(saved_model.save).to be_true }
   end
 
   describe '#available?' do

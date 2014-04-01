@@ -61,7 +61,7 @@
 #     let(:uuid) { user.uuid }
 #     let :user do
 #       new_model.password = password
-#       new_model.save
+#       new_model.save!
 #       new_model
 #     end
 

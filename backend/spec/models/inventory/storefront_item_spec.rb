@@ -34,18 +34,16 @@ describe StorefrontItem do
   end
 
   describe '#amount' do
-    let(:currency) { new_model.price.pricepoint.pricepoint_prices.sample.currency }
+    let(:currency) { saved_model.price.pricepoint.pricepoint_prices.sample.currency }
 
     it 'delegates to Price#amount' do
       expect(saved_model.amount(currency)).to eq(saved_model.price.amount(currency))
-      expect(new_model.amount(currency)).to eq(new_model.price.amount(currency))
     end
   end
 
   describe '#discounted?' do
     it 'delegates to Price#discounted?' do
       expect(saved_model.discounted?).to eq(saved_model.price.discounted?)
-      expect(new_model.discounted?).to eq(new_model.price.discounted?)
     end
   end
 

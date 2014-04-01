@@ -86,7 +86,7 @@ shared_examples 'activable model' do
 
   describe '#inactive?' do
     it 'opposites #active?' do
-      expect(saved_model.inactive?).to eq(!new_model.active?)
+      expect(saved_model.inactive?).to eq(!saved_model.active?)
     end
   end
 

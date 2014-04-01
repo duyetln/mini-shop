@@ -28,7 +28,6 @@ module SpecHelpers
     # unit test helpers
     let(:model_args) { [described_class.to_s.underscore.to_sym] }
     let(:saved_model) { FactoryGirl.build(*model_args) }
-    let(:new_model) { FactoryGirl.build(*model_args) }
 
     # service test helpers
     let(:items) { item_class.kept }

@@ -22,15 +22,15 @@ describe User do
   it { should ensure_length_of(:password).is_at_least(5) }
 
   describe 'factory model' do
-    it('is valid') { expect(new_model.valid?).to be_true }
-    it('saves successfully') { expect(saved_model).to be_present }
+    it('is valid') { expect(saved_model.valid?).to be_true }
+    it('saves successfully') { expect(saved_model.save).to be_true }
   end
 
-  let(:password) { new_model.password }
+  let(:password) { saved_model.password }
   let :user do
-    new_model.password = password
-    new_model.save
-    new_model
+    saved_model.password = password
+    saved_model.save!
+    saved_model
   end
 
   describe '#save' do
@@ -45,7 +45,7 @@ describe User do
     end
 
     context 'created user' do
-      it('does not change uuid') { expect { saved_model.save }.to_not change { saved_model.uuid } }
+      it('does not change uuid') { expect { saved_model.save! }.to_not change { saved_model.uuid } }
 
       context 'password changed' do
         it 'encrypts new password' do
