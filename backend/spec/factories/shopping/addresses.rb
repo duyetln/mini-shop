@@ -5,6 +5,6 @@ FactoryGirl.define do
     region { Faker::Address.state }
     postal_code { Faker::Address.postcode }
     country { Faker::Address.country }
-    user { create :user }
+    user { build :user }
   end
 end

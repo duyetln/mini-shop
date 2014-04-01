@@ -2,13 +2,11 @@ FactoryGirl.define do
   factory :pricepoint do
     name {  Faker::Lorem.characters(20) }
 
-    after(:create) do |pricepoint|
-      [:usd, :eur, :gbp].each do |curr|
-        PricepointPrice.create(
-          pricepoint_id: pricepoint.id,
-          amount: rand(50),
-          currency_id: create(curr).id
-        )
+    trait :pricepoint_prices do
+      after(:build) do |pricepoint|
+        [:usd, :eur, :gbp].each do |curr|
+          pricepoint.pricepoint_prices << build(:pricepoint_price, curr)
+        end
       end
     end
   end

@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :order do
-    purchase { create :purchase, :ready }
-    item { create :storefront_item }
+    purchase { build :purchase, :ready }
+    item { build :storefront_item }
     qty { rand(1..10) }
-    currency { create :usd }
+    currency { build :usd }
   end
 end
