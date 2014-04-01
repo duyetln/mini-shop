@@ -3,7 +3,6 @@ require 'spec/models/shared/committable'
 
 describe Purchase do
 
-  let(:model_args) { [:purchase, :ready] }
   let(:orders) { saved_model.orders }
   let(:order) { orders.sample }
 
@@ -50,6 +49,10 @@ describe Purchase do
   end
 
   describe '.pending_purchase' do
+    before :each do
+      user.save!
+    end
+
     def pending_count
       described_class.where(user_id: user.id).pending.count
     end
@@ -64,11 +67,14 @@ describe Purchase do
   describe '#add_or_update' do
     context 'pending' do
       before :each do
-        FactoryGirl.create :order, 
+        sf_item.save!
+        saved_model.orders << FactoryGirl.build(:order, 
           purchase: saved_model, 
           item: sf_item,
           qty: qty, 
           currency: currency
+        )
+        saved_model.save!
       end
 
       it 'adds or updates item' do
@@ -90,6 +96,8 @@ describe Purchase do
   describe '#remove' do
     context 'pending' do
       before :each do
+        sf_item.save!
+        saved_model.save!
         saved_model.add_or_update(sf_item, currency, qty)
       end
 
@@ -110,9 +118,7 @@ describe Purchase do
   end
 
   describe '#amount' do
-    before :each do
-      FactoryGirl.create :order, purchase: saved_model
-    end
+    let(:model_args) { [:purchase, :orders] }
 
     it 'totals order amount' do
       total_amount = saved_model.orders.reduce(BigDecimal('0.0')) do |a, e| 
@@ -127,9 +133,7 @@ describe Purchase do
   end
 
   describe '#tax' do
-    before :each do
-      FactoryGirl.create :order, purchase: saved_model
-    end
+    let(:model_args) { [:purchase, :orders] }
 
     it 'totals order tax' do
       total_tax = saved_model.orders.reduce(BigDecimal('0.0')) do |a, e| 
