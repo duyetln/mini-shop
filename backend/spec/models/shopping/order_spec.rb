@@ -19,7 +19,7 @@ describe Order do
   it { should validate_presence_of(:purchase) }
   it { should validate_presence_of(:currency) }
 
-  it("foo") { saved_model.should ensure_inclusion_of(:item_type).in_array(%w{ StorefrontItem }) }
+  it { should ensure_inclusion_of(:item_type).in_array(%w{ StorefrontItem }) }
 
   describe '#user' do
     it 'delegates to #purchase' do
