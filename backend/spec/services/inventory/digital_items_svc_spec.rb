@@ -1,12 +1,12 @@
-require 'spec_helper'
-require 'item_svc_helper'
+# require 'spec_helper'
+# require 'item_svc_helper'
 
-describe DigitalItemsSvc do
+# describe DigitalItemsSvc do
 
-  let(:key) { :title }
-  let(:value) { 'New title' }
+#   let(:key) { :title }
+#   let(:value) { 'New title' }
 
-  let(:item_class) { DigitalItem }
+#   let(:item_class) { DigitalItem }
 
-  it_behaves_like 'item service', DigitalItem
-end
+#   it_behaves_like 'item service', DigitalItem
+# end
