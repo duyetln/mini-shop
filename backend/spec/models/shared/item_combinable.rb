@@ -12,7 +12,11 @@ shared_examples 'item combinable model' do
     it { should respond_to(:retrieve).with(1).argument }
   end
 
-  let(:item) { saved_model.item }
+  before :each do
+    model.save!
+  end
+
+  let(:item) { model.item }
 
   describe '.add_or_update' do
     context 'accumulation' do
@@ -41,19 +45,19 @@ shared_examples 'item combinable model' do
   describe '.retrieve' do
     context 'providing the item' do
       it 'returns the model' do
-        expect(described_class.retrieve(item)).to eq(saved_model)
+        expect(described_class.retrieve(item)).to eq(model)
       end
     end
 
     context 'providing the model' do
       it 'returns the model' do
-        expect(described_class.retrieve(saved_model)).to eq(saved_model)
+        expect(described_class.retrieve(model)).to eq(model)
       end
     end
 
     context 'providing the model id' do
       it 'returns the model' do
-        expect(described_class.retrieve(saved_model.id)).to eq(saved_model)
+        expect(described_class.retrieve(model.id)).to eq(model)
       end
     end
   end

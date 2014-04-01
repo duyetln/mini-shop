@@ -1,11 +1,14 @@
 FactoryGirl.define do
   factory :purchase do
-    user { create :user }
+    user { build :user }
+    payment_method { build :payment_method }
+    billing_address { build :address }
+    shipping_address { build :address }
 
-    trait :ready do
-      payment_method { create :payment_method }
-      billing_address { create :address }
-      shipping_address { create :address }
+    trait :orders do
+      after :build do |purchase|
+        purchase.orders << build(:order)
+      end
     end
   end
 end

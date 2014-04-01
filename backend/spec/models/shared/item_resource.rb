@@ -9,22 +9,22 @@ shared_examples 'item resource' do
   it_behaves_like 'displayable model'
 
   describe 'factory model' do
-    it('is valid') { expect(new_model).to be_valid }
-    it('saves successfully') { expect(saved_model).to be_present }
+    it('is valid') { expect(model.valid?).to be_true }
+    it('saves successfully') { expect(model.save).to be_true }
   end
 
   describe '#available?' do
     context 'deleted' do
       it 'is false' do
-        saved_model.delete!
-        expect(saved_model).to_not be_available
+        model.delete!
+        expect(model).to_not be_available
       end
     end
 
     context 'inactive' do
       it 'is false' do
-        saved_model.deactivate!
-        expect(saved_model).to_not be_available
+        model.deactivate!
+        expect(model).to_not be_available
       end
     end
   end

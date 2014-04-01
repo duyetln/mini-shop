@@ -1,10 +1,10 @@
 FactoryGirl.define do
   factory :price do
     name { SecureRandom.hex }
-    pricepoint { create :pricepoint }
+    pricepoint { build :pricepoint, :pricepoint_prices }
 
     trait :discounted do
-      discount { create :discount, :random }
+      discount { build :discount, :random }
     end
   end
 end

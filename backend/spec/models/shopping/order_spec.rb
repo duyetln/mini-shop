@@ -23,45 +23,45 @@ describe Order do
 
   describe '#user' do
     it 'delegates to #purchase' do
-      expect(saved_model.user).to eq(saved_model.purchase.user)
+      expect(model.user).to eq(model.purchase.user)
     end
   end
 
   describe '#payment_method' do
     it 'delegates to #purchase' do
-      expect(saved_model.payment_method).to eq(saved_model.purchase.payment_method)
+      expect(model.payment_method).to eq(model.purchase.payment_method)
     end
   end
 
   describe '#billing_address' do
     it 'delegates to #purchase' do
-      expect(saved_model.billing_address).to eq(saved_model.purchase.billing_address)
+      expect(model.billing_address).to eq(model.purchase.billing_address)
     end
   end
 
   describe '#shipping_address' do
     it 'delegates to #purchase' do
-      expect(saved_model.shipping_address).to eq(saved_model.purchase.shipping_address)
+      expect(model.shipping_address).to eq(model.purchase.shipping_address)
     end
   end
 
   describe '#purchase_committed?' do
     it 'delegates to #purchase' do
-      expect(saved_model.purchase_committed?).to eq(saved_model.purchase.committed?)
+      expect(model.purchase_committed?).to eq(model.purchase.committed?)
     end
   end
 
   describe '#purchase_pending?' do
     it 'delegates to #purchase' do
-      expect(saved_model.purchase_pending?).to eq(saved_model.purchase.pending?)
+      expect(model.purchase_pending?).to eq(model.purchase.pending?)
     end
   end
 
   describe 'delete!' do
     context 'purchase committed' do
       it 'cannot be executed' do
-        saved_model.purchase.commit!
-        expect{ saved_model.delete! }.to_not change{ saved_model.deleted? }
+        model.purchase.commit!
+        expect{ model.delete! }.to_not change{ model.deleted? }
       end
     end
   end

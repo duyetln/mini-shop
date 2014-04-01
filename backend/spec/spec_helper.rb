@@ -27,8 +27,7 @@ module SpecHelpers
 
     # unit test helpers
     let(:model_args) { [described_class.to_s.underscore.to_sym] }
-    let(:saved_model) { FactoryGirl.create(*model_args) }
-    let(:new_model) { FactoryGirl.build(*model_args) }
+    let(:model) { FactoryGirl.build(*model_args) }
 
     # service test helpers
     let(:items) { item_class.kept }
@@ -36,11 +35,11 @@ module SpecHelpers
     let(:parsed_response) { Yajl::Parser.parse(last_response.body, symbolize_keys: true) }
 
     # common helpers
-    let(:user) { FactoryGirl.create :user }
-    let(:item) { FactoryGirl.create [:bundle_item, :physical_item, :digital_item].sample }
-    let(:sf_item) { FactoryGirl.create :storefront_item }
+    let(:user) { FactoryGirl.build :user }
+    let(:item) { FactoryGirl.build [:bundle_item, :physical_item, :digital_item].sample }
+    let(:sf_item) { FactoryGirl.build :storefront_item }
     let(:qty) { rand(1..10) }
-    let(:currency) { FactoryGirl.create [:usd, :eur, :gbp].sample } 
+    let(:currency) { FactoryGirl.build [:usd, :eur, :gbp].sample } 
 
     def expect_status(code)
       expect(last_response.status).to eq(code)
