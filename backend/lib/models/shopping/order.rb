@@ -93,7 +93,7 @@ class Order < ActiveRecord::Base
       !fulfilled_at_changed? &&
       !reversed_at_changed? &&
       changed?
-      errors.add(:purchase, "can't be already commited on save") unless purchase_pending?
+      errors.add(:purchase, 'cannot be already commited on save') if purchase.present? && purchase_committed?
     end
   end
 
