@@ -5,6 +5,7 @@ describe BundleItem do
 
   let(:bundlings) { saved_model.bundlings }
   let(:bundling) { bundlings.sample }
+  let(:model_args) { [:bundle_item, :bundlings] }
 
   it_behaves_like 'item resource'
 
@@ -32,16 +33,13 @@ describe BundleItem do
   describe '#available?' do
     context 'items not present' do
       it 'is false' do
+        saved_model.bundlings.clear
         expect(saved_model.items).to_not be_present
         expect(saved_model).to_not be_available
       end
     end
 
     context 'items present' do
-      before :each do
-        saved_model.add_or_update(item)
-      end
-
       context 'items unavailable' do
         context 'deleted' do
           it 'is false' do
@@ -68,10 +66,6 @@ describe BundleItem do
 
   describe '#remove' do
     context 'kept' do
-      before :each do
-        saved_model.add_or_update(item)
-      end
-
       it 'removes the item' do
         expect(bundlings).to receive(:retrieve).with(item).and_yield(bundling)
         expect(bundling).to receive(:destroy)
