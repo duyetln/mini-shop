@@ -26,7 +26,7 @@ describe Price do
   end
 
   describe '#amount' do
-    let(:currency) { saved_model.pricepoint.currencies.sample }
+    let(:currency) { saved_model.pricepoint.pricepoint_prices.sample.currency }
 
     context 'discount present' do
       let(:model_args) { [:price, :discounted] }
