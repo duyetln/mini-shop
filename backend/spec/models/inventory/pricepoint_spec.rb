@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe Pricepoint do
 
+  let(:model_args) { [:pricepoint, :pricepoint_prices] }
+
   it { should have_many(:pricepoint_prices) }
   it { should have_many(:currencies).through(:pricepoint_prices) }
 
@@ -11,9 +13,8 @@ describe Pricepoint do
   describe '#amount' do
     context 'currency found' do
       it 'returns correct amount' do
-        currency = saved_model.currencies.sample
-        pricepoint_price = saved_model.pricepoint_prices.where(currency_id: currency.id).first
-        expect(saved_model.amount(currency)).to eq(pricepoint_price.amount)
+        pricepoint_price = saved_model.pricepoint_prices.sample
+        expect(saved_model.amount(pricepoint_price.currency)).to eq(pricepoint_price.amount)
       end
     end
 
