@@ -18,27 +18,23 @@ describe StorefrontItem do
   it { should ensure_inclusion_of(:item_type).in_array(%w{ BundleItem DigitalItem PhysicalItem }) }
 
   describe '#available?' do
-    before :each do
-      expect(saved_model).to receive(:item).and_return(item)
-    end
-
     context 'item unavailable' do
       it 'is false' do
-        expect(item).to receive(:available?).and_return(false)
+        expect(saved_model.item).to receive(:available?).and_return(false)
         expect(saved_model).to_not be_available
       end
     end
 
     context 'item available' do
       it 'is true' do
-        expect(item).to receive(:available?).and_return(true)
+        expect(saved_model.item).to receive(:available?).and_return(true)
         expect(saved_model).to be_available
       end
     end
   end
 
   describe '#amount' do
-    let(:currency) { new_model.price.pricepoint.currencies.sample }
+    let(:currency) { new_model.price.pricepoint.pricepoint_prices.sample.currency }
 
     it 'delegates to Price#amount' do
       expect(saved_model.amount(currency)).to eq(saved_model.price.amount(currency))
