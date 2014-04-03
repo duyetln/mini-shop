@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :purchase do
     user { build :user }
-    payment_method { build :payment_method }
-    billing_address { build :address }
-    shipping_address { build :address }
+    payment_method { build :payment_method, user: user }
+    billing_address { build :address, user: user }
+    shipping_address { build :address, user: user }
 
     trait :orders do
       after :build do |purchase|
