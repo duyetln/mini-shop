@@ -7,12 +7,11 @@ module ItemCombinable
   include Quantifiable
 
   module ClassMethods
-    def add_or_update(item, options={})
-
+    def add_or_update(item, options = {})
       qty   =  options[:qty]      || 1
       acc   = !options.key?(:acc) || !!options[:acc]
-      conds =  options[:conds]    || { }
-      attrs =  options[:attrs]    || { }
+      conds =  options[:conds]    || {}
+      attrs =  options[:attrs]    || {}
 
       record = where({
         item_type: item.class,

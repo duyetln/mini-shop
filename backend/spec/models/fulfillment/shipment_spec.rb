@@ -3,7 +3,7 @@ require 'spec/models/shared/item_combinable'
 
 describe Shipment do
 
-  it_behaves_like "item combinable model"
+  it_behaves_like 'item combinable model'
 
   it { should have_readonly_attribute(:user_id) }
   it { should have_readonly_attribute(:order_id) }

@@ -67,10 +67,10 @@ describe Purchase do
     context 'pending' do
       before :each do
         sf_item.save!
-        model.orders << FactoryGirl.build(:order, 
-          purchase: model, 
+        model.orders << FactoryGirl.build(:order,
+          purchase: model,
           item: sf_item,
-          qty: qty, 
+          qty: qty,
           currency: currency
         )
         model.save!
@@ -120,10 +120,10 @@ describe Purchase do
     let(:model_args) { [:purchase, :orders] }
 
     it 'totals order amount' do
-      total_amount = model.orders.reduce(BigDecimal('0.0')) do |a, e| 
+      total_amount = model.orders.reduce(BigDecimal('0.0')) do |a, e|
         a += Currency.exchange(
-          e.amount, 
-          e.currency, 
+          e.amount,
+          e.currency,
           currency
         )
       end
@@ -135,10 +135,10 @@ describe Purchase do
     let(:model_args) { [:purchase, :orders] }
 
     it 'totals order tax' do
-      total_tax = model.orders.reduce(BigDecimal('0.0')) do |a, e| 
+      total_tax = model.orders.reduce(BigDecimal('0.0')) do |a, e|
         a += Currency.exchange(
-          e.tax, 
-          e.currency, 
+          e.tax,
+          e.currency,
           currency
         )
       end

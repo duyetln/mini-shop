@@ -61,7 +61,7 @@ describe Order do
     context 'purchase committed' do
       it 'cannot be executed' do
         model.purchase.commit!
-        expect{ model.delete! }.to_not change{ model.deleted? }
+        expect { model.delete! }.to_not change { model.deleted? }
       end
     end
   end

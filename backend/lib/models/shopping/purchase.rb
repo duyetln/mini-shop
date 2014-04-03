@@ -36,10 +36,10 @@ class Purchase < ActiveRecord::Base
 
   [:amount, :tax].each do |method|
     define_method method do |currency = payment_method_currency|
-      orders.reduce(BigDecimal('0.0')) do |a, e| 
+      orders.reduce(BigDecimal('0.0')) do |a, e|
         a += Currency.exchange(
-          e.send(method), 
-          e.currency, 
+          e.send(method),
+          e.currency,
           currency
         )
       end
