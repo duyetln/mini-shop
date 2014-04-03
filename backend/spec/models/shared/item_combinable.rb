@@ -21,7 +21,7 @@ shared_examples 'item combinable model' do
   describe '.add_or_update' do
     context 'accumulation' do
       it 'increments the qty' do
-        expect { described_class.add_or_update(item, qty) }.to change{
+        expect { described_class.add_or_update(item, qty: qty) }.to change{
           described_class.where(
             item_type: item.class,
             item_id: item.id
@@ -32,7 +32,7 @@ shared_examples 'item combinable model' do
 
     context 'override' do
       it 'updates the qty' do
-        expect { described_class.add_or_update(item, qty, false) }.to change{
+        expect { described_class.add_or_update(item, qty: qty, acc: false) }.to change{
           described_class.where(
             item_type: item.class,
             item_id: item.id

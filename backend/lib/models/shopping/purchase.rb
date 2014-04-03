@@ -27,7 +27,7 @@ class Purchase < ActiveRecord::Base
   end
 
   def add_or_update(item, currency, qty = 1)
-    orders.add_or_update(item, qty, false) { |order| order.currency = currency } if pending?
+    orders.add_or_update(item, qty: qty, acc: false) { |order| order.currency = currency } if pending?
   end
 
   def remove(item)

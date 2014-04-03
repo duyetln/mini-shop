@@ -6,7 +6,7 @@ class BundleItem < ActiveRecord::Base
   has_many :bundlings, foreign_key: :bundle_id
 
   def add_or_update(item, qty = 1, acc = true)
-    bundlings.add_or_update(item, qty, acc) if kept?
+    bundlings.add_or_update(item, qty: qty, acc: acc) if kept?
   end
 
   def remove(item)

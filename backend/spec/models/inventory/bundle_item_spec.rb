@@ -16,7 +16,7 @@ describe BundleItem do
 
     context 'kept' do
       it 'adds or updates the item' do
-        expect(bundlings).to receive(:add_or_update).with(item, qty, acc)
+        expect(bundlings).to receive(:add_or_update).with(item, qty: qty, acc: acc)
         model.add_or_update(item, qty, acc)
       end
     end

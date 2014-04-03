@@ -77,7 +77,7 @@ describe Purchase do
       end
 
       it 'adds or updates item' do
-        expect(orders).to receive(:add_or_update).with(sf_item, qty, false).and_yield(order)
+        expect(orders).to receive(:add_or_update).with(sf_item, qty: qty, acc: false).and_yield(order)
         expect(order).to receive(:currency=).with(currency)
         model.add_or_update(sf_item, currency, qty)
       end
