@@ -1,6 +1,9 @@
 require 'spec_helper'
+require 'spec/models/fulfillment/fulfillment'
 
 describe ShippingFulfillment do
+
+  it_behaves_like 'fulfillment model'
 
   it { should ensure_inclusion_of(:item_type).in_array(%w{ PhysicalItem }) }
 
