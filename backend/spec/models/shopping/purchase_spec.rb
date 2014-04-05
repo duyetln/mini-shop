@@ -5,6 +5,7 @@ describe Purchase do
 
   let(:orders) { model.orders }
   let(:order) { orders.sample }
+  let(:model_args) { [:purchase, :orders] }
 
   it_behaves_like 'committable model'
 
@@ -66,20 +67,19 @@ describe Purchase do
   describe '#add_or_update' do
     context 'pending' do
       before :each do
-        sf_item.save!
-        model.orders << FactoryGirl.build(:order,
-          purchase: model,
-          item: sf_item,
+        expect(orders).to receive(:add_or_update).with(
+          sf_item,
           qty: qty,
-          currency: currency
-        )
-        model.save!
+          acc: false
+        ).and_yield(order)
       end
 
-      it 'adds or updates item' do
-        expect(orders).to receive(:add_or_update).with(sf_item, qty: qty, acc: false).and_yield(order)
-        expect(order).to receive(:currency=).with(currency)
+      it 'adds or updates order' do
         model.add_or_update(sf_item, currency, qty)
+      end
+
+      it 'changes the order currency' do
+        expect { model.add_or_update(sf_item, currency, qty) }.to change { order.currency }.to(currency)
       end
     end
 
@@ -95,15 +95,15 @@ describe Purchase do
   describe '#remove' do
     context 'pending' do
       before :each do
-        sf_item.save!
-        model.save!
-        model.add_or_update(sf_item, currency, qty)
+        expect(orders).to receive(:retrieve).with(sf_item).and_yield(order)
+      end
+
+      it 'retrieves the item' do
+        model.remove(sf_item)
       end
 
       it 'removes the item' do
-        expect(orders).to receive(:retrieve).with(sf_item).and_yield(order)
-        expect(order).to receive(:delete!)
-        model.remove(sf_item)
+        expect { model.remove(sf_item) }.to change { order.deleted? }.to(true)
       end
     end
 
