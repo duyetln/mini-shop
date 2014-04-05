@@ -17,6 +17,7 @@ shared_examples 'item combinable model' do
   end
 
   let(:item) { model.item }
+  let(:qty) { model.qty + 1 }
 
   describe '.add_or_update' do
     context 'accumulation' do
