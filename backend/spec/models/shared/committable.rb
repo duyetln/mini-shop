@@ -20,6 +20,15 @@ shared_examples 'committable model' do
     it { should respond_to(:commit!).with(0).argument }
   end
 
+  context 'new record' do
+    let(:model) { described_class.new }
+
+    it 'defaults to pending' do
+      expect(model).to be_pending
+      expect(model.committed_at).to be_nil
+    end
+  end
+
   describe '#committed?' do
     it 'equals #committed' do
       expect(model.committed?).to eq(model.committed)

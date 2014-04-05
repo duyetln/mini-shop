@@ -18,6 +18,14 @@ shared_examples 'activable model' do
     it { should respond_to(:deactivate!).with(0).argument }
   end
 
+  context 'new record' do
+    let(:model) { described_class.new }
+
+    it 'defaults to pending' do
+      expect(model).to be_active
+    end
+  end
+
   describe '#active?' do
     it 'equals #active' do
       expect(model.active?).to eq(model.active)

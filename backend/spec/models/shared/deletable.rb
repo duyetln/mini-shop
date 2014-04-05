@@ -17,6 +17,14 @@ shared_examples 'deletable model' do
     it { should respond_to(:delete!).with(0).argument }
   end
 
+  context 'new record' do
+    let(:model) { described_class.new }
+
+    it 'defaults to pending' do
+      expect(model).to be_kept
+    end
+  end
+
   describe '#deleted?' do
     it 'equals #deleted' do
       expect(model.deleted?).to eq(model.deleted)
