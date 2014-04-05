@@ -1,4 +1,6 @@
 class ShippingFulfillment < Fulfillment
+  validates :item_type, inclusion: { in: %w{ PhysicalItem } }
+
   protected
 
   def process_fulfillment!
