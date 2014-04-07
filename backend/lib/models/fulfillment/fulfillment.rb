@@ -1,17 +1,16 @@
-require 'models/shared/enum'
 require 'models/shared/itemable'
+require 'models/shared/status'
 
 class Fulfillment < ActiveRecord::Base
   class PreparationFailure < StandardError; end
   class FulfillmentFailure < StandardError; end
   class ReversalFailure    < StandardError; end
 
-  include Enum
+  STATUS = { prepared: 0, fulfilled: 1, reversed: 2 }
+
   include Itemable
+  include Status::Mixin
 
-  enum :status, [:prepared, :fulfilled, :reversed]
-
-  attr_protected :status, :fulfilled_at, :reversed_at
   attr_readonly :order_id
 
   belongs_to :order
@@ -19,8 +18,6 @@ class Fulfillment < ActiveRecord::Base
   validates :order, presence: true
 
   validates :item_type, inclusion: { in: %w{ PhysicalItem DigitalItem } }
-
-  after_initialize :initialize_values
 
   def self.prepare!(order, item)
     fulfillment = new
@@ -33,8 +30,7 @@ class Fulfillment < ActiveRecord::Base
 
   def fulfill!
     if persisted? && prepared? && process_fulfillment!
-      self.status = STATUS[:fulfilled]
-      self.fulfilled_at = DateTime.now
+      mark_fulfilled!
       save!
     end
     fulfilled? || (fail FulfillmentFailure)
@@ -42,8 +38,7 @@ class Fulfillment < ActiveRecord::Base
 
   def reverse!
     if persisted? && fulfilled? && process_reversal!
-      self.status = STATUS[:reversed]
-      self.reversed_at = DateTime.now
+      mark_reversed!
       save!
     end
     reversed? || (fail ReversalFailure)
@@ -57,13 +52,5 @@ class Fulfillment < ActiveRecord::Base
 
   def process_reversal!
     fail 'Must be implemented in derived class'
-  end
-
-  def initialize_values
-    if new_record?
-      self.status = STATUS[:prepared]
-      self.fulfilled_at = nil
-      self.reversed_at  = nil
-    end
   end
 end

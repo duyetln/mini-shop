@@ -1,14 +1,14 @@
-require 'models/shared/enum'
 require 'models/shared/item_combinable'
+require 'models/shared/status'
 
 class Order < ActiveRecord::Base
-  include Enum
+  STATUS = { prepared: 0, fulfilled: 1, reversed: 2 }
+
   include ItemCombinable
   include Deletable
+  include Status::Mixin
 
-  enum :status, [:prepared, :fulfilled, :reversed]
-
-  attr_protected :uuid, :purchase_id, :status, :fulfilled_at, :reversed_at
+  attr_protected :uuid, :purchase_id
   attr_readonly :uuid, :purchase_id
 
   belongs_to :purchase
@@ -44,7 +44,7 @@ class Order < ActiveRecord::Base
       begin
         self.class.transaction do
           qty.times { item.prepare!(self) } || (fail Fulfillment::PreparationFailure)
-          self.status = STATUS[:prepared]
+          mark_prepared!
           save!
         end
       rescue => err
@@ -59,8 +59,7 @@ class Order < ActiveRecord::Base
       begin
         self.class.transaction do
           fulfillments.all? { |f| f.fulfill! } || (fail Fulfillment::FulfillmentFailure)
-          self.status = STATUS[:fulfilled]
-          self.fulfilled_at = DateTime.now
+          mark_fulfilled!
           save!
         end
       rescue => err
@@ -75,8 +74,7 @@ class Order < ActiveRecord::Base
       begin
         self.class.transaction do
           fulfillments.all? { |f| f.reverse! } || (fail Fulfillment::ReversalFailure)
-          self.status = STATUS[:reversed]
-          self.reversed_at = DateTime.now
+          mark_reversed!
           save!
         end
       rescue => err
@@ -89,11 +87,8 @@ class Order < ActiveRecord::Base
   protected
 
   def pending_purchase
-    if !status_changed? &&
-      !fulfilled_at_changed? &&
-      !reversed_at_changed? &&
-      changed?
-      errors.add(:purchase, 'cannot be already commited on save') if purchase.present? && purchase_committed?
+    if changed? && purchase.present? && purchase_committed?
+      errors.add(:purchase, 'cannot be already commited on save')
     end
   end
 
