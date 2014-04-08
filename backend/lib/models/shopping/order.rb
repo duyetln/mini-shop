@@ -40,10 +40,12 @@ class Order < ActiveRecord::Base
   end
 
   def prepare!
-    if status.nil?
+    unless marked?
       begin
         self.class.transaction do
-          qty.times { item.prepare!(self) } || (fail Fulfillment::PreparationFailure)
+          item.prepare!(self, qty) &&
+            fulfillments.all? { |f| f.prepare! } ||
+            (fail Fulfillment::PreparationFailure)
           mark_prepared!
           save!
         end

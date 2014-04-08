@@ -47,13 +47,13 @@ class Purchase < ActiveRecord::Base
   end
 
   def prepare!
-    if persisted? && committed?
+    if committed?
       orders.all? { |order| order.prepare! }
     end
   end
 
   def fulfill!
-    if persisted? && committed?
+    if committed?
       if payment_method.enough?(amount)
         payment = create_payment!(
           attributes.symbolize_keys.slice(

@@ -8,7 +8,7 @@ class PhysicalItem < ActiveRecord::Base
     super && qty > 0
   end
 
-  def prepare!(order)
-    ShippingFulfillment.prepare!(order, self)
+  def prepare!(order, qty)
+    ShippingFulfillment.add_or_update(self, qty: qty, conds: { order_id: order.id })
   end
 end

@@ -19,32 +19,32 @@ class Fulfillment < ActiveRecord::Base
 
   validates :item_type, inclusion: { in: %w{ PhysicalItem DigitalItem } }
 
-  def self.prepare!(order, item)
-    fulfillment = new
-    fulfillment.order = order
-    fulfillment.item  = item
-    fulfillment.save!
-
-    fulfillment.prepared? || (fail PreparationFailure)
+  def prepare!
+    if unmarked? && process_preparation!
+      mark_prepared!
+      save!
+    end
   end
 
   def fulfill!
-    if persisted? && prepared? && process_fulfillment!
+    if prepared? && process_fulfillment!
       mark_fulfilled!
       save!
     end
-    fulfilled? || (fail FulfillmentFailure)
   end
 
   def reverse!
-    if persisted? && fulfilled? && process_reversal!
+    if fulfilled? && process_reversal!
       mark_reversed!
       save!
     end
-    reversed? || (fail ReversalFailure)
   end
 
   protected
+
+  def process_preparation!
+    true
+  end
 
   def process_fulfillment!
     fail 'Must be implemented in derived class'

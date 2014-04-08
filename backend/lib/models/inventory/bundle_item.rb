@@ -21,7 +21,7 @@ class BundleItem < ActiveRecord::Base
     super && items.present? && items.all?(&:available?)
   end
 
-  def prepare!(order)
-    items.all? { |item| item.prepare!(order) }
+  def prepare!(order, qty)
+    bundlings.all? { |bundling| bundling.item.prepare!(order, qty * bundling.qty) }
   end
 end
