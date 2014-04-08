@@ -10,5 +10,5 @@ class Bundling < ActiveRecord::Base
   validates :bundle, presence: true
 
   validates :bundle_id, uniqueness: { scope: [:item_type, :item_id] }
-  validates :item_type, inclusion: { in: %w{ BundleItem DigitalItem PhysicalItem } }
+  validates :item_type, inclusion: { in: %w{ DigitalItem PhysicalItem } }
 end

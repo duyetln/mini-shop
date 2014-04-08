@@ -3,6 +3,7 @@ require 'spec/models/shared/item_resource'
 
 describe BundleItem do
 
+  let(:item) { FactoryGirl.build [:physical_item, :digital_item].sample }
   let(:bundlings) { model.bundlings }
   let(:bundling) { bundlings.sample }
   let(:model_args) { [:bundle_item, :bundlings] }
