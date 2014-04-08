@@ -9,9 +9,6 @@ describe Order do
 
   it { should_not allow_mass_assignment_of(:uuid) }
   it { should_not allow_mass_assignment_of(:purchase_id) }
-  it { should_not allow_mass_assignment_of(:status) }
-  it { should_not allow_mass_assignment_of(:fulfilled_at) }
-  it { should_not allow_mass_assignment_of(:reversed_at) }
 
   it { should have_readonly_attribute(:uuid) }
   it { should have_readonly_attribute(:purchase_id) }
