@@ -1,4 +1,4 @@
-require 'models/shared/itemable'
+require 'models/shared/item_combinable'
 require 'models/shared/status'
 
 class Fulfillment < ActiveRecord::Base
@@ -8,7 +8,7 @@ class Fulfillment < ActiveRecord::Base
 
   STATUS = { prepared: 0, fulfilled: 1, reversed: 2 }
 
-  include Itemable
+  include ItemCombinable
   include Status::Mixin
 
   attr_readonly :order_id

@@ -5,6 +5,7 @@ class CreateFulfillmentsTable < ActiveRecord::Migration
       t.integer  :order_id
       t.string   :item_type
       t.integer  :item_id
+      t.integer  :qty
       t.datetime :created_at
     end
 
