@@ -5,8 +5,11 @@ describe BundleItem do
 
   let(:item) { FactoryGirl.build [:physical_item, :digital_item].sample }
   let(:bundlings) { model.bundlings }
-  let(:bundling) { bundlings.sample }
-  let(:model_args) { [:bundle_item, :bundlings] }
+  let(:bundling) { FactoryGirl.build :bundling, item: item, qty: qty }
+
+  before :each do
+    model.bundlings << bundling
+  end
 
   it_behaves_like 'item resource'
 
@@ -83,4 +86,21 @@ describe BundleItem do
     end
   end
 
+  describe '#prepare!' do
+    let :order do 
+      FactoryGirl.build(
+        :order, 
+        item: FactoryGirl.build(
+          :storefront_item, 
+          item: model
+        ), 
+        qty: qty
+      )
+    end
+
+    it 'calls #prepare! on each item' do
+      expect(item).to receive(:prepare!).with(order, order.qty * bundling.qty)
+      model.prepare!(order, order.qty)
+    end
+  end
 end
