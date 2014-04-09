@@ -87,13 +87,13 @@ describe BundleItem do
   end
 
   describe '#prepare!' do
-    let :order do 
+    let :order do
       FactoryGirl.build(
-        :order, 
+        :order,
         item: FactoryGirl.build(
-          :storefront_item, 
+          :storefront_item,
           item: model
-        ), 
+        ),
         qty: qty
       )
     end
