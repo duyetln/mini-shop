@@ -40,18 +40,19 @@ class Order < ActiveRecord::Base
   end
 
   def prepare!
-    unless marked?
+    if unmarked?
       begin
         self.class.transaction do
           item.prepare!(self, qty) &&
-            fulfillments.all? { |f| f.prepare! } ||
-            (fail Fulfillment::PreparationFailure)
+            fulfillments.all? { |f| f.prepare! } || (fail Fulfillment::PreparationFailure)
           mark_prepared!
           save!
         end
+        true
       rescue => err
-        puts err.message
-        puts err.backtrace.inspect
+        # puts err.message
+        # puts err.backtrace.inspect
+        false
       end
     end
   end
@@ -64,9 +65,11 @@ class Order < ActiveRecord::Base
           mark_fulfilled!
           save!
         end
+        true
       rescue => err
-        puts err.message
-        puts err.backtrace.inspect
+        # puts err.message
+        # puts err.backtrace.inspect
+        false
       end
     end
   end
@@ -79,9 +82,11 @@ class Order < ActiveRecord::Base
           mark_reversed!
           save!
         end
+        true
       rescue => err
-        puts err.message
-        puts err.backtrace.inspect
+        # puts err.message
+        # puts err.backtrace.inspect
+        false
       end
     end
   end
