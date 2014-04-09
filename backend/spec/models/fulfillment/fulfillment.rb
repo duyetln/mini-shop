@@ -32,6 +32,10 @@ shared_examples 'fulfillment model' do
 
   it { should validate_presence_of(:order) }
 
+  it { should respond_to(:prepare!).with(0).argument }
+  it { should respond_to(:fulfill!).with(0).argument }
+  it { should respond_to(:reverse!).with(0).argument }
+
   context 'new record' do
     let(:model) { described_class.new }
 
