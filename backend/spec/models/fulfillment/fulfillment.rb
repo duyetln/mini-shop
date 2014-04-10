@@ -64,6 +64,7 @@ shared_examples 'fulfillment model' do
 
         it 'marks status and saves' do
           expect(model).to receive(mark_method)
+          expect(model).to_not receive(:mark_failed!)
           expect(model).to receive(:save!)
           model.send(method)
         end
@@ -72,9 +73,10 @@ shared_examples 'fulfillment model' do
       context 'failed processing' do
         let(:process_status) { false }
 
-        it 'does not do anything' do
+        it 'marks status and saves' do
           expect(model).to_not receive(mark_method)
-          expect(model).to_not receive(:save!)
+          expect(model).to receive(:mark_failed!)
+          expect(model).to receive(:save!)
           model.send(method)
         end
       end
@@ -85,6 +87,7 @@ shared_examples 'fulfillment model' do
 
       it 'does not do anything' do
         expect(model).to_not receive(mark_method)
+        expect(model).to_not receive(:mark_failed!)
         expect(model).to_not receive(:save!)
         model.send(method)
       end
