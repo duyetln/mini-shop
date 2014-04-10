@@ -41,8 +41,7 @@ shared_examples 'fulfillment model' do
         it 'marks status and saves' do
           expect(model).to receive(mark_method)
           expect(model).to_not receive(:mark_failed!)
-          expect(model).to receive(:save!)
-          model.send(method)
+          expect(model.send(method)).to eq(model.send(check_method))
         end
       end
 
@@ -52,8 +51,7 @@ shared_examples 'fulfillment model' do
         it 'marks status and saves' do
           expect(model).to_not receive(mark_method)
           expect(model).to receive(:mark_failed!)
-          expect(model).to receive(:save!)
-          model.send(method)
+          expect(model.send(method)).to eq(model.send(check_method))
         end
       end
     end
@@ -64,8 +62,7 @@ shared_examples 'fulfillment model' do
       it 'does not do anything' do
         expect(model).to_not receive(mark_method)
         expect(model).to_not receive(:mark_failed!)
-        expect(model).to_not receive(:save!)
-        model.send(method)
+        expect(model.send(method)).to eq(model.send(check_method))
       end
     end
   end
@@ -74,6 +71,7 @@ shared_examples 'fulfillment model' do
     let(:method) { :prepare! }
     let(:process_method) { :process_preparation! }
     let(:status_method) { :unmarked? }
+    let(:check_method) { :prepared? }
     let(:mark_method) { :mark_prepared! }
 
     include_examples 'fulfillment method'
@@ -83,6 +81,7 @@ shared_examples 'fulfillment model' do
     let(:method) { :fulfill! }
     let(:process_method) { :process_fulfillment! }
     let(:status_method) { :prepared? }
+    let(:check_method) { :fulfilled? }
     let(:mark_method) { :mark_fulfilled! }
 
     include_examples 'fulfillment method'
@@ -92,6 +91,7 @@ shared_examples 'fulfillment model' do
     let(:method) { :reverse! }
     let(:process_method) { :process_reversal! }
     let(:status_method) { :fulfilled? }
+    let(:check_method) { :reversed? }
     let(:mark_method) { :mark_reversed! }
 
     include_examples 'fulfillment method'

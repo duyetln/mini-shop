@@ -22,21 +22,21 @@ class Fulfillment < ActiveRecord::Base
   def prepare!
     if unmarked?
       process_preparation! ? mark_prepared! : mark_failed!
-      save!
+      prepared?
     end
   end
 
   def fulfill!
     if prepared?
       process_fulfillment! ? mark_fulfilled! : mark_failed!
-      save!
+      fulfilled?
     end
   end
 
   def reverse!
     if fulfilled?
       process_reversal! ? mark_reversed! : mark_failed!
-      save!
+      reversed?
     end
   end
 
