@@ -93,50 +93,63 @@ describe Order do
       let(:mark_method) { :mark_prepared! }
 
       before :each do
-        expect(model).to receive(status_method).and_return(status)
-      end 
+        expect(model).to receive(:purchase_committed?).and_return(committed_status)
+      end
 
-      context 'unmarked' do
-        let(:status) { true }
+      context 'committed purchase' do
+        let(:committed_status) { true }
 
         before :each do
-          expect(model.item).to receive(process_method).with(model, model.qty).and_return(item_preparation_status)
-        end
+          expect(model).to receive(status_method).and_return(status)
+        end 
 
-        context 'successful item preparation' do
-          let(:item_preparation_status) { true }
+        context 'unmarked' do
+          let(:status) { true }
 
           before :each do
-            expect(fulfillment).to receive(process_method).and_return(preparation_status)
+            expect(model.item).to receive(process_method).with(model, model.qty).and_return(item_preparation_status)
           end
 
-          context 'successful preparation' do
-            let(:preparation_status) { true }
+          context 'successful item preparation' do
+            let(:item_preparation_status) { true }
 
-            include_examples 'marks success status and saves'
+            before :each do
+              expect(fulfillment).to receive(process_method).and_return(preparation_status)
+            end
+
+            context 'successful preparation' do
+              let(:preparation_status) { true }
+
+              include_examples'marks success status and saves'
+            end
+
+            context 'failed preparation' do
+              let(:preparation_status) { false }
+
+              include_examples 'marks failure status and saves'
+            end
           end
 
-          context 'failed preparation' do
-            let(:preparation_status) { false }
+          context 'failed item preparation' do
+            let(:item_preparation_status) { false }
+
+            before :each do
+              expect(fulfillment).to_not receive(process_method)
+            end
 
             include_examples 'marks failure status and saves'
           end
         end
 
-        context 'failed item preparation' do
-          let(:item_preparation_status) { false }
+        context 'marked' do
+          let(:status) { false }
 
-          include_examples 'marks failure status and saves'
-
-          it 'does not process the fulfillment' do
-            expect(fulfillment).to_not receive(process_method)
-            expect(model.send(method)).to eq(model.send(check_method))
-          end
+          include_examples 'does not do anything'
         end
       end
 
-      context 'marked' do
-        let(:status) { false }
+      context 'pending purchase' do
+        let(:committed_status) { false }
 
         include_examples 'does not do anything'
       end
@@ -149,7 +162,21 @@ describe Order do
       let(:check_method) { :fulfilled? }
       let(:mark_method) { :mark_fulfilled! }
 
-      include_examples 'fulfillment method'
+      before :each do
+        expect(model).to receive(:purchase_committed?).and_return(committed_status)
+      end
+
+      context 'committed purchase' do
+        let(:committed_status) { true }
+
+        include_examples 'fulfillment method'
+      end
+
+      context 'pending purchase' do
+        let(:committed_status) { false }
+
+        include_examples 'does not do anything'
+      end
     end
 
     describe '#reverse!' do
@@ -159,7 +186,21 @@ describe Order do
       let(:check_method) { :reversed? }
       let(:mark_method) { :mark_reversed! }
 
-      include_examples 'fulfillment method'
+      before :each do
+        expect(model).to receive(:purchase_committed?).and_return(committed_status)
+      end
+
+      context 'committed purchase' do
+        let(:committed_status) { true }
+
+        include_examples 'fulfillment method'
+      end
+
+      context 'pending purchase' do
+        let(:committed_status) { false }
+
+        include_examples 'does not do anything'
+      end
     end
   end
 

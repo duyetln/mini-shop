@@ -40,7 +40,7 @@ class Order < ActiveRecord::Base
   end
 
   def prepare!
-    if unmarked?
+    if purchase_committed? && unmarked?
       begin
         self.class.transaction do
           item.prepare!(self, qty) &&
@@ -55,7 +55,7 @@ class Order < ActiveRecord::Base
   end
 
   def fulfill!
-    if prepared?
+    if purchase_committed? && prepared?
       begin
         self.class.transaction do
           fulfillments.all? { |f| f.fulfill! } || (fail Fulfillment::FulfillmentFailure)
@@ -69,7 +69,7 @@ class Order < ActiveRecord::Base
   end
 
   def reverse!
-    if fulfilled?
+    if purchase_committed? && fulfilled?
       begin
         self.class.transaction do
           fulfillments.all? { |f| f.reverse! } || (fail Fulfillment::ReversalFailure)
