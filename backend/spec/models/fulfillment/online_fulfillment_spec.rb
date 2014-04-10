@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'spec/models/fulfillment/fulfillment'
+require 'spec/models/shared/fulfillment'
 
 describe OnlineFulfillment do
 
