@@ -2,7 +2,7 @@ require 'models/shared/item_combinable'
 require 'models/shared/status'
 
 class Order < ActiveRecord::Base
-  STATUS = { prepared: 0, fulfilled: 1, reversed: 2 }
+  STATUS = { failed: -2, invalid: -1, prepared: 0, fulfilled: 1, reversed: 2 }
 
   include ItemCombinable
   include Deletable
@@ -46,14 +46,11 @@ class Order < ActiveRecord::Base
           item.prepare!(self, qty) &&
             fulfillments.all? { |f| f.prepare! } || (fail Fulfillment::PreparationFailure)
           mark_prepared!
-          save!
         end
-        true
       rescue => err
-        # puts err.message
-        # puts err.backtrace.inspect
-        false
+        mark_failed!
       end
+      prepared?
     end
   end
 
@@ -63,14 +60,11 @@ class Order < ActiveRecord::Base
         self.class.transaction do
           fulfillments.all? { |f| f.fulfill! } || (fail Fulfillment::FulfillmentFailure)
           mark_fulfilled!
-          save!
         end
-        true
       rescue => err
-        # puts err.message
-        # puts err.backtrace.inspect
-        false
+        mark_failed!
       end
+      fulfilled?
     end
   end
 
@@ -80,14 +74,11 @@ class Order < ActiveRecord::Base
         self.class.transaction do
           fulfillments.all? { |f| f.reverse! } || (fail Fulfillment::ReversalFailure)
           mark_reversed!
-          save!
         end
-        true
       rescue => err
-        # puts err.message
-        # puts err.backtrace.inspect
-        false
+        mark_failed!
       end
+      reversed?
     end
   end
 

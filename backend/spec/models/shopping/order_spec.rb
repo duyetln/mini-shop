@@ -29,54 +29,108 @@ describe Order do
       model.fulfillments << fulfillment
     end
 
-    describe '#prepare!' do
-      before :each do
-        expect(model).to receive(:unmarked?).and_return(status)
+    shared_examples 'marks success status and saves' do
+      it 'marks status and saves' do
+        expect(model).to receive(mark_method)
+        expect(model).to_not receive(:mark_failed!)
+        expect(model.send(method)).to eq(model.send(check_method))
       end
+    end
+
+    shared_examples 'marks failure status and saves' do
+      it 'marks status and saves' do
+        expect(model).to_not receive(mark_method)
+        expect(model).to receive(:mark_failed!)
+        expect(model.send(method)).to eq(model.send(check_method))
+      end
+    end
+
+    shared_examples 'does not do anything' do
+      it 'does not do anything' do
+        expect(model).to_not receive(mark_method)
+        expect(model).to_not receive(:mark_failed!)
+        expect(model.send(method)).to eq(model.send(check_method))
+      end
+    end
+
+    shared_examples 'fulfillment method' do
+      before :each do
+        expect(model).to receive(status_method).and_return(status)
+      end
+
+      context 'status true' do
+        before :each do
+          expect(fulfillment).to receive(process_method).and_return(process_status)
+        end
+
+        let(:status) { true }
+
+        context 'successful processing' do
+          let(:process_status) { true }
+
+          include_examples 'marks success status and saves'
+        end
+
+        context 'failed processing' do
+          let(:process_status) { false }
+
+          include_examples 'marks failure status and saves'
+        end
+      end
+
+      context 'status false' do
+        let(:status) { false }
+
+        include_examples 'does not do anything'
+      end
+    end
+
+    describe '#prepare' do
+      let(:method) { :prepare! }
+      let(:process_method) { :prepare! }
+      let(:status_method) { :unmarked? }
+      let(:check_method) { :prepared? }
+      let(:mark_method) { :mark_prepared! }
+
+      before :each do
+        expect(model).to receive(status_method).and_return(status)
+      end 
 
       context 'unmarked' do
         let(:status) { true }
 
         before :each do
-          expect(model.item).to receive(:prepare!).with(model, model.qty).and_return(item_preparation_status)
+          expect(model.item).to receive(process_method).with(model, model.qty).and_return(item_preparation_status)
         end
 
         context 'successful item preparation' do
           let(:item_preparation_status) { true }
 
           before :each do
-            expect(fulfillment).to receive(:prepare!).and_return(preparation_status)
+            expect(fulfillment).to receive(process_method).and_return(preparation_status)
           end
 
           context 'successful preparation' do
             let(:preparation_status) { true }
 
-            it 'changes the status and saves' do
-              expect(model).to receive(:mark_prepared!)
-              expect(model).to receive(:save!)
-              expect(model.prepare!).to be_true
-            end
+            include_examples 'marks success status and saves'
           end
 
           context 'failed preparation' do
             let(:preparation_status) { false }
 
-            it 'does not change the status or save' do
-              expect(model).to_not receive(:mark_prepared!)
-              expect(model).to_not receive(:save!)
-              expect(model.prepare!).to_not be_true
-            end
+            include_examples 'marks failure status and saves'
           end
         end
 
         context 'failed item preparation' do
           let(:item_preparation_status) { false }
 
-          it 'does not prepare, change status, or save' do
-            expect(fulfillment).to_not receive(:prepare!)
-            expect(model).to_not receive(:mark_prepared!)
-            expect(model).to_not receive(:save!)
-            expect(model.prepare!).to_not be_true
+          include_examples 'marks failure status and saves'
+
+          it 'does not process the fulfillment' do
+            expect(fulfillment).to_not receive(process_method)
+            expect(model.send(method)).to eq(model.send(check_method))
           end
         end
       end
@@ -84,104 +138,28 @@ describe Order do
       context 'marked' do
         let(:status) { false }
 
-        it 'does not prepare, change status, or save' do
-          expect(model.item).to_not receive(:prepare!)
-          expect(fulfillment).to_not receive(:prepare!)
-          expect(model).to_not receive(:mark_prepared!)
-          expect(model).to_not receive(:save!)
-          expect(model.prepare!).to_not be_true
-        end
+        include_examples 'does not do anything'
       end
     end
 
     describe '#fulfill!' do
-      before :each do
-        expect(model).to receive(:prepared?).and_return(status)
-      end
+      let(:method) { :fulfill! }
+      let(:process_method) { :fulfill! }
+      let(:status_method) { :prepared? }
+      let(:check_method) { :fulfilled? }
+      let(:mark_method) { :mark_fulfilled! }
 
-      context 'prepared' do
-        let(:status) { true }
-
-        before :each do
-          expect(fulfillment).to receive(:fulfill!).and_return(fulfillment_status)
-        end
-
-        context 'successful fulfillment' do
-          let(:fulfillment_status) { true }
-
-          it 'changes the status and saves' do
-            expect(model).to receive(:mark_fulfilled!)
-            expect(model).to receive(:save!)
-            expect(model.fulfill!).to be_true
-          end
-        end
-
-        context 'failed fulfillment' do
-          let(:fulfillment_status) { false }
-
-          it 'does not change the status or save' do
-            expect(model).to_not receive(:mark_fulfilled!)
-            expect(model).to_not receive(:save!)
-            expect(model.fulfill!).to_not be_true
-          end
-        end
-      end
-
-      context 'not prepared' do
-        let(:status) { false }
-
-        it 'does not fulfill, change status, or save' do
-          expect(fulfillment).to_not receive(:fulfill!)
-          expect(model).to_not receive(:mark_fulfilled!)
-          expect(model).to_not receive(:save!)
-          expect(model.fulfill!).to_not be_true
-        end
-      end
+      include_examples 'fulfillment method'
     end
 
     describe '#reverse!' do
-      before :each do
-        expect(model).to receive(:fulfilled?).and_return(status)
-      end
+      let(:method) { :reverse! }
+      let(:process_method) { :reverse! }
+      let(:status_method) { :fulfilled? }
+      let(:check_method) { :reversed? }
+      let(:mark_method) { :mark_reversed! }
 
-      context 'fulfilled' do
-        let(:status) { true }
-
-        before :each do
-          expect(fulfillment).to receive(:reverse!).and_return(reversal_status)
-        end
-
-        context 'successful reversal' do
-          let(:reversal_status) { true }
-
-          it 'changes the status and saves' do
-            expect(model).to receive(:mark_reversed!)
-            expect(model).to receive(:save!)
-            expect(model.reverse!).to be_true
-          end
-        end
-
-        context 'failed reversal' do
-          let(:reversal_status) { false }
-
-          it 'does not change the status or save' do
-            expect(model).to_not receive(:mark_reversed!)
-            expect(model).to_not receive(:save!)
-            expect(model.reverse!).to_not be_true
-          end
-        end
-      end
-
-      context 'not fulfilled' do
-        let(:status) { false }
-
-        it 'does not reverse, change status, or save' do
-          expect(fulfillment).to_not receive(:reverse!)
-          expect(model).to_not receive(:mark_reversed!)
-          expect(model).to_not receive(:save!)
-          expect(model.reverse!).to_not be_true
-        end
-      end
+      include_examples 'fulfillment method'
     end
   end
 
