@@ -1,7 +1,10 @@
 require 'models/shared/committable'
 
 class Purchase < ActiveRecord::Base
+  STATUS = { prepared: 0, fulfilled: 1, reversed: 2 }
+
   include Committable
+  include Status::Mixin
 
   attr_readonly :user_id
 
@@ -47,30 +50,55 @@ class Purchase < ActiveRecord::Base
   end
 
   def prepare!
-    if committed?
-      orders.all? { |order| order.prepare! }
+    if committed? && unmarked?
+      orders.each do |order|
+        order.prepare!
+      end
+      mark_prepared!
+      prepared?
     end
   end
 
   def fulfill!
-    if committed?
+    if committed? && prepared?
       if payment_method.enough?(amount)
-        transaction = transactions.create!(
-          attributes.symbolize_keys.slice(
-            :user_id,
-            :payment_method_id,
-            :billing_address_id
-          ).merge(
-            amount: amount,
-            currency_id: payment_method_currency.id
-          )
-        )
-
-        transaction.commit! if orders.all? { |order| order.fulfill! }
+        create_transaction!.commit!
+        orders.each do |order|
+          if order.fulfill! == false
+            create_transaction!(
+             -order.amount,
+              order.currency
+            ).commit!
+          end
+        end
+        mark_fulfilled!
+        fulfilled?
       end
     end
   end
 
   def reverse!
+    if committed? && fulfilled?
+      orders.each do |order|
+        order.reverse!
+      end
+      mark_reversed!
+      reversed?
+    end
+  end
+
+  private
+
+  def create_transaction!(input_amount = amount, input_currency = payment_method_currency)
+    if committed?
+      transaction = transactions.build
+      transaction.user = user
+      transaction.amount = input_amount
+      transaction.currency = input_currency
+      transaction.payment_method = payment_method
+      transaction.billing_address = billing_address
+      transaction.save!
+      transaction
+    end
   end
 end
