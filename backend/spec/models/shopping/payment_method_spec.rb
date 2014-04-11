@@ -53,4 +53,43 @@ describe PaymentMethod do
     end
   end
 
+  describe '#deposit!' do
+    before :each do
+      expect(model).to receive(:save!)
+    end
+
+    let(:converted_amount) { Currency.exchange(amount, currency, model.currency) }
+
+    context 'positive amount' do
+      it 'adds to the balance' do
+        expect { model.deposit!(amount, currency) }.to change { model.balance }.by(converted_amount)
+      end
+    end
+
+    context 'negative amount' do
+      it 'adds to the balance' do
+        expect { model.deposit!(-amount, currency) }.to change { model.balance }.by(converted_amount)
+      end
+    end
+  end
+
+  describe '#withdraw!' do
+    before :each do
+      expect(model).to receive(:save!)
+    end
+
+    let(:converted_amount) { Currency.exchange(amount, currency, model.currency) }
+
+    context 'positive amount' do
+      it 'subtracts from the balance' do
+        expect { model.withdraw!(amount, currency) }.to change { model.balance }.by(-converted_amount)
+      end
+    end
+
+    context 'negative amount' do
+      it 'subtracts from the balance' do
+        expect { model.withdraw!(-amount, currency) }.to change { model.balance }.by(-converted_amount)
+      end
+    end
+  end
 end

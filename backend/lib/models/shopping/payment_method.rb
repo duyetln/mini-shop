@@ -18,4 +18,14 @@ class PaymentMethod < ActiveRecord::Base
   def enough?(amount = 0, input_currency = currency)
     pending_balance >= Currency.exchange(amount, input_currency, currency)
   end
+
+  def deposit!(amount, input_currency = currency)
+    self.balance += Currency.exchange(amount.abs, input_currency, currency)
+    save!
+  end
+
+  def withdraw!(amount, input_currency = currency)
+    self.balance -= Currency.exchange(amount.abs, input_currency, currency)
+    save!
+  end
 end
