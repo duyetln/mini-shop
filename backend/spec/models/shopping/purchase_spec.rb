@@ -15,8 +15,8 @@ describe Purchase do
   it { should belong_to(:payment_method) }
   it { should belong_to(:billing_address).class_name('Address') }
   it { should belong_to(:shipping_address).class_name('Address') }
-  it { should belong_to(:payment) }
   it { should belong_to(:user) }
+  it { should have_many(:transactions) }
 
   it { should validate_presence_of(:user) }
 

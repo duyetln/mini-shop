@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :payment do
+  factory :transaction do
     payment_method { build :payment_method }
     user { payment_method.user }
     amount { 100 }

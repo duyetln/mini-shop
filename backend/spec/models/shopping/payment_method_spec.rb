@@ -13,7 +13,7 @@ describe PaymentMethod do
 
   it { should belong_to(:user) }
   it { should belong_to(:currency) }
-  it { should have_many(:payments) }
+  it { should have_many(:transactions) }
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:balance) }
@@ -22,25 +22,25 @@ describe PaymentMethod do
 
   it { should validate_numericality_of(:balance).is_greater_than_or_equal_to(0) }
 
-  let(:payment) { FactoryGirl.create(:payment, payment_method: model) }
+  let(:transaction) { FactoryGirl.create(:transaction, payment_method: model) }
 
   describe '#pending_balance' do
-    context 'no payments' do
+    context 'no transactions' do
       it 'equals balance' do
         expect(model.pending_balance).to eq(model.balance)
       end
     end
 
-    context 'pending payments' do
-      it 'equals balance minus total pending payment amount' do
-        pending_balance = model.balance - Currency.exchange(payment.amount, payment.currency, model.currency)
+    context 'pending transactions' do
+      it 'equals balance minus total pending transaction amount' do
+        pending_balance = model.balance - Currency.exchange(transaction.amount, transaction.currency, model.currency)
         expect(model.pending_balance).to eq(pending_balance)
       end
     end
 
-    context 'committed payments' do
+    context 'committed transactions' do
       it 'equals balance' do
-        payment.commit!
+        transaction.commit!
         expect(model.pending_balance).to eq(model.balance)
       end
     end

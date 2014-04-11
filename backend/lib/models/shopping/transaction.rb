@@ -1,6 +1,6 @@
 require 'models/shared/committable'
 
-class Payment < ActiveRecord::Base
+class Transaction < ActiveRecord::Base
   include Committable
 
   belongs_to :payment_method
