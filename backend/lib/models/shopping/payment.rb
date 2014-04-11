@@ -6,7 +6,7 @@ class Payment < ActiveRecord::Base
   belongs_to :payment_method
   belongs_to :billing_address, class_name: 'Address'
 
-  attr_protected :uuid, :refunded
+  attr_protected :uuid
   attr_readonly :uuid, :user_id, :payment_method_id, :billing_address_id, :amount, :currency_id
 
   belongs_to :user
@@ -40,7 +40,6 @@ class Payment < ActiveRecord::Base
   def initialize_values
     if new_record?
       self.uuid = SecureRandom.hex.upcase
-      self.refunded = false
     end
   end
 end

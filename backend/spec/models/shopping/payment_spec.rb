@@ -39,21 +39,6 @@ describe Payment do
     end
   end
 
-  describe '#refunded?' do
-    context 'new payment' do
-      it 'is false' do
-        expect(model).to_not be_refunded
-      end
-    end
-
-    context 'saved payment' do
-      it 'is false' do
-        model.save!
-        expect(model).to_not be_refunded
-      end
-    end
-  end
-
   describe '#commit!' do
     it 'subtracts payment amount from payment method' do
       payment_method = model.payment_method

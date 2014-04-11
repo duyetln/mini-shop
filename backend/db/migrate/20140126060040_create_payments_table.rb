@@ -9,7 +9,6 @@ class CreatePaymentsTable < ActiveRecord::Migration
       t.integer  :currency_id
       t.boolean  :committed
       t.datetime :committed_at
-      t.boolean  :refunded
       t.datetime :created_at
     end
 
