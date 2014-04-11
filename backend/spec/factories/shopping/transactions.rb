@@ -5,5 +5,13 @@ FactoryGirl.define do
     amount { 100 }
     currency { payment_method.currency }
     billing_address { build :address, user: user }
+
+    trait :payment do
+      amount { 100 }
+    end
+
+    trait :refund do
+      amount { -100 }
+    end
   end
 end

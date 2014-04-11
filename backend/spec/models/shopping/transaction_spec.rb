@@ -10,8 +10,6 @@ describe Transaction do
   it { should belong_to(:user) }
   it { should belong_to(:currency) }
 
-  it { should validate_numericality_of(:amount).is_greater_than(0) }
-
   it { should validate_presence_of(:user) }
   it { should validate_presence_of(:payment_method) }
   it { should validate_presence_of(:billing_address) }
@@ -39,11 +37,37 @@ describe Transaction do
     end
   end
 
+  describe '#payment?' do
+    it 'compares amount with zero' do
+      expect(model.payment?).to eq(model.amount >= 0)
+    end
+  end
+
+  describe '#refund?' do
+    it 'opposites #payment?' do
+      expect(model.refund?).to eq(!model.payment?)
+    end
+  end
+
   describe '#commit!' do
-    it 'subtracts payment amount from payment method' do
-      payment_method = model.payment_method
-      amount = Currency.exchange(model.amount, model.currency, payment_method.currency)
-      expect { model.commit! }.to change { model.payment_method.balance }.by(-amount)
+    context 'payment transaction' do
+      let(:model_args) { [:transaction, :payment] }
+
+      it 'withdraws amount from payment method' do
+        payment_method = model.payment_method
+        amount = Currency.exchange(model.amount, model.currency, payment_method.currency)
+        expect { model.commit! }.to change { payment_method.balance }.by(-amount.abs)
+      end
+    end
+
+    context 'refund transaction' do
+      let(:model_args) { [:transaction, :refund] }
+
+      it 'deposits amount to payment method' do
+        payment_method = model.payment_method
+        amount = Currency.exchange(model.amount, model.currency, payment_method.currency)
+        expect { model.commit! }.to change { payment_method.balance }.by(amount.abs)
+      end
     end
   end
 

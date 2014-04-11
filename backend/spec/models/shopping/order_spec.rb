@@ -101,7 +101,7 @@ describe Order do
 
         before :each do
           expect(model).to receive(status_method).and_return(status)
-        end 
+        end
 
         context 'unmarked' do
           let(:status) { true }

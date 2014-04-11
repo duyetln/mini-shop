@@ -12,8 +12,6 @@ class Transaction < ActiveRecord::Base
   belongs_to :user
   belongs_to :currency
 
-  validates :amount,  numericality: { greater_than: 0 }
-
   validates :user,            presence: true
   validates :payment_method,  presence: true
   validates :billing_address, presence: true
@@ -26,13 +24,18 @@ class Transaction < ActiveRecord::Base
 
   def commit!
     if super
-      payment_method.balance -= Currency.exchange(
-        amount,
-        currency,
-        payment_method_currency
-      )
-      payment_method.save!
+      payment? ?
+        payment_method.withdraw!(amount, currency) :
+        payment_method.deposit!(amount, currency)
     end
+  end
+
+  def payment?
+    amount >= 0
+  end
+
+  def refund?
+    !payment?
   end
 
   protected
