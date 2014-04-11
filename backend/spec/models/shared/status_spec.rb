@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Status do
 
-  it { should belong_to(:owner) }
+  it { should belong_to(:source) }
 
-  it { should validate_presence_of(:owner) }
+  it { should validate_presence_of(:source) }
   it { should validate_presence_of(:status) }
 
   describe Status::Mixin do

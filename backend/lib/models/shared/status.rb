@@ -1,7 +1,7 @@
 class Status < ActiveRecord::Base
-  belongs_to :owner, polymorphic: true
+  belongs_to :source, polymorphic: true
 
-  validates :owner, presence: true
+  validates :source, presence: true
   validates :status, presence: true
 
   default_scope { order(:created_at) }
@@ -11,7 +11,7 @@ class Status < ActiveRecord::Base
 
     included do
 
-      has_many :statuses, as: :owner, class_name: 'Status'
+      has_many :statuses, as: :source, class_name: 'Status'
 
       self::STATUS.each do |key, value|
         class_eval <<-EOF
@@ -21,7 +21,7 @@ class Status < ActiveRecord::Base
 
           def mark_#{key}!
             status = ::Status.new
-            status.owner = self
+            status.source = self
             status.status = #{value}
             status.save! && status
           end
