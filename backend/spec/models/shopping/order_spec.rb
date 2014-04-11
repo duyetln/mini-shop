@@ -18,7 +18,7 @@ describe Order do
 
   it { should ensure_inclusion_of(:item_type).in_array(%w{ StorefrontItem }) }
 
-  context 'fulfillment methods' do
+  describe 'fulfillment methods' do
     let :fulfillment do
       FactoryGirl.build [:shipping_fulfillment, :online_fulfillment].sample
     end
@@ -29,16 +29,16 @@ describe Order do
       model.fulfillments << fulfillment
     end
 
-    shared_examples 'marks success status and saves' do
-      it 'marks status and saves' do
+    shared_examples 'marks success status and returns' do
+      it 'marks status and returns' do
         expect(model).to receive(mark_method)
         expect(model).to_not receive(:mark_failed!)
         expect(model.send(method)).to eq(model.send(check_method))
       end
     end
 
-    shared_examples 'marks failure status and saves' do
-      it 'marks status and saves' do
+    shared_examples 'marks failure status and returns' do
+      it 'marks status and returns' do
         expect(model).to_not receive(mark_method)
         expect(model).to receive(:mark_failed!)
         expect(model.send(method)).to eq(model.send(check_method))
@@ -49,37 +49,51 @@ describe Order do
       it 'does not do anything' do
         expect(model).to_not receive(mark_method)
         expect(model).to_not receive(:mark_failed!)
-        expect(model.send(method)).to eq(model.send(check_method))
+        expect(model.send(method)).to be_nil
       end
     end
 
     shared_examples 'fulfillment method' do
       before :each do
-        expect(model).to receive(status_method).and_return(status)
+        expect(model).to receive(:purchase_committed?).and_return(committed_status)
       end
 
-      context 'status true' do
+      context 'committed purchase' do
+        let(:committed_status) { true }
+
         before :each do
-          expect(fulfillment).to receive(process_method).and_return(process_status)
+          expect(model).to receive(status_method).and_return(status)
         end
 
-        let(:status) { true }
+        context 'status true' do
+          before :each do
+            expect(fulfillment).to receive(process_method).and_return(process_status)
+          end
 
-        context 'successful processing' do
-          let(:process_status) { true }
+          let(:status) { true }
 
-          include_examples 'marks success status and saves'
+          context 'successful processing' do
+            let(:process_status) { true }
+
+            include_examples 'marks success status and returns'
+          end
+
+          context 'failed processing' do
+            let(:process_status) { false }
+
+            include_examples 'marks failure status and returns'
+          end
         end
 
-        context 'failed processing' do
-          let(:process_status) { false }
+        context 'status false' do
+          let(:status) { false }
 
-          include_examples 'marks failure status and saves'
+          include_examples 'does not do anything'
         end
       end
 
-      context 'status false' do
-        let(:status) { false }
+      context 'pending purchase' do
+        let(:committed_status) { false }
 
         include_examples 'does not do anything'
       end
@@ -120,13 +134,13 @@ describe Order do
             context 'successful preparation' do
               let(:preparation_status) { true }
 
-              include_examples'marks success status and saves'
+              include_examples'marks success status and returns'
             end
 
             context 'failed preparation' do
               let(:preparation_status) { false }
 
-              include_examples 'marks failure status and saves'
+              include_examples 'marks failure status and returns'
             end
           end
 
@@ -137,7 +151,7 @@ describe Order do
               expect(fulfillment).to_not receive(process_method)
             end
 
-            include_examples 'marks failure status and saves'
+            include_examples 'marks failure status and returns'
           end
         end
 
@@ -162,21 +176,7 @@ describe Order do
       let(:check_method) { :fulfilled? }
       let(:mark_method) { :mark_fulfilled! }
 
-      before :each do
-        expect(model).to receive(:purchase_committed?).and_return(committed_status)
-      end
-
-      context 'committed purchase' do
-        let(:committed_status) { true }
-
-        include_examples 'fulfillment method'
-      end
-
-      context 'pending purchase' do
-        let(:committed_status) { false }
-
-        include_examples 'does not do anything'
-      end
+      include_examples 'fulfillment method'
     end
 
     describe '#reverse!' do
@@ -186,21 +186,7 @@ describe Order do
       let(:check_method) { :reversed? }
       let(:mark_method) { :mark_reversed! }
 
-      before :each do
-        expect(model).to receive(:purchase_committed?).and_return(committed_status)
-      end
-
-      context 'committed purchase' do
-        let(:committed_status) { true }
-
-        include_examples 'fulfillment method'
-      end
-
-      context 'pending purchase' do
-        let(:committed_status) { false }
-
-        include_examples 'does not do anything'
-      end
+      include_examples 'fulfillment method'
     end
   end
 
