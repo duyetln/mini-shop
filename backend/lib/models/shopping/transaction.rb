@@ -3,12 +3,12 @@ require 'models/shared/committable'
 class Transaction < ActiveRecord::Base
   include Committable
 
-  belongs_to :payment_method
-  belongs_to :billing_address, class_name: 'Address'
-
   attr_protected :uuid
   attr_readonly :uuid, :user_id, :payment_method_id, :billing_address_id, :amount, :currency_id
 
+  belongs_to :payment_method
+  belongs_to :source, polymorphic: true
+  belongs_to :billing_address, class_name: 'Address'
   belongs_to :user
   belongs_to :currency
 

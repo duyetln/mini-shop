@@ -6,6 +6,7 @@ describe Transaction do
   it_behaves_like 'committable model'
 
   it { should belong_to(:payment_method) }
+  it { should belong_to(:source) }
   it { should belong_to(:billing_address).class_name('Address') }
   it { should belong_to(:user) }
   it { should belong_to(:currency) }
@@ -15,6 +16,14 @@ describe Transaction do
   it { should validate_presence_of(:billing_address) }
   it { should validate_presence_of(:currency) }
   it { should validate_presence_of(:amount) }
+
+  it { should_not allow_mass_assignment_of(:uuid) }
+  it { should have_readonly_attribute(:uuid) }
+  it { should have_readonly_attribute(:user_id) }
+  it { should have_readonly_attribute(:payment_method_id) }
+  it { should have_readonly_attribute(:billing_address_id) }
+  it { should have_readonly_attribute(:amount) }
+  it { should have_readonly_attribute(:currency_id) }
 
   describe '#payment_method_currency' do
     it 'delegates to #payment_method' do
