@@ -146,4 +146,189 @@ describe Purchase do
     end
   end
 
+  describe '#create_transaction!' do
+    let(:transaction) { model.send(:create_transaction!, amount, currency) }
+
+    context 'pending' do
+      it 'does not do anything' do
+        expect { transaction }.to_not change { model.transactions.count }
+      end
+    end
+
+    context 'committed' do
+      before :each do
+        model.commit!
+      end
+
+      it 'creates new transaction' do
+        expect { transaction }.to change { model.transactions.count }.by(1)
+      end
+
+      it 'sets correct information' do
+        expect(transaction).to eq(model.transactions.last)
+        expect(transaction.user).to eq(model.user)
+        expect(transaction.amount).to eq(amount)
+        expect(transaction.currency).to eq(currency)
+        expect(transaction.payment_method).to eq(model.payment_method)
+        expect(transaction.billing_address).to eq(model.billing_address)
+      end
+    end
+  end
+
+  describe 'fulfillment methods' do
+    shared_examples 'marks success status and returns' do
+      it 'marks success status and returns' do
+        expect(order).to receive(process_method)
+        expect(model).to receive(mark_method)
+        expect(model.send(method)).to eq(model.send(check_method))
+      end
+    end
+
+    shared_examples 'does not do anything' do
+      it 'does not do anything' do
+        expect(order).to_not receive(process_method)
+        expect(model).to_not receive(mark_method)
+        expect(model).to_not receive(:create_transaction!)
+        expect(model.send(method)).to be_nil
+      end
+    end
+
+    shared_examples 'fulfillment method' do
+      before :each do
+        expect(model).to receive(:committed?).and_return(committed_status)
+      end
+
+      context 'committed' do
+        let(:committed_status) { true }
+
+        before :each do
+          expect(model).to receive(status_method).and_return(status)
+        end
+
+        context 'status true' do
+          let(:status) { true }
+
+          include_examples 'marks success status and returns'
+        end
+
+        context 'status false' do
+          let(:status) { false }
+
+          include_examples 'does not do anything'
+        end
+      end
+
+      context 'pending' do
+        let(:committed_status) { false }
+
+        include_examples 'does not do anything'
+      end
+    end
+
+    describe '#prepare!' do
+      let(:method) { :prepare! }
+      let(:process_method) { :prepare! }
+      let(:status_method) { :unmarked? }
+      let(:check_method) { :prepared? }
+      let(:mark_method) { :mark_prepared! }
+
+      include_examples 'fulfillment method'
+    end
+
+    describe '#reverse!' do
+      let(:method) { :reverse! }
+      let(:process_method) { :reverse! }
+      let(:status_method) { :fulfilled? }
+      let(:check_method) { :reversed? }
+      let(:mark_method) { :mark_reversed! }
+
+      include_examples 'fulfillment method'
+    end
+
+    describe '#fulfill!' do
+      let(:method) { :fulfill! }
+      let(:process_method) { :fulfill! }
+      let(:status_method) { :prepared? }
+      let(:check_method) { :fulfilled? }
+      let(:mark_method) { :mark_fulfilled! }
+
+      let(:payment_transaction) { FactoryGirl.build :transaction, :payment, source: model }
+      let(:refund_transaction) { FactoryGirl.build :transaction, :refund, source: model }
+
+      before :each do
+        expect(model).to receive(:committed?).and_return(committed_status)
+        order.amount = order.item.amount(order.currency) * order.qty
+      end
+
+      context 'committed' do
+        let(:committed_status) { true }
+
+        before :each do
+          expect(model).to receive(status_method).and_return(status)
+        end
+
+        context 'status true' do
+          let(:status) { true }
+
+          before :each do
+            expect(model.payment_method).to receive(:enough?).with(model.amount).and_return(enough_status)
+          end
+
+          context 'enough amount' do
+            let(:enough_status) { true }
+
+            before :each do
+              expect(model).to receive(:create_transaction!).and_return(payment_transaction)
+              expect(payment_transaction).to receive(:commit!)
+              expect(order).to receive(process_method).and_return(fulfillment_status)
+              expect(model).to receive(mark_method)
+            end
+
+            context 'successful processing' do
+              let(:fulfillment_status) { true }
+
+              before :each do
+                expect(model).to_not receive(:create_transaction!).with(-order.amount, order.currency)
+              end
+
+              it 'processes correctly' do
+                expect(model.send(method)).to eq(model.send(check_method))
+              end
+            end
+
+            context 'failed processing' do
+              let(:fulfillment_status) { false }
+
+              before :each do
+                expect(model).to receive(:create_transaction!).with(-order.amount, order.currency).and_return(refund_transaction)
+                expect(refund_transaction).to receive(:commit!)
+              end
+
+              it 'processes correctly' do
+                expect(model.send(method)).to eq(model.send(check_method))
+              end
+            end
+          end
+
+          context 'not enought amount' do
+            let(:enough_status) { false }
+
+            include_examples 'does not do anything'
+          end
+        end
+
+        context 'status false' do
+          let(:status) { false }
+
+          include_examples 'does not do anything'
+        end
+      end
+
+      context 'pending' do
+        let(:committed_status) { false }
+
+        include_examples 'does not do anything'
+      end
+    end
+  end
 end
