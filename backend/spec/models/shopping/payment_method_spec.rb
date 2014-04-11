@@ -47,8 +47,6 @@ describe PaymentMethod do
   end
 
   describe '#enough?' do
-    let(:amount) { rand(1..10) }
-
     it 'checks against #pending_balance amount' do
       enough = (model.pending_balance >= amount)
       expect(model.enough?(amount)).to eq(enough)

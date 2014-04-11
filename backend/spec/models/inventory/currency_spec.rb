@@ -38,8 +38,6 @@ describe Currency do
     let(:eur) { FactoryGirl.build :eur }
     let(:gbp) { FactoryGirl.build :gbp }
 
-    let(:amount) { rand(50) }
-
     context 'different currencies' do
       let(:src_curr) { eur }
       let(:dest_curr) { gbp }
