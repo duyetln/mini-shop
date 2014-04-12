@@ -8,11 +8,12 @@ describe OnlineFulfillment do
   it { should ensure_inclusion_of(:item_type).in_array(%w{ DigitalItem }) }
 
   describe '#process_fulfillment!' do
-    let(:ownership) { FactoryGirl.build :ownership, order: model.order, item: model.item }
+    let(:ownership) { FactoryGirl.build :ownership, order: model.order, item: model.item, qty: model.qty }
 
     before :each do
       expect(Ownership).to receive(:add_or_update).with(
         model.item,
+        qty: model.qty,
         conds: { order_id: model.order.id }
       ).and_yield(ownership)
     end

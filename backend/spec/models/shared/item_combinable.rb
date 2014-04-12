@@ -61,5 +61,11 @@ shared_examples 'item combinable model' do
         expect(described_class.retrieve(model.id)).to eq(model)
       end
     end
+
+    context 'providing invalid id' do
+      it 'returns nil' do
+        expect(described_class.retrieve(nil)).to be_nil
+      end
+    end
   end
 end

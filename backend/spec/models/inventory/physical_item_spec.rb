@@ -33,13 +33,26 @@ describe PhysicalItem do
       )
     end
 
-    it 'creates or updates ShippingFulfillment records' do
-      expect(ShippingFulfillment).to receive(:add_or_update).with(
-        model,
-        qty: qty,
-        conds: { order_id: order.id }
-      )
-      model.prepare!(order, order.qty)
+    context 'enough quantity' do
+      let(:model_args) { [:physical_item, qty: qty] }
+
+      it 'creates or updates ShippingFulfillment records' do
+        expect(ShippingFulfillment).to receive(:add_or_update).with(
+          model,
+          qty: order.qty,
+          conds: { order_id: order.id }
+        )
+        expect { model.prepare!(order, order.qty) }.to change{ model.qty }.by(-order.qty)
+      end
+    end
+
+    context 'not enough quantity' do
+      let(:model_args) { [:physical_item, qty: 0] }
+
+      it 'creates or updates ShippingFulfillment records' do
+        expect(ShippingFulfillment).to_not receive(:add_or_update)
+        expect { model.prepare!(order, order.qty) }.to_not change{ model.qty }
+      end
     end
   end
 end

@@ -8,11 +8,12 @@ describe ShippingFulfillment do
   it { should ensure_inclusion_of(:item_type).in_array(%w{ PhysicalItem }) }
 
   describe '#process_fulfillment!' do
-    let(:shipment) { FactoryGirl.build :shipment, order: model.order, item: model.item }
+    let(:shipment) { FactoryGirl.build :shipment, order: model.order, item: model.item, qty: model.qty }
 
     before :each do
       expect(Shipment).to receive(:add_or_update).with(
         model.item,
+        qty: model.qty,
         conds: { order_id: model.order.id }
       ).and_yield(shipment)
     end

@@ -9,6 +9,10 @@ class PhysicalItem < ActiveRecord::Base
   end
 
   def prepare!(order, qty)
-    ShippingFulfillment.add_or_update(self, qty: qty, conds: { order_id: order.id })
+    if self.qty >= qty
+      self.qty -= qty
+      save!
+      ShippingFulfillment.add_or_update(self, qty: qty, conds: { order_id: order.id })
+    end
   end
 end

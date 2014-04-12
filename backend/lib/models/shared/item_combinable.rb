@@ -22,12 +22,12 @@ module ItemCombinable
       acc ? record.qty += qty : record.qty = qty
 
       yield record if block_given?
-      record.save! && record
+      record.save! && (!respond_to?(:reload) || !!reload) && record
     end
 
     def retrieve(item)
       record = find { |r| r.item == item } || find { |r| r == item } || find_by_id(item)
-      record.present? && (!block_given? || (yield record)) && record
+      record.present? && (!block_given? || (yield record)) && record || nil
     end
   end
 end
