@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'models/spec_setup'
 
 shared_examples 'correct currency converter' do
 

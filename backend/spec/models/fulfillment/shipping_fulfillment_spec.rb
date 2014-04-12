@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'models/spec_setup'
 require 'spec/models/shared/fulfillment'
 
 describe ShippingFulfillment do

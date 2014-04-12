@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'models/spec_setup'
 
 describe Address do
 

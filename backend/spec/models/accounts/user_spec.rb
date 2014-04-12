@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'models/spec_setup'
 
 describe User do
 
@@ -93,7 +93,7 @@ describe User do
 
   describe '.authenticate' do
     context 'non-matching uuid' do
-      it('returns nil') { expect(User.authenticate(random_string, random_string)).to be_nil }
+      it('returns nil') { expect(User.authenticate(rand_str, rand_str)).to be_nil }
     end
 
     context 'unconfirmed user' do
@@ -101,7 +101,7 @@ describe User do
     end
 
     context 'non-matching password' do
-      it('returns nil') { expect(User.authenticate(user.uuid, random_string)).to be_nil }
+      it('returns nil') { expect(User.authenticate(user.uuid, rand_str)).to be_nil }
     end
 
     context 'matching uuid, matching password, confirmed user' do
