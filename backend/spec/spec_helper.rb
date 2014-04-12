@@ -39,7 +39,7 @@ module SpecHelpers
     let(:item) { FactoryGirl.build [:bundle_item, :physical_item, :digital_item].sample }
     let(:qty) { rand(1..10) }
     let(:amount) { rand(1..100) }
-    let(:currency) { |curr = :eur| FactoryGirl.build curr }
+    let(:currency) { FactoryGirl.build [:usd, :eur, :gbp].sample }
 
     def expect_status(code)
       expect(last_response.status).to eq(code)

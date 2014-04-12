@@ -66,6 +66,8 @@ describe Purchase do
   end
 
   describe '#add_or_update' do
+    let(:currency) { FactoryGirl.build :eur }
+    
     context 'pending' do
       before :each do
         expect(orders).to receive(:add_or_update).with(
