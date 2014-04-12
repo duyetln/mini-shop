@@ -37,7 +37,6 @@ module SpecHelpers
     # common helpers
     let(:user) { FactoryGirl.build :user }
     let(:item) { FactoryGirl.build [:bundle_item, :physical_item, :digital_item].sample }
-    let(:sf_item) { FactoryGirl.build :storefront_item }
     let(:qty) { rand(1..10) }
     let(:amount) { rand(1..100) }
     let(:currency) { |curr = :eur| FactoryGirl.build curr }

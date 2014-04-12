@@ -6,6 +6,7 @@ describe Purchase do
   let(:orders) { model.orders }
   let(:order) { orders.sample }
   let(:model_args) { [:purchase, :orders] }
+  let(:item) { FactoryGirl.build :storefront_item }
 
   it_behaves_like 'committable model'
 
@@ -68,18 +69,18 @@ describe Purchase do
     context 'pending' do
       before :each do
         expect(orders).to receive(:add_or_update).with(
-          sf_item,
+          item,
           qty: qty,
           acc: false
         ).and_yield(order)
       end
 
       it 'adds or updates order' do
-        model.add_or_update(sf_item, currency, qty)
+        model.add_or_update(item, currency, qty)
       end
 
       it 'changes the order currency' do
-        expect { model.add_or_update(sf_item, currency, qty) }.to change { order.currency }.to(currency)
+        expect { model.add_or_update(item, currency, qty) }.to change { order.currency }.to(currency)
       end
     end
 
@@ -87,7 +88,7 @@ describe Purchase do
       it 'does not add or update item' do
         model.commit!
         expect(orders).to_not receive(:add_or_update)
-        model.add_or_update(sf_item, currency, qty)
+        model.add_or_update(item, currency, qty)
       end
     end
   end
@@ -95,15 +96,15 @@ describe Purchase do
   describe '#remove' do
     context 'pending' do
       before :each do
-        expect(orders).to receive(:retrieve).with(sf_item).and_yield(order)
+        expect(orders).to receive(:retrieve).with(item).and_yield(order)
       end
 
       it 'retrieves the item' do
-        model.remove(sf_item)
+        model.remove(item)
       end
 
       it 'removes the item' do
-        expect { model.remove(sf_item) }.to change { order.deleted? }.to(true)
+        expect { model.remove(item) }.to change { order.deleted? }.to(true)
       end
     end
 
@@ -111,7 +112,7 @@ describe Purchase do
       it 'does not remove the item' do
         model.commit!
         expect(orders).to_not receive(:retrieve)
-        model.remove(sf_item)
+        model.remove(item)
       end
     end
   end
