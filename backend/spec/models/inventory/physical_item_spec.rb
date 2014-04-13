@@ -42,7 +42,7 @@ describe PhysicalItem do
           qty: order.qty,
           conds: { order_id: order.id }
         )
-        expect { model.prepare!(order, order.qty) }.to change{ model.qty }.by(-order.qty)
+        expect { model.prepare!(order, order.qty) }.to change { model.qty }.by(-order.qty)
       end
     end
 
@@ -51,7 +51,7 @@ describe PhysicalItem do
 
       it 'creates or updates ShippingFulfillment records' do
         expect(ShippingFulfillment).to_not receive(:add_or_update)
-        expect { model.prepare!(order, order.qty) }.to_not change{ model.qty }
+        expect { model.prepare!(order, order.qty) }.to_not change { model.qty }
       end
     end
   end

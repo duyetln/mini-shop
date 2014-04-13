@@ -21,21 +21,23 @@ module SpecHelpers
       let(:rand_str) { Faker::Lorem.characters(20) }
       let(:rand_num) { rand(1..50) }
 
-      let(:currency) { FactoryGirl.build [
-          :usd, 
-          :eur, 
+      let(:currency) do
+        FactoryGirl.build [
+          :usd,
+          :eur,
           :gbp
-        ].sample 
-      }
+        ].sample
+      end
       let(:qty) { rand(1..10) }
       let(:amount) { rand(1..100) }
       let(:user) { FactoryGirl.build :user }
-      let(:item) { FactoryGirl.build [
-          :bundle_item, 
-          :physical_item, 
+      let(:item) do
+        FactoryGirl.build [
+          :bundle_item,
+          :physical_item,
           :digital_item
-        ].sample 
-      }
+        ].sample
+      end
     end
   end
 end
