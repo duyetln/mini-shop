@@ -43,6 +43,21 @@ describe Purchase do
     it { should validate_presence_of(:shipping_address) }
   end
 
+  describe '#normalize!' do
+    it 'sets the order currency to payment method currency' do
+      expect(order).to receive(:currency=).with(model.payment_method_currency)
+      expect(order).to receive(:save!)
+      model.normalize!
+    end
+  end
+
+  describe '#commit!' do
+    it 'calls #normalize!' do
+      expect(model).to receive(:normalize!)
+      model.commit!
+    end
+  end
+
   describe '#payment_method_currency' do
     it 'delegates to #payment_method' do
       expect(model.payment_method_currency).to eq(model.payment_method.currency)

@@ -95,6 +95,20 @@ class Purchase < ActiveRecord::Base
     [] + orders.map(&:refund) << payment
   end
 
+  def commit!
+    normalize!
+    super
+  end
+
+  def normalize!
+    if payment_method.present?
+      orders.each do |order|
+        order.currency = payment_method_currency
+        order.save!
+      end
+    end
+  end
+
   private
 
   def make_payment!
