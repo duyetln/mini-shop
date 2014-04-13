@@ -10,6 +10,7 @@ class CreateOrdersTable < ActiveRecord::Migration
       t.decimal  :tax, precision: 20, scale: 4
       t.integer  :qty
       t.boolean  :deleted
+      t.integer  :refund_id
       t.datetime :created_at
     end
 
