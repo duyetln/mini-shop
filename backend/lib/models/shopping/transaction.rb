@@ -7,7 +7,6 @@ class Transaction < ActiveRecord::Base
   attr_readonly :uuid, :user_id, :payment_method_id, :billing_address_id, :amount, :currency_id
 
   belongs_to :payment_method
-  belongs_to :source, polymorphic: true
   belongs_to :billing_address, class_name: 'Address'
   belongs_to :user
   belongs_to :currency
@@ -24,9 +23,8 @@ class Transaction < ActiveRecord::Base
 
   def commit!
     if super
-      payment? ?
-        payment_method.withdraw!(amount, currency) :
-        payment_method.deposit!(amount, currency)
+      method = payment? ? :withdraw! : :deposit!
+      payment_method.send(method, amount, currency)
     end
   end
 

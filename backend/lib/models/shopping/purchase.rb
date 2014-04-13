@@ -13,8 +13,8 @@ class Purchase < ActiveRecord::Base
   belongs_to :payment_method
   belongs_to :billing_address,  class_name: 'Address'
   belongs_to :shipping_address, class_name: 'Address'
+  belongs_to :payment, class_name: 'Transaction'
   belongs_to :user
-  has_many   :transactions, as: :source, class_name: 'Transaction'
 
   validates :user,             presence: true
   validates :payment_method,   presence: true, if: :committed?
@@ -49,31 +49,38 @@ class Purchase < ActiveRecord::Base
     end
   end
 
+  def commit!
+    normalize!
+    super
+  end
+
+  def total(currency = payment_method_currency)
+    amount(currency) + tax(currency)
+  end
+
   def prepare!
     if committed? && unmarked?
-      orders.each do |order|
-        order.prepare!
+      if payment_method.enough?(total)
+        make_payment!
+        orders.each do |order|
+          order.prepare!
+        end
+        mark_prepared!
+        prepared?
       end
-      mark_prepared!
-      prepared?
     end
   end
 
   def fulfill!
     if committed? && prepared?
-      if payment_method.enough?(amount)
-        create_transaction!.commit!
-        orders.each do |order|
-          if order.fulfill! == false
-            create_transaction!(
-             -order.amount,
-              order.currency
-            ).commit!
-          end
-        end
-        mark_fulfilled!
-        fulfilled?
+      orders.each do |order|
+        order.fulfill!
       end
+      transactions.each do |transaction|
+        transaction.commit!
+      end
+      mark_fulfilled!
+      fulfilled?
     end
   end
 
@@ -87,18 +94,35 @@ class Purchase < ActiveRecord::Base
     end
   end
 
+  def transactions
+    [] + orders.map(&:refund) << payment
+  end
+
+  def normalize!
+    if payment_method.present?
+      orders.each do |order|
+        order.currency = payment_method_currency
+        order.update_values
+        order.save!
+      end
+    end
+  end
+
   private
 
-  def create_transaction!(input_amount = amount, input_currency = payment_method_currency)
+  def make_payment!
     if committed?
-      transaction = transactions.build
-      transaction.user = user
-      transaction.amount = input_amount
-      transaction.currency = input_currency
-      transaction.payment_method = payment_method
-      transaction.billing_address = billing_address
-      transaction.save!
-      transaction
+      unless payment.present?
+        build_payment
+        payment.user = user
+        payment.amount = total
+        payment.currency = payment_method_currency
+        payment.payment_method = payment_method
+        payment.billing_address = billing_address
+        payment.save!
+        save!
+      end
+      payment
     end
   end
 end

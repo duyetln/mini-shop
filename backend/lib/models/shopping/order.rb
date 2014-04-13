@@ -13,6 +13,7 @@ class Order < ActiveRecord::Base
 
   belongs_to :purchase
   belongs_to :currency
+  belongs_to :refund, class_name: 'Transaction'
   has_many   :fulfillments
 
   validates :purchase, presence: true
@@ -24,7 +25,7 @@ class Order < ActiveRecord::Base
   validate  :pending_purchase
 
   after_initialize :initialize_values
-  before_save :set_values
+  before_save :update_values
 
   delegate :user,             to: :purchase
   delegate :payment_method,   to: :purchase
@@ -32,6 +33,7 @@ class Order < ActiveRecord::Base
   delegate :shipping_address, to: :purchase
   delegate :committed?,       to: :purchase, prefix: true
   delegate :pending?,         to: :purchase, prefix: true
+  delegate :payment,          to: :purchase, prefix: true
 
   def delete!
     if purchase_pending?
@@ -48,6 +50,7 @@ class Order < ActiveRecord::Base
           mark_prepared!
         end
       rescue => err
+        make_refund!
         mark_failed!
       end
       prepared?
@@ -62,6 +65,7 @@ class Order < ActiveRecord::Base
           mark_fulfilled!
         end
       rescue => err
+        make_refund!
         mark_failed!
       end
       fulfilled?
@@ -82,6 +86,20 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def paid?
+    purchase_payment.present?
+  end
+
+  def update_values
+    self.amount = item.amount(currency) * qty if currency_id_changed? || qty_changed?
+    self.tax_rate ||= (5 + rand(15)) / 100.0
+    self.tax = amount * tax_rate if amount_changed?
+  end
+
+  def total
+    amount + tax
+  end
+
   protected
 
   def pending_purchase
@@ -96,9 +114,21 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def set_values
-    self.amount = item.amount(currency) * qty if currency_id_changed? || qty_changed?
-    self.tax_rate ||= (5 + rand(15)) / 100.0
-    self.tax = amount * tax_rate if amount_changed?
+  private
+
+  def make_refund!
+    if purchase_committed?
+      unless refund.present?
+        build_refund
+        refund.user = user
+        refund.amount = -total
+        refund.currency = currency
+        refund.payment_method = payment_method
+        refund.billing_address = billing_address
+        refund.save!
+        save!
+      end
+      refund
+    end
   end
 end
