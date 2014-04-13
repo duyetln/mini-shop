@@ -37,25 +37,12 @@ class Purchase < ActiveRecord::Base
     orders.retrieve(item) { |order| order.delete! } if pending?
   end
 
-  [:amount, :tax].each do |method|
+  [:amount, :tax, :total].each do |method|
     define_method method do |currency = payment_method_currency|
       orders.reduce(BigDecimal('0.0')) do |a, e|
-        a += Currency.exchange(
-          e.send(method),
-          e.currency,
-          currency
-        )
+        a += e.send(method, currency)
       end
     end
-  end
-
-  def commit!
-    normalize!
-    super
-  end
-
-  def total(currency = payment_method_currency)
-    amount(currency) + tax(currency)
   end
 
   def prepare!
@@ -96,16 +83,6 @@ class Purchase < ActiveRecord::Base
 
   def transactions
     [] + orders.map(&:refund) << payment
-  end
-
-  def normalize!
-    if payment_method.present?
-      orders.each do |order|
-        order.currency = payment_method_currency
-        order.update_values
-        order.save!
-      end
-    end
   end
 
   private

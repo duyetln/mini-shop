@@ -187,12 +187,39 @@ describe Order do
     end
   end
 
+  describe '#amount' do
+    it 'multiplies item price with #qty' do
+      expect(model.amount(currency)).to eq(model.item.amount(currency) * model.qty)
+    end
+  end
+
+  describe '#tax_rate' do
+    it 'is initialized' do
+      expect(described_class.new.tax_rate).to be_present
+    end
+  end
+
+  describe '#tax' do
+    it 'multiplies #amount with #tax_rate' do
+      expect(model.tax(currency)).to eq(model.amount(currency) * model.tax_rate)
+    end
+  end
+
   describe '#update_values' do
+    it 'is a callback' do
+      expect(model).to receive(:update_values)
+      model.save!
+    end
+
     it 'updates amount, tax_rate, and tax' do
-      model.update_values
-      expect(model.amount).to eq(model.item.amount(model.currency) * model.qty)
-      expect(model.tax_rate).to be_present
-      expect(model.tax).to eq(model.amount * model.tax_rate)
+      model.save!
+      expect(model['amount']).to eq(model.amount(model.currency))
+      expect(model['tax']).to eq(model.tax(model.currency))
+    end
+
+    it 'updates currency' do
+      model.save!
+      expect(model.currency).to eq(model.payment_method.currency)
     end
   end
 
@@ -232,7 +259,7 @@ describe Order do
 
   describe '#total' do
     it 'sums #amount and #tax' do
-      model.update_values
+      model.send(:update_values)
       expect(model.total).to eq(model.amount + model.tax)
     end
   end

@@ -90,17 +90,25 @@ class Order < ActiveRecord::Base
     purchase_payment.present?
   end
 
-  def update_values
-    self.amount = item.amount(currency) * qty if currency_id_changed? || qty_changed?
-    self.tax_rate ||= (5 + rand(15)) / 100.0
-    self.tax = amount * tax_rate if amount_changed?
+  def amount(input_currency = currency)
+    item.amount(input_currency) * qty
   end
 
-  def total
-    amount + tax
+  def tax(input_currency = currency)
+    amount(input_currency) * tax_rate
+  end
+
+  def total(input_currency = currency)
+    amount(input_currency) + tax(input_currency)
   end
 
   protected
+
+  def update_values
+    self.currency = payment_method.currency if payment_method.present?
+    self.amount = amount
+    self.tax = tax
+  end
 
   def pending_purchase
     if changed? && purchase.present? && purchase_committed?
@@ -111,6 +119,7 @@ class Order < ActiveRecord::Base
   def initialize_values
     if new_record?
       self.uuid = SecureRandom.hex.upcase
+      self.tax_rate ||= (5 + rand(15)) / 100.0
     end
   end
 

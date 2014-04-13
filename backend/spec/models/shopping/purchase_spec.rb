@@ -43,13 +43,6 @@ describe Purchase do
     it { should validate_presence_of(:shipping_address) }
   end
 
-  describe '#commit!' do
-    it 'calls #normalize!' do
-      expect(model).to receive(:normalize!)
-      model.commit!
-    end
-  end
-
   describe '#payment_method_currency' do
     it 'delegates to #payment_method' do
       expect(model.payment_method_currency).to eq(model.payment_method.currency)
@@ -127,38 +120,29 @@ describe Purchase do
   end
 
   describe '#amount' do
-    let(:model_args) { [:purchase, :orders] }
-
-    it 'totals order amount' do
+    it 'sums order amount' do
       total_amount = model.orders.reduce(BigDecimal('0.0')) do |a, e|
-        a += Currency.exchange(
-          e.amount,
-          e.currency,
-          currency
-        )
+        a += e.amount(currency)
       end
       expect(model.amount(currency)).to eq(total_amount)
     end
   end
 
   describe '#tax' do
-    let(:model_args) { [:purchase, :orders] }
-
-    it 'totals order tax' do
+    it 'sums order tax' do
       total_tax = model.orders.reduce(BigDecimal('0.0')) do |a, e|
-        a += Currency.exchange(
-          e.tax,
-          e.currency,
-          currency
-        )
+        a += e.tax(currency)
       end
       expect(model.tax(currency)).to eq(total_tax)
     end
   end
 
   describe '#total' do
-    it 'sums #amount and #tax' do
-      expect(model.total).to eq(model.amount + model.tax)
+    it 'sums order total' do
+      total = model.orders.reduce(BigDecimal('0.0')) do |a, e|
+        a += e.total(currency)
+      end
+      expect(model.total(currency)).to eq(total)
     end
   end
 
@@ -171,6 +155,7 @@ describe Purchase do
 
     context 'committed' do
       before :each do
+        model.save!
         model.commit!
       end
 
@@ -192,14 +177,6 @@ describe Purchase do
         model.send(:make_payment!)
         expect(model.payment).to eq(model.send(:make_payment!))
       end
-    end
-  end
-
-  describe '#normalize!' do
-    it 'changes the currency of orders' do
-      expect(order).to receive(:save!)
-      expect(order).to receive(:currency=).with(model.payment_method_currency)
-      model.normalize!
     end
   end
 
