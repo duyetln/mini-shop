@@ -8,7 +8,6 @@ shared_examples 'fulfillment model' do
 
   it { should validate_presence_of(:order) }
 
-  it { should respond_to(:prepare!).with(0).argument }
   it { should respond_to(:fulfill!).with(0).argument }
   it { should respond_to(:reverse!).with(0).argument }
 
@@ -17,7 +16,6 @@ shared_examples 'fulfillment model' do
 
     it 'defaults to nil status' do
       expect(model).to_not be_marked
-      expect(model).to_not be_prepared
       expect(model).to_not be_fulfilled
       expect(model).to_not be_reversed
     end
@@ -68,20 +66,10 @@ shared_examples 'fulfillment model' do
       end
     end
 
-    describe '#prepare' do
-      let(:method) { :prepare! }
-      let(:process_method) { :process_preparation! }
-      let(:status_method) { :unmarked? }
-      let(:check_method) { :prepared? }
-      let(:mark_method) { :mark_prepared! }
-
-      include_examples 'fulfillment method'
-    end
-
     describe '#fulfill!' do
       let(:method) { :fulfill! }
       let(:process_method) { :process_fulfillment! }
-      let(:status_method) { :prepared? }
+      let(:status_method) { :unmarked? }
       let(:check_method) { :fulfilled? }
       let(:mark_method) { :mark_fulfilled! }
 

@@ -1,7 +1,7 @@
 require 'models/shared/committable'
 
 class Purchase < ActiveRecord::Base
-  STATUS = { prepared: 0, fulfilled: 1, reversed: 2 }
+  STATUS = { fulfilled: 1, reversed: 2 }
 
   include Committable
   include Status::Mixin
@@ -55,29 +55,19 @@ class Purchase < ActiveRecord::Base
     end
   end
 
-  def prepare!
+  def fulfill!
     if committed? && unmarked?
       if payment_method.enough?(total)
         make_payment!
         orders.each do |order|
-          order.prepare!
+          order.fulfill!
         end
-        mark_prepared!
-        prepared?
+        transactions.each do |transaction|
+          transaction.commit!
+        end
+        mark_fulfilled!
+        fulfilled?
       end
-    end
-  end
-
-  def fulfill!
-    if committed? && prepared?
-      orders.each do |order|
-        order.fulfill!
-      end
-      transactions.each do |transaction|
-        transaction.commit!
-      end
-      mark_fulfilled!
-      fulfilled?
     end
   end
 
@@ -92,7 +82,7 @@ class Purchase < ActiveRecord::Base
   end
 
   def transactions
-    [] + orders.map(&:refund) << payment
+    ([] + orders.map(&:refund) << payment).compact
   end
 
   def commit!
