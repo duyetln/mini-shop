@@ -82,7 +82,7 @@ class Purchase < ActiveRecord::Base
   end
 
   def transactions
-    [] + orders.map(&:refund) << payment
+    ([] + orders.map(&:refund) << payment).compact
   end
 
   def commit!
