@@ -14,8 +14,8 @@ class BundleItem < ActiveRecord::Base
 
   def remove(item)
     if kept?
-      bundling = bundlings.retrieve(item) do |bundling| 
-        bundling.destroy
+      bundling = bundlings.retrieve(item) do |bnln|
+        bnln.destroy
       end
       reload && bundling
     end
