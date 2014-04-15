@@ -71,17 +71,17 @@ describe Order do
       end
     end
 
-    describe '#prepare!' do
-      let(:method) { :prepare! }
-      let(:process_method) { :prepare! }
+    describe '#fulfill!!' do
+      let(:method) { :fulfill! }
+      let(:process_method) { :fulfill! }
       let(:status_method) { :unmarked? }
-      let(:check_method) { :prepared? }
-      let(:mark_method) { :mark_prepared! }
+      let(:check_method) { :fulfilled? }
+      let(:mark_method) { :mark_fulfilled! }
 
       before :each do
         model.stub(:purchase_committed?).and_return(true)
         model.stub(status_method).and_return(true)
-        model.item.stub(process_method).with(model, model.qty).and_return(true)
+        model.item.stub(:prepare!).with(model, model.qty).and_return(true)
         fulfillment.stub(process_method).and_return(true)
       end
 
@@ -90,7 +90,7 @@ describe Order do
 
       context 'failed item preparation' do
         before :each do
-          model.item.stub(process_method).with(model, model.qty).and_return(false)
+          model.item.stub(:prepare!).with(model, model.qty).and_return(false)
         end
 
         it 'marks status and returns' do
@@ -102,40 +102,6 @@ describe Order do
       end
 
       context 'failed preparation' do
-        before :each do
-          fulfillment.stub(process_method).and_return(false)
-        end
-
-        it 'marks status and returns' do
-          expect(model).to_not receive(mark_method)
-          expect(model).to receive(:make_refund!)
-          expect(model).to receive(:mark_failed!)
-          expect(model.send(method)).to eq(model.send(check_method))
-        end
-      end
-
-      context 'ready' do
-        include_examples 'processes, marks status, and returns'
-      end
-    end
-
-    describe '#fulfill!' do
-      let(:method) { :fulfill! }
-      let(:process_method) { :fulfill! }
-      let(:status_method) { :prepared? }
-      let(:check_method) { :fulfilled? }
-      let(:mark_method) { :mark_fulfilled! }
-
-      before :each do
-        model.stub(:purchase_committed?).and_return(true)
-        model.stub(status_method).and_return(true)
-        fulfillment.stub(process_method).and_return(true)
-      end
-
-      include_examples 'status false'
-      include_examples 'purchase pending'
-
-      context 'failed fulfillment' do
         before :each do
           fulfillment.stub(process_method).and_return(false)
         end

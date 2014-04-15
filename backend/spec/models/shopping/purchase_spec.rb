@@ -248,12 +248,12 @@ describe Purchase do
       end
     end
 
-    describe '#prepare!' do
-      let(:method) { :prepare! }
-      let(:process_method) { :prepare! }
+    describe '#fufill!' do
+      let(:method) { :fulfill! }
+      let(:process_method) { :fulfill! }
       let(:status_method) { :unmarked? }
-      let(:check_method) { :prepared? }
-      let(:mark_method) { :mark_prepared! }
+      let(:check_method) { :fulfilled? }
+      let(:mark_method) { :mark_fulfilled! }
 
       before :each do
         model.stub(:committed?).and_return(true)
@@ -275,30 +275,6 @@ describe Purchase do
       context 'ready' do
         it 'processes, marks status, and returns' do
           expect(model).to receive(:make_payment!)
-          expect(order).to receive(process_method)
-          expect(model).to receive(mark_method)
-          expect(model.send(method)).to eq(model.send(check_method))
-        end
-      end
-    end
-
-    describe '#fulfill!' do
-      let(:method) { :fulfill! }
-      let(:process_method) { :fulfill! }
-      let(:status_method) { :prepared? }
-      let(:check_method) { :fulfilled? }
-      let(:mark_method) { :mark_fulfilled! }
-
-      before :each do
-        model.stub(:committed?).and_return(true)
-        model.stub(status_method).and_return(true)
-      end
-
-      include_examples 'status false'
-      include_examples 'pending'
-
-      context 'ready' do
-        it 'processes, marks status, and returns' do
           expect(order).to receive(process_method)
           expect(transaction).to receive(:commit!)
           expect(model).to receive(mark_method)
