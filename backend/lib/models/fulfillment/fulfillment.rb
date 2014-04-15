@@ -2,11 +2,10 @@ require 'models/shared/item_combinable'
 require 'models/shared/status'
 
 class Fulfillment < ActiveRecord::Base
-  class PreparationFailure < StandardError; end
   class FulfillmentFailure < StandardError; end
   class ReversalFailure    < StandardError; end
 
-  STATUS = { failed: -2, invalid: -1, prepared: 0, fulfilled: 1, reversed: 2 }
+  STATUS = { failed: -2, invalid: -1, fulfilled: 1, reversed: 2 }
 
   include ItemCombinable
   include Status::Mixin
@@ -19,15 +18,8 @@ class Fulfillment < ActiveRecord::Base
 
   validates :item_type, inclusion: { in: %w{ PhysicalItem DigitalItem } }
 
-  def prepare!
-    if unmarked?
-      process_preparation! ? mark_prepared! : mark_failed!
-      prepared?
-    end
-  end
-
   def fulfill!
-    if prepared?
+    if unmarked?
       process_fulfillment! ? mark_fulfilled! : mark_failed!
       fulfilled?
     end
@@ -41,10 +33,6 @@ class Fulfillment < ActiveRecord::Base
   end
 
   protected
-
-  def process_preparation!
-    true
-  end
 
   def process_fulfillment!
     fail 'Must be implemented in derived class'
