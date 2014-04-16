@@ -197,7 +197,7 @@ describe Purchase do
 
   describe '#transactions' do
     it 'returns all related transactions' do
-      expect(model.transactions).to eq([model.orders.map(&:refund), model.payment].flatten)
+      expect(model.transactions).to eq([model.orders.map(&:refund), model.payment].flatten.compact)
     end
   end
 
