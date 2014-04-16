@@ -25,25 +25,25 @@ class Purchase < ActiveRecord::Base
 
   delegate :currency, to: :payment_method, prefix: true, allow_nil: true
 
+  after_save :reload
+
   def self.pending_purchase(user)
     where(user_id: user.id).pending.first_or_create
   end
 
   def add_or_update(item, currency, qty = 1)
     if pending?
-      order = orders.add_or_update(item, qty: qty, acc: false) do |ordr|
-        ordr.currency = currency
+      orders.add_or_update(item, qty: qty, acc: false) do |order|
+        order.currency = currency
       end
-      reload && order
     end
   end
 
   def remove(item)
     if pending?
-      order = orders.retrieve(item) do |ordr|
-        ordr.delete!
+      orders.retrieve(item) do |order|
+        order.delete!
       end
-      reload && order
     end
   end
 

@@ -5,19 +5,19 @@ class BundleItem < ActiveRecord::Base
 
   has_many :bundlings, foreign_key: :bundle_id
 
+  after_save :reload
+
   def add_or_update(item, qty = 1, acc = true)
     if kept?
-      bundling = bundlings.add_or_update(item, qty: qty, acc: acc)
-      reload && bundling
+      bundlings.add_or_update(item, qty: qty, acc: acc)
     end
   end
 
   def remove(item)
     if kept?
-      bundling = bundlings.retrieve(item) do |bnln|
-        bnln.destroy
+      bundlings.retrieve(item) do |bundling|
+        bundling.destroy
       end
-      reload && bundling
     end
   end
 

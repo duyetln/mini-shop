@@ -20,9 +20,7 @@ class Status < ActiveRecord::Base
           end
 
           def mark_#{key}!
-            status = ::Status.new
-            status.source = self
-            status.status = #{value}
+            status = statuses.new(status: #{value})
             status.save! && status
           end
         EOF

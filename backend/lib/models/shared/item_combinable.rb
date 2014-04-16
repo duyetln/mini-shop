@@ -6,6 +6,10 @@ module ItemCombinable
   include Itemable
   include Quantifiable
 
+  included do
+    after_save :reload
+  end
+
   module ClassMethods
     def add_or_update(item, options = {})
       qty   =  options[:qty]      || 1
@@ -22,7 +26,7 @@ module ItemCombinable
       acc ? record.qty += qty : record.qty = qty
 
       yield record if block_given?
-      record.save! && (!respond_to?(:reload) || !!reload) && record
+      record.save! && record
     end
 
     def retrieve(item)
