@@ -201,6 +201,12 @@ describe Purchase do
     end
   end
 
+  describe '#refunds' do
+    it 'returns order refunds' do
+      expect(model.refunds).to eq(model.orders.map(&:refund).compact)
+    end
+  end
+
   describe 'fulfillment methods' do
     let(:transaction) do
       FactoryGirl.build :transaction,
