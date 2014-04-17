@@ -90,7 +90,6 @@ describe Purchase do
           qty: qty,
           acc: false
         ).and_yield(order)
-        expect(model).to receive(:reload)
       end
 
       it 'adds or updates order' do
@@ -106,7 +105,6 @@ describe Purchase do
       it 'does not add or update item' do
         model.commit!
         expect(orders).to_not receive(:add_or_update)
-        expect(model).to_not receive(:reload)
         model.add_or_update(item, currency, qty)
       end
     end
@@ -116,7 +114,6 @@ describe Purchase do
     context 'pending' do
       before :each do
         expect(orders).to receive(:retrieve).with(item).and_yield(order)
-        expect(model).to receive(:reload)
       end
 
       it 'retrieves the item' do
@@ -132,7 +129,6 @@ describe Purchase do
       it 'does not remove the item' do
         model.commit!
         expect(orders).to_not receive(:retrieve)
-        expect(model).to_not receive(:reload)
         model.remove(item)
       end
     end
