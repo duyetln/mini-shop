@@ -21,6 +21,7 @@ describe BundleItem do
     context 'kept' do
       it 'adds or updates the item' do
         expect(bundlings).to receive(:add_or_update).with(item, qty: qty, acc: acc)
+        expect(model).to receive(:reload)
         model.add_or_update(item, qty, acc)
       end
     end
@@ -29,6 +30,7 @@ describe BundleItem do
       it 'does not add or update the item' do
         model.delete!
         expect(bundlings).to_not receive(:add_or_update)
+        expect(model).to_not receive(:reload)
         model.add_or_update(item, qty, acc)
       end
     end
@@ -73,6 +75,7 @@ describe BundleItem do
       it 'removes the item' do
         expect(bundlings).to receive(:retrieve).with(item).and_yield(bundling)
         expect(bundling).to receive(:destroy)
+        expect(model).to receive(:reload)
         model.remove(item)
       end
     end
@@ -81,6 +84,7 @@ describe BundleItem do
       it 'does not remove the item' do
         model.delete!
         expect(bundlings).to_not receive(:retrieve)
+        expect(model).to_not receive(:reload)
         model.remove(item)
       end
     end
