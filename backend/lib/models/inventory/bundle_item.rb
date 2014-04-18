@@ -9,15 +9,17 @@ class BundleItem < ActiveRecord::Base
 
   def add_or_update(item, qty = 1, acc = true)
     if kept?
-      bundlings.add_or_update(item, qty: qty, acc: acc)
+      abundling = bundlings.add_or_update(item, qty: qty, acc: acc)
+      reload && abundling
     end
   end
 
   def remove(item)
     if kept?
-      bundlings.retrieve(item) do |bundling|
+      rbundling = bundlings.retrieve(item) do |bundling|
         bundling.destroy
       end
+      reload && rbundling
     end
   end
 

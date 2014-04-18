@@ -33,17 +33,19 @@ class Purchase < ActiveRecord::Base
 
   def add_or_update(item, currency, qty = 1)
     if pending?
-      orders.add_or_update(item, qty: qty, acc: false) do |order|
+      aorder = orders.add_or_update(item, qty: qty, acc: false) do |order|
         order.currency = currency
       end
+      reload && aorder
     end
   end
 
   def remove(item)
     if pending?
-      orders.retrieve(item) do |order|
+      rorder = orders.retrieve(item) do |order|
         order.delete!
       end
+      reload && rorder
     end
   end
 
