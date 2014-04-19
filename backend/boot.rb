@@ -1,22 +1,63 @@
-ENV['RACK_ENV'] ||= 'development'
+module Application
+  class << self
+    attr_writer :env
 
-SVC_ENV  = ENV['RACK_ENV']
-SVC_ROOT = File.expand_path File.dirname(__FILE__)
+    def env
+      @env ||= 'development'
+    end
 
-$LOAD_PATH.unshift SVC_ROOT
-$LOAD_PATH.unshift File.join(SVC_ROOT, 'lib')
+    def root=(path)
+      @root = File.expand_path(path)
+    end
 
-Bundler.require :default, SVC_ENV.to_sym
+    def root
+      @root ||= File.expand_path('.')
+    end
 
-ActiveRecord::Base.establish_connection(YAML.load_file(File.join(SVC_ROOT, 'config/database.yml'))[SVC_ENV])
+    def config
+      @config ||= Hashie::Mash.new
+    end
 
-Sinatra::Base.set :env,  SVC_ENV
-Sinatra::Base.set :root, SVC_ROOT
+    def load_config!
+      config.currency_rates = YAML.load_file('config/currency_rates.yml')
+    end
 
-CURRENCY_RATES = YAML.load_file(File.join(SVC_ROOT, 'config/currency_rates.yml'))
+    def load_path!(*paths)
+      paths.each do |path|
+        $LOAD_PATH.unshift File.expand_path(path)
+      end
+    end
 
-dirs = []
-dirs << 'lib/*.rb'
-dirs << 'lib/models/**/*.rb'
-dirs << 'lib/services/**/*.rb'
-dirs.map { |dir| File.join(SVC_ROOT, dir) }.each { |dir| Dir[dir].each { |file| require file } }
+    def load_bundle!
+      Bundler.require :default, env.to_sym
+    end
+
+    def load_models!
+      load_files! 'lib/models/**/*.rb'
+    end
+
+    def load_services!
+      load_files! 'lib/services/**/*.rb'
+    end
+
+    def load_lib!
+      load_files! 'lib/*.rb'
+    end
+
+    def load_files!(*paths)
+      Dir[*paths].each do |file|
+        require file
+      end
+    end
+
+    def connect_db!
+      require 'active_record'
+      ActiveRecord::Base.establish_connection(YAML.load_file('config/database.yml')[env])
+    end
+  end
+end
+
+Application.env = ENV['RACK_ENV']
+Application.root = File.dirname(__FILE__)
+Application.load_path! Application.root, 'lib'
+Application.load_bundle!
