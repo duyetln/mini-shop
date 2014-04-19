@@ -1,5 +1,11 @@
 require "./boot"
 
+Application.connect_db!
+Application.load_lib!
+Application.load_models!
+Application.load_services!
+Application.load_config!
+
 use Rack::Parser, parsers: { 'application/json' => proc { |data| Yajl::Parser.parse data } }
 
 class ApplicationService < Sinatra::Base
