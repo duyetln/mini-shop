@@ -1,28 +1,29 @@
-source "http://rubygems.org"
+source 'http://rubygems.org'
 
-gem "rake"
-gem "sinatra"
-gem "mysql2"
-gem "bcrypt-ruby", "3.1.2", require: "bcrypt"
-gem "activerecord", "3.2.16", require: "active_record"
-gem "yajl-ruby", "1.1.0", require: ["yajl", "yajl/json_gem"]
-gem "rack-parser", require: "rack/parser"
+gem 'rake'
+gem 'sinatra'
+gem 'mysql2'
+gem 'bcrypt-ruby', '3.1.2', require: 'bcrypt'
+gem 'activerecord', '3.2.16', require: 'active_record'
+gem 'yajl-ruby', '1.1.0', require: ['yajl', 'yajl/json_gem']
+gem 'rack-parser', require: 'rack/parser'
+gem 'hashie', '~> 2.1.1'
 
 group :development do
-  gem "thin"
-  gem "pry"
-  gem "pry-remote"
-  gem "pry-debugger"
-  gem "pry-stack_explorer"
+  gem 'thin'
+  gem 'pry'
+  gem 'pry-remote'
+  gem 'pry-debugger'
+  gem 'pry-stack_explorer'
 end
 
 group :test do
-  gem "timecop"
-  gem "faker"
-  gem "rspec"
-  gem "shoulda-matchers"
-  gem "factory_girl"
-  gem "database_cleaner"
-  gem "rack-test", require: "rack/test"
-  gem "simplecov", "~> 0.7.1"
+  gem 'timecop'
+  gem 'faker'
+  gem 'rspec'
+  gem 'shoulda-matchers'
+  gem 'factory_girl'
+  gem 'database_cleaner'
+  gem 'rack-test', require: 'rack/test'
+  gem 'simplecov', '~> 0.7.1'
 end
