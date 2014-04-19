@@ -20,3 +20,31 @@ namespace :db do
     require 'db/seeds'
   end
 end
+
+namespace :spec do
+  require 'rspec/core/rake_task'
+
+  namespace :unit do
+    desc 'Run model unit tests'
+    RSpec::Core::RakeTask.new(:models) do |task|
+      task.verbose = false
+      task.pattern = 'spec/models/**/*_spec.rb'
+      task.rspec_opts = '--profile'
+    end
+
+    task :all => [:models]
+  end
+
+  namespace :integration do
+    desc 'Run common usecase integration tests'
+    RSpec::Core::RakeTask.new(:usecases) do |task|
+      task.verbose = false
+      task.pattern = 'spec/integration/**/*_spec.rb'
+      task.rspec_opts == '--profile'
+    end
+
+    task :all => [:usecases]
+  end
+
+  task :all => ['unit:all', 'integration:all']
+end
