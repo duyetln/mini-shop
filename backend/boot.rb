@@ -61,3 +61,4 @@ Application.env = ENV['RACK_ENV']
 Application.root = File.dirname(__FILE__)
 Application.load_path! Application.root, 'lib'
 Application.load_bundle!
+Application.connect_db!

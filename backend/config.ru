@@ -1,6 +1,5 @@
 require "./boot"
 
-Application.connect_db!
 Application.load_lib!
 Application.load_models!
 Application.load_services!
