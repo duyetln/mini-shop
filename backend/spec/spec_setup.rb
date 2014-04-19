@@ -13,6 +13,11 @@ end
 
 require './boot'
 
+Application.connect_db!
+Application.load_lib!
+Application.load_models!
+Application.load_config!
+
 module SpecHelpers
   module Common
     extend ActiveSupport::Concern

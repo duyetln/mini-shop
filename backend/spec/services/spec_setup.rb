@@ -29,6 +29,8 @@ module SpecHelpers
   end
 end
 
+Application.load_services!
+
 RSpec.configure do |config|
   config.include SpecHelpers::Services
 end
