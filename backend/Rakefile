@@ -48,3 +48,18 @@ namespace :spec do
 
   task :all => ['unit:all', 'integration:all']
 end
+
+desc 'Load applicationn in a pry console'
+task :pry do
+  system(<<-EOF
+    RACK_ENV=test bundle exec pry -I. -r ./boot -e '
+      puts "loading lib..."; Application.load_lib!;
+      puts "loading models..."; Application.load_models!;
+      puts "loading config..."; Application.load_config!;
+      puts "finding factories..."; FactoryGirl.find_definitions;
+      puts "checking factory validity..."; FactoryGirl.lint;
+      puts "done"
+    '
+  EOF
+  )
+end
