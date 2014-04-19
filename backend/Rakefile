@@ -1,21 +1,22 @@
-require "./boot"
+task :boot do
+  require './boot'
+end
 
 namespace :db do
-
-  desc "Migrate the database (options: VERSION=x)"
-  task :migrate do
+  desc 'Migrate the database (options: VERSION=x)'
+  task :migrate => :boot do
     ActiveRecord::Migration.verbose = true
-    ActiveRecord::Migrator.migrate File.join(SVC_ROOT, "db/migrate"), ENV["VERSION"] ? ENV["VERSION"].to_i : nil
+    ActiveRecord::Migrator.migrate 'db/migrate', ENV['VERSION'] ? ENV['VERSION'].to_i : nil
   end
 
-  desc "Rolls the schema back to the previous version (specify steps w/ STEP=n)"
-  task :rollback do
-    ActiveRecord::Migrator.rollback File.join(SVC_ROOT, "db/migrate"), ENV["STEP"] ? ENV["STEP"].to_i : 1
+  desc 'Rolls the schema back to the previous version (specify steps w/ STEP=n)'
+  task :rollback => :boot do
+    ActiveRecord::Migrator.rollback 'db/migrate', ENV['STEP'] ? ENV['STEP'].to_i : 1
   end
 
-  desc "Populate database with sample data"
-  task :seed do
-    require "db/seeds"
+  desc 'Populate database with sample data'
+  task :seed => :boot do
+    Application.load_models!
+    require 'db/seeds'
   end
-
 end
