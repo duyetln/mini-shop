@@ -19,6 +19,7 @@ module Application
     end
 
     def load_config!
+      I18n.enforce_available_locales = false
       config.currency_rates = YAML.load_file('config/currency_rates.yml')
     end
 
