@@ -12,8 +12,8 @@ class Currency < ActiveRecord::Base
     src_unit = src_curr.code.upcase.to_sym
     dst_unit = dst_curr.code.upcase.to_sym
 
-    src_rate = CURRENCY_RATES[:USD][src_unit]
-    dst_rate = CURRENCY_RATES[:USD][dst_unit]
+    src_rate = Application.config.currency_rates[:USD][src_unit]
+    dst_rate = Application.config.currency_rates[:USD][dst_unit]
 
     (amount * dst_rate / src_rate).ceil(4)
   end

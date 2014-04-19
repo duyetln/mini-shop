@@ -5,8 +5,8 @@ shared_examples 'correct currency converter' do
   it 'correctly converts provided amount' do
     expected_amount = (
       BigDecimal.new(amount.to_s) *
-      CURRENCY_RATES[:USD][dest_curr.code.to_sym] /
-      CURRENCY_RATES[:USD][src_curr.code.to_sym]
+      Application.config.currency_rates[:USD][dest_curr.code.to_sym] /
+      Application.config.currency_rates[:USD][src_curr.code.to_sym]
     ).ceil(4)
 
     expect(described_class.exchange(amount, src_curr, dest_curr)).to eq(expected_amount)
