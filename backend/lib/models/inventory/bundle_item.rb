@@ -24,7 +24,7 @@ class BundleItem < ActiveRecord::Base
   end
 
   def items
-    bundlings.map(&:item)
+    bundlings.map(&:item).compact
   end
 
   def available?
