@@ -91,26 +91,82 @@ describe Order do
       context 'failed item preparation' do
         before :each do
           model.item.stub(:prepare!).with(model, model.qty).and_return(false)
+          model.stub(:paid?).and_return(true)
+          model.stub(:total).and_return(amount)
         end
 
-        it 'marks status and returns' do
+        it 'marks status and creates refund' do
           expect(model).to_not receive(mark_method)
           expect(model).to receive(:make_refund!)
           expect(model).to receive(:mark_failed!)
           expect(model.send(method)).to eq(model.send(check_method))
+        end
+
+        context 'unpaid' do
+          before :each do
+            model.stub(:paid?).and_return(false)
+          end
+
+          it 'marks status but does not create refund' do
+            expect(model).to_not receive(mark_method)
+            expect(model).to_not receive(:make_refund!)
+            expect(model).to receive(:mark_failed!)
+            expect(model.send(method)).to eq(model.send(check_method))
+          end
+        end
+
+        context 'zero total' do
+          before :each do
+            model.stub(:total).and_return(0)
+          end
+
+          it 'marks status but does not create refund' do
+            expect(model).to_not receive(mark_method)
+            expect(model).to_not receive(:make_refund!)
+            expect(model).to receive(:mark_failed!)
+            expect(model.send(method)).to eq(model.send(check_method))
+          end
         end
       end
 
-      context 'failed preparation' do
+      context 'failed fufillment' do
         before :each do
           fulfillment.stub(process_method).and_return(false)
+          model.stub(:paid?).and_return(true)
+          model.stub(:total).and_return(amount)
         end
 
-        it 'marks status and returns' do
+        it 'marks status and creates refund' do
           expect(model).to_not receive(mark_method)
           expect(model).to receive(:make_refund!)
           expect(model).to receive(:mark_failed!)
           expect(model.send(method)).to eq(model.send(check_method))
+        end
+
+        context 'unpaid' do
+          before :each do
+            model.stub(:paid?).and_return(false)
+          end
+
+          it 'marks status but does not create refund' do
+            expect(model).to_not receive(mark_method)
+            expect(model).to_not receive(:make_refund!)
+            expect(model).to receive(:mark_failed!)
+            expect(model.send(method)).to eq(model.send(check_method))
+          end
+        end
+
+        context 'zero total' do
+          before :each do
+            model.stub(:total).and_return(0)
+          end
+
+          it 'marks status but does not create refund' do
+            expect(model).to_not receive(mark_method)
+            expect(model).to_not receive(:make_refund!)
+            expect(model).to receive(:mark_failed!)
+            expect(model.send(method)).to eq(model.send(check_method))
+          end
         end
       end
 

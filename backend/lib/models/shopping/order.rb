@@ -52,7 +52,7 @@ class Order < ActiveRecord::Base
           mark_fulfilled!
         end
       rescue => err
-        make_refund!
+        make_refund! if paid? && total > 0
         mark_failed!
       end
       fulfilled?
