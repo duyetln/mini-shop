@@ -12,7 +12,7 @@ class PhysicalItem < ActiveRecord::Base
     if self.qty >= qty
       self.qty -= qty
       save!
-      ShippingFulfillment.add_or_update(self, qty: qty, conds: { order_id: order.id })
+      order.fulfillments << ShippingFulfillment.new(item: self, qty: qty)
     end
   end
 end
