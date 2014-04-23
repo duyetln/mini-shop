@@ -52,7 +52,7 @@ class Order < ActiveRecord::Base
           mark_fulfilled!
         end
       rescue => err
-        make_refund! if paid? && total > 0
+        make_refund!
         mark_failed!
       end
       fulfilled?
@@ -114,7 +114,7 @@ class Order < ActiveRecord::Base
 
   def make_refund!
     if purchase_committed?
-      unless refund.present?
+      if refund.blank? && paid? && total > 0
         build_refund
         refund.user = user
         refund.amount = -total

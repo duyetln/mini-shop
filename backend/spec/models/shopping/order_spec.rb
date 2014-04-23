@@ -91,8 +91,6 @@ describe Order do
       context 'failed item preparation' do
         before :each do
           model.item.stub(:prepare!).with(model, model.qty).and_return(false)
-          model.stub(:paid?).and_return(true)
-          model.stub(:total).and_return(amount)
         end
 
         it 'marks status and creates refund' do
@@ -100,40 +98,12 @@ describe Order do
           expect(model).to receive(:make_refund!)
           expect(model).to receive(:mark_failed!)
           expect(model.send(method)).to eq(model.send(check_method))
-        end
-
-        context 'unpaid' do
-          before :each do
-            model.stub(:paid?).and_return(false)
-          end
-
-          it 'marks status but does not create refund' do
-            expect(model).to_not receive(mark_method)
-            expect(model).to_not receive(:make_refund!)
-            expect(model).to receive(:mark_failed!)
-            expect(model.send(method)).to eq(model.send(check_method))
-          end
-        end
-
-        context 'zero total' do
-          before :each do
-            model.stub(:total).and_return(0)
-          end
-
-          it 'marks status but does not create refund' do
-            expect(model).to_not receive(mark_method)
-            expect(model).to_not receive(:make_refund!)
-            expect(model).to receive(:mark_failed!)
-            expect(model.send(method)).to eq(model.send(check_method))
-          end
         end
       end
 
       context 'failed fufillment' do
         before :each do
           fulfillment.stub(process_method).and_return(false)
-          model.stub(:paid?).and_return(true)
-          model.stub(:total).and_return(amount)
         end
 
         it 'marks status and creates refund' do
@@ -141,32 +111,6 @@ describe Order do
           expect(model).to receive(:make_refund!)
           expect(model).to receive(:mark_failed!)
           expect(model.send(method)).to eq(model.send(check_method))
-        end
-
-        context 'unpaid' do
-          before :each do
-            model.stub(:paid?).and_return(false)
-          end
-
-          it 'marks status but does not create refund' do
-            expect(model).to_not receive(mark_method)
-            expect(model).to_not receive(:make_refund!)
-            expect(model).to receive(:mark_failed!)
-            expect(model.send(method)).to eq(model.send(check_method))
-          end
-        end
-
-        context 'zero total' do
-          before :each do
-            model.stub(:total).and_return(0)
-          end
-
-          it 'marks status but does not create refund' do
-            expect(model).to_not receive(mark_method)
-            expect(model).to_not receive(:make_refund!)
-            expect(model).to receive(:mark_failed!)
-            expect(model.send(method)).to eq(model.send(check_method))
-          end
         end
       end
 
@@ -246,36 +190,61 @@ describe Order do
   end
 
   describe '#make_refund!' do
+    before :each do
+      model.save!
+      model.purchase.commit!
+      model.stub(:purchase_committed?).and_return(true)
+      model.stub(:paid?).and_return(true)
+      model.stub(:total).and_return(amount)
+    end
+
     context 'purchase pending' do
+      before :each do
+        model.stub(:purchase_committed?).and_return(false)
+      end
+
       it 'does not do anything' do
         expect { model.send(:make_refund!) }.to_not change { model.refund }
       end
     end
 
-    context 'purchase committed' do
+    context 'unpaid' do
       before :each do
-        model.save!
-        model.purchase.commit!
+        model.stub(:paid?).and_return(false)
       end
 
-      it 'creates new refund' do
-        expect { model.send(:make_refund!) }.to change { model.refund }
-        expect(model.refund).to be_present
+      it 'does not do anything' do
+        expect { model.send(:make_refund!) }.to_not change { model.refund }
+      end
+    end
+
+    context 'zero total' do
+      before :each do
+        model.stub(:total).and_return(0)
       end
 
-      it 'sets correct information' do
-        model.send(:make_refund!)
-        expect(model.refund.user).to eq(model.user)
-        expect(model.refund.amount).to eq(-model.total)
-        expect(model.refund.currency).to eq(model.currency)
-        expect(model.refund.payment_method).to eq(model.payment_method)
-        expect(model.refund.billing_address).to eq(model.billing_address)
+      it 'does not do anything' do
+        expect { model.send(:make_refund!) }.to_not change { model.refund }
       end
+    end
 
-      it 'does not create a new refund' do
-        model.send(:make_refund!)
-        expect(model.refund).to eq(model.send(:make_refund!))
-      end
+    it 'creates new refund' do
+      expect { model.send(:make_refund!) }.to change { model.refund }
+      expect(model.refund).to be_present
+    end
+
+    it 'sets correct information' do
+      model.send(:make_refund!)
+      expect(model.refund.user).to eq(model.user)
+      expect(model.refund.amount).to eq(-model.total)
+      expect(model.refund.currency).to eq(model.currency)
+      expect(model.refund.payment_method).to eq(model.payment_method)
+      expect(model.refund.billing_address).to eq(model.billing_address)
+    end
+
+    it 'does not create a new refund' do
+      model.send(:make_refund!)
+      expect(model.refund).to eq(model.send(:make_refund!))
     end
   end
 
