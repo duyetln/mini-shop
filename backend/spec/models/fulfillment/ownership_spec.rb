@@ -1,9 +1,11 @@
 require 'models/spec_setup'
 require 'spec/models/shared/item_combinable'
+require 'spec/models/shared/deletable'
 
 describe Ownership do
 
   it_behaves_like 'item combinable model'
+  it_behaves_like 'deletable model'
 
   it { should have_readonly_attribute(:user_id) }
   it { should have_readonly_attribute(:order_id) }

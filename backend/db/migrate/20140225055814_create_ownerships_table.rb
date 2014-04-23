@@ -6,6 +6,7 @@ class CreateOwnershipsTable < ActiveRecord::Migration
       t.string   :item_type
       t.string   :item_id
       t.integer  :qty
+      t.boolean  :deleted
       t.datetime :created_at
     end
 

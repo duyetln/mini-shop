@@ -1,7 +1,9 @@
 require 'models/shared/item_combinable'
+require 'models/shared/deletable'
 
 class Ownership < ActiveRecord::Base
   include ItemCombinable
+  include Deletable
 
   attr_readonly :user_id, :order_id
 
