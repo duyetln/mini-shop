@@ -4,6 +4,6 @@ class DigitalItem < ActiveRecord::Base
   include ItemResource
 
   def prepare!(order, qty)
-    OnlineFulfillment.add_or_update(self, qty: qty, conds: { order_id: order.id })
+    order.fulfillments << OnlineFulfillment.new(item: self, qty: qty)
   end
 end
