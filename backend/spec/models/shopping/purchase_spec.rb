@@ -206,6 +206,12 @@ describe Purchase do
     end
   end
 
+  describe '#paid?' do
+    it 'checks the presence of #payment' do
+      expect(model.paid?).to eq(model.payment.present?)
+    end
+  end
+
   describe 'fulfillment methods' do
     let(:transaction) do
       FactoryGirl.build :transaction,

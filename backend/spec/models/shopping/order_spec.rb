@@ -194,7 +194,7 @@ describe Order do
       model.save!
       model.purchase.commit!
       model.stub(:purchase_committed?).and_return(true)
-      model.stub(:paid?).and_return(true)
+      model.stub(:purchase_paid?).and_return(true)
       model.stub(:total).and_return(amount)
     end
 
@@ -210,7 +210,7 @@ describe Order do
 
     context 'unpaid' do
       before :each do
-        model.stub(:paid?).and_return(false)
+        model.stub(:purchase_paid?).and_return(false)
       end
 
       it 'does not do anything' do
@@ -255,9 +255,9 @@ describe Order do
     end
   end
 
-  describe '#paid?' do
+  describe '#purchase_paid?' do
     it 'checks the presence of payment' do
-      expect(model.paid?).to eq(model.purchase_payment.present?)
+      expect(model.purchase_paid?).to eq(model.purchase.paid?)
     end
   end
 

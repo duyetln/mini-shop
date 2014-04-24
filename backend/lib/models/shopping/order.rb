@@ -33,6 +33,7 @@ class Order < ActiveRecord::Base
   delegate :shipping_address, to: :purchase
   delegate :committed?,       to: :purchase, prefix: true
   delegate :pending?,         to: :purchase, prefix: true
+  delegate :paid?,            to: :purchase, prefix: true
   delegate :payment,          to: :purchase, prefix: true
 
   def delete!
@@ -73,10 +74,6 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def paid?
-    purchase_payment.present?
-  end
-
   def amount(input_currency = currency)
     item.amount(input_currency) * qty
   end
@@ -114,7 +111,7 @@ class Order < ActiveRecord::Base
 
   def make_refund!
     if purchase_committed?
-      if refund.blank? && paid? && total > 0
+      if refund.blank? && purchase_paid? && total > 0
         build_refund
         refund.user = user
         refund.amount = -total

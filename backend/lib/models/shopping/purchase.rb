@@ -102,6 +102,10 @@ class Purchase < ActiveRecord::Base
     end
   end
 
+  def paid?
+    payment.present?
+  end
+
   private
 
   def make_payment!
