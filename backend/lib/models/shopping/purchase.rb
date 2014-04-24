@@ -110,7 +110,7 @@ class Purchase < ActiveRecord::Base
 
   def make_payment!
     if committed?
-      unless payment.present?
+      if !paid? && payment_method.enough?(total) && total > 0
         build_payment
         payment.user = user
         payment.amount = total
