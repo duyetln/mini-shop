@@ -13,6 +13,6 @@ class Ownership < ActiveRecord::Base
   validates :user,  presence: true
   validates :order, presence: true
 
-  validates :order_id,  uniqueness: { scope: [:item_type, :item_id] }
+  validates :order_id, uniqueness: { scope: [:item_type, :item_id, :deleted] }, unless: :deleted?
   validates :item_type, inclusion: { in: %w{ DigitalItem } }
 end
