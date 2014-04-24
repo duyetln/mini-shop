@@ -11,4 +11,14 @@ class OnlineFulfillment < Fulfillment
       user: order.user
     )
   end
+
+  def process_reversal!
+    Ownership.where(
+      item_type: item.class,
+      item_id: item.id,
+      order_id: order.id
+    ).each do |ownership|
+      ownership.delete!
+    end
+  end
 end

@@ -18,4 +18,18 @@ describe OnlineFulfillment do
       model.send(:process_fulfillment!)
     end
   end
+
+  describe '#process_reversal!' do
+    let(:ownership) { FactoryGirl.build :ownership, order: model.order }
+
+    it 'deletes related ownerships' do
+      expect(Ownership).to receive(:where).with(
+        item_type: model.item.class,
+        item_id: model.item.id,
+        order_id: model.order.id
+      ).and_return([ownership])
+      expect(ownership).to receive(:delete!)
+      model.send(:process_reversal!)
+    end
+  end
 end
