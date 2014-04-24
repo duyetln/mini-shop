@@ -65,6 +65,7 @@ class Order < ActiveRecord::Base
       begin
         self.class.transaction do
           fulfillments.all? { |f| f.reverse! } || (fail Fulfillment::ReversalFailure)
+          make_refund!
           mark_reversed!
         end
       rescue => err

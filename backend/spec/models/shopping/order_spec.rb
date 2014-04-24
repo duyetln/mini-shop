@@ -43,14 +43,6 @@ describe Order do
       end
     end
 
-    shared_examples 'processes, marks status, and returns' do
-      it 'marks status and returns' do
-        expect(model).to receive(mark_method)
-        expect(model).to_not receive(:mark_failed!)
-        expect(model.send(method)).to eq(model.send(check_method))
-      end
-    end
-
     shared_examples 'status false' do
       context 'status false' do
         before :each do
@@ -114,8 +106,11 @@ describe Order do
         end
       end
 
-      context 'ready' do
-        include_examples 'processes, marks status, and returns'
+      it 'marks status and returns' do
+        expect(model).to receive(mark_method)
+        expect(model).to_not receive(:make_refund!)
+        expect(model).to_not receive(:mark_failed!)
+        expect(model.send(method)).to eq(model.send(check_method))
       end
     end
 
@@ -135,7 +130,7 @@ describe Order do
       include_examples 'status false'
       include_examples 'purchase pending'
 
-      context 'failed fulfillment' do
+      context 'failed reversal' do
         before :each do
           fulfillment.stub(process_method).and_return(false)
         end
@@ -147,8 +142,11 @@ describe Order do
         end
       end
 
-      context 'ready' do
-        include_examples 'processes, marks status, and returns'
+      it 'marks status and returns' do
+        expect(model).to receive(:make_refund!)
+        expect(model).to receive(mark_method)
+        expect(model).to_not receive(:mark_failed!)
+        expect(model.send(method)).to eq(model.send(check_method))
       end
     end
   end
