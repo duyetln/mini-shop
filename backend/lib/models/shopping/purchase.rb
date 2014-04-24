@@ -9,6 +9,7 @@ class Purchase < ActiveRecord::Base
   attr_readonly :user_id
 
   has_many :orders
+  has_many :refunds, through: :orders
 
   belongs_to :payment_method
   belongs_to :billing_address,  class_name: 'Address'
@@ -84,11 +85,7 @@ class Purchase < ActiveRecord::Base
   end
 
   def transactions
-    (refunds << payment).compact
-  end
-
-  def refunds
-    orders.map(&:refund).compact
+    (refunds + [payment]).compact
   end
 
   def commit!

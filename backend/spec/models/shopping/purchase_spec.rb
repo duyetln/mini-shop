@@ -13,6 +13,7 @@ describe Purchase do
   it { should have_readonly_attribute(:user_id) }
 
   it { should have_many(:orders) }
+  it { should have_many(:refunds).through(:orders) }
   it { should belong_to(:payment_method) }
   it { should belong_to(:billing_address).class_name('Address') }
   it { should belong_to(:shipping_address).class_name('Address') }
@@ -202,12 +203,6 @@ describe Purchase do
   describe '#transactions' do
     it 'returns all related transactions' do
       expect(model.transactions).to eq([model.orders.map(&:refund), model.payment].flatten.compact)
-    end
-  end
-
-  describe '#refunds' do
-    it 'returns order refunds' do
-      expect(model.refunds).to eq(model.orders.map(&:refund).compact)
     end
   end
 
