@@ -269,18 +269,7 @@ describe Purchase do
       it 'does not do anything' do
         expect(order).to_not receive(process_method)
         expect(transaction).to_not receive(:commit!)
-        expect(model).to_not receive(mark_method)
         expect(model.send(method)).to be_nil
-      end
-    end
-
-    shared_examples 'status false' do
-      context 'status false' do
-        before :each do
-          model.stub(status_method).and_return(false)
-        end
-
-        include_examples 'does not do anything'
       end
     end
 
@@ -297,17 +286,12 @@ describe Purchase do
     describe '#fufill!' do
       let(:method) { :fulfill! }
       let(:process_method) { :fulfill! }
-      let(:status_method) { :unmarked? }
-      let(:check_method) { :fulfilled? }
-      let(:mark_method) { :mark_fulfilled! }
 
       before :each do
         model.stub(:committed?).and_return(true)
-        model.stub(status_method).and_return(true)
         model.stub(:make_payment!).and_return(true)
       end
 
-      include_examples 'status false'
       include_examples 'pending'
 
       context 'creating payment failed' do
@@ -323,8 +307,7 @@ describe Purchase do
           expect(model).to receive(:make_payment!)
           expect(order).to receive(process_method)
           expect(transaction).to receive(:commit!)
-          expect(model).to receive(mark_method)
-          expect(model.send(method)).to eq(model.send(check_method))
+          model.send(method)
         end
       end
     end
@@ -332,23 +315,18 @@ describe Purchase do
     describe '#reverse!' do
       let(:method) { :reverse! }
       let(:process_method) { :reverse! }
-      let(:status_method) { :fulfilled? }
-      let(:check_method) { :reversed? }
-      let(:mark_method) { :mark_reversed! }
 
       before :each do
         model.stub(:committed?).and_return(true)
-        model.stub(status_method).and_return(true)
       end
 
-      include_examples 'status false'
       include_examples 'pending'
 
       context 'ready' do
         it 'processes, marks status, and returns' do
           expect(order).to receive(process_method)
-          expect(model).to receive(mark_method)
-          expect(model.send(method)).to eq(model.send(check_method))
+          expect(transaction).to receive(:commit!)
+          model.send(method)
         end
       end
     end

@@ -1,10 +1,7 @@
 require 'models/shared/committable'
 
 class Purchase < ActiveRecord::Base
-  STATUS = { fulfilled: 1, reversed: 2 }
-
   include Committable
-  include Status::Mixin
 
   attr_readonly :user_id
 
@@ -59,25 +56,24 @@ class Purchase < ActiveRecord::Base
   end
 
   def fulfill!
-    if committed? && unmarked? && make_payment!
+    if committed? && make_payment!
       orders.each do |order|
         order.fulfill!
       end
       transactions.each do |transaction|
         transaction.commit!
       end
-      mark_fulfilled!
-      fulfilled?
     end
   end
 
   def reverse!
-    if committed? && fulfilled?
+    if committed?
       orders.each do |order|
         order.reverse!
       end
-      mark_reversed!
-      reversed?
+      transactions.each do |transaction|
+        transaction.commit!
+      end
     end
   end
 
