@@ -59,18 +59,15 @@ class Purchase < ActiveRecord::Base
   end
 
   def fulfill!
-    if committed? && unmarked?
-      if payment_method.enough?(total)
-        make_payment!
-        orders.each do |order|
-          order.fulfill!
-        end
-        transactions.each do |transaction|
-          transaction.commit!
-        end
-        mark_fulfilled!
-        fulfilled?
+    if committed? && unmarked? && make_payment!
+      orders.each do |order|
+        order.fulfill!
       end
+      transactions.each do |transaction|
+        transaction.commit!
+      end
+      mark_fulfilled!
+      fulfilled?
     end
   end
 

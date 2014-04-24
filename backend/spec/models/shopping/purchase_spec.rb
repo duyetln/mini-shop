@@ -304,15 +304,15 @@ describe Purchase do
       before :each do
         model.stub(:committed?).and_return(true)
         model.stub(status_method).and_return(true)
-        model.payment_method.stub(:enough?).with(model.total).and_return(true)
+        model.stub(:make_payment!).and_return(true)
       end
 
       include_examples 'status false'
       include_examples 'pending'
 
-      context 'insufficient balance' do
+      context 'creating payment failed' do
         before :each do
-          model.payment_method.stub(:enough?).with(model.total).and_return(false)
+          model.stub(:make_payment!).and_return(false)
         end
 
         include_examples 'does not do anything'
