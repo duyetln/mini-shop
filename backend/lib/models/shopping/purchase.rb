@@ -66,9 +66,16 @@ class Purchase < ActiveRecord::Base
     end
   end
 
-  def reverse!
+  def reverse!(*items)
     if committed?
-      orders.each do |order|
+      reversals = if items.present?
+                    items.map do |item|
+                      orders.retrieve(item)
+                    end.compact
+                  else
+                    orders
+                  end
+      reversals.each do |order|
         order.reverse!
       end
       transactions.each do |transaction|
