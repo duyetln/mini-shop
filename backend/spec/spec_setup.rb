@@ -32,8 +32,8 @@ module SpecHelpers
           :gbp
         ].sample
       end
-      let(:qty) { rand(1..10) }
-      let(:amount) { rand(1..100) }
+      let(:qty) { rand(1..5) }
+      let(:amount) { rand(1..20) }
       let(:user) { FactoryGirl.build :user }
       let(:item) do
         FactoryGirl.build [

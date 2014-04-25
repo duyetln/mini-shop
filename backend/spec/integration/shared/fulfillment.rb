@@ -31,8 +31,9 @@ shared_examples 'successful order fulfillment' do
     expect(order.refund).to be_blank
   end
 
-  it 'has fulfillments' do
+  it 'has fulfilled fulfillments' do
     expect(order.fulfillments).to be_present
+    expect(order.fulfillments.all?(&:fulfilled?)).to be_true
   end
 end
 

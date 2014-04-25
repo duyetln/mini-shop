@@ -36,8 +36,7 @@ describe PhysicalItem do
     let(:fulfillment) { FactoryGirl.build :shipping_fulfillment, order: order, item: model, qty: order.qty }
 
     it 'creates or updates ShippingFulfillment records' do
-      expect(ShippingFulfillment).to receive(:new).with(item: model, qty: order.qty).and_return(fulfillment)
-      expect(order.fulfillments).to receive(:<<).with(fulfillment)
+      expect(ShippingFulfillment).to receive(:create!).with(item: model, order: order, qty: order.qty)
       model.prepare!(order, order.qty)
     end
   end

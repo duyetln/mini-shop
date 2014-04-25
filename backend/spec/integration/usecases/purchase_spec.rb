@@ -32,13 +32,13 @@ describe 'purchase flow' do
   let(:pmethod) { @pmethod }
   let(:qty) { @qty }
 
-  context 'user' do
+  describe 'user' do
     it 'confirms and changes status' do
       expect { user.confirm! }.to change { user.confirmed? }.to(true)
     end
   end
 
-  context 'bundle item' do
+  describe 'bundle item' do
     it 'adds and updates items' do
       expect { bundle_item.add_or_update(physical_item, qty) }.to change { bundle_item.bundlings.count }.by(1)
       expect { bundle_item.add_or_update(digital_item, qty) }.to change { bundle_item.bundlings.count }.by(1)
@@ -46,7 +46,7 @@ describe 'purchase flow' do
     end
   end
 
-  context 'purchase' do
+  describe 'purchase' do
     it 'is pending' do
       expect(purchase).to be_pending
     end
@@ -66,7 +66,7 @@ describe 'purchase flow' do
     end
   end
 
-  context 'fulfillment' do
+  describe 'fulfillment' do
     it 'commits purchase' do
       purchase.payment_method = pmethod
       purchase.billing_address = address
@@ -78,22 +78,22 @@ describe 'purchase flow' do
       expect { purchase.payment_method.enough?(purchase.total) }.to be_true
     end
 
-    it 'fulfills and marks purchase fulfilled' do
+    it 'can be fulfilled' do
       expect(purchase.fulfill!).to_not be_nil
     end
 
-    context 'physical item order' do
+    describe 'physical item order' do
       let(:order) { purchase.orders.retrieve(psfi) }
 
       include_examples 'failed order fulfillment'
     end
 
-    context 'digital item order' do
+    describe 'digital item order' do
       let(:order) { purchase.orders.retrieve(dsfi) }
 
       include_examples 'successful order fulfillment'
 
-      context 'digital item fulfillment' do
+      describe 'digital item fulfillment' do
         let(:item) { digital_item }
         let(:qty) { order.qty }
         let(:result_class) { Ownership }
@@ -102,12 +102,12 @@ describe 'purchase flow' do
       end
     end
 
-    context 'bundle item order' do
+    describe 'bundle item order' do
       let(:order) { purchase.orders.retrieve(bsfi) }
 
       include_examples 'successful order fulfillment'
 
-      context 'physical item fulfillment' do
+      describe 'physical item fulfillment' do
         let(:item) { physical_item }
         let(:qty) { order.qty * bsfi.item.bundlings.retrieve(item).qty }
         let(:result_class) { Shipment }
@@ -119,7 +119,7 @@ describe 'purchase flow' do
         end
       end
 
-      context 'digital item fulfillment' do
+      describe 'digital item fulfillment' do
         let(:item) { digital_item }
         let(:qty) { order.qty * bsfi.item.bundlings.retrieve(item).qty }
         let(:result_class) { Ownership }
@@ -129,7 +129,7 @@ describe 'purchase flow' do
     end
   end
 
-  context 'transactions' do
+  describe 'transactions' do
     it 'includes payment' do
       expect(purchase.payment).to be_present
       expect(purchase.payment.amount).to eq(purchase.total(pmethod.currency))

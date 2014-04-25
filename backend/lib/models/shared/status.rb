@@ -4,7 +4,7 @@ class Status < ActiveRecord::Base
   validates :source, presence: true
   validates :status, presence: true
 
-  default_scope { order(:created_at) }
+  default_scope { order(:id) }
 
   module Mixin
     extend ActiveSupport::Concern

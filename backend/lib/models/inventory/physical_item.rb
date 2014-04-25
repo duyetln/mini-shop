@@ -9,6 +9,6 @@ class PhysicalItem < ActiveRecord::Base
   end
 
   def prepare!(order, qty)
-    order.fulfillments << ShippingFulfillment.new(item: self, qty: qty)
+    ShippingFulfillment.create!(item: self, order: order, qty: qty)
   end
 end

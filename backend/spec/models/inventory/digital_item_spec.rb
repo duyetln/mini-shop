@@ -19,8 +19,7 @@ describe DigitalItem do
     let(:fulfillment) { FactoryGirl.build :online_fulfillment, order: order, item: model, qty: order.qty }
 
     it 'creates or updates OnlineFulfillment records' do
-      expect(OnlineFulfillment).to receive(:new).with(item: model, qty: order.qty).and_return(fulfillment)
-      expect(order.fulfillments).to receive(:<<).with(fulfillment)
+      expect(OnlineFulfillment).to receive(:create!).with(item: model, order: order, qty: order.qty)
       model.prepare!(order, order.qty)
     end
   end
