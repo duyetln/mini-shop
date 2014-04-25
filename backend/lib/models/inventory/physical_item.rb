@@ -9,10 +9,6 @@ class PhysicalItem < ActiveRecord::Base
   end
 
   def prepare!(order, qty)
-    if self.qty >= qty
-      self.qty -= qty
-      save!
-      order.fulfillments << ShippingFulfillment.new(item: self, qty: qty)
-    end
+    order.fulfillments << ShippingFulfillment.new(item: self, qty: qty)
   end
 end

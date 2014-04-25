@@ -4,12 +4,16 @@ class ShippingFulfillment < Fulfillment
   protected
 
   def process_fulfillment!
-    Shipment.create!(
-      item: item,
-      qty: qty,
-      order: order,
-      user: order.user,
-      shipping_address: order.shipping_address
-    )
+    if item.qty >= qty
+      item.qty -= qty
+      item.save!
+      Shipment.create!(
+        item: item,
+        qty: qty,
+        order: order,
+        user: order.user,
+        shipping_address: order.shipping_address
+      )
+    end
   end
 end

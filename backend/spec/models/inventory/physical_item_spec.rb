@@ -32,26 +32,13 @@ describe PhysicalItem do
         qty: qty
       )
     end
+    let(:model_args) { [:physical_item, qty: qty] }
+    let(:fulfillment) { FactoryGirl.build :shipping_fulfillment, order: order, item: model, qty: order.qty }
 
-    context 'enough quantity' do
-      let(:model_args) { [:physical_item, qty: qty] }
-      let(:fulfillment) { FactoryGirl.build :shipping_fulfillment, order: order, item: model, qty: order.qty }
-
-      it 'creates or updates ShippingFulfillment records' do
-        expect(ShippingFulfillment).to receive(:new).with(item: model, qty: order.qty).and_return(fulfillment)
-        expect(order.fulfillments).to receive(:<<).with(fulfillment)
-        expect { model.prepare!(order, order.qty) }.to change { model.qty }.by(-order.qty)
-      end
-    end
-
-    context 'not enough quantity' do
-      let(:model_args) { [:physical_item, qty: 0] }
-
-      it 'creates or updates ShippingFulfillment records' do
-        expect(ShippingFulfillment).to_not receive(:new)
-        expect(order.fulfillments).to_not receive(:<<)
-        expect { model.prepare!(order, order.qty) }.to_not change { model.qty }
-      end
+    it 'creates or updates ShippingFulfillment records' do
+      expect(ShippingFulfillment).to receive(:new).with(item: model, qty: order.qty).and_return(fulfillment)
+      expect(order.fulfillments).to receive(:<<).with(fulfillment)
+      model.prepare!(order, order.qty)
     end
   end
 end
