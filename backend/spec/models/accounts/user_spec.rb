@@ -2,6 +2,13 @@ require 'models/spec_setup'
 
 describe User do
 
+  it { should have_many(:purchases) }
+  it { should have_many(:addresses) }
+  it { should have_many(:payment_methods) }
+  it { should have_many(:transactions) }
+  it { should have_many(:ownerships) }
+  it { should have_many(:shipments) }
+
   it { should allow_mass_assignment_of(:first_name) }
   it { should allow_mass_assignment_of(:last_name) }
   it { should allow_mass_assignment_of(:email) }

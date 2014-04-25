@@ -2,6 +2,13 @@ class User < ActiveRecord::Base
   attr_protected :uuid, :actv_code
   attr_readonly :uuid
 
+  has_many :purchases
+  has_many :addresses
+  has_many :payment_methods
+  has_many :transactions
+  has_many :ownerships
+  has_many :shipments
+
   validates :first_name, presence: true
   validates :last_name,  presence: true
   validates :email,      presence: true
