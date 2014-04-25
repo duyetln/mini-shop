@@ -145,4 +145,53 @@ describe 'purchase flow' do
       expect(purchase.transactions.all?(&:committed?)).to be_true
     end
   end
+
+  describe 'user' do
+    it 'has 2 ownerships' do
+      expect(user.ownerships.count).to eq(2)
+    end
+
+    it 'has 1 shipment' do
+      expect(user.shipments.count).to eq(1)
+    end
+
+    it 'has 2 transactions' do
+      expect(user.transactions.count).to eq(2)
+    end
+  end
+
+  describe 'digital item order' do
+    def order; purchase.orders.retrieve(dsfi); end
+
+    it 'can be reversed' do
+      expect(purchase.reverse!(order)).to_not be_nil
+    end
+
+    include_examples 'successful order reversal'
+  end
+
+  describe 'bundle item order' do
+    def order; purchase.orders.retrieve(bsfi); end
+    def qty; order.qty * bsfi.item.bundlings.retrieve(physical_item).qty; end
+
+    it 'can be reversed' do
+      expect { purchase.reverse!(order) }.to change { physical_item.qty }.by(qty)
+    end
+
+    include_examples 'successful order reversal'
+  end
+
+  describe 'user' do
+    it 'has 0 ownerships' do
+      expect(user.ownerships.count).to eq(0)
+    end
+
+    it 'has 1 shipment' do
+      expect(user.shipments.count).to eq(1)
+    end
+
+    it 'has 4 transactions' do
+      expect(user.transactions.count).to eq(4)
+    end
+  end
 end

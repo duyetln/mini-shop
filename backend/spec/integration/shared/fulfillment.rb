@@ -37,6 +37,27 @@ shared_examples 'successful order fulfillment' do
   end
 end
 
+shared_examples 'successful order reversal' do
+  it 'is marked as reversed' do
+    expect(order).to be_reversed
+  end
+
+  it 'is not marked as failed' do
+    expect(order).to_not be_failed
+  end
+
+  it 'has a refund' do
+    expect(order.refund).to be_present
+  end
+
+  it 'has reversed fulfillments' do
+    expect(order.fulfillments).to be_present
+    expect(order.fulfillments.all? do |f|
+      f.reversed?
+    end).to be_true
+  end
+end
+
 shared_examples 'fulfillment processing' do
   let :fulfillment do
     order.fulfillments.find do |f|
