@@ -16,4 +16,9 @@ class ShippingFulfillment < Fulfillment
       )
     end
   end
+
+  def process_reversal!
+    item.qty += qty
+    item.save!
+  end
 end

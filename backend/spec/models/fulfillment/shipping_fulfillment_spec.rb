@@ -36,4 +36,10 @@ describe ShippingFulfillment do
       end
     end
   end
+
+  describe '#process_reversal!' do
+    it 'adds qty back to item' do
+      expect { model.send(:process_reversal!) }.to change { model.item.qty }.by(model.qty)
+    end
+  end
 end
