@@ -323,10 +323,21 @@ describe Purchase do
       include_examples 'pending'
 
       context 'ready' do
-        it 'processes, marks status, and returns' do
-          expect(order).to receive(process_method)
-          expect(transaction).to receive(:commit!)
-          model.send(method)
+        context 'full purchase reversal' do
+          it 'processes, marks status, and returns' do
+            expect(order).to receive(process_method)
+            expect(transaction).to receive(:commit!)
+            model.send(method)
+          end
+        end
+
+        context 'single order reversal' do
+          it 'processes, marks status, and returns' do
+            expect(orders).to receive(:retrieve).with(order).and_return(order)
+            expect(order).to receive(process_method)
+            expect(transaction).to receive(:commit!)
+            model.send(method, order)
+          end
         end
       end
     end
