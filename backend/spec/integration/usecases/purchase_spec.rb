@@ -18,19 +18,19 @@ describe 'purchase flow' do
     @pmethod = FactoryGirl.create :payment_method, user: @user, currency: @usd
   end
 
-  let(:user) { @user }
-  let(:usd) { @usd }
-  let(:eur) { @eur }
-  let(:physical_item) { @pitem }
-  let(:digital_item) { @ditem }
-  let(:bundle_item) { @bitem }
-  let(:psfi) { @psfi }
-  let(:dsfi) { @dsfi }
-  let(:bsfi) { @bsfi }
-  let(:purchase) { @purchase }
-  let(:address) { @address }
-  let(:pmethod) { @pmethod }
-  let(:qty) { @qty }
+  def user; User.find @user.id; end
+  def usd; Currency.find @usd.id; end
+  def eur; Currency.find @eur.id; end
+  def physical_item; PhysicalItem.find @pitem.id; end
+  def digital_item; DigitalItem.find @ditem.id; end
+  def bundle_item; BundleItem.find @bitem.id; end
+  def psfi; StorefrontItem.find @psfi.id; end
+  def dsfi; StorefrontItem.find @dsfi.id; end
+  def bsfi; StorefrontItem.find @bsfi.id; end
+  def purchase; Purchase.find @purchase.id; end
+  def address; Address.find @address.id; end
+  def pmethod; PaymentMethod.find @pmethod.id; end
+  def qty; @qty; end
 
   describe 'user' do
     it 'confirms and changes status' do
@@ -68,6 +68,7 @@ describe 'purchase flow' do
 
   describe 'fulfillment' do
     it 'commits purchase' do
+      purchase = self.purchase
       purchase.payment_method = pmethod
       purchase.billing_address = address
       purchase.shipping_address = address
@@ -83,34 +84,34 @@ describe 'purchase flow' do
     end
 
     describe 'physical item order' do
-      let(:order) { purchase.orders.retrieve(psfi) }
+      def order; purchase.orders.retrieve(psfi); end
 
       include_examples 'failed order fulfillment'
     end
 
     describe 'digital item order' do
-      let(:order) { purchase.orders.retrieve(dsfi) }
+      def order; purchase.orders.retrieve(dsfi); end
 
       include_examples 'successful order fulfillment'
 
       describe 'digital item fulfillment' do
-        let(:item) { digital_item }
-        let(:qty) { order.qty }
-        let(:result_class) { Ownership }
+        def item; digital_item; end
+        def qty; order.qty; end
+        def result_class; Ownership; end
 
         include_examples 'fulfillment processing'
       end
     end
 
     describe 'bundle item order' do
-      let(:order) { purchase.orders.retrieve(bsfi) }
+      def order; purchase.orders.retrieve(bsfi); end
 
       include_examples 'successful order fulfillment'
 
       describe 'physical item fulfillment' do
-        let(:item) { physical_item }
-        let(:qty) { order.qty * bsfi.item.bundlings.retrieve(item).qty }
-        let(:result_class) { Shipment }
+        def item; physical_item; end
+        def qty; order.qty * bsfi.item.bundlings.retrieve(item).qty; end
+        def result_class; Shipment; end
 
         include_examples 'fulfillment processing'
 
@@ -120,9 +121,9 @@ describe 'purchase flow' do
       end
 
       describe 'digital item fulfillment' do
-        let(:item) { digital_item }
-        let(:qty) { order.qty * bsfi.item.bundlings.retrieve(item).qty }
-        let(:result_class) { Ownership }
+        def item; digital_item; end
+        def qty; order.qty * bsfi.item.bundlings.retrieve(item).qty; end
+        def result_class; Ownership; end
 
         include_examples 'fulfillment processing'
       end
