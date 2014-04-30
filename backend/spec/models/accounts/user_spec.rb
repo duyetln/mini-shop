@@ -17,6 +17,7 @@ describe User do
 
   it { should_not allow_mass_assignment_of(:uuid) }
   it { should_not allow_mass_assignment_of(:actv_code) }
+  it { should_not allow_mass_assignment_of(:confirmed) }
   it { should have_readonly_attribute(:uuid) }
 
   it { should validate_presence_of(:first_name) }
@@ -45,6 +46,7 @@ describe User do
     context 'new user' do
       it('sets uuid') { expect(model.uuid).to be_present }
       it('sets actv_code') { expect(model.actv_code).to be_present }
+      it('is unconfirmed') { expect(model).to_not be_confirmed }
       it('sets password') { expect(model.password).to be_present }
 
       it 'encrypts password' do
@@ -73,28 +75,31 @@ describe User do
   end
 
   describe '#confirm!' do
-    before :each do
-      expect(model).to receive(:confirmed?).and_return(confirmed)
-    end
-
     context 'confirmed' do
-      let(:confirmed) { true }
+      before :each do
+        model.confirmed = true
+      end
 
-      it 'returns false' do
-        expect(model.confirm!).to be_false
+      it 'does not return true' do
+        expect(model.confirm!).to_not be_true
       end
     end
 
     context 'not confirmed' do
-      let(:confirmed) { false }
+      before :each do
+        model.confirmed = false
+      end
 
       it 'returns true' do
         expect(model.confirm!).to be_true
       end
 
       it 'clears the activation code' do
-        model.confirm!
-        expect(model.actv_code).to be_blank
+        expect { model.confirm! }.to change { model.actv_code }.to(nil)
+      end
+
+      it 'sets confirmed flag to true' do
+        expect { model.confirm! }.to change { model.confirmed? }.to(true)
       end
     end
   end

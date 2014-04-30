@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_protected :uuid, :actv_code
+  attr_protected :uuid, :actv_code, :confirmed
   attr_readonly :uuid
 
   has_many :purchases
@@ -26,18 +26,18 @@ class User < ActiveRecord::Base
   after_initialize :initialize_values
   before_save :encrypt_password, if: :password_changed?
 
+  scope :confirmed, -> { where(confirmed: true) }
+  scope :unconfirmed, -> { where(confirmed: false) }
+
   def self.authenticate(uuid, password)
     user = find_by_uuid(uuid)
     user.present? && user.confirmed? && BCrypt::Password.new(user.password) == password ? user : nil
   end
 
-  def confirmed?
-    actv_code.blank?
-  end
-
   def confirm!
     unless confirmed?
       self.actv_code = nil
+      self.confirmed = true
       save!
     end
   end
@@ -48,6 +48,7 @@ class User < ActiveRecord::Base
     if new_record?
       self.uuid = SecureRandom.hex.upcase
       self.actv_code = SecureRandom.hex.upcase
+      self.confirmed = false
     end
   end
 

@@ -8,6 +8,7 @@ class CreateUsersTable < ActiveRecord::Migration
       t.date      :birthdate
       t.string    :password
       t.string    :actv_code
+      t.boolean   :confirmed
       t.timestamps
     end
 
