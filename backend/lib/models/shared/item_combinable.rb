@@ -26,7 +26,7 @@ module ItemCombinable
       acc ? record.qty += qty : record.qty = qty
 
       yield record if block_given?
-      record.save! && record
+      (!record.changed? || record.save!) && record
     end
 
     def retrieve(item)
