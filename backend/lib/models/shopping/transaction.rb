@@ -16,6 +16,7 @@ class Transaction < ActiveRecord::Base
   validates :billing_address, presence: true
   validates :currency, presence: true
   validates :amount,   presence: true
+  validates :uuid, uniqueness: true
 
   after_initialize :initialize_values
 

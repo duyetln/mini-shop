@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   validates :email,      format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }
 
   validates :email, uniqueness: true
+  validates :uuid, uniqueness: true
   validates :password, length: { minimum: 5 }
 
   after_initialize :initialize_values

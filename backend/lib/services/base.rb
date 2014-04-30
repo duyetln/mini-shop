@@ -34,10 +34,6 @@ module Services
         env['sinatra.error']
       end
 
-      def invalid_request
-        error 400, message: 'Invalid Request'
-      end
-
       def respond_with(body)
         yield body if block_given?
         respond_to do |format|

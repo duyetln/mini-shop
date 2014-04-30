@@ -20,6 +20,7 @@ describe Order do
 
   it { should validate_presence_of(:purchase) }
   it { should validate_presence_of(:currency) }
+  it { should validate_uniqueness_of(:uuid) }
 
   it { should ensure_inclusion_of(:item_type).in_array(%w{ StorefrontItem }) }
 

@@ -20,6 +20,7 @@ class Order < ActiveRecord::Base
   validates :currency, presence: true
 
   validates :purchase_id, uniqueness: { scope: [:item_type, :item_id, :deleted] }, unless: :deleted?
+  validates :uuid, uniqueness: true
   validates :item_type, inclusion: { in: %w{ StorefrontItem } }
 
   validate  :pending_purchase

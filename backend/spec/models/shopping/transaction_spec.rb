@@ -15,6 +15,7 @@ describe Transaction do
   it { should validate_presence_of(:billing_address) }
   it { should validate_presence_of(:currency) }
   it { should validate_presence_of(:amount) }
+  it { should validate_uniqueness_of(:uuid) }
 
   it { should_not allow_mass_assignment_of(:uuid) }
   it { should have_readonly_attribute(:uuid) }
