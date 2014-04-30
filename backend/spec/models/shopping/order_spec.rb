@@ -151,39 +151,51 @@ describe Order do
     end
   end
 
-  describe '#amount' do
-    it 'multiplies item price with #qty' do
-      expect(model.amount(currency)).to eq(model.item.amount(currency) * model.qty)
+  describe '#amount!' do
+    before :each do
+      model.amount!(currency)
+    end
+
+    it 'updates the currency' do
+      expect(model.currency).to eq(currency)
+    end
+
+    it 'updates the amount' do
+      expect(model['amount']).to eq(model.item.amount(currency) * model.qty)
     end
   end
 
-  describe '#tax_rate' do
-    it 'is initialized' do
-      expect(described_class.new.tax_rate).to be_present
+  describe 'tax!' do
+    before :each do
+      model.amount!(currency)
+      model.tax!
+    end
+
+    it 'sets the tax rate' do
+      expect(model.tax_rate).to be_present
+    end
+
+    it 'sets the tax amount' do
+      expect(model['tax']).to eq(model['amount'] * model.tax_rate)
+    end
+  end
+
+  describe '#amount' do
+    it 'multiplies translated amount with #qty' do
+      model.amount!(currency)
+      expect(model.amount(currency)).to eq(
+        Currency.exchange(model['amount'], model.currency, currency)
+      )
     end
   end
 
   describe '#tax' do
-    it 'multiplies #amount with #tax_rate' do
-      expect(model.tax(currency)).to eq(model.amount(currency) * model.tax_rate)
-    end
-  end
-
-  describe '#update_values' do
-    it 'is a callback' do
-      expect(model).to receive(:update_values)
-      model.save!
-    end
-
-    it 'updates amount, tax_rate, and tax' do
-      model.save!
-      expect(model['amount']).to eq(model.amount(model.currency))
-      expect(model['tax']).to eq(model.tax(model.currency))
-    end
-
-    it 'updates currency' do
-      model.save!
-      expect(model.currency).to eq(model.payment_method.currency)
+    it 'multiplies translated tax with #tax_rate' do
+      model.amount!(currency)
+      model.tax!
+      expect(model.tax(currency)).to eq(
+        Currency.exchange(model['tax'], model.currency, currency)
+      )
     end
   end
 
@@ -248,7 +260,8 @@ describe Order do
 
   describe '#total' do
     it 'sums #amount and #tax' do
-      model.send(:update_values)
+      model.amount!(currency)
+      model.tax!
       expect(model.total).to eq(model.amount + model.tax)
     end
   end

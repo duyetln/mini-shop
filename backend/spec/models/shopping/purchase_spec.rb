@@ -46,8 +46,8 @@ describe Purchase do
 
   describe '#normalize!' do
     it 'sets the order currency to payment method currency' do
-      expect(order).to receive(:currency=).with(model.payment_method_currency)
-      expect(order).to receive(:save!)
+      expect(order).to receive(:amount!).with(model.payment_method_currency)
+      expect(order).to receive(:tax!)
       model.normalize!
     end
   end
@@ -98,8 +98,9 @@ describe Purchase do
         model.add_or_update(item, currency, qty)
       end
 
-      it 'changes the order currency' do
-        expect { model.add_or_update(item, currency, qty) }.to change { order.currency }.to(currency)
+      it 'updates order amount and currency' do
+        expect(order).to receive(:amount!).with(currency)
+        model.add_or_update(item, currency, qty)
       end
     end
 

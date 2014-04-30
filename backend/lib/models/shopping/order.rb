@@ -25,7 +25,6 @@ class Order < ActiveRecord::Base
   validate  :pending_purchase
 
   after_initialize :initialize_values
-  before_save :update_values
 
   delegate :user,             to: :purchase
   delegate :payment_method,   to: :purchase
@@ -75,12 +74,24 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def amount!(input_currency = currency)
+    self.currency = input_currency
+    self.amount = item.amount(input_currency) * qty
+    save!
+  end
+
+  def tax!
+    self.tax_rate ||= (5 + rand(15)) / 100.0
+    self.tax = amount * tax_rate
+    save!
+  end
+
   def amount(input_currency = currency)
-    item.amount(input_currency) * qty
+    Currency.exchange(super() || 0, currency, input_currency)
   end
 
   def tax(input_currency = currency)
-    amount(input_currency) * tax_rate
+    Currency.exchange(super() || 0, currency, input_currency)
   end
 
   def total(input_currency = currency)
@@ -88,12 +99,6 @@ class Order < ActiveRecord::Base
   end
 
   protected
-
-  def update_values
-    self.currency = payment_method.currency if payment_method.present?
-    self.amount = amount
-    self.tax = tax
-  end
 
   def pending_purchase
     if changed? && purchase.present? && purchase_committed?
@@ -104,7 +109,6 @@ class Order < ActiveRecord::Base
   def initialize_values
     if new_record?
       self.uuid = SecureRandom.hex.upcase
-      self.tax_rate ||= (5 + rand(15)) / 100.0
     end
   end
 
