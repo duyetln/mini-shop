@@ -36,6 +36,7 @@ describe User do
   end
 
   let(:password) { model.password }
+  let(:actv_code) { model.actv_code }
   let :user do
     model.password = password
     model.save!
@@ -104,23 +105,76 @@ describe User do
     end
   end
 
-  describe '.authenticate' do
-    context 'non-matching uuid' do
-      it('returns nil') { expect(User.authenticate(rand_str, rand_str)).to be_nil }
+  describe '.authenticate!' do
+    context 'unconfirmed user' do
+      before :each do
+        expect(user).to_not be_confirmed
+      end
+
+      it 'raise an error' do
+        expect(user).to_not be_confirmed
+        expect { User.authenticate!(user.email, password) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context 'confirmed user' do
+      before :each do
+        user.confirm!
+      end
+
+      context 'wrong email' do
+        it 'raises an error' do
+          expect { User.authenticate!(rand_str, password) }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      context 'wrong password' do
+        it 'returns false' do
+          expect(User.authenticate!(user.email, rand_str)).to be_false
+        end
+      end
+
+      context 'matching email, matching password' do
+        it 'returns the user' do
+          expect(User.authenticate!(user.email, password)).to eq(user)
+        end
+      end
+    end
+  end
+
+  describe '.confirm!' do
+    context 'confirmed user' do
+      before :each do
+        user.confirm!
+      end
+
+      it 'raises an error' do
+        expect { User.confirm!(user.uuid, actv_code) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 
     context 'unconfirmed user' do
-      it('returns nil') { expect(User.authenticate(user.uuid, password)).to be_nil }
-    end
+      before :each do
+        expect(user).to_not be_confirmed
+      end
 
-    context 'non-matching password' do
-      it('returns nil') { expect(User.authenticate(user.uuid, rand_str)).to be_nil }
-    end
+      context 'wrong uuid' do
+        it 'raises an error' do
+          expect { User.confirm!(rand_str, actv_code) }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
 
-    context 'matching uuid, matching password, confirmed user' do
-      it 'returns the user' do
-        user.confirm!
-        expect(User.authenticate(user.uuid, password)).to eq(user)
+      context 'wrong activation code' do
+        it 'raises an error' do
+          expect { User.confirm!(user.uuid, rand_str) }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      context 'matching uuid, matching activation code' do
+        it 'confirms the user' do
+          expect(User.confirm!(user.uuid, actv_code)).to eq(user)
+          expect(user.reload).to be_confirmed
+        end
       end
     end
   end

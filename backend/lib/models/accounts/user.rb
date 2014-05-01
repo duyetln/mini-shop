@@ -29,9 +29,14 @@ class User < ActiveRecord::Base
   scope :confirmed, -> { where(confirmed: true) }
   scope :unconfirmed, -> { where(confirmed: false) }
 
-  def self.authenticate(uuid, password)
-    user = find_by_uuid(uuid)
-    user.present? && user.confirmed? && BCrypt::Password.new(user.password) == password ? user : nil
+  def self.authenticate!(email, password)
+    user = confirmed.find_by_email!(email)
+    BCrypt::Password.new(user.password) == password && user
+  end
+
+  def self.confirm!(uuid, actv_code)
+    user = unconfirmed.where(uuid: uuid, actv_code: actv_code).first!
+    user.confirm! && user
   end
 
   def confirm!
