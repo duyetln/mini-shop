@@ -9,6 +9,7 @@ gem 'yajl-ruby', '1.1.0', require: ['yajl', 'yajl/json_gem']
 gem 'rack-parser', require: 'rack/parser'
 gem 'hashie', '~> 2.1.1'
 gem 'sinatra-respond_to'
+gem 'sinatra-contrib'
 
 group :development do
   gem 'thin'
