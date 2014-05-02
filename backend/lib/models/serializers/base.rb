@@ -11,6 +11,10 @@ class ResourceSerializer < ActiveModel::Serializer
   end
 end
 
+class StatusSerializer < ResourceSerializer
+  attributes :source_type, :source_id, :status, :created_at
+end
+
 class DynamicSerializer < SimpleDelegator
   def initialize(resource, options = {})
     __setobj__("#{resource.class.name.demodulize}Serializer".constantize.new(resource, options))
