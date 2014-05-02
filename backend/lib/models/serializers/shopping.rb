@@ -21,9 +21,14 @@ end
 
 class PurchaseSerializer < ResourceSerializer
   attributes :user_id, :payment_method_id, :billing_address_id, :shipping_address_id, :payment_id, :committed, :committed_at, :created_at
+  attributes :order_ids
   has_one :payment_method, serializer: PaymentMethodSerializer
   has_one :billing_address, serializer: AddressSerializer
   has_one :shipping_address, serializer: AddressSerializer
   has_one :payment, serializer: TransactionSerializer
   has_many :orders, serializer: OrderSerializer
+
+  def order_ids
+    object.orders.map(&:id)
+  end
 end
