@@ -1,6 +1,8 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    active_model_serializers (0.8.1)
+      activemodel (>= 3.0)
     activemodel (3.2.16)
       activesupport (= 3.2.16)
       builder (~> 3.0.0)
@@ -102,6 +104,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_model_serializers (~> 0.8.1)
   activerecord (= 3.2.16)
   bcrypt-ruby (= 3.1.2)
   database_cleaner

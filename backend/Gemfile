@@ -10,6 +10,7 @@ gem 'rack-parser', require: 'rack/parser'
 gem 'hashie', '~> 2.1.1'
 gem 'sinatra-respond_to'
 gem 'sinatra-contrib'
+gem 'active_model_serializers', '~> 0.8.1'
 
 group :development do
   gem 'thin'
