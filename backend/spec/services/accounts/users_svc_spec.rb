@@ -1,184 +1,247 @@
-# require 'spec_helper'
+require 'services/spec_setup'
+require 'spec/services/shared/errors'
 
-# describe UsersSvc do
+describe Services::Accounts::Users do
+  let :user do
+    User.find FactoryGirl.create(:user, password: password).id
+  end
 
-#   def user_response_options
-#     { except: [:password, :updated_at]  }
-#   end
+  let(:password) { rand_str }
+  let(:email) { user.email }
+  let(:uuid) { user.uuid }
+  let(:actv_code) { user.actv_code }
+  let(:id) { user.id }
 
-#   let(:model_args) { [:user] }
+  describe 'get /users/:id' do
+    let(:method) { :get }
+    let(:path) { "/users/#{id}" }
 
-#   describe 'get /users/:id' do
-#     context 'valid id' do
-#       it 'returns the user' do
-#         get "/users/#{saved_model.id}"
-#         expect_status(200)
-#         expect(parsed_response[:id]).to eq(saved_model.id)
-#       end
-#     end
+    context 'valid id' do
+      it 'returns the user' do
+        send_request
+        expect_status(200)
+        expect_response(UserSerializer.new(user).to_json)
+      end
+    end
 
-#     context 'invalid id' do
-#       it 'returns 404 status' do
-#         get "/users/#{random_string}"
-#         expect_status(404)
-#         expect_empty_response
-#       end
-#     end
-#   end
+    context 'invalid id' do
+      let(:id) { rand_str }
 
-#   describe 'post /users' do
-#     context 'valid parameters' do
-#       it 'creates the user and returns it' do
-#         expect { post '/users', new_model.attributes }.to change { User.count }.by(1)
-#         expect_status(200)
-#         expect(parsed_response[:id]).to eq(User.last.id)
-#         expect(parsed_response[:uuid]).to eq(User.last.uuid)
-#       end
-#     end
+      include_examples 'not found'
+    end
+  end
 
-#     context 'missing parameters' do
-#       it 'returns 400 status' do
-#         expect { post '/users' }.to_not change { User.count }
-#         expect_status(400)
-#         expect_empty_response
-#       end
-#     end
+  describe 'post /users' do
+    let(:method) { :post }
+    let(:path) { '/users' }
+    let(:user) { FactoryGirl.build :user }
 
-#     context 'user creation failed' do
-#       it 'returns 500 status' do
-#         expect(User).to receive(:new).with(an_instance_of(Hash)).and_return(new_model)
-#         expect(new_model).to receive(:valid?).and_return(true)
-#         expect(new_model).to receive(:save).and_return(false)
+    context 'valid parameters' do
+      let(:params) { { user: user.attributes } }
 
-#         expect { post '/users', new_model.attributes }.to_not change { User.count }
-#         expect_status(500)
-#       end
-#     end
-#   end
+      it 'creates a new user' do
+        expect { send_request }.to change { User.count }.by(1)
+        expect_status(200)
+        expect_response(UserSerializer.new(User.last).to_json)
+      end
+    end
 
-#   describe 'post /users/authenticate' do
-#     let(:password) { new_model.password }
-#     let(:uuid) { user.uuid }
-#     let :user do
-#       new_model.password = password
-#       new_model.save!
-#       new_model
-#     end
+    context 'invalid parameters' do
+      let(:params) { {} }
 
-#     context 'user authenticated' do
-#       it 'returns the user' do
-#         user.confirm!
-#         post '/users/authenticate',  uuid: uuid, password: password
-#         expect_status(200)
-#         expect(parsed_response[:uuid]).to eq(uuid)
-#       end
-#     end
+      include_examples 'bad request'
+    end
+  end
 
-#     context 'user not authenticated' do
-#       context 'not confirmed' do
-#         it 'returns 404 status' do
-#           post '/users/authenticate',  uuid: uuid, password: password
-#           expect_status(404)
-#           expect_empty_response
-#         end
-#       end
+  describe 'post /users/authenticate' do
+    let(:method) { :post }
+    let(:path) { '/users/authenticate' }
+    let(:params) { { email: input_email, password: input_password } }
+    let(:input_email) { email }
+    let(:input_password) { password }
 
-#       context 'wrong uuid' do
-#         it 'returns 404 status' do
-#           user.confirm!
-#           post '/users/authenticate',  uuid: random_string, password: password
-#           expect_status(404)
-#           expect_empty_response
-#         end
-#       end
+    context 'unconfirmed' do
+      before :each do
+        expect(user).to_not be_confirmed
+      end
 
-#       context 'wrong password' do
-#         it 'returns 404 status' do
-#           user.confirm!
-#           post '/users/authenticate',  uuid: uuid, password: random_string
-#           expect_status(404)
-#           expect_empty_response
-#         end
-#       end
-#     end
-#   end
+      include_examples 'not found'
+    end
 
-#   describe 'put /users/:id' do
-#     context 'user not found' do
-#       it 'returns 404 status' do
-#         put "/users/#{random_string}"
-#         expect_status(404)
-#         expect_empty_response
-#       end
-#     end
+    context 'confirmed' do
+      before :each do
+        user.confirm!
+      end
 
-#     context 'user found' do
-#       context 'invalid parameters' do
-#         it 'returns 400 status' do
-#           expect do
-#             put "/users/#{saved_model.id}", first_name: nil
-#             saved_model.reload
-#           end.to_not change { saved_model }
-#           expect_status(400)
-#         end
-#       end
+      context 'wrong email' do
+        let(:input_email) { rand_str }
 
-#       context 'valid parameters' do
-#         let(:new_password) { random_string }
-#         let(:new_first_name) { 'John' }
+        include_examples 'not found'
+      end
 
-#         it 'returns the user' do
-#           put "/users/#{saved_model.id}", password: new_password, first_name: new_first_name
-#           saved_model.reload
-#           expect_status(200)
-#           expect(parsed_response[:uuid]).to eq(saved_model.uuid)
-#           expect(saved_model.first_name).to eq(new_first_name)
-#           expect(BCrypt::Password.new(saved_model.password)).to eq(new_password)
-#         end
-#       end
-#     end
-#   end
+      context 'wrong password' do
+        let(:input_password) { password + rand_str }
 
-#   describe 'put /users/:uuid/confirm/:actv_code' do
-#     context 'user not found' do
-#       it 'returns 404 status' do
-#         put "/users/#{random_string}/confirm/#{saved_model.actv_code}"
-#         saved_model.reload
-#         expect_status(404)
-#         expect(saved_model).to_not be_confirmed
-#       end
-#     end
+        include_examples 'unauthorized'
+      end
 
-#     context 'user found' do
-#       context 'confirmed user' do
-#         it 'returns 404 status' do
-#           saved_model.confirm!
+      context 'correct credentials' do
+        it 'authenticates the user' do
+          send_request
+          expect_status(200)
+          expect_response(UserSerializer.new(user).to_json)
+        end
+      end
+    end
+  end
 
-#           put "/users/#{saved_model.uuid}/confirm/#{saved_model.actv_code}"
-#           saved_model.reload
-#           expect_status(404)
-#           expect(saved_model).to be_confirmed
-#         end
-#       end
+  describe 'put /users/:id' do
+    let(:method) { :put }
+    let(:path) { "/users/#{id}" }
+    let(:params) { { user: user.attributes } }
 
-#       context 'wrong confirmation code' do
-#         it 'returns 404 status' do
-#           put "/users/#{saved_model.uuid}/confirm/#{random_string}"
-#           saved_model.reload
-#           expect_status(404)
-#           expect(saved_model).to_not be_confirmed
-#         end
-#       end
+    context 'invalid id' do
+      let(:id) { rand_str }
 
-#       context 'correct confirmation code' do
-#         it 'returns the user' do
-#           put "/users/#{saved_model.uuid}/confirm/#{saved_model.actv_code}"
-#           saved_model.reload
-#           expect_status(200)
-#           expect(parsed_response[:uuid]).to eq(saved_model.uuid)
-#           expect(saved_model).to be_confirmed
-#         end
-#       end
-#     end
-#   end
-# end
+      include_examples 'not found'
+    end
+
+    context 'valid id' do
+      context 'invalid attributes' do
+        let(:params) { { user: { first_name: nil } } }
+
+        include_examples 'bad request'
+      end
+
+      context 'valid attributes' do
+        it 'updates and returns the user' do
+          send_request
+          expect_status(200)
+          expect_response(UserSerializer.new(user).to_json)
+        end
+      end
+    end
+  end
+
+  describe 'put /users/:uuid/confirm/:actv_code' do
+    let(:method) { :put }
+    let(:path) { "/users/#{uuid}/confirm/#{actv_code}" }
+
+    context 'invalid uuid' do
+      let(:uuid) { rand_str }
+
+      include_examples 'not found'
+    end
+
+    context 'invalid activation code' do
+      let(:actv_code) { rand_str }
+
+      include_examples 'not found'
+    end
+
+    context 'confirmed' do
+      before :each do
+        user.confirm!
+      end
+
+      include_examples 'not found'
+    end
+
+    context 'unconfirmed, valid uuid, valid activation code' do
+      before :each do
+        expect(user).to_not be_confirmed
+      end
+
+      it 'confirms and returns the user' do
+        expect { send_request }.to change { user.reload.confirmed? }.to(true)
+        expect_status(200)
+        expect_response(UserSerializer.new(user).to_json)
+      end
+    end
+  end
+
+  describe 'get /users/:id/purchases' do
+    let(:method) { :get }
+    let(:path) { "/users/#{id}/purchases" }
+
+    context 'invalid id' do
+      let(:id) { rand_str }
+
+      include_examples 'not found'
+    end
+
+    context 'valid id' do
+      it 'returns the purchases' do
+        send_request
+        expect_status(200)
+        expect_response(user.purchases.map do |purchase|
+          PurchaseSerializer.new(purchase)
+        end.to_json)
+      end
+    end
+  end
+
+  describe 'get /users/:id/orders' do
+    let(:method) { :get }
+    let(:path) { "/users/#{id}/orders" }
+
+    context 'invalid id' do
+      let(:id) { rand_str }
+
+      include_examples 'not found'
+    end
+
+    context 'valid id' do
+      it 'returns the orders' do
+        send_request
+        expect_status(200)
+        orders = user.purchases.map(&:orders).flatten
+        expect_response(orders.map do |order|
+          OrderSerializer.new(order)
+        end.to_json)
+      end
+    end
+  end
+
+  describe 'get /users/:id/ownerships' do
+    let(:method) { :get }
+    let(:path) { "/users/#{id}/ownerships" }
+
+    context 'invalid id' do
+      let(:id) { rand_str }
+
+      include_examples 'not found'
+    end
+
+    context 'valid id' do
+      it 'returns the ownerships' do
+        send_request
+        expect_status(200)
+        expect_response(user.ownerships.map do |ownership|
+          OwnershipSerializer.new(ownership)
+        end.to_json)
+      end
+    end
+  end
+
+  describe 'get /users/:id/shipments' do
+    let(:method) { :get }
+    let(:path) { "/users/#{id}/shipments" }
+
+    context 'invalid id' do
+      let(:id) { rand_str }
+
+      include_examples 'not found'
+    end
+
+    context 'valid id' do
+      it 'returns the shipments' do
+        send_request
+        expect_status(200)
+        expect_response(user.shipments.map do |shipment|
+          ShipmentSerializer.new(shipment)
+        end.to_json)
+      end
+    end
+  end
+end
