@@ -6,9 +6,12 @@ module SpecHelpers
     include Rack::Test::Methods
 
     included do
-      let(:items) { item_class.kept }
-      let(:namespace) { described_class.to_s.tableize }
-      let(:parsed_response) { Yajl::Parser.parse(last_response.body, symbolize_keys: true) }
+      let(:params) { {} }
+      let(:response_status) { last_response.status }
+      let(:response_body) { last_response.body }
+      let :parsed_response do
+        Yajl::Parser.parse(last_response.body, symbolize_keys: true)
+      end
     end
 
     def app
@@ -16,15 +19,15 @@ module SpecHelpers
     end
 
     def expect_status(code)
-      expect(last_response.status).to eq(code)
-    end
-
-    def expect_empty_response
-      expect(last_response.body).to be_empty
+      expect(response_status).to eq(code)
     end
 
     def expect_response(body)
-      expect(last_response.body).to eq(body)
+      expect(response_body).to eq(body)
+    end
+
+    def send_request
+      send method, path, params
     end
   end
 end
