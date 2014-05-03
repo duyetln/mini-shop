@@ -2,14 +2,15 @@ module Services
   module Errors
     extend ActiveSupport::Concern
 
-    class BadRequest < StandardError; end
-    class Unauthorized < StandardError; end
-    class Forbidden < StandardError; end
-    class NotFound < StandardError; end
-    class Unprocessable < StandardError; end
-    class TooManyRequests < StandardError; end
-    class ServerError < StandardError; end
-    class Unavailable < StandardError; end
+    class Base < StandardError; end
+    class BadRequest < Base; end
+    class Unauthorized < Base; end
+    class Forbidden < Base; end
+    class NotFound < Base; end
+    class Unprocessable < Base; end
+    class TooManyRequests < Base; end
+    class ServerError < Base; end
+    class Unavailable < Base; end
 
     included do
 

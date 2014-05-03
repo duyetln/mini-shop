@@ -22,7 +22,7 @@ module SpecHelpers
     extend ActiveSupport::Concern
 
     included do
-      let(:rand_str) { Faker::Lorem.characters(20) }
+      let(:rand_str) { Faker::Lorem.words.join('') }
       let(:rand_num) { rand(1..50) }
 
       let(:currency) do

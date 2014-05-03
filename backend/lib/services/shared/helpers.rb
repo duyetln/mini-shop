@@ -4,6 +4,8 @@ module Services
 
     def process_request
       yield
+    rescue ::Services::Errors::Base => ex
+      raise
     rescue ActiveRecord::RecordNotFound => ex
       fail ::Services::Errors::NotFound, ex.message
     rescue ActiveRecord::RecordInvalid => ex

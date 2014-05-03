@@ -10,7 +10,7 @@ class UserSerializer < ResourceSerializer
   def address_ids
     object.addresses.map(&:id)
   end
-  
+
   def payment_method_ids
     object.payment_methods.map(&:id)
   end
