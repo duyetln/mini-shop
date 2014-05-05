@@ -107,14 +107,14 @@ describe Services::Accounts::Users do
     end
 
     context 'valid id' do
-      context 'invalid attributes' do
+      context 'invalid parameters' do
         let(:params) { { user: { first_name: nil } } }
 
         include_examples 'bad request'
       end
 
-      context 'valid attributes' do
-        it 'updates and returns the user' do
+      context 'valid parameters' do
+        it 'updates the user' do
           send_request
           expect_status(200)
           expect_response(UserSerializer.new(user).to_json)
