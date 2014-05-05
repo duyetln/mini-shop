@@ -25,8 +25,9 @@ class Purchase < ActiveRecord::Base
 
   after_save :reload
 
-  def self.pending_purchase(user)
-    where(user_id: user.id).pending.first_or_create
+  def self.pending_purchase(user, force=false)
+    purchases = where(user_id: user.id).pending
+    force ? purchases.first_or_create! : purchases.first!
   end
 
   def add_or_update(item, currency, qty = 1)

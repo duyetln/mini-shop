@@ -13,7 +13,7 @@ describe 'purchase flow' do
     @psfi = FactoryGirl.create :storefront_item, item: @pitem
     @dsfi = FactoryGirl.create :storefront_item, item: @ditem
     @bsfi = FactoryGirl.create :storefront_item, item: @bitem
-    @purchase = Purchase.pending_purchase(@user)
+    @purchase = Purchase.pending_purchase(@user, true)
     @address = FactoryGirl.create :address, user: @user
     @pmethod = FactoryGirl.create :payment_method, user: @user, currency: @usd
   end
