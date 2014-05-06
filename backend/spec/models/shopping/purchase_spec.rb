@@ -65,36 +65,6 @@ describe Purchase do
     end
   end
 
-  describe '.pending_purchase' do
-    before :each do
-      user.save!
-    end
-
-    def pending_count
-      described_class.where(user_id: user.id).pending.count
-    end
-
-    context 'force flag is true' do
-      it 'finds or create the pending purchase' do
-        expect { described_class.pending_purchase(user, true) }.to change { pending_count }.by(1)
-        expect { described_class.pending_purchase(user, true) }.to change { pending_count }.by(0)
-        expect(described_class.pending_purchase(user, true)).to be_pending
-      end
-    end
-
-    context 'force flag is false' do
-      before :each do
-        described_class.pending_purchase(user, true)
-      end
-
-      it 'finds the pending purchase' do
-        expect { described_class.pending_purchase(user, false) }.to_not change { pending_count }
-        expect(described_class.pending_purchase(user, false)).to eq(described_class.pending_purchase(user, true))
-        expect(described_class.pending_purchase(user, false)).to be_pending
-      end
-    end
-  end
-
   describe '#add_or_update' do
     let(:currency) { FactoryGirl.build :eur }
 

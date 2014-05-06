@@ -20,15 +20,13 @@ class Purchase < ActiveRecord::Base
   validates :shipping_address, presence: true, if: :committed?
 
   validates :committed, uniqueness: { scope: :user_id }, unless: :committed?
+  validate  :pending
 
   delegate :currency, to: :payment_method, prefix: true, allow_nil: true
 
-  after_save :reload
+  scope :current, -> user { pending.where(user_id: user.id) }
 
-  def self.pending_purchase(user, force=false)
-    purchases = where(user_id: user.id).pending
-    force ? purchases.first_or_create! : purchases.first!
-  end
+  after_save :reload
 
   def add_or_update(item, currency, qty = 1)
     if pending?
@@ -90,6 +88,7 @@ class Purchase < ActiveRecord::Base
   end
 
   def commit!
+    save!
     normalize!
     super
   end
@@ -105,6 +104,14 @@ class Purchase < ActiveRecord::Base
 
   def paid?
     payment.present?
+  end
+
+  protected
+
+  def pending
+    if persisted? && committed? && changes.except(:committed, :committed_at).present?
+      errors.add(:purchase, 'cannot be changed after committed')
+    end
   end
 
   private
