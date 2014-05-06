@@ -61,15 +61,6 @@ module Services
           end)
         end
       end
-
-      get '/users/:id/shipments' do
-        process_request do
-          user = User.find(params[:id])
-          respond_with(user.shipments.map do |shipment|
-            ShipmentSerializer.new(shipment)
-          end)
-        end
-      end
     end
   end
 end
