@@ -4,7 +4,7 @@ gem 'rake'
 gem 'sinatra'
 gem 'mysql2'
 gem 'bcrypt-ruby', '3.1.2', require: 'bcrypt'
-gem 'activerecord', '3.2.16', require: 'active_record'
+gem 'activerecord', '3.2.18', require: 'active_record'
 gem 'yajl-ruby', '1.1.0', require: ['yajl', 'yajl/json_gem']
 gem 'rack-parser', require: 'rack/parser'
 gem 'hashie', '~> 2.1.1'
