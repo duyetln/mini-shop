@@ -203,27 +203,6 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'get /users/:id/ownerships' do
-    let(:method) { :get }
-    let(:path) { "/users/#{id}/ownerships" }
-
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
-    end
-
-    context 'valid id' do
-      it 'returns the ownerships' do
-        send_request
-        expect_status(200)
-        expect_response(user.ownerships.map do |ownership|
-          OwnershipSerializer.new(ownership)
-        end.to_json)
-      end
-    end
-  end
-
   describe 'get /users/:id/shipments' do
     let(:method) { :get }
     let(:path) { "/users/#{id}/shipments" }

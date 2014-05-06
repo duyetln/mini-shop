@@ -62,15 +62,6 @@ module Services
         end
       end
 
-      get '/users/:id/ownerships' do
-        process_request do
-          user = User.find(params[:id])
-          respond_with(user.ownerships.map do |ownership|
-            OwnershipSerializer.new(ownership)
-          end)
-        end
-      end
-
       get '/users/:id/shipments' do
         process_request do
           user = User.find(params[:id])
