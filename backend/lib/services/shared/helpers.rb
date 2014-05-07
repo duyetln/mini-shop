@@ -10,6 +10,8 @@ module Services
       fail ::Services::Errors::NotFound, ex.message
     rescue ActiveRecord::RecordInvalid => ex
       fail ::Services::Errors::BadRequest, ex.message
+    rescue NameError => ex
+      fail ::Services::Errors::BadRequest, "Unrecoginzed type #{ex.missing_name}"
     rescue => ex
       fail ::Services::Errors::ServerError, ex.message
     end
