@@ -2,9 +2,7 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Fulfillment::Shipments do
-  let :user do
-    User.find FactoryGirl.create(:user).id
-  end
+  let(:user) { FactoryGirl.create(:user).reload }
   let(:id) { user.id }
 
   describe 'get /users/:id/shipments' do
