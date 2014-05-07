@@ -16,18 +16,14 @@ describe Services::Accounts::Users do
     let(:method) { :get }
     let(:path) { "/users/#{id}" }
 
+    include_examples 'invalid id'
+
     context 'valid id' do
       it 'returns the user' do
         send_request
         expect_status(200)
         expect_response(UserSerializer.new(user).to_json)
       end
-    end
-
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
     end
   end
 
@@ -100,11 +96,7 @@ describe Services::Accounts::Users do
     let(:path) { "/users/#{id}" }
     let(:params) { { user: user.attributes } }
 
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
-    end
+    include_examples 'invalid id'
 
     context 'valid id' do
       context 'invalid parameters' do

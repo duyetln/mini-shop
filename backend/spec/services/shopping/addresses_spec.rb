@@ -11,11 +11,7 @@ describe Services::Shopping::Addresses do
     let(:method) { :get }
     let(:path) { "/users/#{id}/addresses" }
 
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
-    end
+    include_examples 'invalid id'
 
     context 'valid id' do
       it 'returns the addresses' do
@@ -32,11 +28,7 @@ describe Services::Shopping::Addresses do
     let(:method) { :post }
     let(:path) { "/users/#{id}/addresses" }
 
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
-    end
+    include_examples 'invalid id'
 
     context 'valid id' do
       context 'invalid parameters' do
@@ -66,11 +58,7 @@ describe Services::Shopping::Addresses do
     let(:address_id) { address.id }
     let(:params) { { address: address.attributes } }
 
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
-    end
+    include_examples 'invalid id'
 
     context 'valid id' do
       context 'invalid address id' do

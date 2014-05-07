@@ -11,11 +11,7 @@ describe Services::Fulfillment::Shipments do
     let(:method) { :get }
     let(:path) { "/users/#{id}/shipments" }
 
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
-    end
+    include_examples 'invalid id'
 
     context 'valid id' do
       it 'returns the shipments' do

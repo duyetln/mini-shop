@@ -11,11 +11,7 @@ describe Services::Shopping::PaymentMethods do
     let(:method) { :get }
     let(:path) { "/users/#{id}/payment_methods" }
 
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
-    end
+    include_examples 'invalid id'
 
     context 'valid id' do
       it 'returns the payment methods' do
@@ -32,11 +28,7 @@ describe Services::Shopping::PaymentMethods do
     let(:method) { :post }
     let(:path) { "/users/#{id}/payment_methods" }
 
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
-    end
+    include_examples 'invalid id'
 
     context 'valid id' do
       context 'invalid parameters' do
@@ -66,11 +58,7 @@ describe Services::Shopping::PaymentMethods do
     let(:payment_method_id) { payment_method.id }
     let(:params) { { payment_method: payment_method.attributes } }
 
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
-    end
+    include_examples 'invalid id'
 
     context 'valid id' do
       context 'invalid payment method id' do

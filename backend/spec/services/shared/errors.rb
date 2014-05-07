@@ -1,3 +1,11 @@
+shared_examples 'invalid id' do
+  context 'invalid id' do
+    let(:id) { rand_str }
+
+    include_examples 'not found'
+  end
+end
+
 shared_examples 'bad request' do
   it 'returns bad request error' do
     send_request
