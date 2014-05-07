@@ -127,7 +127,7 @@ describe Purchase do
   describe '#amount' do
     it 'sums order amount' do
       total_amount = model.orders.reduce(BigDecimal('0.0')) do |a, e|
-        a += e.amount(currency)
+        a + e.amount(currency)
       end
       expect(model.amount(currency)).to eq(total_amount)
     end
@@ -136,7 +136,7 @@ describe Purchase do
   describe '#tax' do
     it 'sums order tax' do
       total_tax = model.orders.reduce(BigDecimal('0.0')) do |a, e|
-        a += e.tax(currency)
+        a + e.tax(currency)
       end
       expect(model.tax(currency)).to eq(total_tax)
     end
@@ -145,7 +145,7 @@ describe Purchase do
   describe '#total' do
     it 'sums order total' do
       total = model.orders.reduce(BigDecimal('0.0')) do |a, e|
-        a += e.total(currency)
+        a + e.total(currency)
       end
       expect(model.total(currency)).to eq(total)
     end

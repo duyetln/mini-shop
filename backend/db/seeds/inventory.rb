@@ -22,9 +22,10 @@ eur = Currency.where(code: 'EUR').first_or_create!
 krw = Currency.where(code: 'KRW').first_or_create!
 gbp = Currency.where(code: 'GBP').first_or_create!
 
-no_discount           = Discount.where(name: 'No discount', rate: 0.0).first_or_create!
-black_friday_discount = Discount.where(name: 'Black Friday Discount', rate: 0.75).first_or_create!(start_at: DateTime.new(2013, 11, 25), end_at: DateTime.new(2013, 12, 9))
-christmas_discount    = Discount.where(name: 'Christmas Discount', rate: 0.5).first_or_create!(start_at: DateTime.new(2013, 12, 23), end_at: DateTime.new(2013, 12, 30))
+no_discount =
+Discount.where(name: 'No discount', rate: 0.0).first_or_create!
+Discount.where(name: 'Black Friday Discount', rate: 0.75).first_or_create!(start_at: DateTime.new(2013, 11, 25), end_at: DateTime.new(2013, 12, 9))
+Discount.where(name: 'Christmas Discount', rate: 0.5).first_or_create!(start_at: DateTime.new(2013, 12, 23), end_at: DateTime.new(2013, 12, 30))
 
 sc2_standard_pp = Pricepoint.where(name: 'SC2 Standard Pricepoint').first_or_create!
 deluxe_ed_pp    = Pricepoint.where(name: 'SC2 Deluxe Pricepoint').first_or_create!

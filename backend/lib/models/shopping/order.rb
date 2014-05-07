@@ -52,7 +52,7 @@ class Order < ActiveRecord::Base
           end
           mark_fulfilled!
         end
-      rescue => err
+      rescue
         make_refund!
         mark_failed!
       end
@@ -68,7 +68,7 @@ class Order < ActiveRecord::Base
           make_refund!
           mark_reversed!
         end
-      rescue => err
+      rescue
         mark_failed!
       end
       reversed?

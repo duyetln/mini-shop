@@ -12,7 +12,7 @@ class PaymentMethod < ActiveRecord::Base
   validates :balance,  numericality: { greater_than_or_equal_to: 0 }
 
   def pending_balance
-    balance - transactions.pending.reduce(BigDecimal.new('0.0')) { |a, e| a += Currency.exchange(e.amount, e.currency, currency) }
+    balance - transactions.pending.reduce(BigDecimal.new('0.0')) { |a, e| a + Currency.exchange(e.amount, e.currency, currency) }
   end
 
   def enough?(amount = 0, input_currency = currency)
