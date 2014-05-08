@@ -49,7 +49,7 @@ describe Services::Accounts::Users do
   describe 'post /users/authenticate' do
     let(:method) { :post }
     let(:path) { '/users/authenticate' }
-    let(:params) { { email: input_email, password: input_password } }
+    let(:params) { { user: { email: input_email, password: input_password } } }
     let(:input_email) { email }
     let(:input_password) { password }
 

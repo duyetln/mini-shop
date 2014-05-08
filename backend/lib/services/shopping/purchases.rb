@@ -24,7 +24,7 @@ module Services
 
       post '/users/:id/purchases' do
         process_request do
-          purchase = current_purchase.first_or_create!(params[:purchase])
+          purchase = current_purchase.first_or_create!(purchase_params)
           respond_with(PurchaseSerializer.new(purchase))
         end
       end
@@ -39,7 +39,7 @@ module Services
       put '/users/:id/purchases/current' do
         process_request do
           purchase = current_purchase.first!
-          purchase.update_attributes!(params[:purchase])
+          purchase.update_attributes!(purchase_params)
           respond_with(PurchaseSerializer.new(purchase))
         end
       end
@@ -48,9 +48,9 @@ module Services
         process_request do
           purchase = current_purchase.first!
           purchase.add_or_update(
-            params[:item_type].classify.constantize.find(params[:item_id]),
-            Currency.find(params[:currency_id]),
-            params[:qty].to_i
+            order_params[:item_type].classify.constantize.find(order_params[:item_id]),
+            Currency.find(order_params[:currency_id]),
+            order_params[:qty].to_i
           )
           respond_with(PurchaseSerializer.new(purchase))
         end
@@ -106,6 +106,14 @@ module Services
 
       def load_purchase!
         User.find(params[:id]).purchases.find(params[:purchase_id])
+      end
+
+      def purchase_params
+        params[:purchase] || {}
+      end
+
+      def order_params
+        params[:order] || {}
       end
     end
   end

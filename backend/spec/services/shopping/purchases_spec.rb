@@ -193,10 +193,12 @@ describe Services::Shopping::Purchases do
         let(:currency_id) { currency.id }
         let :params do
           {
-            item_type: item_type,
-            item_id: item_id,
-            currency_id: currency_id,
-            qty: qty
+            order: {
+              item_type: item_type,
+              item_id: item_id,
+              currency_id: currency_id,
+              qty: qty
+            }
           }
         end
 

@@ -13,7 +13,7 @@ module Services
 
       post '/users' do
         process_request do
-          user = User.new(params[:user])
+          user = User.new(user_params)
           user.save!
           respond_with(UserSerializer.new(user))
         end
@@ -22,8 +22,8 @@ module Services
       post '/users/authenticate' do
         process_request do
           user = User.authenticate!(
-            params[:email],
-            params[:password]
+            user_params[:email],
+            user_params[:password]
           ) || unauthorized!
           respond_with(UserSerializer.new(user))
         end
@@ -32,7 +32,7 @@ module Services
       put '/users/:id' do
         process_request do
           user = User.find(params[:id])
-          user.update_attributes!(params[:user])
+          user.update_attributes!(user_params)
           respond_with(UserSerializer.new(user))
         end
       end
@@ -42,6 +42,12 @@ module Services
           user = User.confirm!(params[:uuid], params[:actv_code])
           respond_with(UserSerializer.new(user))
         end
+      end
+
+      protected
+
+      def user_params
+        params[:user] || {}
       end
     end
   end
