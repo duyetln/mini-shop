@@ -148,47 +148,4 @@ describe Services::Accounts::Users do
       end
     end
   end
-
-  describe 'get /users/:id/purchases' do
-    let(:method) { :get }
-    let(:path) { "/users/#{id}/purchases" }
-
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
-    end
-
-    context 'valid id' do
-      it 'returns the purchases' do
-        send_request
-        expect_status(200)
-        expect_response(user.purchases.map do |purchase|
-          PurchaseSerializer.new(purchase)
-        end.to_json)
-      end
-    end
-  end
-
-  describe 'get /users/:id/orders' do
-    let(:method) { :get }
-    let(:path) { "/users/#{id}/orders" }
-
-    context 'invalid id' do
-      let(:id) { rand_str }
-
-      include_examples 'not found'
-    end
-
-    context 'valid id' do
-      it 'returns the orders' do
-        send_request
-        expect_status(200)
-        orders = user.purchases.map(&:orders).flatten
-        expect_response(orders.map do |order|
-          OrderSerializer.new(order)
-        end.to_json)
-      end
-    end
-  end
 end

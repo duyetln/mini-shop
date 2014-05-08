@@ -1,0 +1,112 @@
+require 'services/base'
+require 'models/serializers/shopping'
+
+module Services
+  module Shopping
+    class Purchases < Services::Base
+      get '/users/:id/orders' do
+        process_request do
+          orders = User.find(params[:id]).purchases.map(&:orders).flatten
+          respond_with(orders.map do |order|
+            OrderSerializer.new(order)
+          end)
+        end
+      end
+
+      get '/users/:id/purchases' do
+        process_request do
+          purchases = User.find(params[:id]).purchases
+          respond_with(purchases.map do |purchase|
+            PurchaseSerializer.new(purchase)
+          end)
+        end
+      end
+
+      post '/users/:id/purchases' do
+        process_request do
+          purchase = current_purchase.first_or_create!(params[:purchase])
+          respond_with(PurchaseSerializer.new(purchase))
+        end
+      end
+
+      get '/users/:id/purchases/current' do
+        process_request do
+          purchase = current_purchase.first!
+          respond_with(PurchaseSerializer.new(purchase))
+        end
+      end
+
+      put '/users/:id/purchases/current' do
+        process_request do
+          purchase = current_purchase.first!
+          purchase.update_attributes!(params[:purchase])
+          respond_with(PurchaseSerializer.new(purchase))
+        end
+      end
+
+      post '/users/:id/purchases/current/orders' do
+        process_request do
+          purchase = current_purchase.first!
+          purchase.add_or_update(
+            params[:item_type].classify.constantize.find(params[:item_id]),
+            Currency.find(params[:currency_id]),
+            params[:qty].to_i
+          )
+          respond_with(PurchaseSerializer.new(purchase))
+        end
+      end
+
+      delete '/users/:id/purchases/current/orders/:order_id' do
+        process_request do
+          purchase = current_purchase.first!
+          order = purchase.orders.find(params[:order_id])
+          purchase.remove(order)
+          respond_with(PurchaseSerializer.new(purchase))
+        end
+      end
+
+      put '/users/:id/purchases/current/submit' do
+        process_request do
+          purchase = current_purchase.first!
+          purchase.commit!
+          purchase.fulfill!
+          respond_with(PurchaseSerializer.new(purchase))
+        end
+      end
+
+      get '/users/:id/purchases/:purchase_id' do
+        process_request do
+          purchase = load_purchase!
+          respond_with(PurchaseSerializer.new(purchase))
+        end
+      end
+
+      put '/users/:id/purchases/:purchase_id/return' do
+        process_request do
+          purchase = load_purchase!
+          purchase.reverse!
+          respond_with(PurchaseSerializer.new(purchase))
+        end
+      end
+
+      put '/users/:id/purchases/:purchase_id/orders/:order_id/return' do
+        process_request do
+          purchase = load_purchase!
+          order = purchase.orders.find(params[:order_id])
+          purchase.reverse!(order)
+          respond_with(PurchaseSerializer.new(purchase))
+        end
+      end
+
+      protected
+
+      def current_purchase
+        Purchase.current(User.find(params[:id]))
+      end
+
+      def load_purchase!
+        User.find(params[:id]).purchases.find(params[:purchase_id])
+      end
+    end
+  end
+end
