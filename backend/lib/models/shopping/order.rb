@@ -56,6 +56,7 @@ class Order < ActiveRecord::Base
         make_refund!
         mark_failed!
       end
+      reload
       fulfilled?
     end
   end
@@ -71,6 +72,7 @@ class Order < ActiveRecord::Base
       rescue
         mark_failed!
       end
+      reload
       reversed?
     end
   end

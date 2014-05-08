@@ -90,6 +90,7 @@ describe Order do
           expect(model).to_not receive(mark_method)
           expect(model).to receive(:make_refund!)
           expect(model).to receive(:mark_failed!)
+          expect(model).to receive(:reload)
           expect(model.send(method)).to eq(model.send(check_method))
         end
       end
@@ -103,6 +104,7 @@ describe Order do
           expect(model).to_not receive(mark_method)
           expect(model).to receive(:make_refund!)
           expect(model).to receive(:mark_failed!)
+          expect(model).to receive(:reload)
           expect(model.send(method)).to eq(model.send(check_method))
         end
       end
@@ -111,6 +113,7 @@ describe Order do
         expect(model).to receive(mark_method)
         expect(model).to_not receive(:make_refund!)
         expect(model).to_not receive(:mark_failed!)
+        expect(model).to receive(:reload)
         expect(model.send(method)).to eq(model.send(check_method))
       end
     end
@@ -139,6 +142,7 @@ describe Order do
         it 'marks status and returns' do
           expect(model).to_not receive(mark_method)
           expect(model).to receive(:mark_failed!)
+          expect(model).to receive(:reload)
           expect(model.send(method)).to eq(model.send(check_method))
         end
       end
@@ -147,6 +151,7 @@ describe Order do
         expect(model).to receive(:make_refund!)
         expect(model).to receive(mark_method)
         expect(model).to_not receive(:mark_failed!)
+        expect(model).to receive(:reload)
         expect(model.send(method)).to eq(model.send(check_method))
       end
     end

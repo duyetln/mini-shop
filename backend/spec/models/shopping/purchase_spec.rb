@@ -292,6 +292,7 @@ describe Purchase do
           expect(model).to receive(:make_payment!)
           expect(order).to receive(process_method)
           expect(transaction).to receive(:commit!)
+          expect(model).to receive(:reload)
           model.send(method)
         end
       end
@@ -312,6 +313,7 @@ describe Purchase do
           it 'processes, marks status, and returns' do
             expect(order).to receive(process_method)
             expect(transaction).to receive(:commit!)
+            expect(model).to receive(:reload)
             model.send(method)
           end
         end
@@ -321,6 +323,7 @@ describe Purchase do
             expect(orders).to receive(:retrieve).with(order).and_return(order)
             expect(order).to receive(process_method)
             expect(transaction).to receive(:commit!)
+            expect(model).to receive(:reload)
             model.send(method, order)
           end
         end

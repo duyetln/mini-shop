@@ -62,6 +62,7 @@ class Purchase < ActiveRecord::Base
       transactions.each do |transaction|
         transaction.commit!
       end
+      reload
     end
   end
 
@@ -80,6 +81,7 @@ class Purchase < ActiveRecord::Base
       transactions.each do |transaction|
         transaction.commit!
       end
+      reload
     end
   end
 
