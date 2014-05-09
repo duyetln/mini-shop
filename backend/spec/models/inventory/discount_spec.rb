@@ -8,6 +8,11 @@ describe Discount do
   it { should validate_numericality_of(:rate).is_greater_than_or_equal_to(0) }
   it { should validate_uniqueness_of(:name) }
 
+  it { should allow_mass_assignment_of(:name) }
+  it { should allow_mass_assignment_of(:rate) }
+  it { should allow_mass_assignment_of(:start_at) }
+  it { should allow_mass_assignment_of(:end_at) }
+
   describe 'discount dates' do
     let(:model_args) { [:discount, :half] }
 

@@ -7,6 +7,8 @@ class Discount < ActiveRecord::Base
 
   validate :discount_dates
 
+  attr_accessible :name, :rate, :start_at, :end_at
+
   def rate_at(dt = DateTime.now)
     zero_rate = BigDecimal.new('0.0')
     start_set = start_at.present?
