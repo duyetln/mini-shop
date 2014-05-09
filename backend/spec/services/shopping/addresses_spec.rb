@@ -52,7 +52,7 @@ describe Services::Shopping::Addresses do
   describe 'put /users/:id/addresses/:address_id' do
     let(:method) { :put }
     let(:path) { "/users/#{id}/addresses/#{address_id}" }
-    let(:address) { Address.find FactoryGirl.create(:address, user: user).id }
+    let(:address) { FactoryGirl.create(:address, user: user) }
     let(:address_id) { address.id }
     let(:params) { { address: address.attributes } }
 

@@ -2,7 +2,7 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Accounts::Users do
-  let(:user) { FactoryGirl.create(:user, password: password).reload }
+  let(:user) { FactoryGirl.create :user, password: password }
   let(:password) { rand_str }
   let(:email) { user.email }
   let(:uuid) { user.uuid }

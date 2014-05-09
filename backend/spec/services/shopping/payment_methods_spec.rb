@@ -52,7 +52,7 @@ describe Services::Shopping::PaymentMethods do
   describe 'put /users/:id/payment_methods/:payment_method_id' do
     let(:method) { :put }
     let(:path) { "/users/#{id}/payment_methods/#{payment_method_id}" }
-    let(:payment_method) { PaymentMethod.find FactoryGirl.create(:payment_method, user: user).id }
+    let(:payment_method) { FactoryGirl.create(:payment_method, user: user) }
     let(:payment_method_id) { payment_method.id }
     let(:params) { { payment_method: payment_method.attributes } }
 
