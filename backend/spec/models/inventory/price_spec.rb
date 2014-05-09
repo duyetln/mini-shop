@@ -46,5 +46,4 @@ describe Price do
       end
     end
   end
-
 end

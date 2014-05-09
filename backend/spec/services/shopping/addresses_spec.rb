@@ -37,7 +37,7 @@ describe Services::Shopping::Addresses do
 
       context 'valid parameters' do
         let :params do
-          { address: FactoryGirl.build(:address).attributes.except('user_id') }
+          { address: FactoryGirl.build(:address).attributes }
         end
 
         it 'creates a new address' do

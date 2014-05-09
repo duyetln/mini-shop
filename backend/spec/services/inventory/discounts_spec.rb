@@ -43,7 +43,6 @@ describe Services::Inventory::Discounts do
   describe 'put /discounts/:id' do
     let(:method) { :put }
     let(:path) { "/discounts/#{id}" }
-    let(:id) { rand_str }
 
     include_examples 'invalid id'
 

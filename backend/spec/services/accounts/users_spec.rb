@@ -91,7 +91,6 @@ describe Services::Accounts::Users do
   describe 'put /users/:id' do
     let(:method) { :put }
     let(:path) { "/users/#{id}" }
-    let(:params) { { user: user.attributes } }
 
     include_examples 'invalid id'
 
@@ -103,6 +102,8 @@ describe Services::Accounts::Users do
       end
 
       context 'valid parameters' do
+        let(:params) { { user: user.attributes } }
+
         it 'updates the user' do
           send_request
           expect_status(200)

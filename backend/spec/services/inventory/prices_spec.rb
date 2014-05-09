@@ -31,7 +31,7 @@ describe Services::Inventory::Prices do
 
     context 'valid parameters' do
       let :params do
-        { 
+        {
           price: FactoryGirl.build(
             :price,
             pricepoint: FactoryGirl.create(:pricepoint)
@@ -50,7 +50,6 @@ describe Services::Inventory::Prices do
   describe 'put /prices/:id' do
     let(:method) { :put }
     let(:path) { "/prices/#{id}" }
-    let(:id) { rand_str }
 
     include_examples 'invalid id'
 

@@ -37,7 +37,7 @@ describe Services::Shopping::PaymentMethods do
 
       context 'valid parameters' do
         let :params do
-          { payment_method: FactoryGirl.build(:payment_method).attributes.except('user_id') }
+          { payment_method: FactoryGirl.build(:payment_method).attributes }
         end
 
         it 'creates a new payment method' do

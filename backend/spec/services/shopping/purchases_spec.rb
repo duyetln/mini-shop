@@ -4,8 +4,6 @@ require 'spec/services/shared/errors'
 describe Services::Shopping::Purchases do
   let(:user) { FactoryGirl.create(:user).reload }
   let(:purchase) { Purchase.current(user).first! }
-  let(:address) { FactoryGirl.create :address, user: user }
-  let(:params) { { purchase: { billing_address_id: address.id } } }
   let(:item) { FactoryGirl.create :storefront_item, :physical_item }
   let(:qty) { 2 }
   let(:id) { user.id }
@@ -47,6 +45,8 @@ describe Services::Shopping::Purchases do
   describe 'post /users/:user_id/purchases' do
     let(:method) { :post }
     let(:path) { "/users/#{id}/purchases" }
+    let(:address) { FactoryGirl.create :address, user: user }
+    let(:params) { { purchase: { billing_address_id: address.id } } }
 
     include_examples 'invalid id'
 
@@ -137,6 +137,8 @@ describe Services::Shopping::Purchases do
   describe 'put /users/:id/purchases/current' do
     let(:method) { :put }
     let(:path) { "/users/#{id}/purchases/current" }
+    let(:address) { FactoryGirl.create :address, user: user }
+    let(:params) { { purchase: { billing_address_id: address.id } } }
 
     include_examples 'invalid id'
 
