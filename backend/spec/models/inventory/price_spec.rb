@@ -9,6 +9,10 @@ describe Price do
   it { should validate_presence_of(:name) }
   it { should validate_uniqueness_of(:name) }
 
+  it { should allow_mass_assignment_of(:name) }
+  it { should allow_mass_assignment_of(:pricepoint_id) }
+  it { should allow_mass_assignment_of(:discount_id) }
+
   describe '#discounted?' do
     context 'discount present' do
       let(:model_args) { [:price, :discounted] }

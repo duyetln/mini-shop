@@ -8,6 +8,8 @@ class Price < ActiveRecord::Base
 
   delegate :discounted?, to: :discount, allow_nil: true
 
+  attr_accessible :name, :pricepoint_id, :discount_id
+
   def amount(currency)
     zero = BigDecimal.new('0.0')
 
