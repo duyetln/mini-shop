@@ -10,6 +10,8 @@ describe Pricepoint do
   it { should validate_uniqueness_of(:name) }
   it { should validate_presence_of(:name) }
 
+  it { should allow_mass_assignment_of(:name) }
+
   describe '#amount' do
     context 'currency found' do
       it 'returns correct amount' do
@@ -24,5 +26,4 @@ describe Pricepoint do
       end
     end
   end
-
 end

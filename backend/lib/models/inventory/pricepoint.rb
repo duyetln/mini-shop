@@ -5,6 +5,8 @@ class Pricepoint < ActiveRecord::Base
   validates :name, presence: true
   validates :name, uniqueness: true
 
+  attr_accessible :name
+
   def amount(currency)
     pricepoint_prices.find { |price| price.currency.code == currency.code }.try(:amount)
   end
