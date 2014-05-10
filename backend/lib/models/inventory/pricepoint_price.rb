@@ -10,4 +10,6 @@ class PricepointPrice < ActiveRecord::Base
 
   validates :amount, numericality: { greater_than_or_equal_to: 0 }
   validates :currency_id, uniqueness: { scope: :pricepoint_id }
+
+  attr_accessible :amount, :pricepoint_id, :currency_id
 end

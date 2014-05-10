@@ -15,4 +15,7 @@ describe PricepointPrice do
   it { should validate_numericality_of(:amount).is_greater_than_or_equal_to(0) }
   it { should validate_uniqueness_of(:currency_id).scoped_to(:pricepoint_id) }
 
+  it { should allow_mass_assignment_of(:amount) }
+  it { should allow_mass_assignment_of(:pricepoint_id) }
+  it { should allow_mass_assignment_of(:currency_id) }
 end
