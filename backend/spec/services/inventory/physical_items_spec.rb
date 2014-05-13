@@ -27,6 +27,10 @@ describe Services::Inventory::PhysicalItems do
       let(:params) { {} }
 
       include_examples 'bad request'
+
+      it 'does not create new physical item' do
+        expect { send_request }.to_not change { PhysicalItem.count }
+      end
     end
 
     context 'valid parameters' do
@@ -54,13 +58,17 @@ describe Services::Inventory::PhysicalItems do
         let(:params) { { physical_item: { title: nil } } }
 
         include_examples 'bad request'
+
+        it 'does not update the physical item' do
+          expect { send_request }.to_not change { physical_item.reload.attributes }
+        end
       end
 
       context 'valid parameters' do
-        let(:params) { { physical_item: physical_item.attributes } }
+        let(:params) { { physical_item: { title: rand_str } } }
 
-        it 'updates the existing physical item' do
-          send_request
+        it 'updates the the physical item' do
+          expect { send_request }.to change { physical_item.reload.attributes }
           expect_status(200)
           expect_response(PhysicalItemSerializer.new(physical_item).to_json)
         end
@@ -84,6 +92,10 @@ describe Services::Inventory::PhysicalItems do
         end
 
         include_examples 'not found'
+
+        it 'does not update the physical item' do
+          expect { send_request }.to_not change { physical_item.reload.attributes }
+        end
       end
 
       context 'unactivated physical item' do
@@ -116,6 +128,10 @@ describe Services::Inventory::PhysicalItems do
         end
 
         include_examples 'not found'
+
+        it 'does not update the physical item' do
+          expect { send_request }.to_not change { physical_item.reload.attributes }
+        end
       end
 
       context 'undeleted physical item' do

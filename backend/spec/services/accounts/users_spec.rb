@@ -43,6 +43,10 @@ describe Services::Accounts::Users do
       let(:params) { {} }
 
       include_examples 'bad request'
+
+      it 'does not create new user' do
+        expect { send_request }.to_not change { User.count }
+      end
     end
   end
 
@@ -99,13 +103,17 @@ describe Services::Accounts::Users do
         let(:params) { { user: { first_name: nil } } }
 
         include_examples 'bad request'
+
+        it 'does not update the user' do
+          expect { send_request }.to_not change { user.reload.attributes }
+        end
       end
 
       context 'valid parameters' do
-        let(:params) { { user: user.attributes } }
+        let(:params) { { user: { first_name: rand_str } } }
 
         it 'updates the user' do
-          send_request
+          expect { send_request }.to change { user.reload.attributes }
           expect_status(200)
           expect_response(UserSerializer.new(user).to_json)
         end
@@ -121,12 +129,20 @@ describe Services::Accounts::Users do
       let(:uuid) { rand_str }
 
       include_examples 'not found'
+
+      it 'does not update the user' do
+        expect { send_request }.to_not change { user.reload.attributes }
+      end
     end
 
     context 'invalid activation code' do
       let(:actv_code) { rand_str }
 
       include_examples 'not found'
+
+      it 'does not update the user' do
+        expect { send_request }.to_not change { user.reload.attributes }
+      end
     end
 
     context 'confirmed' do
@@ -135,6 +151,10 @@ describe Services::Accounts::Users do
       end
 
       include_examples 'not found'
+
+      it 'does not update the user' do
+        expect { send_request }.to_not change { user.reload.attributes }
+      end
     end
 
     context 'unconfirmed, valid uuid, valid activation code' do

@@ -27,6 +27,10 @@ describe Services::Inventory::Discounts do
       let(:params) { {} }
 
       include_examples 'bad request'
+
+      it 'does not create new discount' do
+        expect { send_request }.to_not change { Discount.count }
+      end
     end
 
     context 'valid parameters' do
@@ -54,13 +58,17 @@ describe Services::Inventory::Discounts do
         let(:params) { { discount: { rate: nil } } }
 
         include_examples 'bad request'
+
+        it 'does not update the discount' do
+          expect { send_request }.to_not change { discount.reload.attributes }
+        end
       end
 
       context 'valid parameters' do
-        let(:params) { { discount: discount.attributes } }
+        let(:params) { { discount: { name: rand_str } } }
 
         it 'updates the existing discount' do
-          send_request
+          expect { send_request }.to change { discount.reload.attributes }
           expect_status(200)
           expect_response(DiscountSerializer.new(discount).to_json)
         end

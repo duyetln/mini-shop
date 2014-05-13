@@ -26,11 +26,11 @@ describe Services::Inventory::Currencies do
     context 'invalid parameters' do
       let(:params) { { currency: { code: nil } } }
 
+      include_examples 'bad request'
+
       it 'does not create a new currency' do
         expect { send_request }.to_not change { Currency.count }
       end
-
-      include_examples 'bad request'
     end
 
     context 'valid parameters' do

@@ -27,6 +27,10 @@ describe Services::Inventory::Pricepoints do
       let(:params) { {} }
 
       include_examples 'bad request'
+
+      it 'does not create new pricepoint' do
+        expect { send_request }.to_not change { Pricepoint.count }
+      end
     end
 
     context 'valid parameters' do
@@ -54,13 +58,17 @@ describe Services::Inventory::Pricepoints do
         let(:params) { { pricepoint: { name: nil } } }
 
         include_examples 'bad request'
+
+        it 'does not update the pricepoint' do
+          expect { send_request }.to_not change { pricepoint.reload.attributes }
+        end
       end
 
       context 'valid parameters' do
-        let(:params) { { pricepoint: pricepoint.attributes } }
+        let(:params) { { pricepoint: { name: rand_str } } }
 
         it 'updates the existing pricepoint' do
-          send_request
+          expect { send_request }.to change { pricepoint.reload.attributes }
           expect_status(200)
           expect_response(PricepointSerializer.new(pricepoint).to_json)
         end
@@ -82,6 +90,10 @@ describe Services::Inventory::Pricepoints do
         let(:params) { { pricepiont_price: { amount: nil } } }
 
         include_examples 'bad request'
+
+        it 'does not create new pricepoint prices' do
+          expect { send_request }.to_not change { pricepoint.pricepoint_prices.count }
+        end
       end
 
       context 'valid parameters' do
@@ -125,13 +137,17 @@ describe Services::Inventory::Pricepoints do
           let(:params) { { pricepoint_price: { amount: nil } } }
 
           include_examples 'bad request'
+
+          it 'does not update the pricepoint price' do
+            expect { send_request }.to_not change { pricepoint_price.reload.attributes }
+          end
         end
 
         context 'valid parameters' do
-          let(:params) { { pricepoint_price: pricepoint_price.attributes } }
+          let(:params) { { pricepoint_price: { amount: amount } } }
 
           it 'updates the existing pricepoint price' do
-            send_request
+            expect { send_request }.to change { pricepoint_price.reload.attributes }
             expect_status(200)
             expect_response(PricepointSerializer.new(pricepoint).to_json)
           end
