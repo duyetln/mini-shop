@@ -39,6 +39,7 @@ namespace :spec do
       task.rspec_opts = '--profile'
     end
 
+    desc 'Run all unit tests'
     task :all => [:models, :services]
   end
 
@@ -50,13 +51,15 @@ namespace :spec do
       task.rspec_opts == '--profile'
     end
 
+    desc 'Run all integration tests'
     task :all => [:usecases]
   end
 
+  desc 'Run all tests'
   task :all => ['unit:all', 'integration:all']
 end
 
-desc 'Load applicationn in a pry console'
+desc 'Start a pry session'
 task :pry do
   system(<<-EOF
     RACK_ENV=test bundle exec pry -I. -r ./boot -e '
