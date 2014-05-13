@@ -22,21 +22,35 @@ class PriceSerializer < ResourceSerializer
   attributes :name, :pricepoint_id, :discount_id
 end
 
+module ItemResourceSerializer
+  extend ActiveSupport::Concern
+
+  included do
+    attributes :title, :description, :active, :deleted, :available
+  end
+
+  def available
+    object.available?
+  end
+end
+
 class PhysicalItemSerializer < ResourceSerializer
-  attributes :title, :description, :active, :deleted, :qty
+  include ItemResourceSerializer
+  attributes :qty
 end
 
 class DigitalItemSerializer < ResourceSerializer
-  attributes :title, :description, :active, :deleted
+  include ItemResourceSerializer
 end
 
 class BundleItemSerializer < ResourceSerializer
-  attributes :title, :description, :active, :deleted
+  include ItemResourceSerializer
   has_many :items, serializer: DynamicSerializer
 end
 
 class StorefrontItemSerializer < ResourceSerializer
-  attributes :name, :title, :description, :active, :deleted, :item_type, :item_id, :price_id
+  include ItemResourceSerializer
+  attributes :name, :item_type, :item_id, :price_id
   has_one :price, serializer: PriceSerializer
   has_one :item, serializer: DynamicSerializer
 end
