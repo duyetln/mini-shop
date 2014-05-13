@@ -79,7 +79,7 @@ describe Services::Inventory::Pricepoints do
       let(:id) { pricepoint.id }
 
       context 'invalid parameters' do
-        let(:pricepoint_price) { { pricepiont_price: { amount: nil } } }
+        let(:params) { { pricepiont_price: { amount: nil } } }
 
         include_examples 'bad request'
       end
@@ -110,7 +110,7 @@ describe Services::Inventory::Pricepoints do
     context 'valid id' do
       let(:pricepoint) { FactoryGirl.create :pricepoint }
       let(:id) { pricepoint.id }
-      
+
       context 'invalid pricepoint price id' do
         let(:pricepoint_price_id) { rand_str }
 
