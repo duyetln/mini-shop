@@ -12,6 +12,10 @@ describe Services::Fulfillment::Shipments do
     include_examples 'invalid id'
 
     context 'valid id' do
+      before :each do
+        FactoryGirl.create :shipment, user: user
+      end
+
       it 'returns the shipments' do
         send_request
         expect_status(200)

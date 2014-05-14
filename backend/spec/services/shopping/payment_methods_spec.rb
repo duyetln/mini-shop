@@ -12,6 +12,10 @@ describe Services::Shopping::PaymentMethods do
     include_examples 'invalid id'
 
     context 'valid id' do
+      before :each do
+        FactoryGirl.create :payment_method, user: user
+      end
+
       it 'returns the payment methods' do
         send_request
         expect_status(200)

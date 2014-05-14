@@ -12,6 +12,10 @@ describe Services::Shopping::Addresses do
     include_examples 'invalid id'
 
     context 'valid id' do
+      before :each do
+        FactoryGirl.create :address, user: user
+      end
+
       it 'returns the addresses' do
         send_request
         expect_status(200)

@@ -12,6 +12,10 @@ describe Services::Fulfillment::Ownerships do
     include_examples 'invalid id'
 
     context 'valid id' do
+      before :each do
+        FactoryGirl.create :ownership, user: user
+      end
+
       it 'returns the ownerships' do
         send_request
         expect_status(200)

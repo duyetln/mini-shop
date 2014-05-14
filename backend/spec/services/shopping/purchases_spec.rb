@@ -15,6 +15,10 @@ describe Services::Shopping::Purchases do
     include_examples 'invalid id'
 
     context 'valid id' do
+      before :each do
+        FactoryGirl.create :purchase, user: user
+      end
+
       it 'returns the purchases' do
         send_request
         expect_status(200)
@@ -32,6 +36,10 @@ describe Services::Shopping::Purchases do
     include_examples 'invalid id'
 
     context 'valid id' do
+      before :each do
+        FactoryGirl.create :order, purchase: FactoryGirl.create(:purchase, user: user)
+      end
+
       it 'returns the orders' do
         send_request
         expect_status(200)
