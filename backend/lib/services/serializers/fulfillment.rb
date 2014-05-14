@@ -1,5 +1,5 @@
-require 'models/serializers/base'
-require 'models/serializers/shopping'
+require 'services/serializers/base'
+require 'services/serializers/shopping'
 
 class OwnershipSerializer < ResourceSerializer
   attributes :user_id, :order_id, :item_type, :item_id, :qty, :deleted, :created_at

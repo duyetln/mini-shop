@@ -1,5 +1,5 @@
 require 'services/base'
-require 'models/serializers/inventory'
+require 'services/serializers/inventory'
 
 module Services
   module Inventory

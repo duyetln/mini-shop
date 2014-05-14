@@ -1,4 +1,4 @@
-require 'models/serializers/base'
+require 'services/serializers/base'
 
 class CurrencySerializer < ResourceSerializer
   attributes :code

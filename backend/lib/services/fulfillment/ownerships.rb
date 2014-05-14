@@ -1,5 +1,5 @@
 require 'services/base'
-require 'models/serializers/fulfillment'
+require 'services/serializers/fulfillment'
 
 module Services
   module Fulfillment
