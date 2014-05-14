@@ -262,7 +262,7 @@ describe Services::Shopping::Purchases do
           include_examples 'not found'
         end
 
-        context 'valid order_id' do
+        context 'valid order id' do
           let(:item) { FactoryGirl.create :storefront_item }
           let(:order) { purchase.orders.last }
           let(:order_id) { order.id }

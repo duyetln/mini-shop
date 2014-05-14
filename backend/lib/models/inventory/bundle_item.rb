@@ -7,7 +7,7 @@ class BundleItem < ActiveRecord::Base
 
   after_save :reload
 
-  def add_or_update(item, qty = 1, acc = true)
+  def add_or_update(item, qty = 1, acc = false)
     if kept?
       abundling = bundlings.add_or_update(item, qty: qty, acc: acc)
       reload && abundling
