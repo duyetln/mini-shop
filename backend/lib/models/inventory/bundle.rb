@@ -1,9 +1,9 @@
 require 'models/shared/item_resource'
 
-class BundleItem < ActiveRecord::Base
+class Bundle < ActiveRecord::Base
   include ItemResource
 
-  has_many :bundlings, foreign_key: :bundle_id
+  has_many :bundlings
 
   after_save :reload
 

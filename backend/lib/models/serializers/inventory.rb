@@ -43,7 +43,7 @@ class DigitalItemSerializer < ResourceSerializer
   include ItemResourceSerializer
 end
 
-class BundleItemSerializer < ResourceSerializer
+class BundleSerializer < ResourceSerializer
   include ItemResourceSerializer
   has_many :items, serializer: DynamicSerializer
 end

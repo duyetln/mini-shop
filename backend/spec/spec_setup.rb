@@ -37,7 +37,7 @@ module SpecHelpers
       let(:user) { FactoryGirl.build :user }
       let(:item) do
         FactoryGirl.build [
-          :bundle_item,
+          :bundle,
           :physical_item,
           :digital_item
         ].sample

@@ -9,7 +9,7 @@ describe 'purchase flow' do
     @eur = FactoryGirl.create :eur
     @pitem = FactoryGirl.create :physical_item, qty: @qty * 10
     @ditem = FactoryGirl.create :digital_item
-    @bitem = FactoryGirl.create :bundle_item
+    @bitem = FactoryGirl.create :bundle
     @psfi = FactoryGirl.create :storefront_item, item: @pitem
     @dsfi = FactoryGirl.create :storefront_item, item: @ditem
     @bsfi = FactoryGirl.create :storefront_item, item: @bitem
@@ -23,7 +23,7 @@ describe 'purchase flow' do
   def eur; Currency.find @eur.id; end
   def physical_item; PhysicalItem.find @pitem.id; end
   def digital_item; DigitalItem.find @ditem.id; end
-  def bundle_item; BundleItem.find @bitem.id; end
+  def bundle; Bundle.find @bitem.id; end
   def psfi; StorefrontItem.find @psfi.id; end
   def dsfi; StorefrontItem.find @dsfi.id; end
   def bsfi; StorefrontItem.find @bsfi.id; end
@@ -40,9 +40,9 @@ describe 'purchase flow' do
 
   describe 'bundle item' do
     it 'adds and updates items' do
-      expect { bundle_item.add_or_update(physical_item, qty) }.to change { bundle_item.bundlings.count }.by(1)
-      expect { bundle_item.add_or_update(digital_item, qty) }.to change { bundle_item.bundlings.count }.by(1)
-      expect(bundle_item).to be_available
+      expect { bundle.add_or_update(physical_item, qty) }.to change { bundle.bundlings.count }.by(1)
+      expect { bundle.add_or_update(digital_item, qty) }.to change { bundle.bundlings.count }.by(1)
+      expect(bundle).to be_available
     end
   end
 

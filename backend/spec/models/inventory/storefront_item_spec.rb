@@ -19,7 +19,7 @@ describe StorefrontItem do
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:price) }
   it { should validate_presence_of(:item) }
-  it { should ensure_inclusion_of(:item_type).in_array(%w{ BundleItem DigitalItem PhysicalItem }) }
+  it { should ensure_inclusion_of(:item_type).in_array(%w{ Bundle DigitalItem PhysicalItem }) }
 
   describe '#available?' do
     context 'item unavailable' do

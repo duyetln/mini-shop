@@ -1,7 +1,7 @@
 require 'models/spec_setup'
 require 'spec/models/shared/item_resource'
 
-describe BundleItem do
+describe Bundle do
 
   let(:item) { FactoryGirl.build [:physical_item, :digital_item].sample }
   let(:bundlings) { model.bundlings }
@@ -13,7 +13,7 @@ describe BundleItem do
 
   it_behaves_like 'item resource'
 
-  it { should have_many(:bundlings).with_foreign_key(:bundle_id) }
+  it { should have_many(:bundlings) }
 
   describe '#add_or_update' do
     let(:acc) { [true, false].sample }

@@ -9,8 +9,8 @@ pet         = DigitalItem.where(title: 'World of Warcraft Banneling Pet').first_
 wings       = DigitalItem.where(title: 'Diablo 3 Blade Wings and Banner Sigil').first_or_create!
 sc2_digital = DigitalItem.where(title: 'StarCraft 2 Digital Edition').first_or_create!
 
-deluxe_ed    = BundleItem.where(title: 'StarCraft 2 Deluxe Edition').first_or_create!
-collector_ed = BundleItem.where(title: "StarCraft 2 Collector's Edition").first_or_create!
+deluxe_ed    = Bundle.where(title: 'StarCraft 2 Deluxe Edition').first_or_create!
+collector_ed = Bundle.where(title: "StarCraft 2 Collector's Edition").first_or_create!
 
 deluxe_ed.bundlings.destroy_all
 [sc2_digital, skin, pet, wings].each { |asset| deluxe_ed.add_or_update(asset) }

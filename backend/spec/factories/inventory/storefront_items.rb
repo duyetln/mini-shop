@@ -2,10 +2,10 @@ FactoryGirl.define do
   factory :storefront_item do
     name 'Name'
     price { build :price, :discounted }
-    item { build [:bundle_item, :physical_item, :digital_item].sample }
+    item { build [:bundle, :physical_item, :digital_item].sample }
 
-    trait :bundle_item do
-      item { build :bundle_item, :bundlings }
+    trait :bundle do
+      item { build :bundle, :bundlings }
     end
 
     trait :physical_item do

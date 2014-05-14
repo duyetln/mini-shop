@@ -37,7 +37,7 @@ describe Services::Inventory::StorefrontItems do
       let(:price) { FactoryGirl.create :price, :discounted }
       let :item do
         FactoryGirl.create [
-          :bundle_item,
+          :bundle,
           :physical_item,
           :digital_item
         ].sample

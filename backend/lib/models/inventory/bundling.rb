@@ -5,7 +5,7 @@ class Bundling < ActiveRecord::Base
 
   attr_readonly :bundle_id
 
-  belongs_to :bundle, class_name: 'BundleItem'
+  belongs_to :bundle
 
   validates :bundle, presence: true
 

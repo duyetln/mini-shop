@@ -1,27 +1,27 @@
 require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
-describe Services::Inventory::BundleItems do
-  describe 'get /bundle_items' do
+describe Services::Inventory::Bundles do
+  describe 'get /bundles' do
     let(:method) { :get }
-    let(:path) { '/bundle_items' }
+    let(:path) { '/bundles' }
 
     before :each do
-      FactoryGirl.create :bundle_item
+      FactoryGirl.create :bundle
     end
 
     it 'returns all bundle items' do
       send_request
       expect_status(200)
-      expect_response(BundleItem.all.map do |item|
-        BundleItemSerializer.new(item)
+      expect_response(Bundle.all.map do |item|
+        BundleSerializer.new(item)
       end.to_json)
     end
   end
 
-  describe 'post /bundle_items' do
+  describe 'post /bundles' do
     let(:method) { :post }
-    let(:path) { '/bundle_items' }
+    let(:path) { '/bundles' }
 
     context 'invalid parameters' do
       let(:params) { {} }
@@ -29,62 +29,62 @@ describe Services::Inventory::BundleItems do
       include_examples 'bad request'
 
       it 'does not create new bundle item' do
-        expect { send_request }.to_not change { BundleItem.count }
+        expect { send_request }.to_not change { Bundle.count }
       end
     end
 
     context 'valid parameters' do
-      let(:params) { { bundle_item: FactoryGirl.build(:bundle_item).attributes } }
+      let(:params) { { bundle: FactoryGirl.build(:bundle).attributes } }
 
       it 'creates new bundle item' do
-        expect { send_request }.to change { BundleItem.count }.by(1)
+        expect { send_request }.to change { Bundle.count }.by(1)
         expect_status(200)
-        expect_response(BundleItemSerializer.new(BundleItem.last).to_json)
+        expect_response(BundleSerializer.new(Bundle.last).to_json)
       end
     end
   end
 
-  describe 'put /bundle_items/:id' do
+  describe 'put /bundles/:id' do
     let(:method) { :put }
-    let(:path) { "/bundle_items/#{id}" }
+    let(:path) { "/bundles/#{id}" }
 
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:bundle_item) { FactoryGirl.create :bundle_item }
-      let(:id) { bundle_item.id }
+      let(:bundle) { FactoryGirl.create :bundle }
+      let(:id) { bundle.id }
 
       context 'invalid parameters' do
-        let(:params) { { bundle_item: { title: nil } } }
+        let(:params) { { bundle: { title: nil } } }
 
         include_examples 'bad request'
 
         it 'does not update the bundle item' do
-          expect { send_request }.to_not change { bundle_item.reload.attributes }
+          expect { send_request }.to_not change { bundle.reload.attributes }
         end
       end
 
       context 'valid parameters' do
-        let(:params) { { bundle_item: { title: rand_str } } }
+        let(:params) { { bundle: { title: rand_str } } }
 
         it 'updates the the bundle item' do
-          expect { send_request }.to change { bundle_item.reload.attributes }
+          expect { send_request }.to change { bundle.reload.attributes }
           expect_status(200)
-          expect_response(BundleItemSerializer.new(bundle_item).to_json)
+          expect_response(BundleSerializer.new(bundle).to_json)
         end
       end
     end
   end
 
-  describe 'post /bundle_items/:id/bundlings' do
+  describe 'post /bundles/:id/bundlings' do
     let(:method) { :post }
-    let(:path) { "/bundle_items/#{id}/bundlings" }
+    let(:path) { "/bundles/#{id}/bundlings" }
 
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:bundle_item) { FactoryGirl.create :bundle_item }
-      let(:id) { bundle_item.id }
+      let(:bundle) { FactoryGirl.create :bundle }
+      let(:id) { bundle.id }
       let(:item) { FactoryGirl.create [:physical_item, :digital_item].sample }
       let(:item_type) { item.class.name }
       let(:item_id) { item.id }
@@ -112,14 +112,14 @@ describe Services::Inventory::BundleItems do
 
       context 'valid parameters' do
         it 'creates new bundling' do
-          expect { send_request }.to change { bundle_item.bundlings.count }.by(1)
+          expect { send_request }.to change { bundle.bundlings.count }.by(1)
           expect_status(200)
-          expect_response(BundleItemSerializer.new(bundle_item).to_json)
+          expect_response(BundleSerializer.new(bundle).to_json)
         end
 
         it 'sets bundling attributes correctly' do
           send_request
-          order = bundle_item.bundlings.last
+          order = bundle.bundlings.last
           expect(order.item).to eq(item)
           expect(order.qty).to eq(qty)
         end
@@ -127,16 +127,16 @@ describe Services::Inventory::BundleItems do
     end
   end
 
-  describe 'delete /bundle_items/:id/bundlings/:bundling_id' do
+  describe 'delete /bundles/:id/bundlings/:bundling_id' do
     let(:method) { :delete }
-    let(:path) { "/bundle_items/#{id}/bundlings/#{bundling_id}" }
+    let(:path) { "/bundles/#{id}/bundlings/#{bundling_id}" }
     let(:bundling_id) { rand_str }
 
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:bundle_item) { FactoryGirl.create :bundle_item }
-      let(:id) { bundle_item.id }
+      let(:bundle) { FactoryGirl.create :bundle }
+      let(:id) { bundle.id }
 
       context 'invalid bundling id' do
         include_examples 'not found'
@@ -144,89 +144,89 @@ describe Services::Inventory::BundleItems do
 
       context 'valid bundling id' do
         let(:item) { FactoryGirl.create [:physical_item, :digital_item].sample }
-        let(:bundling) { bundle_item.bundlings.last }
+        let(:bundling) { bundle.bundlings.last }
         let(:bundling_id) { bundling.id }
 
         before :each do
-          bundle_item.add_or_update(item, qty)
+          bundle.add_or_update(item, qty)
         end
 
         it 'removes the bundling' do
-          expect { send_request }.to change { bundle_item.bundlings.count }.by(-1)
+          expect { send_request }.to change { bundle.bundlings.count }.by(-1)
           expect_status(200)
-          expect_response(BundleItemSerializer.new(bundle_item).to_json)
+          expect_response(BundleSerializer.new(bundle).to_json)
         end
       end
     end
   end
 
-  describe 'put /bundle_items/:id/activate' do
+  describe 'put /bundles/:id/activate' do
     let(:method) { :put }
-    let(:path) { "/bundle_items/#{id}/activate" }
+    let(:path) { "/bundles/#{id}/activate" }
 
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:bundle_item) { FactoryGirl.create :bundle_item }
-      let(:id) { bundle_item.id }
+      let(:bundle) { FactoryGirl.create :bundle }
+      let(:id) { bundle.id }
 
       context 'activated bundle item' do
         before :each do
-          expect(bundle_item).to be_active
+          expect(bundle).to be_active
         end
 
         include_examples 'not found'
 
         it 'does not update the bundle item' do
-          expect { send_request }.to_not change { bundle_item.reload.attributes }
+          expect { send_request }.to_not change { bundle.reload.attributes }
         end
       end
 
       context 'unactivated bundle item' do
         before :each do
-          bundle_item.deactivate!
+          bundle.deactivate!
         end
 
         it 'activates the bundle item' do
-          expect { send_request }.to change { bundle_item.reload.active? }.to(true)
+          expect { send_request }.to change { bundle.reload.active? }.to(true)
           expect_status(200)
-          expect_response(BundleItemSerializer.new(bundle_item).to_json)
+          expect_response(BundleSerializer.new(bundle).to_json)
         end
       end
     end
   end
 
-  describe 'delete /bundle_items/:id' do
+  describe 'delete /bundles/:id' do
     let(:method) { :delete }
-    let(:path) { "/bundle_items/#{id}" }
+    let(:path) { "/bundles/#{id}" }
 
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:bundle_item) { FactoryGirl.create :bundle_item }
-      let(:id) { bundle_item.id }
+      let(:bundle) { FactoryGirl.create :bundle }
+      let(:id) { bundle.id }
 
       context 'deleted bundle item' do
         before :each do
-          bundle_item.delete!
+          bundle.delete!
         end
 
         include_examples 'not found'
 
         it 'does not update the bundle item' do
-          expect { send_request }.to_not change { bundle_item.reload.attributes }
+          expect { send_request }.to_not change { bundle.reload.attributes }
         end
       end
 
       context 'undeleted bundle item' do
         before :each do
-          expect(bundle_item).to be_kept
+          expect(bundle).to be_kept
         end
 
         it 'deletes the bundle item' do
-          expect { send_request }.to change { BundleItem.count }.by(-1)
+          expect { send_request }.to change { Bundle.count }.by(-1)
           expect_status(200)
-          expect_response(BundleItemSerializer.new(bundle_item.reload).to_json)
+          expect_response(BundleSerializer.new(bundle.reload).to_json)
         end
       end
     end

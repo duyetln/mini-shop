@@ -1,6 +1,6 @@
-class CreateBundleItemsTable < ActiveRecord::Migration
+class CreateBundlesTable < ActiveRecord::Migration
   def up
-    create_table :bundle_items do |t|
+    create_table :bundles do |t|
       t.string   :title
       t.string   :description
       t.boolean  :active
@@ -9,6 +9,6 @@ class CreateBundleItemsTable < ActiveRecord::Migration
   end
 
   def down
-    drop_table    :bundle_items
+    drop_table    :bundles
   end
 end

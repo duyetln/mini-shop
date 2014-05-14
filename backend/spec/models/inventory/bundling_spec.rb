@@ -7,7 +7,7 @@ describe Bundling do
 
   it { should have_readonly_attribute(:bundle_id) }
 
-  it { should belong_to(:bundle).class_name('BundleItem') }
+  it { should belong_to(:bundle) }
 
   it { should validate_presence_of(:bundle) }
 
