@@ -1,7 +1,7 @@
 require 'models/shared/item_resource'
 require 'models/shared/orderable'
 
-class StorefrontItem < ActiveRecord::Base
+class StoreItem < ActiveRecord::Base
   include ItemResource
   include Orderable
   include Itemable

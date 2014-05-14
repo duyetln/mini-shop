@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :storefront_item do
+  factory :store_item do
     name 'Name'
     price { build :price, :discounted }
     item { build [:bundle, :physical_item, :digital_item].sample }

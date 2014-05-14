@@ -10,7 +10,7 @@ describe DigitalItem do
       FactoryGirl.build(
         :order,
         item: FactoryGirl.build(
-          :storefront_item,
+          :store_item,
           item: model
         ),
         qty: qty

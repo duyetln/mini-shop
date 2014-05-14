@@ -4,7 +4,7 @@ require 'spec/services/shared/errors'
 describe Services::Shopping::Purchases do
   let(:user) { FactoryGirl.create(:user).reload }
   let(:purchase) { Purchase.current(user).first! }
-  let(:item) { FactoryGirl.create :storefront_item, :physical_item }
+  let(:item) { FactoryGirl.create :store_item, :physical_item }
   let(:qty) { 2 }
   let(:id) { user.id }
 
@@ -263,7 +263,7 @@ describe Services::Shopping::Purchases do
         end
 
         context 'valid order id' do
-          let(:item) { FactoryGirl.create :storefront_item }
+          let(:item) { FactoryGirl.create :store_item }
           let(:order) { purchase.orders.last }
           let(:order_id) { order.id }
 

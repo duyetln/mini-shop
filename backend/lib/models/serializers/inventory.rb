@@ -48,7 +48,7 @@ class BundleSerializer < ResourceSerializer
   has_many :items, serializer: DynamicSerializer
 end
 
-class StorefrontItemSerializer < ResourceSerializer
+class StoreItemSerializer < ResourceSerializer
   include ItemResourceSerializer
   attributes :name, :item_type, :item_id, :price_id
   has_one :price, serializer: PriceSerializer

@@ -6,7 +6,7 @@ describe Purchase do
   let(:orders) { model.orders }
   let(:order) { orders.sample }
   let(:model_args) { [:purchase, :orders] }
-  let(:item) { FactoryGirl.build :storefront_item }
+  let(:item) { FactoryGirl.build :store_item }
 
   it_behaves_like 'committable model'
 

@@ -21,7 +21,7 @@ class Order < ActiveRecord::Base
 
   validates :purchase_id, uniqueness: { scope: [:item_type, :item_id, :deleted] }, unless: :deleted?
   validates :uuid, uniqueness: true
-  validates :item_type, inclusion: { in: %w{ StorefrontItem } }
+  validates :item_type, inclusion: { in: %w{ StoreItem } }
 
   validate  :pending_purchase
 

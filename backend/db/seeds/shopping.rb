@@ -8,4 +8,4 @@ purchase.payment_method   = payment_method
 purchase.billing_address  = address
 purchase.shipping_address = address
 purchase.save!
-purchase.add_or_update(StorefrontItem.last, currency, 2)
+purchase.add_or_update(StoreItem.last, currency, 2)

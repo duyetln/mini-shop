@@ -3,7 +3,7 @@ require 'spec/models/shared/item_resource'
 require 'spec/models/shared/orderable'
 require 'spec/models/shared/itemable'
 
-describe StorefrontItem do
+describe StoreItem do
 
   it_behaves_like 'item resource'
   it_behaves_like 'orderable model'

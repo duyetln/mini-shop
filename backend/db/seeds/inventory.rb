@@ -50,7 +50,7 @@ sc2_standard_price = Price.where(pricepoint_id: sc2_standard_pp.id).first_or_cre
 deluxe_ed_price    = Price.where(pricepoint_id: deluxe_ed_pp.id).first_or_create!(name: 'SC2 Deluxe Price', discount_id: no_discount.id)
 collector_ed_price = Price.where(pricepoint_id: collector_ed_pp.id).first_or_create!(name: 'SC2 Collector Price', discount_id: no_discount.id)
 
-StorefrontItem.where(item_type: sc2_retail.class,   item_id: sc2_retail.id,    price_id: sc2_standard_price.id).first_or_create!(name: 'StarCraft 2 Retail Edition')
-StorefrontItem.where(item_type: sc2_digital.class,  item_id: sc2_digital.id,   price_id: sc2_standard_price.id).first_or_create!(name: 'StarCraft 2 Digital Edition')
-StorefrontItem.where(item_type: deluxe_ed.class,    item_id: deluxe_ed.id,     price_id: deluxe_ed_price.id).first_or_create!(name: 'StarCraft 2 Deluxe Edition')
-StorefrontItem.where(item_type: collector_ed.class, item_id: collector_ed.id,  price_id: collector_ed_price.id).first_or_create!(name: "StarCraft 2 Collector's Edition")
+StoreItem.where(item_type: sc2_retail.class,   item_id: sc2_retail.id,    price_id: sc2_standard_price.id).first_or_create!(name: 'StarCraft 2 Retail Edition')
+StoreItem.where(item_type: sc2_digital.class,  item_id: sc2_digital.id,   price_id: sc2_standard_price.id).first_or_create!(name: 'StarCraft 2 Digital Edition')
+StoreItem.where(item_type: deluxe_ed.class,    item_id: deluxe_ed.id,     price_id: deluxe_ed_price.id).first_or_create!(name: 'StarCraft 2 Deluxe Edition')
+StoreItem.where(item_type: collector_ed.class, item_id: collector_ed.id,  price_id: collector_ed_price.id).first_or_create!(name: "StarCraft 2 Collector's Edition")
