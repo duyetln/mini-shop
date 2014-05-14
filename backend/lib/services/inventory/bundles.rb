@@ -29,23 +29,23 @@ module Services
         end
       end
 
-      post '/bundles/:id/bundlings' do
+      post '/bundles/:id/bundleds' do
         process_request do
           bundle = Bundle.find(params[:id])
           bundle.add_or_update(
-            bundling_params[:item_type].classify.constantize.find(bundling_params[:item_id]),
-            bundling_params[:qty].to_i,
+            bundled_params[:item_type].classify.constantize.find(bundled_params[:item_id]),
+            bundled_params[:qty].to_i,
             false
           )
           respond_with(BundleSerializer.new(bundle))
         end
       end
 
-      delete '/bundles/:id/bundlings/:bundling_id' do
+      delete '/bundles/:id/bundleds/:bundled_id' do
         process_request do
           bundle = Bundle.find(params[:id])
-          bundling = bundle.bundlings.find(params[:bundling_id])
-          bundle.remove(bundling)
+          bundled = bundle.bundleds.find(params[:bundled_id])
+          bundle.remove(bundled)
           respond_with(BundleSerializer.new(bundle))
         end
       end
@@ -68,8 +68,8 @@ module Services
 
       protected
 
-      def bundling_params
-        params[:bundling] || {}
+      def bundled_params
+        params[:bundled] || {}
       end
     end
   end

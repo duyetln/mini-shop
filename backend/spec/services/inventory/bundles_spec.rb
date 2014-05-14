@@ -76,9 +76,9 @@ describe Services::Inventory::Bundles do
     end
   end
 
-  describe 'post /bundles/:id/bundlings' do
+  describe 'post /bundles/:id/bundleds' do
     let(:method) { :post }
-    let(:path) { "/bundles/#{id}/bundlings" }
+    let(:path) { "/bundles/#{id}/bundleds" }
 
     include_examples 'invalid id'
 
@@ -90,7 +90,7 @@ describe Services::Inventory::Bundles do
       let(:item_id) { item.id }
       let :params do
         {
-          bundling: {
+          bundled: {
             item_type: item_type,
             item_id: item_id,
             qty: qty
@@ -111,15 +111,15 @@ describe Services::Inventory::Bundles do
       end
 
       context 'valid parameters' do
-        it 'creates new bundling' do
-          expect { send_request }.to change { bundle.bundlings.count }.by(1)
+        it 'creates new bundled' do
+          expect { send_request }.to change { bundle.bundleds.count }.by(1)
           expect_status(200)
           expect_response(BundleSerializer.new(bundle).to_json)
         end
 
-        it 'sets bundling attributes correctly' do
+        it 'sets bundled attributes correctly' do
           send_request
-          order = bundle.bundlings.last
+          order = bundle.bundleds.last
           expect(order.item).to eq(item)
           expect(order.qty).to eq(qty)
         end
@@ -127,10 +127,10 @@ describe Services::Inventory::Bundles do
     end
   end
 
-  describe 'delete /bundles/:id/bundlings/:bundling_id' do
+  describe 'delete /bundles/:id/bundleds/:bundled_id' do
     let(:method) { :delete }
-    let(:path) { "/bundles/#{id}/bundlings/#{bundling_id}" }
-    let(:bundling_id) { rand_str }
+    let(:path) { "/bundles/#{id}/bundleds/#{bundled_id}" }
+    let(:bundled_id) { rand_str }
 
     include_examples 'invalid id'
 
@@ -138,21 +138,21 @@ describe Services::Inventory::Bundles do
       let(:bundle) { FactoryGirl.create :bundle }
       let(:id) { bundle.id }
 
-      context 'invalid bundling id' do
+      context 'invalid bundled id' do
         include_examples 'not found'
       end
 
-      context 'valid bundling id' do
+      context 'valid bundled id' do
         let(:item) { FactoryGirl.create [:physical_item, :digital_item].sample }
-        let(:bundling) { bundle.bundlings.last }
-        let(:bundling_id) { bundling.id }
+        let(:bundled) { bundle.bundleds.last }
+        let(:bundled_id) { bundled.id }
 
         before :each do
           bundle.add_or_update(item, qty)
         end
 
-        it 'removes the bundling' do
-          expect { send_request }.to change { bundle.bundlings.count }.by(-1)
+        it 'removes the bundled' do
+          expect { send_request }.to change { bundle.bundleds.count }.by(-1)
           expect_status(200)
           expect_response(BundleSerializer.new(bundle).to_json)
         end

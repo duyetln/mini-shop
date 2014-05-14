@@ -3,9 +3,9 @@ FactoryGirl.define do
     title 'Title'
     description 'Description'
 
-    trait :bundlings do
+    trait :bundleds do
       after :build do |bundle|
-        bundle.bundlings << build(:bundling)
+        bundle.bundleds << build(:bundled)
       end
     end
   end

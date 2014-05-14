@@ -40,8 +40,8 @@ describe 'purchase flow' do
 
   describe 'bundle item' do
     it 'adds and updates items' do
-      expect { bundle.add_or_update(physical_item, qty) }.to change { bundle.bundlings.count }.by(1)
-      expect { bundle.add_or_update(digital_item, qty) }.to change { bundle.bundlings.count }.by(1)
+      expect { bundle.add_or_update(physical_item, qty) }.to change { bundle.bundleds.count }.by(1)
+      expect { bundle.add_or_update(digital_item, qty) }.to change { bundle.bundleds.count }.by(1)
       expect(bundle).to be_available
     end
   end
@@ -110,7 +110,7 @@ describe 'purchase flow' do
 
       describe 'physical item fulfillment' do
         def item; physical_item; end
-        def qty; order.qty * bsfi.item.bundlings.retrieve(item).qty; end
+        def qty; order.qty * bsfi.item.bundleds.retrieve(item).qty; end
         def result_class; Shipment; end
 
         include_examples 'fulfillment processing'
@@ -122,7 +122,7 @@ describe 'purchase flow' do
 
       describe 'digital item fulfillment' do
         def item; digital_item; end
-        def qty; order.qty * bsfi.item.bundlings.retrieve(item).qty; end
+        def qty; order.qty * bsfi.item.bundleds.retrieve(item).qty; end
         def result_class; Ownership; end
 
         include_examples 'fulfillment processing'
@@ -172,7 +172,7 @@ describe 'purchase flow' do
 
   describe 'bundle item order' do
     def order; purchase.orders.retrieve(bsfi); end
-    def qty; order.qty * bsfi.item.bundlings.retrieve(physical_item).qty; end
+    def qty; order.qty * bsfi.item.bundleds.retrieve(physical_item).qty; end
 
     it 'can be reversed' do
       expect { purchase.reverse!(order) }.to change { physical_item.qty }.by(qty)

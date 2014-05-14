@@ -5,7 +5,7 @@ FactoryGirl.define do
     item { build [:bundle, :physical_item, :digital_item].sample }
 
     trait :bundle do
-      item { build :bundle, :bundlings }
+      item { build :bundle, :bundleds }
     end
 
     trait :physical_item do

@@ -1,7 +1,7 @@
 require 'models/spec_setup'
 require 'spec/models/shared/item_combinable'
 
-describe Bundling do
+describe Bundled do
 
   it_behaves_like 'item combinable model'
 

@@ -3,28 +3,28 @@ require 'models/shared/item_resource'
 class Bundle < ActiveRecord::Base
   include ItemResource
 
-  has_many :bundlings
+  has_many :bundleds
 
   after_save :reload
 
   def add_or_update(item, qty = 1, acc = false)
     if kept?
-      abundling = bundlings.add_or_update(item, qty: qty, acc: acc)
-      reload && abundling
+      abundled = bundleds.add_or_update(item, qty: qty, acc: acc)
+      reload && abundled
     end
   end
 
   def remove(item)
     if kept?
-      rbundling = bundlings.retrieve(item) do |bundling|
-        bundling.destroy
+      rbundled = bundleds.retrieve(item) do |bundled|
+        bundled.destroy
       end
-      reload && rbundling
+      reload && rbundled
     end
   end
 
   def items
-    bundlings.map(&:item).compact
+    bundleds.map(&:item).compact
   end
 
   def available?
@@ -32,6 +32,6 @@ class Bundle < ActiveRecord::Base
   end
 
   def prepare!(order, qty)
-    bundlings.all? { |bundling| bundling.item.prepare!(order, qty * bundling.qty) }
+    bundleds.all? { |bundled| bundled.item.prepare!(order, qty * bundled.qty) }
   end
 end

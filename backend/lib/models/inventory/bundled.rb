@@ -1,6 +1,6 @@
 require 'models/shared/item_combinable'
 
-class Bundling < ActiveRecord::Base
+class Bundled < ActiveRecord::Base
   include ItemCombinable
 
   attr_readonly :bundle_id

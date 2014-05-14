@@ -4,8 +4,8 @@ class RemoveUnnecessaryTimestampColumns < ActiveRecord::Migration
     remove_column :digital_items,    :updated_at
     remove_column :bundles,     :updated_at
 
-    remove_column :bundlings,       :updated_at
-    remove_column :bundlings,       :created_at
+    remove_column :bundleds,       :updated_at
+    remove_column :bundleds,       :created_at
 
     remove_column :storefront_items, :updated_at
   end
@@ -13,8 +13,8 @@ class RemoveUnnecessaryTimestampColumns < ActiveRecord::Migration
   def down
     add_column :storefront_items, :updated_at, :datetime
 
-    add_column :bundlings,       :created_at, :datetime
-    add_column :bundlings,       :updated_at, :datetime
+    add_column :bundleds,       :created_at, :datetime
+    add_column :bundleds,       :updated_at, :datetime
 
     add_column :bundles,     :updated_at, :datetime
     add_column :digital_items,    :updated_at, :datetime
