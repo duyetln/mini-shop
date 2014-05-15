@@ -11,7 +11,7 @@ module Services
     rescue ActiveRecord::RecordInvalid => ex
       fail ::Services::Errors::BadRequest, ex.message
     rescue NameError => ex
-      fail ::Services::Errors::BadRequest, "Unrecoginzed type #{ex.missing_name}"
+      fail ::Services::Errors::BadRequest, (ex.missing_name ? "Unrecoginzed type #{ex.missing_name}" : ex.message)
     rescue => ex
       fail ::Services::Errors::ServerError, ex.message
     end
