@@ -10,7 +10,7 @@ describe Services::Inventory::Bundles do
       FactoryGirl.create :bundle
     end
 
-    it 'returns all bundle items' do
+    it 'returns all bundles' do
       send_request
       expect_status(200)
       expect_response(Bundle.all.map do |item|
@@ -28,7 +28,7 @@ describe Services::Inventory::Bundles do
 
       include_examples 'bad request'
 
-      it 'does not create new bundle item' do
+      it 'does not create new bundle' do
         expect { send_request }.to_not change { Bundle.count }
       end
     end
@@ -36,7 +36,7 @@ describe Services::Inventory::Bundles do
     context 'valid parameters' do
       let(:params) { { bundle: FactoryGirl.build(:bundle).attributes } }
 
-      it 'creates new bundle item' do
+      it 'creates new bundle' do
         expect { send_request }.to change { Bundle.count }.by(1)
         expect_status(200)
         expect_response(BundleSerializer.new(Bundle.last).to_json)
@@ -59,7 +59,7 @@ describe Services::Inventory::Bundles do
 
         include_examples 'bad request'
 
-        it 'does not update the bundle item' do
+        it 'does not update the bundle' do
           expect { send_request }.to_not change { bundle.reload.attributes }
         end
       end
@@ -67,7 +67,7 @@ describe Services::Inventory::Bundles do
       context 'valid parameters' do
         let(:params) { { bundle: { title: rand_str } } }
 
-        it 'updates the the bundle item' do
+        it 'updates the bundle' do
           expect { send_request }.to change { bundle.reload.attributes }
           expect_status(200)
           expect_response(BundleSerializer.new(bundle).to_json)
@@ -170,24 +170,24 @@ describe Services::Inventory::Bundles do
       let(:bundle) { FactoryGirl.create :bundle }
       let(:id) { bundle.id }
 
-      context 'activated bundle item' do
+      context 'activated bundle' do
         before :each do
           expect(bundle).to be_active
         end
 
         include_examples 'not found'
 
-        it 'does not update the bundle item' do
+        it 'does not update the bundle' do
           expect { send_request }.to_not change { bundle.reload.attributes }
         end
       end
 
-      context 'unactivated bundle item' do
+      context 'unactivated bundle' do
         before :each do
           bundle.deactivate!
         end
 
-        it 'activates the bundle item' do
+        it 'activates the bundle' do
           expect { send_request }.to change { bundle.reload.active? }.to(true)
           expect_status(200)
           expect_response(BundleSerializer.new(bundle).to_json)
@@ -206,24 +206,24 @@ describe Services::Inventory::Bundles do
       let(:bundle) { FactoryGirl.create :bundle }
       let(:id) { bundle.id }
 
-      context 'deleted bundle item' do
+      context 'deleted bundle' do
         before :each do
           bundle.delete!
         end
 
         include_examples 'not found'
 
-        it 'does not update the bundle item' do
+        it 'does not update the bundle' do
           expect { send_request }.to_not change { bundle.reload.attributes }
         end
       end
 
-      context 'undeleted bundle item' do
+      context 'undeleted bundle' do
         before :each do
           expect(bundle).to be_kept
         end
 
-        it 'deletes the bundle item' do
+        it 'deletes the bundle' do
           expect { send_request }.to change { Bundle.count }.by(-1)
           expect_status(200)
           expect_response(BundleSerializer.new(bundle.reload).to_json)

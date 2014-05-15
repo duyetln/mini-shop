@@ -39,7 +39,7 @@ describe 'purchase flow' do
     end
   end
 
-  describe 'bundle item' do
+  describe 'bundle' do
     it 'adds and updates items' do
       expect { bundle.add_or_update(physical_item, qty) }.to change { bundle.bundleds.count }.by(1)
       expect { bundle.add_or_update(digital_item, qty) }.to change { bundle.bundleds.count }.by(1)
@@ -104,7 +104,7 @@ describe 'purchase flow' do
       end
     end
 
-    describe 'bundle item order' do
+    describe 'bundle order' do
       def order; purchase.orders.retrieve(bsi); end
 
       include_examples 'successful order fulfillment'
@@ -171,7 +171,7 @@ describe 'purchase flow' do
     include_examples 'successful order reversal'
   end
 
-  describe 'bundle item order' do
+  describe 'bundle order' do
     def order; purchase.orders.retrieve(bsi); end
     def qty; order.qty * bsi.item.bundleds.retrieve(physical_item).qty; end
 

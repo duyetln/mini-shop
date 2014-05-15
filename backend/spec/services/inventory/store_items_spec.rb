@@ -10,7 +10,7 @@ describe Services::Inventory::StoreItems do
       FactoryGirl.create :store_item
     end
 
-    it 'returns all storefront items' do
+    it 'returns all store items' do
       send_request
       expect_status(200)
       expect_response(StoreItem.all.map do |item|
@@ -28,7 +28,7 @@ describe Services::Inventory::StoreItems do
 
       include_examples 'bad request'
 
-      it 'does not create new storefront item' do
+      it 'does not create new store item' do
         expect { send_request }.to_not change { StoreItem.count }
       end
     end
@@ -52,7 +52,7 @@ describe Services::Inventory::StoreItems do
         }
       end
 
-      it 'creates new storefront item' do
+      it 'creates new store item' do
         expect { send_request }.to change { StoreItem.count }.by(1)
         expect_status(200)
         expect_response(StoreItemSerializer.new(StoreItem.last).to_json)
@@ -75,7 +75,7 @@ describe Services::Inventory::StoreItems do
 
         include_examples 'bad request'
 
-        it 'does not update the storefront item' do
+        it 'does not update the store item' do
           expect { send_request }.to_not change { store_item.reload.attributes }
         end
       end
@@ -83,7 +83,7 @@ describe Services::Inventory::StoreItems do
       context 'valid parameters' do
         let(:params) { { store_item: { name: rand_str } } }
 
-        it 'updates the the storefront item' do
+        it 'updates the the store item' do
           expect { send_request }.to change { store_item.reload.attributes }
           expect_status(200)
           expect_response(StoreItemSerializer.new(store_item).to_json)
@@ -102,24 +102,24 @@ describe Services::Inventory::StoreItems do
       let(:store_item) { FactoryGirl.create :store_item }
       let(:id) { store_item.id }
 
-      context 'activated storefront item' do
+      context 'activated store item' do
         before :each do
           expect(store_item).to be_active
         end
 
         include_examples 'not found'
 
-        it 'does not update the storefront item' do
+        it 'does not update the store item' do
           expect { send_request }.to_not change { store_item.reload.attributes }
         end
       end
 
-      context 'unactivated storefront item' do
+      context 'unactivated store item' do
         before :each do
           store_item.deactivate!
         end
 
-        it 'activates the storefront item' do
+        it 'activates the store item' do
           expect { send_request }.to change { store_item.reload.active? }.to(true)
           expect_status(200)
           expect_response(StoreItemSerializer.new(store_item).to_json)
@@ -138,24 +138,24 @@ describe Services::Inventory::StoreItems do
       let(:store_item) { FactoryGirl.create :store_item }
       let(:id) { store_item.id }
 
-      context 'deleted storefront item' do
+      context 'deleted store item' do
         before :each do
           store_item.delete!
         end
 
         include_examples 'not found'
 
-        it 'does not update the storefront item' do
+        it 'does not update the store item' do
           expect { send_request }.to_not change { store_item.reload.attributes }
         end
       end
 
-      context 'undeleted storefront item' do
+      context 'undeleted store item' do
         before :each do
           expect(store_item).to be_kept
         end
 
-        it 'deletes the storefront item' do
+        it 'deletes the store item' do
           expect { send_request }.to change { StoreItem.count }.by(-1)
           expect_status(200)
           expect_response(StoreItemSerializer.new(store_item.reload).to_json)
