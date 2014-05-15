@@ -18,19 +18,20 @@ describe 'purchase flow' do
     @pmethod = FactoryGirl.create :payment_method, user: @user, currency: @usd
   end
 
-  def user; User.find @user.id; end
-  def usd; Currency.find @usd.id; end
-  def eur; Currency.find @eur.id; end
-  def physical_item; PhysicalItem.find @pitem.id; end
-  def digital_item; DigitalItem.find @ditem.id; end
-  def bundle; Bundle.find @bitem.id; end
-  def psi; StoreItem.find @psi.id; end
-  def dsi; StoreItem.find @dsi.id; end
-  def bsi; StoreItem.find @bsi.id; end
-  def purchase; Purchase.find @purchase.id; end
-  def address; Address.find @address.id; end
-  def pmethod; PaymentMethod.find @pmethod.id; end
-  def qty; @qty; end
+  attr_reader :qty
+
+  def user; @user.reload; end
+  def usd; @usd.reload; end
+  def eur; @eur.reload; end
+  def physical_item; @pitem.reload; end
+  def digital_item; @ditem.reload; end
+  def bundle; @bitem.reload; end
+  def psi; @psi.reload; end
+  def dsi; @dsi.reload; end
+  def bsi; @bsi.reload; end
+  def purchase; @purchase.reload; end
+  def address; @address.reload; end
+  def pmethod; @pmethod.reload; end
 
   describe 'user' do
     it 'confirms and changes status' do
