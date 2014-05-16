@@ -14,7 +14,8 @@ class StoreItem < ActiveRecord::Base
 
   delegate :amount, to: :price
   delegate :discounted?, to: :price
-  delegate :prepare!, to: :item
+  delegate :fulfill!, to: :item
+  delegate :reverse!, to: :item
   delegate :title, to: :item, allow_nil: true
   delegate :description, to: :item, allow_nil: true
 

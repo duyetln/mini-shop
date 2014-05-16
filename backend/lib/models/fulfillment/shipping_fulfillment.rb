@@ -4,21 +4,17 @@ class ShippingFulfillment < Fulfillment
   protected
 
   def process_fulfillment!
-    if item.qty >= qty
-      item.qty -= qty
-      item.save!
-      Shipment.create!(
-        item: item,
-        qty: qty,
-        order: order,
-        user: order.user,
-        shipping_address: order.shipping_address
-      )
-    end
+    Shipment.create!(
+      item: item,
+      qty: qty,
+      order: order,
+      user: order.user,
+      shipping_address: order.shipping_address
+    )
   end
 
   def process_reversal!
-    item.qty += qty
-    item.save!
+    # do nothing
+    true
   end
 end

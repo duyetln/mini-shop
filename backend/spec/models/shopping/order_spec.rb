@@ -74,16 +74,16 @@ describe Order do
       before :each do
         model.stub(:purchase_committed?).and_return(true)
         model.stub(status_method).and_return(true)
-        model.item.stub(:prepare!).with(model, model.qty).and_return(true)
+        model.item.stub(process_method).with(model, model.qty).and_return(true)
         fulfillment.stub(process_method).and_return(true)
       end
 
       include_examples 'status false'
       include_examples 'purchase pending'
 
-      context 'failed item preparation' do
+      context 'failed item fulfillment' do
         before :each do
-          model.item.stub(:prepare!).with(model, model.qty).and_return(false)
+          model.item.stub(process_method).with(model, model.qty).and_return(false)
         end
 
         it 'marks status and creates refund' do
@@ -128,6 +128,7 @@ describe Order do
       before :each do
         model.stub(:purchase_committed?).and_return(true)
         model.stub(status_method).and_return(true)
+        model.item.stub(process_method).with(model).and_return(true)
         fulfillment.stub(process_method).and_return(true)
       end
 
@@ -140,6 +141,19 @@ describe Order do
         end
 
         it 'marks status and returns' do
+          expect(model).to_not receive(mark_method)
+          expect(model).to receive(:mark_failed!)
+          expect(model).to receive(:reload)
+          expect(model.send(method)).to eq(model.send(check_method))
+        end
+      end
+
+      context 'failed item fulfillment' do
+        before :each do
+          model.item.stub(process_method).with(model).and_return(false)
+        end
+
+        it 'marks status and creates refund' do
           expect(model).to_not receive(mark_method)
           expect(model).to receive(:mark_failed!)
           expect(model).to receive(:reload)

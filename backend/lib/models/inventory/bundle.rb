@@ -31,7 +31,11 @@ class Bundle < ActiveRecord::Base
     super && items.present? && items.all?(&:available?)
   end
 
-  def prepare!(order, qty)
-    bundleds.all? { |bundled| bundled.item.prepare!(order, qty * bundled.qty) }
+  def fulfill!(order, qty)
+    bundleds.all? { |bundled| bundled.item.fulfill!(order, qty * bundled.qty) }
+  end
+
+  def reverse!(order)
+    bundleds.all? { |bundled| bundled.item.reverse!(order) }
   end
 end

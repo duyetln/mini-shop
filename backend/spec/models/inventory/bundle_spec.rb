@@ -90,7 +90,7 @@ describe Bundle do
     end
   end
 
-  describe '#prepare!' do
+  describe '#fulfill!' do
     let :order do
       FactoryGirl.build(
         :order,
@@ -103,8 +103,26 @@ describe Bundle do
     end
 
     it 'calls #prepare! on each item' do
-      expect(item).to receive(:prepare!).with(order, order.qty * bundled.qty)
-      model.prepare!(order, order.qty)
+      expect(item).to receive(:fulfill!).with(order, order.qty * bundled.qty)
+      model.fulfill!(order, order.qty)
+    end
+  end
+
+  describe '#reverse!' do
+    let :order do
+      FactoryGirl.build(
+        :order,
+        item: FactoryGirl.build(
+          :store_item,
+          item: model
+        ),
+        qty: qty
+      )
+    end
+
+    it 'calls #reverse! on each item' do
+      expect(item).to receive(:reverse!).with(order)
+      model.reverse!(order)
     end
   end
 end

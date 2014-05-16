@@ -8,7 +8,20 @@ class PhysicalItem < ActiveRecord::Base
     super && qty > 0
   end
 
-  def prepare!(order, qty)
-    ShippingFulfillment.create!(item: self, order: order, qty: qty)
+  def fulfill!(order, qty)
+    if self.qty >= qty
+      self.qty -= qty
+      save!
+      ShippingFulfillment.create!(item: self, order: order, qty: qty)
+    end
+  end
+
+  def reverse!(order)
+    self.qty += ShippingFulfillment.where(
+      item_type: self.class,
+      item_id: id,
+      order_id: order.id
+    ).sum(:qty)
+    save!
   end
 end

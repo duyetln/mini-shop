@@ -46,7 +46,7 @@ class Order < ActiveRecord::Base
     if purchase_committed? && unmarked?
       begin
         self.class.transaction do
-          unless  item.prepare!(self, qty) &&
+          unless  item.fulfill!(self, qty) &&
                   fulfillments.all? { |f| f.fulfill! }
             fail Fulfillment::FulfillmentFailure
           end
@@ -65,7 +65,10 @@ class Order < ActiveRecord::Base
     if purchase_committed? && fulfilled?
       begin
         self.class.transaction do
-          fulfillments.all? { |f| f.reverse! } || (fail Fulfillment::ReversalFailure)
+          unless  item.reverse!(self) &&
+                  fulfillments.all? { |f| f.reverse! }
+            fail Fulfillment::ReversalFailure
+          end
           make_refund!
           mark_reversed!
         end
