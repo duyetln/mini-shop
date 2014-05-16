@@ -1,12 +1,14 @@
 require 'spec/models/shared/activable'
 require 'spec/models/shared/deletable'
 require 'spec/models/shared/displayable'
+require 'spec/models/shared/fulfillable'
 
 shared_examples 'item resource' do
 
   it_behaves_like 'activable model'
   it_behaves_like 'deletable model'
   it_behaves_like 'displayable model'
+  it_behaves_like 'fulfillable model'
 
   describe 'factory model' do
     it('is valid') { expect(model.valid?).to be_true }
@@ -28,5 +30,4 @@ shared_examples 'item resource' do
       end
     end
   end
-
 end

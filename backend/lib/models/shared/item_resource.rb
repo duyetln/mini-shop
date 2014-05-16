@@ -1,12 +1,14 @@
 require 'models/shared/activable'
 require 'models/shared/deletable'
 require 'models/shared/displayable'
+require 'models/shared/fulfillable'
 
 module ItemResource
   extend ActiveSupport::Concern
   include Activable
   include Deletable
   include Displayable
+  include Fulfillable
 
   module ClassMethods
     def paginate(offset = nil, limit = nil)
