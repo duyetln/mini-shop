@@ -79,5 +79,4 @@ shared_examples 'committable model' do
       end
     end
   end
-
 end

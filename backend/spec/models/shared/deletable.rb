@@ -66,5 +66,4 @@ shared_examples 'deletable model' do
       expect(model.kept?).to eq(!model.deleted?)
     end
   end
-
 end

@@ -7,5 +7,4 @@ shared_examples 'quantifiable model' do
 
   it { should respond_to(:qty) }
   it { should respond_to(:qty=).with(1).argument }
-
 end

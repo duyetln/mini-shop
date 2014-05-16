@@ -15,5 +15,4 @@ shared_examples 'itemable model' do
   it { should respond_to(:item=).with(1).argument }
   it { should respond_to(:item_type=).with(1).argument }
   it { should respond_to(:item_id=).with(1).argument }
-
 end

@@ -97,5 +97,4 @@ shared_examples 'activable model' do
       expect(model.inactive?).to eq(!model.active?)
     end
   end
-
 end
