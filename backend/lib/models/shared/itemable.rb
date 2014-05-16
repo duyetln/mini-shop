@@ -13,7 +13,7 @@ module Itemable
   [:item, :item_type, :item_id].each do |method|
     class_eval <<-EOF
       def #{method}(*args)
-        defined?(super) ? super : (raise NotImplementedError, "#{__method__} must be defined in derived class")
+        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
       end
     EOF
   end
@@ -21,7 +21,7 @@ module Itemable
   [:item=, :item_type=, :item_id=].each do |method|
     class_eval <<-EOF
       def #{method}(*args)
-        defined?(super) ? super : (raise NotImplementedError, "#{__method__} must be defined in derived class")
+        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
       end
     EOF
   end
