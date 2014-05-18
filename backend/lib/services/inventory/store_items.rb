@@ -37,6 +37,14 @@ module Services
         end
       end
 
+      put '/store_items/:id/deactivate' do
+        process_request do
+          store_item = StoreItem.find(params[:id])
+          store_item.deactivate!
+          respond_with(StoreItemSerializer.new(store_item))
+        end
+      end
+
       delete '/store_items/:id' do
         process_request do
           store_item = StoreItem.find(params[:id])
