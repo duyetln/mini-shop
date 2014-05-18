@@ -196,6 +196,42 @@ describe Services::Inventory::Bundles do
     end
   end
 
+  describe 'put /bundles/:id/deactivate' do
+    let(:method) { :put }
+    let(:path) { "/bundles/#{id}/deactivate" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:bundle) { FactoryGirl.create :bundle }
+      let(:id) { bundle.id }
+
+      context 'activated bundle' do
+        before :each do
+          expect(bundle).to be_active
+        end
+
+        it 'activates the bundle' do
+          expect { send_request }.to change { bundle.reload.active? }.to(false)
+          expect_status(200)
+          expect_response(BundleSerializer.new(bundle).to_json)
+        end
+      end
+
+      context 'unactivated bundle' do
+        before :each do
+          bundle.deactivate!
+        end
+
+        include_examples 'not found'
+
+        it 'does not update the bundle' do
+          expect { send_request }.to_not change { bundle.reload.attributes }
+        end
+      end
+    end
+  end
+
   describe 'delete /bundles/:id' do
     let(:method) { :delete }
     let(:path) { "/bundles/#{id}" }
