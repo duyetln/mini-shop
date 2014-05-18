@@ -7,7 +7,7 @@ Mini shop is a simple online shopping store built for my personal learning and c
 ## Goals
 
 Here are the goals set for this project:
-  
+
   * Solid test suite: unit tests, integration tests, and good test coverage.
   * DRY and clean code.
   * Good separation of concerns and code reuse (mostly achieved via polymorphism and composition).
@@ -17,3 +17,4 @@ Here are the goals set for this project:
 ## Releases
 
   * 0.1.0: Add support for simple account creation, shopping cart, payment/transaction, and fulfillment/reversal system.
+  * 0.1.1: Add missing endpoints for a few services.
