@@ -26,7 +26,7 @@ module ItemResourceSerializer
   extend ActiveSupport::Concern
 
   included do
-    attributes :title, :description, :active, :deleted, :available
+    attributes :title, :description, :deleted, :available
   end
 
   def available
@@ -50,7 +50,7 @@ end
 
 class StoreItemSerializer < ResourceSerializer
   include ItemResourceSerializer
-  attributes :name, :item_type, :item_id, :price_id
+  attributes :name, :item_type, :item_id, :price_id, :active
   has_one :price, serializer: PriceSerializer
   has_one :item, serializer: DynamicSerializer
 end

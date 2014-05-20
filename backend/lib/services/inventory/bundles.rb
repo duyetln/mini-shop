@@ -50,22 +50,6 @@ module Services
         end
       end
 
-      put '/bundles/:id/activate' do
-        process_request do
-          bundle = Bundle.inactive.find(params[:id])
-          bundle.activate!
-          respond_with(BundleSerializer.new(bundle))
-        end
-      end
-
-      put '/bundles/:id/deactivate' do
-        process_request do
-          bundle = Bundle.find(params[:id])
-          bundle.deactivate!
-          respond_with(BundleSerializer.new(bundle))
-        end
-      end
-
       delete '/bundles/:id' do
         process_request do
           bundle = Bundle.find(params[:id])
