@@ -5,7 +5,7 @@ class Bundled < ActiveRecord::Base
 
   attr_readonly :bundle_id
 
-  belongs_to :bundle
+  belongs_to :bundle, polymorphic: true
 
   validates :bundle, presence: true
 

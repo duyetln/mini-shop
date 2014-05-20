@@ -3,7 +3,7 @@ require 'models/shared/item_resource'
 class Bundle < ActiveRecord::Base
   include ItemResource
 
-  has_many :bundleds
+  has_many :bundleds, as: :bundle
 
   after_save :reload
 

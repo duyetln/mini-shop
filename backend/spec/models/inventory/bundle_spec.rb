@@ -3,6 +3,8 @@ require 'spec/models/shared/item_resource'
 
 describe Bundle do
 
+  it { should have_many(:bundleds) }
+
   let(:item) { FactoryGirl.build [:physical_item, :digital_item].sample }
   let(:bundleds) { model.bundleds }
   let(:bundled) { FactoryGirl.build :bundled, item: item, qty: qty }
