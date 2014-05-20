@@ -2,12 +2,14 @@ require 'models/spec_setup'
 require 'spec/models/shared/item_resource'
 require 'spec/models/shared/orderable'
 require 'spec/models/shared/itemable'
+require 'spec/models/shared/activable'
 
 describe StoreItem do
 
   it_behaves_like 'item resource'
   it_behaves_like 'orderable model'
   it_behaves_like 'itemable model'
+  it_behaves_like 'activable model'
 
   it { should belong_to(:item) }
   it { should belong_to(:price) }
