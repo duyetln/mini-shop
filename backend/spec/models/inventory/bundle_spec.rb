@@ -53,6 +53,13 @@ describe Bundle do
             expect(model).to_not be_available
           end
         end
+
+        context 'inactive' do
+          it 'is false' do
+            model.items.sample.deactivate!
+            expect(model).to_not be_available
+          end
+        end
       end
 
       context 'items available' do

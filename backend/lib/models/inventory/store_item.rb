@@ -1,12 +1,10 @@
 require 'models/shared/item_resource'
 require 'models/shared/orderable'
-require 'models/shared/activable'
 
 class StoreItem < ActiveRecord::Base
   include ItemResource
   include Orderable
   include Itemable
-  include Activable
 
   belongs_to :price
 
