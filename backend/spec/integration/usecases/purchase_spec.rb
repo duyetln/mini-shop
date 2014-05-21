@@ -72,24 +72,6 @@ describe 'purchase flow' do
     include_examples 'item activation'
   end
 
-  describe 'psi' do
-    let(:item) { psi }
-
-    include_examples 'item activation'
-  end
-
-  describe 'dsi' do
-    let(:item) { dsi }
-
-    include_examples 'item activation'
-  end
-
-  describe 'bsi' do
-    let(:item) { bsi }
-
-    include_examples 'item activation'
-  end
-
   describe 'purchase' do
     it 'is pending' do
       expect(purchase).to be_pending

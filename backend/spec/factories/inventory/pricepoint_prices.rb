@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :pricepoint_price do
-    amount { rand(50) }
+    amount { rand(10..50) }
     currency { build [:usd, :eur, :gbp].sample }
     pricepoint { build :pricepoint }
 

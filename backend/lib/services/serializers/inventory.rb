@@ -53,4 +53,8 @@ class StoreItemSerializer < ResourceSerializer
   attributes :name, :item_type, :item_id, :price_id
   has_one :price, serializer: PriceSerializer
   has_one :item, serializer: DynamicSerializer
+
+  def active
+    object.active?
+  end
 end

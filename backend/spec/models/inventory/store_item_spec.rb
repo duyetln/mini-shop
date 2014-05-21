@@ -1,11 +1,13 @@
 require 'models/spec_setup'
-require 'spec/models/shared/item_resource'
+require 'spec/models/shared/deletable'
+require 'spec/models/shared/displayable'
 require 'spec/models/shared/orderable'
 require 'spec/models/shared/itemable'
 
 describe StoreItem do
 
-  it_behaves_like 'item resource'
+  it_behaves_like 'deletable model'
+  it_behaves_like 'displayable model'
   it_behaves_like 'orderable model'
   it_behaves_like 'itemable model'
 
@@ -22,37 +24,28 @@ describe StoreItem do
   it { should ensure_inclusion_of(:item_type).in_array(%w{ Bundle DigitalItem PhysicalItem }) }
 
   describe '#available?' do
-    before :each do
-      model.active = true
+    it 'delegates to item' do
+      expect(model.available?).to eq(item.available?)
     end
+  end
 
-    context 'item unavailable' do
-      it 'is false' do
-        expect(model.item).to receive(:available?).and_return(false)
-        expect(model).to_not be_available
-      end
-    end
-
-    context 'item available' do
-      it 'is true' do
-        expect(model.item).to receive(:available?).and_return(true)
-        expect(model).to be_available
-      end
+  describe '#active?' do
+    it 'delegates to item' do
+      expect(model.active?).to eq(item.active?)
     end
   end
 
   describe '#amount' do
     let(:currency) { model.price.pricepoint.pricepoint_prices.sample.currency }
 
-    it 'delegates to Price#amount' do
+    it 'delegates to price' do
       expect(model.amount(currency)).to eq(model.price.amount(currency))
     end
   end
 
   describe '#discounted?' do
-    it 'delegates to Price#discounted?' do
+    it 'delegates to price' do
       expect(model.discounted?).to eq(model.price.discounted?)
     end
   end
-
 end
