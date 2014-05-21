@@ -31,8 +31,12 @@ module Committable
     !committed?
   end
 
+  def committable?
+    pending?
+  end
+
   def commit!
-    if pending?
+    if committable?
       self.committed    = true
       self.committed_at = DateTime.now
       save!

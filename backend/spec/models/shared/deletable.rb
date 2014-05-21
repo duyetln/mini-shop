@@ -1,3 +1,11 @@
+shared_examples 'default #deletable?' do
+  describe '#deletable?' do
+    it 'equals #kept?' do
+      expect(model.deletable?).to eq(model.kept?)
+    end
+  end
+end
+
 shared_examples 'deletable model' do
 
   it { should_not allow_mass_assignment_of(:deleted) }
@@ -33,11 +41,11 @@ shared_examples 'deletable model' do
 
   describe '#delete!' do
     before :each do
-      model.deleted = deleted
+      expect(model).to receive(:deletable?).and_return(deletable)
     end
 
-    context 'deleted' do
-      let(:deleted) { true }
+    context 'not deletable' do
+      let(:deletable) { false }
 
       it 'cannot be executed' do
         expect(model.delete!).to_not be_true
@@ -48,15 +56,15 @@ shared_examples 'deletable model' do
       end
     end
 
-    context 'kept' do
-      let(:deleted) { false }
+    context 'deletable' do
+      let(:deletable) { true }
 
       it 'can be executed' do
         expect(model.delete!).to be_true
       end
 
       it 'changes deleted status to true' do
-        expect { model.delete! }.to change { model.deleted? }.to(!deleted)
+        expect { model.delete! }.to change { model.deleted? }.to(deletable)
       end
     end
   end

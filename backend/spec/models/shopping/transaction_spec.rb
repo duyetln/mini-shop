@@ -5,6 +5,8 @@ describe Transaction do
 
   it_behaves_like 'committable model'
 
+  include_examples 'default #committable?'
+
   it { should belong_to(:payment_method) }
   it { should belong_to(:billing_address).class_name('Address') }
   it { should belong_to(:user) }

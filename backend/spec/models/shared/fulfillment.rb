@@ -10,6 +10,8 @@ shared_examples 'fulfillment model' do
 
   it { should validate_presence_of(:order) }
 
+  it { should respond_to(:fulfillable?).with(0).argument }
+  it { should respond_to(:reversible?).with(0).argument }
   it { should respond_to(:fulfill!).with(0).argument }
   it { should respond_to(:reverse!).with(0).argument }
 
@@ -71,7 +73,7 @@ shared_examples 'fulfillment model' do
     describe '#fulfill!' do
       let(:method) { :fulfill! }
       let(:process_method) { :process_fulfillment! }
-      let(:status_method) { :unmarked? }
+      let(:status_method) { :fulfillable? }
       let(:check_method) { :fulfilled? }
       let(:mark_method) { :mark_fulfilled! }
 
@@ -81,7 +83,7 @@ shared_examples 'fulfillment model' do
     describe '#reverse!' do
       let(:method) { :reverse! }
       let(:process_method) { :process_reversal! }
-      let(:status_method) { :fulfilled? }
+      let(:status_method) { :reversible? }
       let(:check_method) { :reversed? }
       let(:mark_method) { :mark_reversed! }
 

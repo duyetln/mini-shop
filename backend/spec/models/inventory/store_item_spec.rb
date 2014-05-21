@@ -11,6 +11,8 @@ describe StoreItem do
   it_behaves_like 'orderable model'
   it_behaves_like 'itemable model'
 
+  include_examples 'default #deletable?'
+
   it { should belong_to(:item) }
   it { should belong_to(:price) }
 

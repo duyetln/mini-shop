@@ -31,8 +31,12 @@ module Activable
     !active?
   end
 
+  def activable?
+    inactive?
+  end
+
   def activate!
-    if inactive?
+    if activable?
       self.active = true
       save!
     end

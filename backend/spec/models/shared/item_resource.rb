@@ -15,6 +15,9 @@ shared_examples 'item resource' do
     it('saves successfully') { expect(model.save).to be_true }
   end
 
+  include_examples 'default #activable?'
+  include_examples 'default #deletable?'
+
   describe '#available?' do
     context 'deleted' do
       it 'is false' do

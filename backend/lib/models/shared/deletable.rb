@@ -31,8 +31,12 @@ module Deletable
     !deleted?
   end
 
+  def deletable?
+    kept?
+  end
+
   def delete!
-    if kept?
+    if deletable?
       self.deleted = true
       save!
     end

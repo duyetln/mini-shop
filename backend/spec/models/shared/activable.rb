@@ -1,3 +1,11 @@
+shared_examples 'default #activable?' do
+  describe '#activable?' do
+    it 'equals #inactive?' do
+      expect(model.activable?).to eq(model.inactive?)
+    end
+  end
+end
+
 shared_examples 'activable model' do
 
   it { should_not allow_mass_assignment_of(:active) }
@@ -14,6 +22,7 @@ shared_examples 'activable model' do
     it { should respond_to(:active=).with(1).argument }
     it { should respond_to(:active?).with(0).argument }
     it { should respond_to(:inactive?).with(0).argument }
+    it { should respond_to(:activable?).with(0).argument }
     it { should respond_to(:activate!).with(0).argument }
   end
 
@@ -33,11 +42,11 @@ shared_examples 'activable model' do
 
   describe '#activate!' do
     before :each do
-      model.active = active
+      expect(model).to receive(:activable?).and_return(activable)
     end
 
-    context 'active' do
-      let(:active) { true }
+    context 'not activable' do
+      let(:activable) { false }
 
       it 'cannot be executed' do
         expect(model.activate!).to_not be_true
@@ -48,15 +57,15 @@ shared_examples 'activable model' do
       end
     end
 
-    context 'inactive' do
-      let(:active) { false }
+    context 'activable' do
+      let(:activable) { true }
 
       it 'can be executed' do
         expect(model.activate!).to be_true
       end
 
       it 'changes active status to true' do
-        expect { model.activate! }.to change { model.active? }.to(!active)
+        expect { model.activate! }.to change { model.active? }.to(activable)
       end
     end
   end

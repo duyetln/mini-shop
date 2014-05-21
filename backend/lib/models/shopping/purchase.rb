@@ -54,8 +54,13 @@ class Purchase < ActiveRecord::Base
     end
   end
 
+  def fulfillable?
+   committed?
+  end
+
   def fulfill!
-    if committed? && make_payment!
+    if fulfillable?
+      make_payment!
       orders.each do |order|
         order.fulfill!
       end
@@ -66,8 +71,12 @@ class Purchase < ActiveRecord::Base
     end
   end
 
+  def reversible?
+    committed?
+  end
+
   def reverse!(*items)
-    if committed?
+    if reversible?
       reversals = if items.present?
                     items.map do |item|
                       orders.retrieve(item)
