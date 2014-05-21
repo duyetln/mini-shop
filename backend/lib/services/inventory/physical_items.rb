@@ -37,14 +37,6 @@ module Services
         end
       end
 
-      put '/physical_items/:id/deactivate' do
-        process_request do
-          physical_item = PhysicalItem.find(params[:id])
-          physical_item.deactivate!
-          respond_with(PhysicalItemSerializer.new(physical_item))
-        end
-      end
-
       delete '/physical_items/:id' do
         process_request do
           physical_item = PhysicalItem.find(params[:id])
