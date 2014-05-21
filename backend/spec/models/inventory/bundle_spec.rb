@@ -112,6 +112,7 @@ describe Bundle do
     end
 
     it 'calls #prepare! on each item' do
+      expect(bundleds).to receive(:retrieve).with(item).and_return(bundled)
       expect(item).to receive(:fulfill!).with(order, order.qty * bundled.qty)
       model.fulfill!(order, order.qty)
     end

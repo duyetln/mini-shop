@@ -32,10 +32,10 @@ class Bundle < ActiveRecord::Base
   end
 
   def fulfill!(order, qty)
-    bundleds.all? { |bundled| bundled.item.fulfill!(order, qty * bundled.qty) }
+    items.all? { |item| item.fulfill!(order, qty * bundleds.retrieve(item).qty) }
   end
 
   def reverse!(order)
-    bundleds.all? { |bundled| bundled.item.reverse!(order) }
+    items.all? { |item| item.reverse!(order) }
   end
 end
