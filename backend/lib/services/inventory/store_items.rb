@@ -6,7 +6,7 @@ module Services
     class StoreItems < Services::Base
       get '/store_items' do
         process_request do
-          store_items = StoreItem.active.all
+          store_items = StoreItem.all
           respond_with(store_items.map do |item|
             StoreItemSerializer.new(item)
           end)
@@ -39,7 +39,7 @@ module Services
 
       put '/store_items/:id/deactivate' do
         process_request do
-          store_item = StoreItem.active.find(params[:id])
+          store_item = StoreItem.find(params[:id])
           store_item.deactivate!
           respond_with(StoreItemSerializer.new(store_item))
         end

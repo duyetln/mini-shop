@@ -7,14 +7,13 @@ describe Services::Inventory::StoreItems do
     let(:path) { '/store_items' }
 
     before :each do
-      FactoryGirl.create(:store_item).activate!
-      FactoryGirl.create(:store_item).deactivate!
+      FactoryGirl.create :store_item
     end
 
     it 'returns all store items' do
       send_request
       expect_status(200)
-      expect_response(StoreItem.active.all.map do |item|
+      expect_response(StoreItem.all.map do |item|
         StoreItemSerializer.new(item)
       end.to_json)
     end

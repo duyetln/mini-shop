@@ -76,6 +76,78 @@ describe Services::Inventory::DigitalItems do
     end
   end
 
+  describe 'put /digital_items/:id/activate' do
+    let(:method) { :put }
+    let(:path) { "/digital_items/#{id}/activate" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:digital_item) { FactoryGirl.create :digital_item }
+      let(:id) { digital_item.id }
+
+      context 'activated digital item' do
+        before :each do
+          expect(digital_item).to be_active
+        end
+
+        include_examples 'not found'
+
+        it 'does not update the digital item' do
+          expect { send_request }.to_not change { digital_item.reload.attributes }
+        end
+      end
+
+      context 'unactivated digital item' do
+        before :each do
+          digital_item.deactivate!
+        end
+
+        it 'activates the digital item' do
+          expect { send_request }.to change { digital_item.reload.active? }.to(true)
+          expect_status(200)
+          expect_response(DigitalItemSerializer.new(digital_item).to_json)
+        end
+      end
+    end
+  end
+
+  describe 'put /digital_items/:id/deactivate' do
+    let(:method) { :put }
+    let(:path) { "/digital_items/#{id}/deactivate" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:digital_item) { FactoryGirl.create :digital_item }
+      let(:id) { digital_item.id }
+
+      context 'activated digital item' do
+        before :each do
+          expect(digital_item).to be_active
+        end
+
+        it 'activates the digital item' do
+          expect { send_request }.to change { digital_item.reload.active? }.to(false)
+          expect_status(200)
+          expect_response(DigitalItemSerializer.new(digital_item).to_json)
+        end
+      end
+
+      context 'unactivated digital item' do
+        before :each do
+          digital_item.deactivate!
+        end
+
+        include_examples 'not found'
+
+        it 'does not update the digital item' do
+          expect { send_request }.to_not change { digital_item.reload.attributes }
+        end
+      end
+    end
+  end
+
   describe 'delete /digital_items/:id' do
     let(:method) { :delete }
     let(:path) { "/digital_items/#{id}" }

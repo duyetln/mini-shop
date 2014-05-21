@@ -76,6 +76,78 @@ describe Services::Inventory::PhysicalItems do
     end
   end
 
+  describe 'put /physical_items/:id/activate' do
+    let(:method) { :put }
+    let(:path) { "/physical_items/#{id}/activate" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:physical_item) { FactoryGirl.create :physical_item }
+      let(:id) { physical_item.id }
+
+      context 'activated physical item' do
+        before :each do
+          expect(physical_item).to be_active
+        end
+
+        include_examples 'not found'
+
+        it 'does not update the physical item' do
+          expect { send_request }.to_not change { physical_item.reload.attributes }
+        end
+      end
+
+      context 'unactivated physical item' do
+        before :each do
+          physical_item.deactivate!
+        end
+
+        it 'activates the physical item' do
+          expect { send_request }.to change { physical_item.reload.active? }.to(true)
+          expect_status(200)
+          expect_response(PhysicalItemSerializer.new(physical_item).to_json)
+        end
+      end
+    end
+  end
+
+  describe 'put /physical_items/:id/deactivate' do
+    let(:method) { :put }
+    let(:path) { "/physical_items/#{id}/deactivate" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:physical_item) { FactoryGirl.create :physical_item }
+      let(:id) { physical_item.id }
+
+      context 'activated physical item' do
+        before :each do
+          expect(physical_item).to be_active
+        end
+
+        it 'deactivates the physical item' do
+          expect { send_request }.to change { physical_item.reload.active? }.to(false)
+          expect_status(200)
+          expect_response(PhysicalItemSerializer.new(physical_item).to_json)
+        end
+      end
+
+      context 'unactivated physical item' do
+        before :each do
+          physical_item.deactivate!
+        end
+
+        include_examples 'not found'
+
+        it 'does not update the physical item' do
+          expect { send_request }.to_not change { physical_item.reload.attributes }
+        end
+      end
+    end
+  end
+
   describe 'delete /physical_items/:id' do
     let(:method) { :delete }
     let(:path) { "/physical_items/#{id}" }
