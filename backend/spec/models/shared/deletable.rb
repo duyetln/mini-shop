@@ -27,7 +27,7 @@ shared_examples 'deletable model' do
 
   describe '#deleted?' do
     it 'equals #deleted' do
-      expect(model.deleted?).to eq(model.deleted)
+      expect(model.deleted?).to eq(!!model.deleted)
     end
   end
 

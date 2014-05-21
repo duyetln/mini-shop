@@ -25,7 +25,7 @@ shared_examples 'item resource' do
 
     context 'inactive' do
       it 'is false' do
-        model.deactivate!
+        model.active = false
         expect(model).to_not be_available
       end
     end

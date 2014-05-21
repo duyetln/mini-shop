@@ -37,6 +37,10 @@ describe Bundle do
   end
 
   describe '#available?' do
+    before :each do
+      model.active = true
+    end
+
     context 'items not present' do
       it 'is false' do
         model.bundleds.clear
@@ -54,15 +58,20 @@ describe Bundle do
           end
         end
 
-        context 'inactive' do
+        context 'items inactive' do
           it 'is false' do
-            model.items.sample.deactivate!
+            model.items.sample.active = false
             expect(model).to_not be_available
           end
         end
       end
 
       context 'items available' do
+        before :each do
+          expect(model.items).to be_present
+          model.items.each { |item| item.active = true }
+        end
+
         it 'is true' do
           expect(model).to be_available
         end

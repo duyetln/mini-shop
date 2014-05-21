@@ -22,6 +22,10 @@ describe StoreItem do
   it { should ensure_inclusion_of(:item_type).in_array(%w{ Bundle DigitalItem PhysicalItem }) }
 
   describe '#available?' do
+    before :each do
+      model.active = true
+    end
+
     context 'item unavailable' do
       it 'is false' do
         expect(model.item).to receive(:available?).and_return(false)

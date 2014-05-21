@@ -8,7 +8,7 @@ module Activable
     scope :active,   -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
 
-    default_scope { active }
+    after_initialize :set_inactive
   end
 
   [:active, :active?].each do |method|
@@ -38,10 +38,11 @@ module Activable
     end
   end
 
-  def deactivate!
-    if active?
+  protected
+
+  def set_inactive
+    if new_record?
       self.active = false
-      save!
     end
   end
 end
