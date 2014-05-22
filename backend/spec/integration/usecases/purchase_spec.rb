@@ -62,7 +62,7 @@ describe 'purchase flow' do
   end
 
   describe 'bundle' do
-    let(:item) { bundle}
+    let(:item) { bundle }
 
     it 'adds and updates items' do
       expect { bundle.add_or_update(physical_item, qty) }.to change { bundle.bundleds.count }.by(1)

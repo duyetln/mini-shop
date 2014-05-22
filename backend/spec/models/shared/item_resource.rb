@@ -3,6 +3,14 @@ require 'spec/models/shared/deletable'
 require 'spec/models/shared/displayable'
 require 'spec/models/shared/fulfillable'
 
+shared_examples 'default #available?' do
+  describe '#available?' do
+    it 'equals #kept?' do
+      expect(model.available?).to eq(model.kept?)
+    end
+  end
+end
+
 shared_examples 'item resource' do
 
   it_behaves_like 'activable model'
@@ -15,22 +23,6 @@ shared_examples 'item resource' do
   describe '#deletable?' do
     it 'equals #inactive? and #kept?' do
       expect(model.deletable?).to eq(model.inactive? && model.kept?)
-    end
-  end
-
-  describe '#available?' do
-    context 'deleted' do
-      it 'is false' do
-        model.delete!
-        expect(model).to_not be_available
-      end
-    end
-
-    context 'inactive' do
-      it 'is false' do
-        model.active = false
-        expect(model).to_not be_available
-      end
     end
   end
 end

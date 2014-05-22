@@ -2,15 +2,16 @@ require 'models/spec_setup'
 require 'spec/models/shared/committable'
 
 describe Purchase do
+  it_behaves_like 'committable model'
+  include_examples 'default #committable?'
+end
+
+describe Purchase do
 
   let(:orders) { model.orders }
   let(:order) { orders.sample }
   let(:model_args) { [:purchase, :orders] }
   let(:item) { FactoryGirl.build :store_item }
-
-  it_behaves_like 'committable model'
-
-  include_examples 'default #committable?'
 
   it { should have_readonly_attribute(:user_id) }
 

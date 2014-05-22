@@ -3,9 +3,11 @@ require 'spec/models/shared/item_combinable'
 require 'spec/models/shared/deletable'
 
 describe Order do
-
   it_behaves_like 'item combinable model'
   it_behaves_like 'deletable model'
+end
+
+describe Order do
 
   it { should_not allow_mass_assignment_of(:uuid) }
   it { should_not allow_mass_assignment_of(:purchase_id) }

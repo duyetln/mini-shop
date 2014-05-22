@@ -5,13 +5,14 @@ require 'spec/models/shared/orderable'
 require 'spec/models/shared/itemable'
 
 describe StoreItem do
-
   it_behaves_like 'deletable model'
   it_behaves_like 'displayable model'
   it_behaves_like 'orderable model'
   it_behaves_like 'itemable model'
-
   include_examples 'default #deletable?'
+end
+
+describe StoreItem do
 
   it { should belong_to(:item) }
   it { should belong_to(:price) }
@@ -24,6 +25,8 @@ describe StoreItem do
   it { should validate_presence_of(:price) }
   it { should validate_presence_of(:item) }
   it { should ensure_inclusion_of(:item_type).in_array(%w{ Bundle DigitalItem PhysicalItem }) }
+
+  let(:item) { model.item }
 
   describe '#available?' do
     it 'delegates to item' do

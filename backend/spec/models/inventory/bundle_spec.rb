@@ -2,16 +2,20 @@ require 'models/spec_setup'
 require 'spec/models/shared/item_resource'
 
 describe Bundle do
+  it_behaves_like 'item resource'
+end
 
-  let(:item) { FactoryGirl.build [:physical_item, :digital_item].sample }
+describe Bundle do
+
+  let(:model_args) { [:bundle, :bundleds] }
   let(:bundleds) { model.bundleds }
-  let(:bundled) { FactoryGirl.build :bundled, item: item, qty: qty }
+  let(:bundled) { bundleds.sample }
+  let(:item) { bundled.item }
+  let(:qty) { bundled.qty }
 
   before :each do
-    model.bundleds << bundled
+    model.save!
   end
-
-  it_behaves_like 'item resource'
 
   it { should have_many(:bundleds) }
 
@@ -51,42 +55,29 @@ describe Bundle do
   end
 
   describe '#available?' do
-    before :each do
-      model.active = true
-    end
-
     context 'items not present' do
       it 'is false' do
-        model.bundleds.clear
-        expect(model.items).to_not be_present
+        model.bundleds.destroy_all
         expect(model).to_not be_available
       end
     end
 
     context 'items present' do
-      context 'items unavailable' do
-        context 'deleted' do
-          it 'is false' do
-            model.items.sample.delete!
-            expect(model).to_not be_available
-          end
-        end
+      before :each do
+        expect(model.items).to be_present
+        model.stub(:items).and_return([item])
+      end
 
-        context 'items inactive' do
-          it 'is false' do
-            model.items.sample.active = false
-            expect(model).to_not be_available
-          end
+      context 'items unavailable' do
+        it 'is false' do
+          item.stub(:available?).and_return(false)
+          expect(model).to_not be_available
         end
       end
 
       context 'items available' do
-        before :each do
-          expect(model.items).to be_present
-          model.items.each { |item| item.active = true }
-        end
-
         it 'is true' do
+          item.stub(:available?).and_return(true)
           expect(model).to be_available
         end
       end

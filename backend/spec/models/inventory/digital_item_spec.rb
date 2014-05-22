@@ -2,8 +2,11 @@ require 'models/spec_setup'
 require 'spec/models/shared/item_resource'
 
 describe DigitalItem do
-
   it_behaves_like 'item resource'
+  include_examples 'default #available?'
+end
+
+describe DigitalItem do
 
   let :order do
     FactoryGirl.build(
