@@ -39,7 +39,7 @@ module Services
 
       delete '/digital_items/:id' do
         process_request do
-          digital_item = DigitalItem.find(params[:id])
+          digital_item = DigitalItem.inactive.find(params[:id])
           digital_item.delete!
           respond_with(DigitalItemSerializer.new(digital_item))
         end

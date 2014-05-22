@@ -122,6 +122,18 @@ describe Services::Inventory::DigitalItems do
       let(:digital_item) { FactoryGirl.create :digital_item }
       let(:id) { digital_item.id }
 
+      context 'activated digital item' do
+        before :each do
+          digital_item.activate!
+        end
+
+        include_examples 'not found'
+
+        it 'does not update the digital item' do
+          expect { send_request }.to_not change { digital_item.reload.attributes }
+        end
+      end
+
       context 'deleted digital item' do
         before :each do
           digital_item.delete!
@@ -134,9 +146,10 @@ describe Services::Inventory::DigitalItems do
         end
       end
 
-      context 'undeleted digital item' do
+      context 'undeleted, inactive digital item' do
         before :each do
           expect(digital_item).to be_kept
+          expect(digital_item).to be_inactive
         end
 
         it 'deletes the digital item' do

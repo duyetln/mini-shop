@@ -39,7 +39,7 @@ module Services
 
       delete '/physical_items/:id' do
         process_request do
-          physical_item = PhysicalItem.find(params[:id])
+          physical_item = PhysicalItem.inactive.find(params[:id])
           physical_item.delete!
           respond_with(PhysicalItemSerializer.new(physical_item))
         end

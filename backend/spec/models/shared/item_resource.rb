@@ -16,7 +16,12 @@ shared_examples 'item resource' do
   end
 
   include_examples 'default #activable?'
-  include_examples 'default #deletable?'
+
+  describe '#deletable?' do
+    it 'equals #inactive? and #kept?' do
+      expect(model.deletable?).to eq(model.inactive? && model.kept?)
+    end
+  end
 
   describe '#available?' do
     context 'deleted' do

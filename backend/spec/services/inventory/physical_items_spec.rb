@@ -122,6 +122,18 @@ describe Services::Inventory::PhysicalItems do
       let(:physical_item) { FactoryGirl.create :physical_item }
       let(:id) { physical_item.id }
 
+      context 'activated physical item' do
+        before :each do
+          physical_item.activate!
+        end
+
+        include_examples 'not found'
+
+        it 'does not update the physical item' do
+          expect { send_request }.to_not change { physical_item.reload.attributes }
+        end
+      end
+
       context 'deleted physical item' do
         before :each do
           physical_item.delete!
@@ -134,9 +146,10 @@ describe Services::Inventory::PhysicalItems do
         end
       end
 
-      context 'undeleted physical item' do
+      context 'undeleted, inactive physical item' do
         before :each do
           expect(physical_item).to be_kept
+          expect(physical_item).to be_inactive
         end
 
         it 'deletes the physical item' do

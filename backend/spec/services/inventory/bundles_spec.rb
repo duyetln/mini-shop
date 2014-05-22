@@ -206,6 +206,18 @@ describe Services::Inventory::Bundles do
       let(:bundle) { FactoryGirl.create :bundle }
       let(:id) { bundle.id }
 
+      context 'activated bundle' do
+        before :each do
+          bundle.activate!
+        end
+
+        include_examples 'not found'
+
+        it 'does not update the bundle' do
+          expect { send_request }.to_not change { bundle.reload.attributes }
+        end
+      end
+
       context 'deleted bundle' do
         before :each do
           bundle.delete!
@@ -218,9 +230,10 @@ describe Services::Inventory::Bundles do
         end
       end
 
-      context 'undeleted bundle' do
+      context 'undeleted, inactive bundle' do
         before :each do
           expect(bundle).to be_kept
+          expect(bundle).to be_inactive
         end
 
         it 'deletes the bundle' do

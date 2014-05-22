@@ -60,7 +60,7 @@ module Services
 
       delete '/bundles/:id' do
         process_request do
-          bundle = Bundle.find(params[:id])
+          bundle = Bundle.inactive.find(params[:id])
           bundle.delete!
           respond_with(BundleSerializer.new(bundle))
         end
