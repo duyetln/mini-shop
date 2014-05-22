@@ -10,11 +10,6 @@ shared_examples 'item resource' do
   it_behaves_like 'displayable model'
   it_behaves_like 'fulfillable model'
 
-  describe 'factory model' do
-    it('is valid') { expect(model.valid?).to be_true }
-    it('saves successfully') { expect(model.save).to be_true }
-  end
-
   include_examples 'default #activable?'
 
   describe '#deletable?' do
