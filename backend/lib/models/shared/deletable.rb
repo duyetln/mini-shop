@@ -36,5 +36,6 @@ module Deletable
       self.deleted = true
       save!
     end
+    deleted?
   end
 end

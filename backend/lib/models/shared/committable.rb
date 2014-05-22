@@ -39,6 +39,7 @@ module Committable
       self.committed_at = DateTime.now
       save!
     end
+    committed?
   end
 
   protected

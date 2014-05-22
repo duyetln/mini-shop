@@ -36,6 +36,7 @@ module Activable
       self.active = true
       save!
     end
+    active?
   end
 
   protected

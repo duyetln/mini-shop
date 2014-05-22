@@ -47,8 +47,8 @@ shared_examples 'deletable model' do
     context 'not deletable' do
       let(:deletable) { false }
 
-      it 'cannot be executed' do
-        expect(model.delete!).to_not be_true
+      it 'returns status' do
+        expect(model.delete!).to eq(model.deleted?)
       end
 
       it 'cannot change deleted status' do
@@ -59,8 +59,8 @@ shared_examples 'deletable model' do
     context 'deletable' do
       let(:deletable) { true }
 
-      it 'can be executed' do
-        expect(model.delete!).to be_true
+      it 'returns status' do
+        expect(model.delete!).to eq(model.deleted?)
       end
 
       it 'changes deleted status to true' do

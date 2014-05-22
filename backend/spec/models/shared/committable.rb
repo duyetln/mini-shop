@@ -57,8 +57,8 @@ shared_examples 'committable model' do
     context 'not committable' do
       let(:committable) { false }
 
-      it 'cannot be executed' do
-        expect(model.commit!).to_not be_true
+      it 'returns status' do
+        expect(model.commit!).to eq(model.committed?)
       end
 
       it 'cannot change committed status' do
@@ -73,8 +73,8 @@ shared_examples 'committable model' do
     context 'committable' do
       let(:committable) { true }
 
-      it 'can be executed' do
-        expect(model.commit!).to be_true
+      it 'returns status' do
+        expect(model.commit!).to eq(model.committed?)
       end
 
       it 'changes committed status to true' do

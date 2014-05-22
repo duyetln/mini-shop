@@ -48,8 +48,8 @@ shared_examples 'activable model' do
     context 'not activable' do
       let(:activable) { false }
 
-      it 'cannot be executed' do
-        expect(model.activate!).to_not be_true
+      it 'returns status' do
+        expect(model.activate!).to eq(model.active?)
       end
 
       it 'cannot change active status' do
@@ -60,8 +60,8 @@ shared_examples 'activable model' do
     context 'activable' do
       let(:activable) { true }
 
-      it 'can be executed' do
-        expect(model.activate!).to be_true
+      it 'returns status' do
+        expect(model.activate!).to eq(model.active?)
       end
 
       it 'changes active status to true' do

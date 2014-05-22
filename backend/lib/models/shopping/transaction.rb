@@ -27,6 +27,7 @@ class Transaction < ActiveRecord::Base
       method = payment? ? :withdraw! : :deposit!
       payment_method.send(method, amount, currency)
     end
+    committed?
   end
 
   def payment?
