@@ -38,4 +38,8 @@ class Bundle < ActiveRecord::Base
   def reverse!(order)
     items.all? { |item| item.reverse!(order) }
   end
+
+  def activable?
+    super && items.all?(&:active?)
+  end
 end

@@ -20,7 +20,11 @@ module ItemResource
     kept?
   end
 
+  def activable?
+    available? && super
+  end
+
   def deletable?
-    activable? && super
+    inactive? && super
   end
 end

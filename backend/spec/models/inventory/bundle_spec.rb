@@ -19,6 +19,12 @@ describe Bundle do
 
   it { should have_many(:bundleds) }
 
+  describe '#activable?' do
+    it 'equals itself being inactive and all items being active' do
+      expect(model.activable?).to eq(model.inactive? && model.items.all?(&:active?))
+    end
+  end
+
   describe '#add_or_update' do
     let(:acc) { [true, false].sample }
 
@@ -36,8 +42,12 @@ describe Bundle do
     end
 
     context 'activated' do
-      it 'does not add or update the item' do
+      before :each do
+        item.activate!
         model.activate!
+      end
+
+      it 'does not add or update the item' do
         expect(bundleds).to_not receive(:add_or_update)
         expect(model).to_not receive(:reload)
         model.add_or_update(item, qty, acc)
@@ -45,8 +55,11 @@ describe Bundle do
     end
 
     context 'deleted' do
-      it 'does not add or update the item' do
+      before :each do
         model.delete!
+      end
+
+      it 'does not add or update the item' do
         expect(bundleds).to_not receive(:add_or_update)
         expect(model).to_not receive(:reload)
         model.add_or_update(item, qty, acc)

@@ -5,6 +5,7 @@ require 'spec/models/shared/quantifiable'
 describe PhysicalItem do
   it_behaves_like 'item resource'
   it_behaves_like 'quantifiable model'
+  include_examples 'default item resource #activable?'
 end
 
 describe PhysicalItem do
