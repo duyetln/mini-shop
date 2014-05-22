@@ -55,7 +55,7 @@ class Purchase < ActiveRecord::Base
   end
 
   def fulfillable?
-   committed?
+    committed?
   end
 
   def fulfill!

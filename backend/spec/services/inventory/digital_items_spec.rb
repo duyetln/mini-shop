@@ -51,7 +51,7 @@ describe Services::Inventory::DigitalItems do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:digital_item) { FactoryGirl.create :digital_item }
+      let!(:digital_item) { FactoryGirl.create :digital_item }
       let(:id) { digital_item.id }
 
       context 'invalid parameters' do
@@ -83,25 +83,25 @@ describe Services::Inventory::DigitalItems do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:digital_item) { FactoryGirl.create :digital_item }
+      let!(:digital_item) { FactoryGirl.create :digital_item }
       let(:id) { digital_item.id }
 
-      context 'activated digital item' do
-        before :each do
-          digital_item.activate!
-        end
+      before :each do
+        DigitalItem.any_instance.stub(:activable?).and_return(activable)
+      end
 
-        include_examples 'not found'
+      context 'unactivable digital item' do
+        let(:activable) { false }
+
+        include_examples 'unprocessable'
 
         it 'does not update the digital item' do
           expect { send_request }.to_not change { digital_item.reload.attributes }
         end
       end
 
-      context 'unactivated digital item' do
-        before :each do
-          expect(digital_item).to be_inactive
-        end
+      context 'activable digital item' do
+        let(:activable) { true }
 
         it 'activates the digital item' do
           expect { send_request }.to change { digital_item.reload.active? }.to(true)
@@ -119,20 +119,8 @@ describe Services::Inventory::DigitalItems do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:digital_item) { FactoryGirl.create :digital_item }
+      let!(:digital_item) { FactoryGirl.create :digital_item }
       let(:id) { digital_item.id }
-
-      context 'activated digital item' do
-        before :each do
-          digital_item.activate!
-        end
-
-        include_examples 'not found'
-
-        it 'does not update the digital item' do
-          expect { send_request }.to_not change { digital_item.reload.attributes }
-        end
-      end
 
       context 'deleted digital item' do
         before :each do
@@ -146,16 +134,29 @@ describe Services::Inventory::DigitalItems do
         end
       end
 
-      context 'undeleted, inactive digital item' do
+      context 'non deleted digital item' do
         before :each do
-          expect(digital_item).to be_kept
-          expect(digital_item).to be_inactive
+          DigitalItem.any_instance.stub(:deletable?).and_return(deletable)
         end
 
-        it 'deletes the digital item' do
-          expect { send_request }.to change { DigitalItem.count }.by(-1)
-          expect_status(200)
-          expect_response(DigitalItemSerializer.new(digital_item.reload).to_json)
+        context 'deletable digital item' do
+          let(:deletable) { false }
+
+          include_examples 'unprocessable'
+
+          it 'does not update the digital item' do
+            expect { send_request }.to_not change { digital_item.reload.attributes }
+          end
+        end
+
+        context 'deletable digital item' do
+          let(:deletable) { true }
+
+          it 'deletes the digital item' do
+            expect { send_request }.to change { DigitalItem.count }.by(-1)
+            expect_status(200)
+            expect_response(DigitalItemSerializer.new(digital_item.reload).to_json)
+          end
         end
       end
     end

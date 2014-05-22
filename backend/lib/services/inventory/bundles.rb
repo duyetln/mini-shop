@@ -31,37 +31,37 @@ module Services
 
       post '/bundles/:id/bundleds' do
         process_request do
-          bundle = Bundle.inactive.find(params[:id])
+          bundle = Bundle.find(params[:id])
           bundle.add_or_update(
             bundled_params[:item_type].classify.constantize.find(bundled_params[:item_id]),
             bundled_params[:qty].to_i,
             false
-          )
+          ) || unprocessable!
           respond_with(BundleSerializer.new(bundle))
         end
       end
 
       delete '/bundles/:id/bundleds/:bundled_id' do
         process_request do
-          bundle = Bundle.inactive.find(params[:id])
+          bundle = Bundle.find(params[:id])
           bundled = bundle.bundleds.find(params[:bundled_id])
-          bundle.remove(bundled)
+          bundle.remove(bundled) || unprocessable!
           respond_with(BundleSerializer.new(bundle))
         end
       end
 
       put '/bundles/:id/activate' do
         process_request do
-          bundle = Bundle.inactive.find(params[:id])
-          bundle.activate!
+          bundle = Bundle.find(params[:id])
+          bundle.activate! || unprocessable!
           respond_with(BundleSerializer.new(bundle))
         end
       end
 
       delete '/bundles/:id' do
         process_request do
-          bundle = Bundle.inactive.find(params[:id])
-          bundle.delete!
+          bundle = Bundle.find(params[:id])
+          bundle.delete! || unprocessable!
           respond_with(BundleSerializer.new(bundle))
         end
       end

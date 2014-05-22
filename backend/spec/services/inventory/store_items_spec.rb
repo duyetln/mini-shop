@@ -67,7 +67,7 @@ describe Services::Inventory::StoreItems do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:store_item) { FactoryGirl.create :store_item }
+      let!(:store_item) { FactoryGirl.create :store_item }
       let(:id) { store_item.id }
 
       context 'invalid parameters' do
@@ -99,7 +99,7 @@ describe Services::Inventory::StoreItems do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:store_item) { FactoryGirl.create :store_item }
+      let!(:store_item) { FactoryGirl.create :store_item }
       let(:id) { store_item.id }
 
       context 'deleted store item' do
