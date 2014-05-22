@@ -98,6 +98,14 @@ describe Services::Inventory::Bundles do
         }
       end
 
+      context 'activated bundle' do
+        before :each do
+          bundle.activate!
+        end
+
+        include_examples 'not found'
+      end
+
       context 'invalid item type' do
         let(:item_type) { rand_str }
 
@@ -137,6 +145,14 @@ describe Services::Inventory::Bundles do
     context 'valid id' do
       let(:bundle) { FactoryGirl.create :bundle }
       let(:id) { bundle.id }
+
+      context 'activated bundle' do
+        before :each do
+          bundle.activate!
+        end
+
+        include_examples 'not found'
+      end
 
       context 'invalid bundled id' do
         include_examples 'not found'

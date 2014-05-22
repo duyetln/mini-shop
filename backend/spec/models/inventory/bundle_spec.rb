@@ -18,10 +18,24 @@ describe Bundle do
   describe '#add_or_update' do
     let(:acc) { [true, false].sample }
 
-    context 'kept' do
+    context 'inactive and kept' do
+      before :each do
+        expect(model).to be_kept
+        expect(model).to be_inactive
+      end
+
       it 'adds or updates the item' do
         expect(bundleds).to receive(:add_or_update).with(item, qty: qty, acc: acc)
         expect(model).to receive(:reload)
+        model.add_or_update(item, qty, acc)
+      end
+    end
+
+    context 'activated' do
+      it 'does not add or update the item' do
+        model.activate!
+        expect(bundleds).to_not receive(:add_or_update)
+        expect(model).to_not receive(:reload)
         model.add_or_update(item, qty, acc)
       end
     end
