@@ -7,19 +7,14 @@ module Quantifiable
     validates :qty, numericality: { greater_than_or_equal_to: 0 }
   end
 
-  [:qty].each do |method|
-    class_eval <<-EOF
-      def #{method}(*args)
-        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
-      end
-    EOF
-  end
-
-  [:qty=].each do |method|
-    class_eval <<-EOF
-      def #{method}(*args)
-        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
-      end
-    EOF
+  def method_missing(method, *args, &block)
+    if [
+      :qty,
+      :qty=
+    ].include?(method.to_sym)
+      fail NotImplementedError, "Method #{method} must be defined in derived class"
+    else
+      super
+    end
   end
 end

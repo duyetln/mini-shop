@@ -11,20 +11,16 @@ module Activable
     after_initialize :set_inactive
   end
 
-  [:active, :active?].each do |method|
-    class_eval <<-EOF
-      def #{method}(*args)
-        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
-      end
-    EOF
-  end
-
-  [:active=].each do |method|
-    class_eval <<-EOF
-      def #{method}(*args)
-        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
-      end
-    EOF
+  def method_missing(method, *args, &block)
+    if [
+      :active,
+      :active?,
+      :active=
+    ].include?(method.to_sym)
+      fail NotImplementedError, "Method #{method} must be defined in derived class"
+    else
+      super
+    end
   end
 
   def inactive?
