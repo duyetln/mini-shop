@@ -1,6 +1,7 @@
 require 'models/spec_setup'
 
 describe Status do
+  let(:subject) { described_class.new }
 
   it { should belong_to(:source) }
 
