@@ -8,40 +8,42 @@ module Activable
     scope :active,   -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
 
-    default_scope { active }
+    after_initialize :set_inactive
   end
 
-  [:active, :active?].each do |method|
-    class_eval <<-EOF
-      def #{method}(*args)
-        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
-      end
-    EOF
-  end
-
-  [:active=].each do |method|
-    class_eval <<-EOF
-      def #{method}(*args)
-        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
-      end
-    EOF
+  def method_missing(method, *args, &block)
+    if [
+      :active,
+      :active?,
+      :active=
+    ].include?(method.to_sym)
+      fail NotImplementedError, "Method #{method} must be defined in derived class"
+    else
+      super
+    end
   end
 
   def inactive?
     !active?
   end
 
+  def activable?
+    inactive?
+  end
+
   def activate!
-    if inactive?
+    if activable?
       self.active = true
       save!
     end
+    active?
   end
 
-  def deactivate!
-    if active?
+  protected
+
+  def set_inactive
+    if new_record?
       self.active = false
-      save!
     end
   end
 end

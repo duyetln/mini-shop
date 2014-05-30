@@ -51,7 +51,7 @@ describe Services::Inventory::Bundles do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:bundle) { FactoryGirl.create :bundle }
+      let!(:bundle) { FactoryGirl.create :bundle }
       let(:id) { bundle.id }
 
       context 'invalid parameters' do
@@ -83,7 +83,7 @@ describe Services::Inventory::Bundles do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:bundle) { FactoryGirl.create :bundle }
+      let(:bundle) { FactoryGirl.create :bundle, :bundleds }
       let(:id) { bundle.id }
       let(:item) { FactoryGirl.create [:physical_item, :digital_item].sample }
       let(:item_type) { item.class.name }
@@ -96,6 +96,15 @@ describe Services::Inventory::Bundles do
             qty: qty
           }
         }
+      end
+
+      context 'activated bundle' do
+        before :each do
+          bundle.items.each(&:activate!)
+          bundle.activate!
+        end
+
+        include_examples 'unprocessable'
       end
 
       context 'invalid item type' do
@@ -135,7 +144,7 @@ describe Services::Inventory::Bundles do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:bundle) { FactoryGirl.create :bundle }
+      let!(:bundle) { FactoryGirl.create :bundle }
       let(:id) { bundle.id }
 
       context 'invalid bundled id' do
@@ -151,10 +160,21 @@ describe Services::Inventory::Bundles do
           bundle.add_or_update(item, qty)
         end
 
-        it 'removes the bundled' do
-          expect { send_request }.to change { bundle.bundleds.count }.by(-1)
-          expect_status(200)
-          expect_response(BundleSerializer.new(bundle).to_json)
+        context 'activated bundle' do
+          before :each do
+            bundle.items.each(&:activate!)
+            bundle.activate!
+          end
+
+          include_examples 'unprocessable'
+        end
+
+        context 'unactivated bundle' do
+          it 'removes the bundled' do
+            expect { send_request }.to change { bundle.bundleds.count }.by(-1)
+            expect_status(200)
+            expect_response(BundleSerializer.new(bundle).to_json)
+          end
         end
       end
     end
@@ -167,66 +187,30 @@ describe Services::Inventory::Bundles do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:bundle) { FactoryGirl.create :bundle }
+      let!(:bundle) { FactoryGirl.create :bundle }
       let(:id) { bundle.id }
 
-      context 'activated bundle' do
-        before :each do
-          expect(bundle).to be_active
-        end
+      before :each do
+        Bundle.any_instance.stub(:activable?).and_return(activable)
+      end
 
-        include_examples 'not found'
+      context 'unactivable bundle' do
+        let(:activable) { false }
+
+        include_examples 'unprocessable'
 
         it 'does not update the bundle' do
           expect { send_request }.to_not change { bundle.reload.attributes }
         end
       end
 
-      context 'unactivated bundle' do
-        before :each do
-          bundle.deactivate!
-        end
+      context 'activable bundle' do
+        let(:activable) { true }
 
         it 'activates the bundle' do
           expect { send_request }.to change { bundle.reload.active? }.to(true)
           expect_status(200)
           expect_response(BundleSerializer.new(bundle).to_json)
-        end
-      end
-    end
-  end
-
-  describe 'put /bundles/:id/deactivate' do
-    let(:method) { :put }
-    let(:path) { "/bundles/#{id}/deactivate" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      let(:bundle) { FactoryGirl.create :bundle }
-      let(:id) { bundle.id }
-
-      context 'activated bundle' do
-        before :each do
-          expect(bundle).to be_active
-        end
-
-        it 'activates the bundle' do
-          expect { send_request }.to change { bundle.reload.active? }.to(false)
-          expect_status(200)
-          expect_response(BundleSerializer.new(bundle).to_json)
-        end
-      end
-
-      context 'unactivated bundle' do
-        before :each do
-          bundle.deactivate!
-        end
-
-        include_examples 'not found'
-
-        it 'does not update the bundle' do
-          expect { send_request }.to_not change { bundle.reload.attributes }
         end
       end
     end
@@ -239,7 +223,7 @@ describe Services::Inventory::Bundles do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:bundle) { FactoryGirl.create :bundle }
+      let!(:bundle) { FactoryGirl.create :bundle }
       let(:id) { bundle.id }
 
       context 'deleted bundle' do
@@ -254,15 +238,29 @@ describe Services::Inventory::Bundles do
         end
       end
 
-      context 'undeleted bundle' do
+      context 'non deleted bundle' do
         before :each do
-          expect(bundle).to be_kept
+          Bundle.any_instance.stub(:deletable?).and_return(deletable)
         end
 
-        it 'deletes the bundle' do
-          expect { send_request }.to change { Bundle.count }.by(-1)
-          expect_status(200)
-          expect_response(BundleSerializer.new(bundle.reload).to_json)
+        context 'deletable bundle' do
+          let(:deletable) { false }
+
+          include_examples 'unprocessable'
+
+          it 'does not update the bundle' do
+            expect { send_request }.to_not change { bundle.reload.attributes }
+          end
+        end
+
+        context 'deletable bundle' do
+          let(:deletable) { true }
+
+          it 'deletes the bundle' do
+            expect { send_request }.to change { Bundle.count }.by(-1)
+            expect_status(200)
+            expect_response(BundleSerializer.new(bundle.reload).to_json)
+          end
         end
       end
     end

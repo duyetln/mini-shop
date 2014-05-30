@@ -2,13 +2,16 @@ require 'models/spec_setup'
 require 'spec/models/shared/committable'
 
 describe Purchase do
+  it_behaves_like 'committable model'
+  include_examples 'default #committable?'
+end
+
+describe Purchase do
 
   let(:orders) { model.orders }
   let(:order) { orders.sample }
   let(:model_args) { [:purchase, :orders] }
   let(:item) { FactoryGirl.build :store_item }
-
-  it_behaves_like 'committable model'
 
   it { should have_readonly_attribute(:user_id) }
 
@@ -236,6 +239,18 @@ describe Purchase do
     end
   end
 
+  describe '#fulfillable?' do
+    it 'equals #committed?' do
+      expect(model.fulfillable?).to eq(model.committed?)
+    end
+  end
+
+  describe '#reversible?' do
+    it 'equals #committed?' do
+      expect(model.fulfillable?).to eq(model.committed?)
+    end
+  end
+
   describe 'fulfillment methods' do
     let(:transaction) do
       FactoryGirl.build :transaction,
@@ -250,42 +265,30 @@ describe Purchase do
       model.stub(:transactions).and_return([transaction])
     end
 
-    shared_examples 'does not do anything' do
-      it 'does not do anything' do
-        expect(order).to_not receive(process_method)
-        expect(transaction).to_not receive(:commit!)
-        expect(model.send(method)).to be_nil
-      end
-    end
-
-    shared_examples 'pending' do
-      context 'pending' do
+    shared_examples 'status not ready' do
+      context 'status not ready' do
         before :each do
-          model.stub(:committed?).and_return(false)
+          model.stub(status_method).and_return(false)
         end
 
-        include_examples 'does not do anything'
+        it 'does nothing' do
+          expect(order).to_not receive(process_method)
+          expect(transaction).to_not receive(:commit!)
+          expect(model.send(method)).to be_nil
+        end
       end
     end
 
     describe '#fufill!' do
       let(:method) { :fulfill! }
       let(:process_method) { :fulfill! }
+      let(:status_method) { :fulfillable? }
 
       before :each do
-        model.stub(:committed?).and_return(true)
-        model.stub(:make_payment!).and_return(true)
+        model.stub(status_method).and_return(true)
       end
 
-      include_examples 'pending'
-
-      context 'creating payment failed' do
-        before :each do
-          model.stub(:make_payment!).and_return(false)
-        end
-
-        include_examples 'does not do anything'
-      end
+      include_examples 'status not ready'
 
       context 'ready' do
         it 'processes, marks status, and returns' do
@@ -301,12 +304,13 @@ describe Purchase do
     describe '#reverse!' do
       let(:method) { :reverse! }
       let(:process_method) { :reverse! }
+      let(:status_method) { :reversible? }
 
       before :each do
-        model.stub(:committed?).and_return(true)
+        model.stub(status_method).and_return(true)
       end
 
-      include_examples 'pending'
+      include_examples 'status not ready'
 
       context 'ready' do
         context 'full purchase reversal' do

@@ -1,3 +1,11 @@
+shared_examples 'default #committable?' do
+  describe '#committable?' do
+    it 'equals #pending?' do
+      expect(model.committable?).to eq(model.pending?)
+    end
+  end
+end
+
 shared_examples 'committable model' do
 
   it { should_not allow_mass_assignment_of(:committed) }
@@ -14,7 +22,7 @@ shared_examples 'committable model' do
     it { should respond_to(:committed).with(0).argument }
     it { should respond_to(:committed=).with(1).argument }
     it { should respond_to(:committed_at).with(0).argument }
-    it { should respond_to(:committed_at=).with(0).argument }
+    it { should respond_to(:committed_at=).with(1).argument }
     it { should respond_to(:committed?).with(0).argument }
     it { should respond_to(:pending?).with(0).argument }
     it { should respond_to(:commit!).with(0).argument }
@@ -43,14 +51,14 @@ shared_examples 'committable model' do
 
   describe '#commit!' do
     before :each do
-      model.committed = committed
+      expect(model).to receive(:committable?).and_return(committable)
     end
 
-    context 'committed' do
-      let(:committed) { true }
+    context 'not committable' do
+      let(:committable) { false }
 
-      it 'cannot be executed' do
-        expect(model.commit!).to_not be_true
+      it 'returns status' do
+        expect(model.commit!).to eq(model.committed?)
       end
 
       it 'cannot change committed status' do
@@ -62,15 +70,15 @@ shared_examples 'committable model' do
       end
     end
 
-    context 'pending' do
-      let(:committed) { false }
+    context 'committable' do
+      let(:committable) { true }
 
-      it 'can be executed' do
-        expect(model.commit!).to be_true
+      it 'returns status' do
+        expect(model.commit!).to eq(model.committed?)
       end
 
       it 'changes committed status to true' do
-        expect { model.commit! }.to change { model.committed? }.to(!committed)
+        expect { model.commit! }.to change { model.committed? }.to(committable)
       end
 
       it 'sets committed_at' do

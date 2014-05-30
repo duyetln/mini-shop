@@ -3,9 +3,12 @@ require 'spec/models/shared/item_resource'
 require 'spec/models/shared/quantifiable'
 
 describe PhysicalItem do
-
   it_behaves_like 'item resource'
   it_behaves_like 'quantifiable model'
+  include_examples 'default item resource #activable?'
+end
+
+describe PhysicalItem do
 
   it { should allow_mass_assignment_of(:qty) }
   it { should validate_presence_of(:qty) }

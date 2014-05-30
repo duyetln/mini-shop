@@ -36,7 +36,7 @@ module Services
             bundled_params[:item_type].classify.constantize.find(bundled_params[:item_id]),
             bundled_params[:qty].to_i,
             false
-          )
+          ) || unprocessable!
           respond_with(BundleSerializer.new(bundle))
         end
       end
@@ -45,23 +45,15 @@ module Services
         process_request do
           bundle = Bundle.find(params[:id])
           bundled = bundle.bundleds.find(params[:bundled_id])
-          bundle.remove(bundled)
+          bundle.remove(bundled) || unprocessable!
           respond_with(BundleSerializer.new(bundle))
         end
       end
 
       put '/bundles/:id/activate' do
         process_request do
-          bundle = Bundle.inactive.find(params[:id])
-          bundle.activate!
-          respond_with(BundleSerializer.new(bundle))
-        end
-      end
-
-      put '/bundles/:id/deactivate' do
-        process_request do
           bundle = Bundle.find(params[:id])
-          bundle.deactivate!
+          bundle.activate! || unprocessable!
           respond_with(BundleSerializer.new(bundle))
         end
       end
@@ -69,7 +61,7 @@ module Services
       delete '/bundles/:id' do
         process_request do
           bundle = Bundle.find(params[:id])
-          bundle.delete!
+          bundle.delete! || unprocessable!
           respond_with(BundleSerializer.new(bundle))
         end
       end

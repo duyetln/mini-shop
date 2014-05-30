@@ -2,8 +2,10 @@ require 'models/spec_setup'
 require 'spec/models/shared/fulfillment'
 
 describe OnlineFulfillment do
-
   it_behaves_like 'fulfillment model'
+end
+
+describe OnlineFulfillment do
 
   it { should ensure_inclusion_of(:item_type).in_array(%w{ DigitalItem }) }
 

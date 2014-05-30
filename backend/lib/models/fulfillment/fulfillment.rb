@@ -19,15 +19,23 @@ class Fulfillment < ActiveRecord::Base
 
   validates :item_type, inclusion: { in: %w{ PhysicalItem DigitalItem } }
 
+  def fulfillable?
+    unmarked?
+  end
+
   def fulfill!
-    if unmarked?
+    if fulfillable?
       process_fulfillment! ? mark_fulfilled! : mark_failed!
       fulfilled?
     end
   end
 
+  def reversible?
+    fulfilled?
+  end
+
   def reverse!
-    if fulfilled?
+    if reversible?
       process_reversal! ? mark_reversed! : mark_failed!
       reversed?
     end

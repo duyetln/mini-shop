@@ -10,19 +10,18 @@ module Itemable
     validates :item, presence: true
   end
 
-  [:item, :item_type, :item_id].each do |method|
-    class_eval <<-EOF
-      def #{method}(*args)
-        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
-      end
-    EOF
-  end
-
-  [:item=, :item_type=, :item_id=].each do |method|
-    class_eval <<-EOF
-      def #{method}(*args)
-        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
-      end
-    EOF
+  def method_missing(method, *args, &block)
+    if [
+      :item,
+      :item=,
+      :item_type,
+      :item_type=,
+      :item_id,
+      :item_id=
+    ].include?(method.to_sym)
+      fail NotImplementedError, "Method #{method} must be defined in derived class"
+    else
+      super
+    end
   end
 end

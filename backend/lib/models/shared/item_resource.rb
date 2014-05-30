@@ -17,6 +17,14 @@ module ItemResource
   end
 
   def available?
-    !deleted? && active?
+    kept?
+  end
+
+  def activable?
+    available? && super
+  end
+
+  def deletable?
+    inactive? && super
   end
 end

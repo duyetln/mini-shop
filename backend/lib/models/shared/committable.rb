@@ -11,32 +11,35 @@ module Committable
     after_initialize :set_pending
   end
 
-  [:committed=, :committed_at=].each do |method|
-    class_eval <<-EOF
-      def #{method}(*args)
-        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
-      end
-    EOF
-  end
-
-  [:commtted, :committed_at, :committed?].each do |method|
-    class_eval <<-EOF
-      def #{method}(*args)
-        defined?(super) ? super : (fail NotImplementedError, "#{__method__} must be defined in derived class")
-      end
-    EOF
+  def method_missing(method, *args, &block)
+    if [
+      :committed=,
+      :committed_at=,
+      :committed,
+      :committed_at,
+      :committed
+    ].include?(method.to_sym)
+      fail NotImplementedError, "Method #{method} must be defined in derived class"
+    else
+      super
+    end
   end
 
   def pending?
     !committed?
   end
 
+  def committable?
+    pending?
+  end
+
   def commit!
-    if pending?
+    if committable?
       self.committed    = true
       self.committed_at = DateTime.now
       save!
     end
+    committed?
   end
 
   protected

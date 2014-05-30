@@ -31,16 +31,8 @@ module Services
 
       put '/digital_items/:id/activate' do
         process_request do
-          digital_item = DigitalItem.inactive.find(params[:id])
-          digital_item.activate!
-          respond_with(DigitalItemSerializer.new(digital_item))
-        end
-      end
-
-      put '/digital_items/:id/deactivate' do
-        process_request do
           digital_item = DigitalItem.find(params[:id])
-          digital_item.deactivate!
+          digital_item.activate! || unprocessable!
           respond_with(DigitalItemSerializer.new(digital_item))
         end
       end
@@ -48,7 +40,7 @@ module Services
       delete '/digital_items/:id' do
         process_request do
           digital_item = DigitalItem.find(params[:id])
-          digital_item.delete!
+          digital_item.delete! || unprocessable!
           respond_with(DigitalItemSerializer.new(digital_item))
         end
       end

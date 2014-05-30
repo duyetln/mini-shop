@@ -51,7 +51,7 @@ describe Services::Inventory::PhysicalItems do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:physical_item) { FactoryGirl.create :physical_item }
+      let!(:physical_item) { FactoryGirl.create :physical_item }
       let(:id) { physical_item.id }
 
       context 'invalid parameters' do
@@ -83,66 +83,30 @@ describe Services::Inventory::PhysicalItems do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:physical_item) { FactoryGirl.create :physical_item }
+      let!(:physical_item) { FactoryGirl.create :physical_item }
       let(:id) { physical_item.id }
 
-      context 'activated physical item' do
-        before :each do
-          expect(physical_item).to be_active
-        end
+      before :each do
+        PhysicalItem.any_instance.stub(:activable?).and_return(activable)
+      end
 
-        include_examples 'not found'
+      context 'unactivable physical item' do
+        let(:activable) { false }
+
+        include_examples 'unprocessable'
 
         it 'does not update the physical item' do
           expect { send_request }.to_not change { physical_item.reload.attributes }
         end
       end
 
-      context 'unactivated physical item' do
-        before :each do
-          physical_item.deactivate!
-        end
+      context 'activable physical item' do
+        let(:activable) { true }
 
         it 'activates the physical item' do
           expect { send_request }.to change { physical_item.reload.active? }.to(true)
           expect_status(200)
           expect_response(PhysicalItemSerializer.new(physical_item).to_json)
-        end
-      end
-    end
-  end
-
-  describe 'put /physical_items/:id/deactivate' do
-    let(:method) { :put }
-    let(:path) { "/physical_items/#{id}/deactivate" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      let(:physical_item) { FactoryGirl.create :physical_item }
-      let(:id) { physical_item.id }
-
-      context 'activated physical item' do
-        before :each do
-          expect(physical_item).to be_active
-        end
-
-        it 'deactivates the physical item' do
-          expect { send_request }.to change { physical_item.reload.active? }.to(false)
-          expect_status(200)
-          expect_response(PhysicalItemSerializer.new(physical_item).to_json)
-        end
-      end
-
-      context 'unactivated physical item' do
-        before :each do
-          physical_item.deactivate!
-        end
-
-        include_examples 'not found'
-
-        it 'does not update the physical item' do
-          expect { send_request }.to_not change { physical_item.reload.attributes }
         end
       end
     end
@@ -155,7 +119,7 @@ describe Services::Inventory::PhysicalItems do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:physical_item) { FactoryGirl.create :physical_item }
+      let!(:physical_item) { FactoryGirl.create :physical_item }
       let(:id) { physical_item.id }
 
       context 'deleted physical item' do
@@ -170,15 +134,29 @@ describe Services::Inventory::PhysicalItems do
         end
       end
 
-      context 'undeleted physical item' do
+      context 'non deleted physical item' do
         before :each do
-          expect(physical_item).to be_kept
+          PhysicalItem.any_instance.stub(:deletable?).and_return(deletable)
         end
 
-        it 'deletes the physical item' do
-          expect { send_request }.to change { PhysicalItem.count }.by(-1)
-          expect_status(200)
-          expect_response(PhysicalItemSerializer.new(physical_item.reload).to_json)
+        context 'deletable physical item' do
+          let(:deletable) { false }
+
+          include_examples 'unprocessable'
+
+          it 'does not update the physical item' do
+            expect { send_request }.to_not change { physical_item.reload.attributes }
+          end
+        end
+
+        context 'deletable physical item' do
+          let(:deletable) { true }
+
+          it 'deletes the physical item' do
+            expect { send_request }.to change { PhysicalItem.count }.by(-1)
+            expect_status(200)
+            expect_response(PhysicalItemSerializer.new(physical_item.reload).to_json)
+          end
         end
       end
     end

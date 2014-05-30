@@ -30,11 +30,6 @@ describe User do
   it { should validate_uniqueness_of(:uuid) }
   it { should ensure_length_of(:password).is_at_least(5) }
 
-  describe 'factory model' do
-    it('is valid') { expect(model.valid?).to be_true }
-    it('saves successfully') { expect(model.save).to be_true }
-  end
-
   let(:password) { model.password }
   let(:actv_code) { model.actv_code }
   let :user do

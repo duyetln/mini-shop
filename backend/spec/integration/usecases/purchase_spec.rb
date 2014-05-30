@@ -39,12 +39,37 @@ describe 'purchase flow' do
     end
   end
 
+  shared_examples 'item activation' do
+    it 'activates the item' do
+      expect { item.activate! }.to change { item.active? }.from(false).to(true)
+    end
+
+    it 'makes the item available' do
+      expect(item).to be_available
+    end
+  end
+
+  describe 'physical item' do
+    let(:item) { physical_item }
+
+    include_examples 'item activation'
+  end
+
+  describe 'digital item' do
+    let(:item) { digital_item }
+
+    include_examples 'item activation'
+  end
+
   describe 'bundle' do
+    let(:item) { bundle }
+
     it 'adds and updates items' do
       expect { bundle.add_or_update(physical_item, qty) }.to change { bundle.bundleds.count }.by(1)
       expect { bundle.add_or_update(digital_item, qty) }.to change { bundle.bundleds.count }.by(1)
-      expect(bundle).to be_available
     end
+
+    include_examples 'item activation'
   end
 
   describe 'purchase' do

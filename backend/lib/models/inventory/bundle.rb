@@ -8,14 +8,14 @@ class Bundle < ActiveRecord::Base
   after_save :reload
 
   def add_or_update(item, qty = 1, acc = false)
-    if kept?
+    if inactive? && kept?
       abundled = bundleds.add_or_update(item, qty: qty, acc: acc)
       reload && abundled
     end
   end
 
   def remove(item)
-    if kept?
+    if inactive? && kept?
       rbundled = bundleds.retrieve(item) do |bundled|
         bundled.destroy
       end
@@ -32,10 +32,14 @@ class Bundle < ActiveRecord::Base
   end
 
   def fulfill!(order, qty)
-    bundleds.all? { |bundled| bundled.item.fulfill!(order, qty * bundled.qty) }
+    items.all? { |item| item.fulfill!(order, qty * bundleds.retrieve(item).qty) }
   end
 
   def reverse!(order)
-    bundleds.all? { |bundled| bundled.item.reverse!(order) }
+    items.all? { |item| item.reverse!(order) }
+  end
+
+  def activable?
+    super && items.all?(&:active?)
   end
 end

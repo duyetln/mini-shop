@@ -1,8 +1,10 @@
-require 'models/shared/item_resource'
+require 'models/shared/deletable'
+require 'models/shared/displayable'
 require 'models/shared/orderable'
 
 class StoreItem < ActiveRecord::Base
-  include ItemResource
+  include Deletable
+  include Displayable
   include Orderable
   include Itemable
 
@@ -18,8 +20,6 @@ class StoreItem < ActiveRecord::Base
   delegate :reverse!, to: :item
   delegate :title, to: :item, allow_nil: true
   delegate :description, to: :item, allow_nil: true
-
-  def available?
-    super && item.available?
-  end
+  delegate :available?, to: :item
+  delegate :active?, to: :item
 end

@@ -21,11 +21,6 @@ describe Currency do
 
   let(:model_args) { [:usd] }
 
-  describe 'factory model' do
-    it('is valid') { expect(model.valid?).to be_true }
-    it('saves successfully') { expect(model.save).to be_true }
-  end
-
   it { should validate_uniqueness_of(:code) }
   it { should ensure_length_of(:code).is_equal_to(3) }
   it { should validate_presence_of(:code) }

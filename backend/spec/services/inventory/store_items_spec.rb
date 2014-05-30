@@ -67,7 +67,7 @@ describe Services::Inventory::StoreItems do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:store_item) { FactoryGirl.create :store_item }
+      let!(:store_item) { FactoryGirl.create :store_item }
       let(:id) { store_item.id }
 
       context 'invalid parameters' do
@@ -92,78 +92,6 @@ describe Services::Inventory::StoreItems do
     end
   end
 
-  describe 'put /store_items/:id/activate' do
-    let(:method) { :put }
-    let(:path) { "/store_items/#{id}/activate" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      let(:store_item) { FactoryGirl.create :store_item }
-      let(:id) { store_item.id }
-
-      context 'activated store item' do
-        before :each do
-          expect(store_item).to be_active
-        end
-
-        include_examples 'not found'
-
-        it 'does not update the store item' do
-          expect { send_request }.to_not change { store_item.reload.attributes }
-        end
-      end
-
-      context 'unactivated store item' do
-        before :each do
-          store_item.deactivate!
-        end
-
-        it 'activates the store item' do
-          expect { send_request }.to change { store_item.reload.active? }.to(true)
-          expect_status(200)
-          expect_response(StoreItemSerializer.new(store_item).to_json)
-        end
-      end
-    end
-  end
-
-  describe 'put /store_items/:id/deactivate' do
-    let(:method) { :put }
-    let(:path) { "/store_items/#{id}/deactivate" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      let(:store_item) { FactoryGirl.create :store_item }
-      let(:id) { store_item.id }
-
-      context 'activated store item' do
-        before :each do
-          expect(store_item).to be_active
-        end
-
-        it 'activates the store item' do
-          expect { send_request }.to change { store_item.reload.active? }.to(false)
-          expect_status(200)
-          expect_response(StoreItemSerializer.new(store_item).to_json)
-        end
-      end
-
-      context 'unactivated store item' do
-        before :each do
-          store_item.deactivate!
-        end
-
-        include_examples 'not found'
-
-        it 'does not update the store item' do
-          expect { send_request }.to_not change { store_item.reload.attributes }
-        end
-      end
-    end
-  end
-
   describe 'delete /store_items/:id' do
     let(:method) { :delete }
     let(:path) { "/store_items/#{id}" }
@@ -171,7 +99,7 @@ describe Services::Inventory::StoreItems do
     include_examples 'invalid id'
 
     context 'valid id' do
-      let(:store_item) { FactoryGirl.create :store_item }
+      let!(:store_item) { FactoryGirl.create :store_item }
       let(:id) { store_item.id }
 
       context 'deleted store item' do

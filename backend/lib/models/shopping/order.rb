@@ -36,14 +36,16 @@ class Order < ActiveRecord::Base
   delegate :paid?,            to: :purchase, prefix: true
   delegate :payment,          to: :purchase, prefix: true
 
-  def delete!
-    if purchase_pending?
-      super
-    end
+  def deletable?
+    purchase_pending? && super
+  end
+
+  def fulfillable?
+    purchase_committed? && unmarked?
   end
 
   def fulfill!
-    if purchase_committed? && unmarked?
+    if fulfillable?
       begin
         self.class.transaction do
           unless  item.fulfill!(self, qty) &&
@@ -61,8 +63,12 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def reversible?
+    purchase_committed? && fulfilled?
+  end
+
   def reverse!
-    if purchase_committed? && fulfilled?
+    if reversible?
       begin
         self.class.transaction do
           unless  item.reverse!(self) &&
