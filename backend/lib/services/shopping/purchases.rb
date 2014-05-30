@@ -49,6 +49,7 @@ module Services
           purchase = current_purchase.first!
           purchase.add_or_update(
             order_params[:item_type].classify.constantize.find(order_params[:item_id]),
+            BigDecimal.new(order_params[:amount]),
             Currency.find(order_params[:currency_id]),
             order_params[:qty].to_i
           )

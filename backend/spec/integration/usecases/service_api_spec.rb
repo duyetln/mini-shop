@@ -322,8 +322,9 @@ describe 'service api' do
       expect do
         post "/users/#{user.id}/purchases/current/orders",
              order: {
-               item_type: psi.class.name,
-               item_id: psi.id,
+               item_type: psi.item.class.name,
+               item_id: psi.item.id,
+               amount: psi.amount(usd) * 1,
                currency_id: usd.id,
                qty: 1
              }
@@ -336,8 +337,9 @@ describe 'service api' do
       expect do
         post "/users/#{user.id}/purchases/current/orders",
              order: {
-               item_type: dsi.class.name,
-               item_id: dsi.id,
+               item_type: dsi.item.class.name,
+               item_id: dsi.item.id,
+               amount: dsi.amount(usd) * 1,
                currency_id: usd.id,
                qty: 1
              }
@@ -350,8 +352,9 @@ describe 'service api' do
       expect do
         post "/users/#{user.id}/purchases/current/orders",
              order: {
-               item_type: bsi.class.name,
-               item_id: bsi.id,
+               item_type: bsi.item.class.name,
+               item_id: bsi.item.id,
+               amount: bsi.amount(usd) * 1,
                currency_id: usd.id,
                qty: 1
              }

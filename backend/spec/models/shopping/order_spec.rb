@@ -22,9 +22,15 @@ describe Order do
 
   it { should validate_presence_of(:purchase) }
   it { should validate_presence_of(:currency) }
-  it { should validate_uniqueness_of(:uuid) }
+  it { should validate_presence_of(:amount) }
 
-  it { should ensure_inclusion_of(:item_type).in_array(%w{ StoreItem }) }
+  it { should ensure_inclusion_of(:item_type).in_array(%w{ Bundle DigitalItem PhysicalItem }) }
+
+  context 'uniqueness validation' do
+    let(:subject) { model.save!; model }
+
+    it { should validate_uniqueness_of(:uuid) }
+  end
 
   describe '#deletable?' do
     it 'equals #purchase_pending? and #kept?' do
@@ -173,51 +179,70 @@ describe Order do
     end
   end
 
-  describe '#amount!' do
+  describe '#update_amount_and_tax' do
+    shared_examples 'sets tax and tax rate' do
+      it 'sets tax and tax rate' do
+        model.currency = new_currency
+        model.save!
+        expect(model['tax']).to be_present
+        expect(model['tax_rate']).to be_present
+      end
+    end
+
     before :each do
-      model.amount!(currency)
+      expect(model).to_not be_persisted
+      expect(model['tax_rate']).to be_nil
+      expect(model['tax']).to be_nil
     end
 
-    it 'updates the currency' do
-      expect(model.currency).to eq(currency)
+    context 'new' do
+      let(:new_currency) { model.currency }
+      it 'does not change amount' do
+         model.currency = new_currency
+         expect { model.save! }.to_not change { model['amount'] }
+      end
+
+      include_examples 'sets tax and tax rate'
     end
 
-    it 'updates the amount' do
-      expect(model['amount']).to eq(model.item.amount(currency) * model.qty)
-    end
-  end
+    context 'persisted' do
+      before :each do
+        model.save!
+      end
 
-  describe 'tax!' do
-    before :each do
-      model.amount!(currency)
-      model.tax!
-    end
+      context 'currency id changed' do
+        let(:new_currency) { FactoryGirl.build :eur }
 
-    it 'sets the tax rate' do
-      expect(model.tax_rate).to be_present
-    end
+        before :each do
+          expect(new_currency).to_not eq(model.currency)
+        end
 
-    it 'sets the tax amount' do
-      expect(model['tax']).to eq(model['amount'] * model.tax_rate)
-    end
-  end
+        it 'updates amount' do
+          old_currency = model.currency
+          old_amount = model['amount']
 
-  describe '#amount' do
-    it 'multiplies translated amount with #qty' do
-      model.amount!(currency)
-      expect(model.amount(currency)).to eq(
-        Currency.exchange(model['amount'], model.currency, currency)
-      )
-    end
-  end
+          model.currency = new_currency
+          expect { model.save! }.to change { model['amount'] }.to(
+            Currency.exchange(old_amount, old_currency, new_currency)
+          )
+        end
 
-  describe '#tax' do
-    it 'multiplies translated tax with #tax_rate' do
-      model.amount!(currency)
-      model.tax!
-      expect(model.tax(currency)).to eq(
-        Currency.exchange(model['tax'], model.currency, currency)
-      )
+        include_examples'sets tax and tax rate'
+      end
+
+      context 'currency id unchanged' do
+        let(:new_currency) { model.currency }
+
+        it 'does not update amount' do
+          old_currency = model.currency
+          old_amount = model['amount']
+
+          model.currency = new_currency
+          expect { model.save! }.to_not change { model['amount'] }
+        end
+
+        include_examples 'sets tax and tax rate'
+      end
     end
   end
 
@@ -277,14 +302,6 @@ describe Order do
     it 'does not create a new refund' do
       model.send(:make_refund!)
       expect(model.refund).to eq(model.send(:make_refund!))
-    end
-  end
-
-  describe '#total' do
-    it 'sums #amount and #tax' do
-      model.amount!(currency)
-      model.tax!
-      expect(model.total).to eq(model.amount + model.tax)
     end
   end
 

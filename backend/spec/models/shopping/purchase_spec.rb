@@ -49,8 +49,8 @@ describe Purchase do
 
   describe '#normalize!' do
     it 'sets the order currency to payment method currency' do
-      expect(order).to receive(:amount!).with(model.payment_method_currency)
-      expect(order).to receive(:tax!)
+      expect(order).to receive(:currency=).with(model.payment_method.currency)
+      expect(order).to receive(:save!)
       model.normalize!
     end
   end
@@ -82,12 +82,13 @@ describe Purchase do
       end
 
       it 'adds or updates order' do
-        model.add_or_update(item, currency, qty)
+        model.add_or_update(item, amount, currency, qty)
       end
 
       it 'updates order amount and currency' do
-        expect(order).to receive(:amount!).with(currency)
-        model.add_or_update(item, currency, qty)
+        expect(order).to receive(:amount=).with(amount)
+        expect(order).to receive(:currency=).with(currency)
+        model.add_or_update(item, amount, currency, qty)
       end
     end
 
@@ -96,7 +97,7 @@ describe Purchase do
         model.commit!
         expect(orders).to_not receive(:add_or_update)
         expect(model).to_not receive(:reload)
-        model.add_or_update(item, currency, qty)
+        model.add_or_update(item, amount, currency, qty)
       end
     end
   end
@@ -130,7 +131,7 @@ describe Purchase do
   describe '#amount' do
     it 'sums order amount' do
       total_amount = model.orders.reduce(BigDecimal('0.0')) do |a, e|
-        a + e.amount(currency)
+        a + Currency.exchange(e.amount, e.currency, currency)
       end
       expect(model.amount(currency)).to eq(total_amount)
     end
@@ -139,7 +140,7 @@ describe Purchase do
   describe '#tax' do
     it 'sums order tax' do
       total_tax = model.orders.reduce(BigDecimal('0.0')) do |a, e|
-        a + e.tax(currency)
+        a + Currency.exchange(e.tax, e.currency, currency)
       end
       expect(model.tax(currency)).to eq(total_tax)
     end
@@ -148,7 +149,7 @@ describe Purchase do
   describe '#total' do
     it 'sums order total' do
       total = model.orders.reduce(BigDecimal('0.0')) do |a, e|
-        a + e.total(currency)
+        a + Currency.exchange(e.total, e.currency, currency)
       end
       expect(model.total(currency)).to eq(total)
     end

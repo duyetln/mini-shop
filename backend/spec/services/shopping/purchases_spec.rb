@@ -4,7 +4,7 @@ require 'spec/services/shared/errors'
 describe Services::Shopping::Purchases do
   let(:user) { FactoryGirl.create(:user).reload }
   let(:purchase) { Purchase.current(user).first! }
-  let(:item) { FactoryGirl.create :store_item, :physical_item }
+  let(:item) { FactoryGirl.create [:bundle, :digital_item, :physical_item].sample }
   let(:qty) { 2 }
   let(:id) { user.id }
 
@@ -206,6 +206,7 @@ describe Services::Shopping::Purchases do
             order: {
               item_type: item_type,
               item_id: item_id,
+              amount: amount,
               currency_id: currency_id,
               qty: qty
             }
@@ -241,6 +242,7 @@ describe Services::Shopping::Purchases do
             send_request
             order = purchase.orders.last
             expect(order.item).to eq(item)
+            expect(order.amount).to eq(amount)
             expect(order.currency).to eq(currency)
             expect(order.qty).to eq(qty)
           end
@@ -271,12 +273,11 @@ describe Services::Shopping::Purchases do
         end
 
         context 'valid order id' do
-          let(:item) { FactoryGirl.create :store_item }
           let(:order) { purchase.orders.last }
           let(:order_id) { order.id }
 
           before :each do
-            purchase.add_or_update(item, currency, qty)
+            purchase.add_or_update(item, amount, currency, qty)
           end
 
           it 'removes the order' do
@@ -302,7 +303,7 @@ describe Services::Shopping::Purchases do
 
       context 'existing current purchase' do
         before :each do
-          FactoryGirl.create(:purchase, user: user).add_or_update(item, currency, qty)
+          FactoryGirl.create(:purchase, user: user).add_or_update(item, amount, currency, qty)
         end
 
         it 'commits and fulfills the purchase' do
@@ -357,7 +358,7 @@ describe Services::Shopping::Purchases do
 
       context 'valid purchase id' do
         before :each do
-          FactoryGirl.create(:purchase, user: user).add_or_update(item, currency, qty)
+          FactoryGirl.create(:purchase, user: user).add_or_update(item, amount, currency, qty)
         end
 
         let(:purchase_id) { purchase.id }
@@ -400,7 +401,7 @@ describe Services::Shopping::Purchases do
 
         context 'valid purchase id' do
           before :each do
-            FactoryGirl.create(:purchase, user: user).add_or_update(item, currency, qty)
+            FactoryGirl.create(:purchase, user: user).add_or_update(item, amount, currency, qty)
           end
 
           let(:purchase_id) { purchase.id }

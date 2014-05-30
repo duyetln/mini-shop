@@ -28,10 +28,12 @@ class Purchase < ActiveRecord::Base
 
   after_save :reload
 
-  def add_or_update(item, currency, qty = 1)
+  def add_or_update(item, amount, currency, qty = 1)
     if pending?
       aorder = orders.add_or_update(item, qty: qty, acc: false) do |order|
-        order.amount!(currency)
+        order.amount = amount
+        order.currency = currency
+        order.save!
       end
       reload && aorder
     end
@@ -49,7 +51,7 @@ class Purchase < ActiveRecord::Base
   [:amount, :tax, :total].each do |method|
     define_method method do |currency = payment_method_currency|
       orders.reduce(BigDecimal('0.0')) do |a, e|
-        a + e.send(method, currency)
+        a + Currency.exchange(e.send(method), e.currency, currency)
       end
     end
   end
@@ -107,8 +109,8 @@ class Purchase < ActiveRecord::Base
   def normalize!
     if payment_method.present?
       orders.each do |order|
-        order.amount!(payment_method_currency)
-        order.tax!
+        order.currency = payment_method_currency
+        order.save!
       end
     end
   end

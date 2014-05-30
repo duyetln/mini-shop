@@ -18,14 +18,16 @@ class Order < ActiveRecord::Base
 
   validates :purchase, presence: true
   validates :currency, presence: true
+  validates :amount,   presence: true
 
   validates :purchase_id, uniqueness: { scope: [:item_type, :item_id, :deleted] }, unless: :deleted?
   validates :uuid, uniqueness: true
-  validates :item_type, inclusion: { in: %w{ StoreItem } }
+  validates :item_type, inclusion: { in: %w{ Bundle DigitalItem PhysicalItem } }
 
   validate  :pending_purchase
 
   after_initialize :initialize_values
+  before_save :update_amount_and_tax
 
   delegate :user,             to: :purchase
   delegate :payment_method,   to: :purchase
@@ -86,31 +88,25 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def amount!(input_currency = currency)
-    self.currency = input_currency
-    self.amount = item.amount(input_currency) * qty
-    save!
-  end
-
-  def tax!
-    self.tax_rate ||= (5 + rand(15)) / 100.0
-    self.tax = amount * tax_rate
-    save!
-  end
-
-  def amount(input_currency = currency)
-    Currency.exchange(super() || 0, currency, input_currency)
-  end
-
-  def tax(input_currency = currency)
-    Currency.exchange(super() || 0, currency, input_currency)
-  end
-
-  def total(input_currency = currency)
-    amount(input_currency) + tax(input_currency)
+  def total
+    if amount && tax
+      amount + tax
+    end
   end
 
   protected
+
+  def update_amount_and_tax
+    if currency_id_changed? && currency_id_was.present?
+      self.amount = Currency.exchange(
+        amount,
+        Currency.find(currency_id_was),
+        Currency.find(currency_id)
+      )
+    end
+    self.tax_rate ||= (5 + rand(15)) / 100.0
+    self.tax = amount * tax_rate
+  end
 
   def pending_purchase
     if changed? && purchase.present? && purchase_committed?
