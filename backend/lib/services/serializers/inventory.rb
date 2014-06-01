@@ -1,4 +1,5 @@
 require 'services/serializers/base'
+require 'services/serializers/shared'
 
 class CurrencySerializer < ResourceSerializer
   attributes :code
@@ -6,12 +7,12 @@ end
 
 class PricepointPriceSerializer < ResourceSerializer
   attributes :amount, :pricepoint_id, :currency_id
-  has_one :currency, serializer: CurrencySerializer
+  has_one :currency, serializer: 'CurrencySerializer'
 end
 
 class PricepointSerializer < ResourceSerializer
   attributes :name
-  has_many :pricepoint_prices, serializer: PricepointPriceSerializer
+  has_many :pricepoint_prices, serializer: 'PricepointPriceSerializer'
 end
 
 class DiscountSerializer < ResourceSerializer
@@ -36,7 +37,7 @@ end
 
 class PhysicalItemSerializer < ResourceSerializer
   include ItemResourceSerializer
-  attributes :qty
+  include QuantifiableSerializer
 end
 
 class DigitalItemSerializer < ResourceSerializer
@@ -45,14 +46,19 @@ end
 
 class BundleSerializer < ResourceSerializer
   include ItemResourceSerializer
-  has_many :items, serializer: DynamicSerializer
+  has_many :items, serializer: 'DynamicSerializer'
 end
 
 class StoreItemSerializer < ResourceSerializer
-  include ItemResourceSerializer
-  attributes :name, :item_type, :item_id, :price_id
-  has_one :price, serializer: PriceSerializer
-  has_one :item, serializer: DynamicSerializer
+  include DeletableSerializer
+  include DisplayableSerializer
+  include ItemableSerializer
+  include PriceableSerializer
+  attributes :name, :active, :available
+
+  def available
+    object.available?
+  end
 
   def active
     object.active?
