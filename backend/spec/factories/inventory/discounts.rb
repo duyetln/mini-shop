@@ -1,7 +1,11 @@
 FactoryGirl.define do
-  factory :discount, class: Discount do
+  factory :discount do
     name {  Faker::Lorem.characters(20) }
     rate 0.0
+
+    trait :full do
+      rate 1.0
+    end
 
     trait :half do
       rate 0.5
