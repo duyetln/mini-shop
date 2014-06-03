@@ -1,7 +1,6 @@
 require 'spec/models/shared/item_combinable'
 
 shared_examples 'fulfillment model' do
-
   it_behaves_like 'item combinable model'
 
   it { should have_readonly_attribute(:order_id) }

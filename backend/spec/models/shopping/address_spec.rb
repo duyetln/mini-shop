@@ -1,7 +1,6 @@
 require 'models/spec_setup'
 
 describe Address do
-
   it { should have_readonly_attribute(:user_id) }
   it { should have_readonly_attribute(:line1) }
   it { should have_readonly_attribute(:line2) }

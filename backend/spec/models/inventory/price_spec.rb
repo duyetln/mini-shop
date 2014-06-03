@@ -1,7 +1,6 @@
 require 'models/spec_setup'
 
 describe Price do
-
   it { should belong_to(:pricepoint) }
   it { should belong_to(:discount) }
 

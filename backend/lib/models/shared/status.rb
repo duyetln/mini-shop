@@ -10,7 +10,6 @@ class Status < ActiveRecord::Base
     extend ActiveSupport::Concern
 
     included do
-
       has_many :statuses, as: :source, class_name: 'Status'
 
       self::STATUS.each do |key, value|

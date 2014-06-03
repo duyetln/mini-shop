@@ -1,7 +1,6 @@
 require 'models/spec_setup'
 
 describe User do
-
   it { should have_many(:purchases) }
   it { should have_many(:addresses) }
   it { should have_many(:payment_methods) }

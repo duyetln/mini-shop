@@ -14,8 +14,8 @@ describe 'service api' do
   def ppoint; Pricepoint.find ids[:ppoint]; end
   def discount; Discount.find ids[:discount]; end
   def price; Price.find ids[:price]; end
-  def physical_item; PhysicalItem.find ids[:physical_item]; end
-  def digital_item; DigitalItem.find ids[:digital_item]; end
+  def pitem; PhysicalItem.find ids[:pitem]; end
+  def ditem; DigitalItem.find ids[:ditem]; end
   def bundle; Bundle.find ids[:bundle]; end
   def psi; StoreItem.find ids[:psi]; end
   def dsi; StoreItem.find ids[:dsi]; end
@@ -172,7 +172,7 @@ describe 'service api' do
              }
       end.to change { PhysicalItem.count }.by(1)
       expect_status(200)
-      ids[:physical_item] = parsed_response[:id]
+      ids[:pitem] = parsed_response[:id]
     end
   end
 
@@ -185,7 +185,7 @@ describe 'service api' do
              }
       end.to change { DigitalItem.count }.by(1)
       expect_status(200)
-      ids[:digital_item] = parsed_response[:id]
+      ids[:ditem] = parsed_response[:id]
     end
   end
 
@@ -205,8 +205,8 @@ describe 'service api' do
       expect do
         post "/bundles/#{bundle.id}/bundleds",
              bundled: {
-               item_type: physical_item.class.name,
-               item_id: physical_item.id,
+               item_type: pitem.class.name,
+               item_id: pitem.id,
                qty: qty
              }
       end.to change { bundle.bundleds.count }.by(1)
@@ -218,8 +218,8 @@ describe 'service api' do
       expect do
         post "/bundles/#{bundle.id}/bundleds",
              bundled: {
-               item_type: digital_item.class.name,
-               item_id: digital_item.id,
+               item_type: ditem.class.name,
+               item_id: ditem.id,
                qty: qty
              }
       end.to change { bundle.bundleds.count }.by(1)
@@ -234,8 +234,8 @@ describe 'service api' do
         post '/store_items',
              store_item: {
                name: rand_str,
-               item_type: physical_item.class.name,
-               item_id: physical_item.id,
+               item_type: pitem.class.name,
+               item_id: pitem.id,
                price_id: price.id
              }
       end.to change { StoreItem.count }.by(1)
@@ -248,8 +248,8 @@ describe 'service api' do
         post '/store_items',
              store_item: {
                name: rand_str,
-               item_type: digital_item.class.name,
-               item_id: digital_item.id,
+               item_type: ditem.class.name,
+               item_id: ditem.id,
                price_id: price.id
              }
       end.to change { StoreItem.count }.by(1)

@@ -2,7 +2,6 @@ module Priceable
   extend ActiveSupport::Concern
 
   included do
-
     belongs_to :price
 
     validates :price, presence: true

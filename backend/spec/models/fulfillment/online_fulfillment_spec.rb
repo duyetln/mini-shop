@@ -6,7 +6,6 @@ describe OnlineFulfillment do
 end
 
 describe OnlineFulfillment do
-
   it { should ensure_inclusion_of(:item_type).in_array(%w{ DigitalItem }) }
 
   describe '#process_fulfillment!' do

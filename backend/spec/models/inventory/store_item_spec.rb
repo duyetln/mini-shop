@@ -15,7 +15,6 @@ describe StoreItem do
 end
 
 describe StoreItem do
-
   it { should belong_to(:item) }
 
   it { should allow_mass_assignment_of(:item_type) }

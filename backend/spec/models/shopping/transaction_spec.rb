@@ -7,7 +7,6 @@ describe Transaction do
 end
 
 describe Transaction do
-
   it { should belong_to(:payment_method) }
   it { should belong_to(:billing_address).class_name('Address') }
   it { should belong_to(:user) }
@@ -82,5 +81,4 @@ describe Transaction do
       end
     end
   end
-
 end

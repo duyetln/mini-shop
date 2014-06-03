@@ -6,7 +6,6 @@ describe Shipment do
 end
 
 describe Shipment do
-
   it { should have_readonly_attribute(:user_id) }
   it { should have_readonly_attribute(:order_id) }
   it { should have_readonly_attribute(:shipping_address_id) }

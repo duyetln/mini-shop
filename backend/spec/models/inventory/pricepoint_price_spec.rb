@@ -1,7 +1,6 @@
 require 'models/spec_setup'
 
 describe PricepointPrice do
-
   it { should have_readonly_attribute(:currency_id) }
   it { should have_readonly_attribute(:pricepoint_id) }
 

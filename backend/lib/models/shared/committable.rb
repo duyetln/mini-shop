@@ -2,7 +2,6 @@ module Committable
   extend ActiveSupport::Concern
 
   included do
-
     attr_protected :committed, :committed_at
 
     scope :committed, -> { where(committed: true) }

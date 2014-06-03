@@ -20,7 +20,6 @@ shared_examples 'default item resource #activable?' do
 end
 
 shared_examples 'item resource' do
-
   it_behaves_like 'activable model'
   it_behaves_like 'deletable model'
   it_behaves_like 'displayable model'

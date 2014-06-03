@@ -1,7 +1,6 @@
 require 'models/spec_setup'
 
 describe PaymentMethod do
-
   it { should allow_mass_assignment_of(:user_id) }
   it { should allow_mass_assignment_of(:name) }
   it { should allow_mass_assignment_of(:currency_id) }

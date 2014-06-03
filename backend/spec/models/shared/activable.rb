@@ -7,7 +7,6 @@ shared_examples 'default #activable?' do
 end
 
 shared_examples 'activable model' do
-
   it { should_not allow_mass_assignment_of(:active) }
 
   context 'class' do

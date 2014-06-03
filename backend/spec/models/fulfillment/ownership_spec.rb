@@ -9,7 +9,6 @@ describe Ownership do
 end
 
 describe Ownership do
-
   it { should have_readonly_attribute(:user_id) }
   it { should have_readonly_attribute(:order_id) }
 

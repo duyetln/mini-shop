@@ -1,7 +1,6 @@
 require 'models/spec_setup'
 
 shared_examples 'correct currency converter' do
-
   it 'correctly converts provided amount' do
     expected_amount = (
       BigDecimal.new(amount.to_s) *
@@ -18,7 +17,6 @@ shared_examples 'correct currency converter' do
 end
 
 describe Currency do
-
   let(:model_args) { [:usd] }
 
   it { should validate_uniqueness_of(:code) }

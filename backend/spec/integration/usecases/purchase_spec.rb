@@ -23,8 +23,8 @@ describe 'purchase flow' do
   def user; @user.reload; end
   def usd; @usd.reload; end
   def eur; @eur.reload; end
-  def physical_item; @pitem.reload; end
-  def digital_item; @ditem.reload; end
+  def pitem; @pitem.reload; end
+  def ditem; @ditem.reload; end
   def bundle; @bitem.reload; end
   def psi; @psi.reload; end
   def dsi; @dsi.reload; end
@@ -50,13 +50,13 @@ describe 'purchase flow' do
   end
 
   describe 'physical item' do
-    let(:item) { physical_item }
+    let(:item) { pitem }
 
     include_examples 'item activation'
   end
 
   describe 'digital item' do
-    let(:item) { digital_item }
+    let(:item) { ditem }
 
     include_examples 'item activation'
   end
@@ -65,8 +65,8 @@ describe 'purchase flow' do
     let(:item) { bundle }
 
     it 'adds and updates items' do
-      expect { bundle.add_or_update(physical_item, qty) }.to change { bundle.bundleds.count }.by(1)
-      expect { bundle.add_or_update(digital_item, qty) }.to change { bundle.bundleds.count }.by(1)
+      expect { bundle.add_or_update(pitem, qty) }.to change { bundle.bundleds.count }.by(1)
+      expect { bundle.add_or_update(ditem, qty) }.to change { bundle.bundleds.count }.by(1)
     end
 
     include_examples 'item activation'
@@ -78,7 +78,7 @@ describe 'purchase flow' do
     end
 
     it 'adds and updates orders' do
-      expect { purchase.add_or_update(psi.item, psi.amount(eur) * (physical_item.qty + 1), eur, physical_item.qty + 1) }.to change { purchase.orders.count }.by(1)
+      expect { purchase.add_or_update(psi.item, psi.amount(eur) * (pitem.qty + 1), eur, pitem.qty + 1) }.to change { purchase.orders.count }.by(1)
       expect { purchase.add_or_update(dsi.item, dsi.amount(usd) * qty, usd, qty) }.to change { purchase.orders.count }.by(1)
       expect { purchase.add_or_update(bsi.item, bsi.amount(usd) * qty, usd, qty) }.to change { purchase.orders.count }.by(1)
     end
@@ -110,18 +110,18 @@ describe 'purchase flow' do
     end
 
     describe 'physical item order' do
-      def order; purchase.orders.retrieve(physical_item); end
+      def order; purchase.orders.retrieve(pitem); end
 
       include_examples 'failed order fulfillment'
     end
 
     describe 'digital item order' do
-      def order; purchase.orders.retrieve(digital_item); end
+      def order; purchase.orders.retrieve(ditem); end
 
       include_examples 'successful order fulfillment'
 
       describe 'digital item fulfillment' do
-        def item; digital_item; end
+        def item; ditem; end
         def qty; order.qty; end
         def result_class; Ownership; end
 
@@ -135,7 +135,7 @@ describe 'purchase flow' do
       include_examples 'successful order fulfillment'
 
       describe 'physical item fulfillment' do
-        def item; physical_item; end
+        def item; pitem; end
         def qty; order.qty * bundle.bundleds.retrieve(item).qty; end
         def result_class; Shipment; end
 
@@ -147,7 +147,7 @@ describe 'purchase flow' do
       end
 
       describe 'digital item fulfillment' do
-        def item; digital_item; end
+        def item; ditem; end
         def qty; order.qty * bundle.bundleds.retrieve(item).qty; end
         def result_class; Ownership; end
 
@@ -187,7 +187,7 @@ describe 'purchase flow' do
   end
 
   describe 'digital item order' do
-    def order; purchase.orders.retrieve(digital_item); end
+    def order; purchase.orders.retrieve(ditem); end
 
     it 'can be reversed' do
       expect(purchase.reverse!(order)).to_not be_nil
@@ -198,10 +198,10 @@ describe 'purchase flow' do
 
   describe 'bundle order' do
     def order; purchase.orders.retrieve(bundle); end
-    def qty; order.qty * bundle.bundleds.retrieve(physical_item).qty; end
+    def qty; order.qty * bundle.bundleds.retrieve(pitem).qty; end
 
     it 'can be reversed' do
-      expect { purchase.reverse!(order) }.to change { physical_item.qty }.by(qty)
+      expect { purchase.reverse!(order) }.to change { pitem.qty }.by(qty)
     end
 
     include_examples 'successful order reversal'

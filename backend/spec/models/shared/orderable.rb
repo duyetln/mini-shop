@@ -1,7 +1,6 @@
 require 'spec/models/shared/fulfillable'
 
 shared_examples 'orderable model' do
-
   it_behaves_like 'fulfillable model'
 
   context 'instance' do

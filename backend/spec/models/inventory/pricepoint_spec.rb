@@ -1,7 +1,6 @@
 require 'models/spec_setup'
 
 describe Pricepoint do
-
   let(:model_args) { [:pricepoint, :pricepoint_prices] }
 
   it { should have_many(:pricepoint_prices) }

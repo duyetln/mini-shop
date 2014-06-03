@@ -7,7 +7,6 @@ shared_examples 'default #deletable?' do
 end
 
 shared_examples 'deletable model' do
-
   it { should_not allow_mass_assignment_of(:deleted) }
 
   context 'class' do

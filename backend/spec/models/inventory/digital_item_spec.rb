@@ -8,7 +8,6 @@ describe DigitalItem do
 end
 
 describe DigitalItem do
-
   let :order do
     FactoryGirl.build(
       :order,

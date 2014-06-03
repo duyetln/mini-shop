@@ -7,7 +7,6 @@ describe Purchase do
 end
 
 describe Purchase do
-
   let(:orders) { model.orders }
   let(:order) { orders.sample }
   let(:model_args) { [:purchase, :orders] }

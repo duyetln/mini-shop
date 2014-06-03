@@ -2,7 +2,6 @@ module Activable
   extend ActiveSupport::Concern
 
   included do
-
     attr_protected :active
 
     scope :active,   -> { where(active: true) }

@@ -2,7 +2,6 @@ module Itemable
   extend ActiveSupport::Concern
 
   included do
-
     attr_readonly :item_type, :item_id
 
     belongs_to :item, polymorphic: true

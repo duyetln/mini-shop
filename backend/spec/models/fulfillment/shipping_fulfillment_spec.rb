@@ -6,7 +6,6 @@ describe ShippingFulfillment do
 end
 
 describe ShippingFulfillment do
-
   it { should ensure_inclusion_of(:item_type).in_array(%w{ PhysicalItem }) }
 
   describe '#process_fulfillment!' do

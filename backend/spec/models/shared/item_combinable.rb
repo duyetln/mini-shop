@@ -2,7 +2,6 @@ require 'spec/models/shared/itemable'
 require 'spec/models/shared/quantifiable'
 
 shared_examples 'item combinable model' do
-
   it_behaves_like 'itemable model'
   it_behaves_like 'quantifiable model'
 

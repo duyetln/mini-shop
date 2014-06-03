@@ -2,7 +2,6 @@ module Deletable
   extend ActiveSupport::Concern
 
   included do
-
     attr_protected :deleted
 
     scope :deleted, -> { where(deleted: true) }

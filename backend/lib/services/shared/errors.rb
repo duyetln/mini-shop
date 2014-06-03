@@ -13,7 +13,6 @@ module Services
     class Unavailable < Base; end
 
     included do
-
       {
         BadRequest => 400,
         Unauthorized => 401,

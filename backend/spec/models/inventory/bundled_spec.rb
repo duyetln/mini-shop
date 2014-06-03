@@ -6,7 +6,6 @@ describe Bundled do
 end
 
 describe Bundled do
-
   it { should have_readonly_attribute(:bundle_id) }
 
   it { should belong_to(:bundle) }

@@ -8,7 +8,6 @@ describe Order do
 end
 
 describe Order do
-
   it { should_not allow_mass_assignment_of(:uuid) }
   it { should_not allow_mass_assignment_of(:purchase_id) }
 
@@ -27,7 +26,10 @@ describe Order do
   it { should ensure_inclusion_of(:item_type).in_array(%w{ Bundle DigitalItem PhysicalItem }) }
 
   context 'uniqueness validation' do
-    let(:subject) { model.save!; model }
+    let :subject do
+      model.save!
+      model
+    end
 
     it { should validate_uniqueness_of(:uuid) }
   end
@@ -198,8 +200,8 @@ describe Order do
     context 'new' do
       let(:new_currency) { model.currency }
       it 'does not change amount' do
-         model.currency = new_currency
-         expect { model.save! }.to_not change { model['amount'] }
+        model.currency = new_currency
+        expect { model.save! }.to_not change { model['amount'] }
       end
 
       include_examples 'sets tax and tax rate'

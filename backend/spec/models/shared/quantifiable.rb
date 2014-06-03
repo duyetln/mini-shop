@@ -1,5 +1,4 @@
 shared_examples 'quantifiable model' do
-
   it { should allow_mass_assignment_of(:qty) }
 
   it { should validate_presence_of(:qty) }

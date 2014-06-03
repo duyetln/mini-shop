@@ -1,7 +1,6 @@
 require 'models/spec_setup'
 
 describe Discount do
-
   it { should validate_presence_of(:rate) }
   it { should validate_presence_of(:name) }
 

@@ -6,7 +6,6 @@ describe Bundle do
 end
 
 describe Bundle do
-
   let(:model_args) { [:bundle, :bundleds] }
   let(:bundleds) { model.bundleds }
   let(:bundled) { bundleds.sample }
