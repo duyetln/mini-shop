@@ -7,7 +7,9 @@ module Orderable
   def method_missing(method, *args, &block)
     if [
       :item,
-      :amount
+      :amount,
+      :active?,
+      :available?
     ].include?(method.to_sym)
       fail NotImplementedError, "Method #{method} must be defined in derived class"
     else

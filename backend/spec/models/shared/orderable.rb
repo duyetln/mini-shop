@@ -7,5 +7,7 @@ shared_examples 'orderable model' do
     let(:subject) { described_class.new }
     it { should respond_to(:amount).with(1).argument }
     it { should respond_to(:item) }
+    it { should respond_to(:active?) }
+    it { should respond_to(:available?) }
   end
 end
