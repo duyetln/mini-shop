@@ -2,13 +2,20 @@ require 'models/shared/displayable'
 require 'models/shared/orderable'
 
 class Coupon < ActiveRecord::Base
+  include Displayable
+  include Orderable
+
   belongs_to :batch
   belongs_to :used_by, class_name: 'User', foreign_key: :used_by
 
   validates :batch, presence: true
-  delegate :promotion, to: :batch, allow_nil: true
-  delegate :amount, to: :promotion, allow_nil: true
-  delegate :available?, to: :promotion, allow_nil: true
+  validates :code, uniqueness: true
+  delegate :promotion,   to: :batch,     allow_nil: true
+  delegate :item,        to: :promotion, allow_nil: true
+  delegate :title,       to: :promotion, allow_nil: true
+  delegate :description, to: :promotion, allow_nil: true
+  delegate :amount,      to: :promotion, allow_nil: true
+  delegate :available?,  to: :promotion, allow_nil: true
 
   after_initialize :set_values
 
@@ -29,17 +36,25 @@ class Coupon < ActiveRecord::Base
   end
 
   def fulfill!(order, qty)
-    if active?
-      self.used = true
-      self.used_by = order.user
-      self.used_at = DateTime.now
-      save!
+    unless used?
+      used_by!(order.user)
       promotion.fulfill!(order, qty)
     end
   end
 
   def reverse!(order)
-    promotion.reverse!(order)
+    if used?
+      promotion.reverse!(order)
+    end
+  end
+
+  def used_by!(user)
+    unless used?
+      self.used = true
+      self.used_by = user
+      self.used_at = DateTime.now
+      save!
+    end
   end
 
   protected

@@ -309,7 +309,7 @@ describe 'inventory administration' do
 
     it 'is not deletable' do
       expect(pitem).to_not be_deletable
-    end 
+    end
   end
 
   describe 'bundle' do
@@ -345,7 +345,7 @@ describe 'inventory administration' do
 
     it 'is not deletable' do
       expect(ditem).to_not be_deletable
-    end 
+    end
   end
 
   describe 'bundle' do

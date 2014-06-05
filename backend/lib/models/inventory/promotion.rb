@@ -29,20 +29,22 @@ class Promotion < ActiveRecord::Base
     item.deleted? && super
   end
 
-  def create_codes(qty, batch_size, batch_name = nil)
+  def create_batches(qty, batch_size, batch_name = nil)
     batches = []
     batch_num = qty / batch_size
-    remainder = qty - batch_size * batch_num
+    remainder = qty % batch_size
     batch_num.times do |index|
       batches << create_batch(
         batch_size,
         batch_name || "Auto generated batch #{index + 1}"
       )
     end
-    batches << create_batch(
-      remainder,
-      batch_name || "Auto generated batch #{batch_num + 1}"
-    )
+    if remainder > 0
+      batches << create_batch(
+        remainder,
+        batch_name || "Auto generated batch #{batch_num + 1}"
+      )
+    end
     batches
   end
 
