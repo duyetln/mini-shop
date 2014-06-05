@@ -174,6 +174,12 @@ describe 'service api' do
       expect_status(200)
       ids[:pitem] = parsed_response[:id]
     end
+
+    it 'activates physical item' do
+      expect do
+        put "/physical_items/#{pitem.id}/activate"
+      end.to change { pitem.active? }.to(true)
+    end
   end
 
   describe Services::Inventory::DigitalItems do
@@ -186,6 +192,12 @@ describe 'service api' do
       end.to change { DigitalItem.count }.by(1)
       expect_status(200)
       ids[:ditem] = parsed_response[:id]
+    end
+
+    it 'activates digital item' do
+      expect do
+        put "/digital_items/#{ditem.id}/activate"
+      end.to change { ditem.active? }.to(true)
     end
   end
 
@@ -225,6 +237,12 @@ describe 'service api' do
       end.to change { bundle.bundleds.count }.by(1)
       expect_status(200)
       ids[:bundle] = parsed_response[:id]
+    end
+
+    it 'activates bundle' do
+      expect do
+        put "/bundles/#{bundle.id}/activate"
+      end.to change { bundle.active? }.to(true)
     end
   end
 
@@ -367,6 +385,7 @@ describe 'service api' do
       expect do
         put "/users/#{user.id}/purchases/current/submit"
       end.to change { purchase.orders.all?(&:fulfilled?) }.from(false).to(true)
+      expect(purchase.orders.any?(&:unmarked?)).to be_false
       expect(purchase).to be_committed
       expect_status(200)
       ids[:purchase] = parsed_response[:id]
@@ -376,6 +395,7 @@ describe 'service api' do
       expect do
         put "/users/#{user.id}/purchases/#{purchase.id}/return"
       end.to change { purchase.orders.all?(&:reversed?) }.from(false).to(true)
+      expect(purchase.orders.any?(&:unmarked?)).to be_false
       expect(purchase).to be_committed
       expect_status(200)
       ids[:purchase] = parsed_response[:id]

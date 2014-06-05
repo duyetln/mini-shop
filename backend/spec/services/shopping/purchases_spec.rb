@@ -4,9 +4,32 @@ require 'spec/services/shared/errors'
 describe Services::Shopping::Purchases do
   let(:user) { FactoryGirl.create(:user).reload }
   let(:purchase) { Purchase.current(user).first! }
-  let(:item) { FactoryGirl.create [:bundle, :digital_item, :physical_item].sample }
   let(:qty) { 2 }
   let(:id) { user.id }
+  let! :item do
+    FactoryGirl.create(
+      *[
+        [
+          [:bundle, :bundleds],
+          :digital_item,
+          :physical_item
+        ].sample
+      ].flatten
+    )
+  end
+
+  before :each do
+    PhysicalItem.all.each do |i|
+      expect { i.activate! }.to change { i.active? }.to(true)
+    end
+    DigitalItem.all.each do |i|
+      expect { i.activate! }.to change { i.active? }.to(true)
+    end
+    Bundle.all.each do |i|
+      expect { i.activate! }.to change { i.active? }.to(true)
+    end
+    item.reload
+  end
 
   describe 'get /users/:id/purchases' do
     let(:method) { :get }
@@ -309,6 +332,7 @@ describe Services::Shopping::Purchases do
         it 'commits and fulfills the purchase' do
           expect { send_request }.to change { purchase.reload.committed? }.to(true)
           expect(purchase.orders.all?(&:fulfilled?)).to be_true
+          expect(purchase.orders.any?(&:unmarked?)).to be_false
           expect_status(200)
           expect_response(PurchaseSerializer.new(purchase).to_json)
         end
@@ -379,6 +403,7 @@ describe Services::Shopping::Purchases do
 
           it 'reverses the purchase' do
             expect { send_request }.to change { purchase.reload.orders.all?(&:reversed?) }.to(true)
+            expect(purchase.orders.any?(&:unmarked?)).to be_false
             expect_status(200)
             expect_response(PurchaseSerializer.new(purchase).to_json)
           end

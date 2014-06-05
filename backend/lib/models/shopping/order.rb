@@ -43,7 +43,7 @@ class Order < ActiveRecord::Base
   end
 
   def fulfillable?
-    purchase_committed? && unmarked?
+    purchase_committed? && unmarked? && item.active? && item.available?
   end
 
   def fulfill!
@@ -66,7 +66,7 @@ class Order < ActiveRecord::Base
   end
 
   def reversible?
-    purchase_committed? && fulfilled?
+    purchase_committed? && fulfilled? && item.active?
   end
 
   def reverse!

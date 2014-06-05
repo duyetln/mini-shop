@@ -41,14 +41,14 @@ describe Order do
   end
 
   describe '#fulfillable?' do
-    it 'equals #purchase_committed and #unmarked?' do
-      expect(model.fulfillable?).to eq(model.purchase_committed? && model.unmarked?)
+    it 'equals #purchase_committed and #unmarked? and active item and available item' do
+      expect(model.fulfillable?).to eq(model.purchase_committed? && model.unmarked? && model.item.active? && item.available?)
     end
   end
 
   describe '#reversible?' do
-    it 'equals #purchase_committed and #fulfilled?' do
-      expect(model.fulfillable?).to eq(model.purchase_committed? && model.fulfilled?)
+    it 'equals #purchase_committed and #fulfilled? and active item' do
+      expect(model.fulfillable?).to eq(model.purchase_committed? && model.fulfilled? && model.item.active?)
     end
   end
 
