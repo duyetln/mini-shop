@@ -23,7 +23,7 @@ describe Order do
   it { should validate_presence_of(:currency) }
   it { should validate_presence_of(:amount) }
 
-  it { should ensure_inclusion_of(:item_type).in_array(%w{ Bundle DigitalItem PhysicalItem }) }
+  it { should ensure_inclusion_of(:item_type).in_array(%w{ Coupon Bundle DigitalItem PhysicalItem }) }
 
   context 'uniqueness validation' do
     let :subject do
