@@ -1,56 +1,79 @@
-art_book    = PhysicalItem.where(title: 'StarCraft 2 Art Book').first_or_create!(qty: 25 + rand(15))
-mousepad    = PhysicalItem.where(title: 'Zerg Rush Mousepad').first_or_create!(qty: 25 + rand(15))
-dvd_set     = PhysicalItem.where(title: 'Behind the Scenes DVD Set').first_or_create!(qty: 25 + rand(15))
-soundtrack  = PhysicalItem.where(title: 'StarCraft 2 Soundtrack').first_or_create!(qty: 25 + rand(15))
-sc2_retail  = PhysicalItem.where(title: 'StarCraft 2 Retail Edition').first_or_create!(qty: 25 + rand(15))
+art_book    = PhysicalItem.create!(title: 'StarCraft 2 Art Book', qty: 25 + rand(15))
+mousepad    = PhysicalItem.create!(title: 'Zerg Rush Mousepad', qty: 25 + rand(15))
+dvd_set     = PhysicalItem.create!(title: 'Behind the Scenes DVD Set', qty: 25 + rand(15))
+soundtrack  = PhysicalItem.create!(title: 'StarCraft 2 Soundtrack', qty: 25 + rand(15))
+sc2_retail  = PhysicalItem.create!(title: 'StarCraft 2 Retail Edition', qty: 25 + rand(15))
 
-skin        = DigitalItem.where(title: 'Skin, Portraits, and Decals').first_or_create!
-pet         = DigitalItem.where(title: 'World of Warcraft Banneling Pet').first_or_create!
-wings       = DigitalItem.where(title: 'Diablo 3 Blade Wings and Banner Sigil').first_or_create!
-sc2_digital = DigitalItem.where(title: 'StarCraft 2 Digital Edition').first_or_create!
+skin        = DigitalItem.create!(title: 'Skin, Portraits, and Decals')
+pet         = DigitalItem.create!(title: 'World of Warcraft Banneling Pet')
+wings       = DigitalItem.create!(title: 'Diablo 3 Blade Wings and Banner Sigil')
+sc2_digital = DigitalItem.create!(title: 'StarCraft 2 Digital Edition')
 
-deluxe_ed    = Bundle.where(title: 'StarCraft 2 Deluxe Edition').first_or_create!
-collector_ed = Bundle.where(title: "StarCraft 2 Collector's Edition").first_or_create!
+deluxe_ed    = Bundle.create!(title: 'StarCraft 2 Deluxe Edition')
+collector_ed = Bundle.create!(title: 'StarCraft 2 Collector\'s Edition')
 
 deluxe_ed.bundleds.destroy_all
 [sc2_digital, skin, pet, wings].each { |asset| deluxe_ed.add_or_update(asset) }
 collector_ed.bundleds.destroy_all
 [sc2_retail, art_book, mousepad, dvd_set, soundtrack, skin, pet, wings].each { |asset| collector_ed.add_or_update(asset) }
 
-usd = Currency.where(code: 'USD').first_or_create!
-eur = Currency.where(code: 'EUR').first_or_create!
-krw = Currency.where(code: 'KRW').first_or_create!
-gbp = Currency.where(code: 'GBP').first_or_create!
+usd = Currency.create!(code: 'USD')
+eur = Currency.create!(code: 'EUR')
+krw = Currency.create!(code: 'KRW')
+gbp = Currency.create!(code: 'GBP')
 
-no_discount =
-Discount.where(name: 'No discount', rate: 0.0).first_or_create!
-Discount.where(name: 'Black Friday Discount', rate: 0.75).first_or_create!(start_at: DateTime.new(2013, 11, 25), end_at: DateTime.new(2013, 12, 9))
-Discount.where(name: 'Christmas Discount', rate: 0.5).first_or_create!(start_at: DateTime.new(2013, 12, 23), end_at: DateTime.new(2013, 12, 30))
+half_discount = Discount.create!(name: 'Half Discount', rate: 0.5)
+no_discount   = Discount.create!(name: 'No Discount', rate: 0.0)
+Discount.create!(name: 'Full Discount', rate: 1.0)
+Discount.create!(name: 'Black Friday Discount', rate: 0.75, start_at: DateTime.new(2013, 11, 25), end_at: DateTime.new(2013, 12, 9))
+Discount.create!(name: 'Christmas Discount', rate: 0.5, start_at: DateTime.new(2013, 12, 23), end_at: DateTime.new(2013, 12, 30))
 
-sc2_standard_pp = Pricepoint.where(name: 'SC2 Standard Pricepoint').first_or_create!
-deluxe_ed_pp    = Pricepoint.where(name: 'SC2 Deluxe Pricepoint').first_or_create!
-collector_ed_pp = Pricepoint.where(name: 'SC2 Collector Pricepoint').first_or_create!
+free_pp         = Pricepoint.create!(name: 'Free Pricepoint')
+sc2_standard_pp = Pricepoint.create!(name: 'SC2 Standard Pricepoint')
+deluxe_ed_pp    = Pricepoint.create!(name: 'SC2 Deluxe Pricepoint')
+collector_ed_pp = Pricepoint.create!(name: 'SC2 Collector Pricepoint')
 
-sc2_standard_pp.pricepoint_prices.where(currency_id: usd.id).first_or_create!(amount: 59.99)
-sc2_standard_pp.pricepoint_prices.where(currency_id: eur.id).first_or_create!(amount: 44.27)
-sc2_standard_pp.pricepoint_prices.where(currency_id: krw.id).first_or_create!(amount: 63907.35)
-sc2_standard_pp.pricepoint_prices.where(currency_id: gbp.id).first_or_create!(amount: 35.83)
+free_pp.pricepoint_prices.create!(currency_id: usd.id, amount: 0.0)
+free_pp.pricepoint_prices.create!(currency_id: eur.id, amount: 0.0)
+free_pp.pricepoint_prices.create!(currency_id: krw.id, amount: 0.0)
+free_pp.pricepoint_prices.create!(currency_id: gbp.id, amount: 0.0)
 
-deluxe_ed_pp.pricepoint_prices.where(currency_id: usd.id).first_or_create!(amount: 79.99)
-deluxe_ed_pp.pricepoint_prices.where(currency_id: eur.id).first_or_create!(amount: 59.03)
-deluxe_ed_pp.pricepoint_prices.where(currency_id: krw.id).first_or_create!(amount: 85213.35)
-deluxe_ed_pp.pricepoint_prices.where(currency_id: gbp.id).first_or_create!(amount: 47.78)
+sc2_standard_pp.pricepoint_prices.create!(currency_id: usd.id, amount: 59.99)
+sc2_standard_pp.pricepoint_prices.create!(currency_id: eur.id, amount: 44.27)
+sc2_standard_pp.pricepoint_prices.create!(currency_id: krw.id, amount: 63907.35)
+sc2_standard_pp.pricepoint_prices.create!(currency_id: gbp.id, amount: 35.83)
 
-collector_ed_pp.pricepoint_prices.where(currency_id: usd.id).first_or_create!(amount: 99.99)
-collector_ed_pp.pricepoint_prices.where(currency_id: eur.id).first_or_create!(amount: 73.80)
-collector_ed_pp.pricepoint_prices.where(currency_id: krw.id).first_or_create!(amount: 106530.00)
-collector_ed_pp.pricepoint_prices.where(currency_id: gbp.id).first_or_create!(amount: 59.72)
+deluxe_ed_pp.pricepoint_prices.create!(currency_id: usd.id, amount: 79.99)
+deluxe_ed_pp.pricepoint_prices.create!(currency_id: eur.id, amount: 59.03)
+deluxe_ed_pp.pricepoint_prices.create!(currency_id: krw.id, amount: 85213.35)
+deluxe_ed_pp.pricepoint_prices.create!(currency_id: gbp.id, amount: 47.78)
 
-sc2_standard_price = Price.where(pricepoint_id: sc2_standard_pp.id).first_or_create!(name: 'SC2 Standard Price', discount_id: no_discount.id)
-deluxe_ed_price    = Price.where(pricepoint_id: deluxe_ed_pp.id).first_or_create!(name: 'SC2 Deluxe Price', discount_id: no_discount.id)
-collector_ed_price = Price.where(pricepoint_id: collector_ed_pp.id).first_or_create!(name: 'SC2 Collector Price', discount_id: no_discount.id)
+collector_ed_pp.pricepoint_prices.create!(currency_id: usd.id, amount: 99.99)
+collector_ed_pp.pricepoint_prices.create!(currency_id: eur.id, amount: 73.80)
+collector_ed_pp.pricepoint_prices.create!(currency_id: krw.id, amount: 106530.00)
+collector_ed_pp.pricepoint_prices.create!(currency_id: gbp.id, amount: 59.72)
 
-StoreItem.where(item_type: sc2_retail.class,   item_id: sc2_retail.id,    price_id: sc2_standard_price.id).first_or_create!(name: 'StarCraft 2 Retail Edition')
-StoreItem.where(item_type: sc2_digital.class,  item_id: sc2_digital.id,   price_id: sc2_standard_price.id).first_or_create!(name: 'StarCraft 2 Digital Edition')
-StoreItem.where(item_type: deluxe_ed.class,    item_id: deluxe_ed.id,     price_id: deluxe_ed_price.id).first_or_create!(name: 'StarCraft 2 Deluxe Edition')
-StoreItem.where(item_type: collector_ed.class, item_id: collector_ed.id,  price_id: collector_ed_price.id).first_or_create!(name: "StarCraft 2 Collector's Edition")
+deluxe_ed_promo_price = Price.create!(name: 'SC2 Deluxe Promotion Price', pricepoint_id: deluxe_ed_pp.id, discount_id: half_discount.id)
+sc2_standard_price    = Price.create!(name: 'SC2 Standard Price', pricepoint_id: sc2_standard_pp.id, discount_id: no_discount.id)
+deluxe_ed_price       = Price.create!(name: 'SC2 Deluxe Price', pricepoint_id: deluxe_ed_pp.id, discount_id: no_discount.id)
+collector_ed_price    = Price.create!(name: 'SC2 Collector Price', pricepoint_id: collector_ed_pp.id, discount_id: no_discount.id)
+
+StoreItem.create!(name: 'StarCraft 2 Retail Edition', item: sc2_retail, price: sc2_standard_price)
+StoreItem.create!(name: 'StarCraft 2 Digital Edition', item: sc2_digital, price: sc2_standard_price)
+StoreItem.create!(name: 'StarCraft 2 Deluxe Edition', item: deluxe_ed, price: deluxe_ed_price)
+StoreItem.create!(name: 'StarCraft 2 Collector\'s Edition', item: collector_ed, price: collector_ed_price)
+
+promotion = Promotion.create!(
+  title: 'Starcraft 2 Deluxe Edition 50% Off',
+  name: 'Starcraft 2 Deluxe Edition Promotion',
+  item: deluxe_ed,
+  price: deluxe_ed_promo_price
+)
+promotion.create_batches(20, 10)
+
+
+PhysicalItem.all.each(&:activate!)
+DigitalItem.all.each(&:activate!)
+Bundle.all.each(&:activate!)
+Batch.all.each(&:activate!)
+Promotion.all.each(&:activate!)
