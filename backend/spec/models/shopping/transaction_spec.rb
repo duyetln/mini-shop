@@ -61,13 +61,22 @@ describe Transaction do
   end
 
   describe '#commit!' do
+    let(:payment_method) { model.payment_method }
+    let(:amount) { Currency.exchange(model.amount, model.currency, payment_method.currency) }
+
     context 'payment transaction' do
       let(:model_args) { [:transaction, :payment] }
 
       it 'withdraws amount from payment method' do
-        payment_method = model.payment_method
-        amount = Currency.exchange(model.amount, model.currency, payment_method.currency)
         expect { model.commit! }.to change { payment_method.balance }.by(-amount.abs)
+        expect(model).to be_committed
+      end
+
+      it 'does not over withdraw' do
+        expect { model.commit! }.to change { payment_method.balance }.by(-amount.abs)
+        rand(1..5).times do
+          expect { model.commit! }.to_not change { payment_method.balance }
+        end
       end
     end
 
@@ -75,9 +84,15 @@ describe Transaction do
       let(:model_args) { [:transaction, :refund] }
 
       it 'deposits amount to payment method' do
-        payment_method = model.payment_method
-        amount = Currency.exchange(model.amount, model.currency, payment_method.currency)
         expect { model.commit! }.to change { payment_method.balance }.by(amount.abs)
+        expect(model).to be_committed
+      end
+
+      it 'does not over deposit' do
+        expect { model.commit! }.to change { payment_method.balance }.by(amount.abs)
+        rand(1..5).times do
+          expect { model.commit! }.to_not change { payment_method.balance }
+        end
       end
     end
   end

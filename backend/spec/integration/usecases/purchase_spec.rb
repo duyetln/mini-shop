@@ -4,6 +4,7 @@ require 'spec/integration/shared/fulfillment'
 describe 'purchase flow' do
   before :all do
     @qty = rand(5) + 1
+    @pmethod_amount = 50_000
     @user = FactoryGirl.create :user
     @usd = FactoryGirl.create :usd
     @eur = FactoryGirl.create :eur
@@ -15,10 +16,10 @@ describe 'purchase flow' do
     @bsi = FactoryGirl.create :store_item, item: @bitem
     @purchase = Purchase.current(@user).first_or_create!
     @address = FactoryGirl.create :address, user: @user
-    @pmethod = FactoryGirl.create :payment_method, user: @user, currency: @usd
+    @pmethod = FactoryGirl.create :payment_method, user: @user, currency: @usd, balance: @pmethod_amount
   end
 
-  attr_reader :qty
+  attr_reader :qty, :pmethod_amount
 
   def user; @user.reload; end
   def usd; @usd.reload; end
@@ -156,6 +157,21 @@ describe 'purchase flow' do
     end
   end
 
+  describe 'payment method' do
+    def total
+      [
+        purchase.orders.retrieve(ditem),
+        purchase.orders.retrieve(bundle)
+      ].reduce(BigDecimal.new('0')) do |a, e|
+        a + Currency.exchange(e.total, e.currency, pmethod.currency)
+      end
+    end
+
+    it 'is charged correctly' do
+      expect(pmethod.balance).to eq(pmethod_amount - total)
+    end
+  end
+
   describe 'transactions' do
     it 'includes payment' do
       expect(purchase.payment).to be_present
@@ -196,6 +212,20 @@ describe 'purchase flow' do
     include_examples 'successful order reversal'
   end
 
+  describe 'payment method' do
+    def total
+      [
+        purchase.orders.retrieve(bundle)
+      ].reduce(BigDecimal.new('0')) do |a, e|
+        a + Currency.exchange(e.total, e.currency, pmethod.currency)
+      end
+    end
+
+    it 'is refunded partially' do
+      expect(pmethod.balance).to eq(pmethod_amount - total)
+    end
+  end
+
   describe 'bundle order' do
     def order; purchase.orders.retrieve(bundle); end
     def qty; order.qty * bundle.bundleds.retrieve(pitem).qty; end
@@ -205,6 +235,12 @@ describe 'purchase flow' do
     end
 
     include_examples 'successful order reversal'
+  end
+
+  describe 'payment method' do
+    it 'is fully refunded' do
+      expect(pmethod.balance).to eq(pmethod_amount)
+    end
   end
 
   describe 'user' do

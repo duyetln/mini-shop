@@ -23,7 +23,7 @@ class Transaction < ActiveRecord::Base
   delegate :currency, to: :payment_method, prefix: true
 
   def commit!
-    if super
+    if pending? && super
       method = payment? ? :withdraw! : :deposit!
       payment_method.send(method, amount, currency)
     end
