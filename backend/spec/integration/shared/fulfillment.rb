@@ -48,7 +48,7 @@ shared_examples 'successful order reversal' do
   end
 
   it 'has a refund' do
-    expect(order.refund).to be_present
+    expect(order.refund.present?).to eq(order.total > 0 && order.purchase.paid?)
   end
 
   it 'has reversed fulfillments' do

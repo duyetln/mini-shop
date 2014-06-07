@@ -17,6 +17,8 @@ describe 'purchase flow' do
     @purchase = Purchase.current(@user).first_or_create!
     @address = FactoryGirl.create :address, user: @user
     @pmethod = FactoryGirl.create :payment_method, user: @user, currency: @usd, balance: @pmethod_amount
+    @promotion = FactoryGirl.create :promotion, :coupons, item: @ditem
+    @coupon = Coupon.first
   end
 
   attr_reader :qty, :pmethod_amount
@@ -33,6 +35,8 @@ describe 'purchase flow' do
   def purchase; @purchase.reload; end
   def address; @address.reload; end
   def pmethod; @pmethod.reload; end
+  def promotion; @promotion.reload; end
+  def coupon; @coupon.reload; end
 
   describe 'user' do
     it 'confirms and changes status' do
@@ -73,6 +77,34 @@ describe 'purchase flow' do
     include_examples 'item activation'
   end
 
+  describe 'promotion' do
+    it 'activates itself' do
+      expect { promotion.activate! }.to change { promotion.active? }.to(true)
+    end
+
+    it 'is available' do
+      expect(promotion).to be_available
+    end
+  end
+
+  describe 'coupon' do
+    before :all do
+      promotion.batches.each(&:activate!)
+    end
+
+    it 'is unused' do
+      expect(coupon).to_not be_used
+    end
+
+    it 'is active' do
+      expect(coupon).to be_active
+    end
+
+    it 'is available' do
+      expect(coupon).to be_available
+    end
+  end
+
   describe 'purchase' do
     it 'is pending' do
       expect(purchase).to be_pending
@@ -82,6 +114,7 @@ describe 'purchase flow' do
       expect { purchase.add_or_update(psi.item, psi.amount(eur) * (pitem.qty + 1), eur, pitem.qty + 1) }.to change { purchase.orders.count }.by(1)
       expect { purchase.add_or_update(dsi.item, dsi.amount(usd) * qty, usd, qty) }.to change { purchase.orders.count }.by(1)
       expect { purchase.add_or_update(bsi.item, bsi.amount(usd) * qty, usd, qty) }.to change { purchase.orders.count }.by(1)
+      expect { purchase.add_or_update(coupon, promotion.amount(usd) * 1, usd, 1) }.to change { purchase.orders.count }.by(1)
     end
 
     it 'removes orders' do
@@ -108,6 +141,10 @@ describe 'purchase flow' do
 
     it 'can be fulfilled' do
       expect(purchase.fulfill!).to_not be_nil
+    end
+
+    it 'pays the purchase' do
+      expect(purchase).to be_paid
     end
 
     describe 'physical item order' do
@@ -155,13 +192,28 @@ describe 'purchase flow' do
         include_examples 'fulfillment processing'
       end
     end
+
+    describe 'coupon order' do
+      def order; purchase.orders.retrieve(coupon); end
+
+      include_examples 'successful order fulfillment'
+
+      describe 'digital item fulfillment' do
+        def item; ditem; end
+        def qty; order.qty; end
+        def result_class; Ownership; end
+
+        include_examples 'fulfillment processing'
+      end
+    end
   end
 
   describe 'payment method' do
     def total
       [
         purchase.orders.retrieve(ditem),
-        purchase.orders.retrieve(bundle)
+        purchase.orders.retrieve(bundle),
+        purchase.orders.retrieve(coupon)
       ].reduce(BigDecimal.new('0')) do |a, e|
         a + Currency.exchange(e.total, e.currency, pmethod.currency)
       end
@@ -189,8 +241,8 @@ describe 'purchase flow' do
   end
 
   describe 'user' do
-    it 'has 2 ownerships' do
-      expect(user.ownerships.count).to eq(2)
+    it 'has 3 ownerships' do
+      expect(user.ownerships.count).to eq(3)
     end
 
     it 'has 1 shipment' do
@@ -215,7 +267,8 @@ describe 'purchase flow' do
   describe 'payment method' do
     def total
       [
-        purchase.orders.retrieve(bundle)
+        purchase.orders.retrieve(bundle),
+        purchase.orders.retrieve(coupon)
       ].reduce(BigDecimal.new('0')) do |a, e|
         a + Currency.exchange(e.total, e.currency, pmethod.currency)
       end
@@ -232,6 +285,31 @@ describe 'purchase flow' do
 
     it 'can be reversed' do
       expect { purchase.reverse!(order) }.to change { pitem.qty }.by(qty)
+    end
+
+    include_examples 'successful order reversal'
+  end
+
+  describe 'payment method' do
+    def total
+      [
+        purchase.orders.retrieve(coupon)
+      ].reduce(BigDecimal.new('0')) do |a, e|
+        a + Currency.exchange(e.total, e.currency, pmethod.currency)
+      end
+    end
+
+    it 'is refunded partially' do
+      expect(pmethod.balance).to eq(pmethod_amount - total)
+    end
+  end
+
+  describe 'coupon order' do
+    def order; purchase.orders.retrieve(coupon); end
+    def qty; order.qty; end
+
+    it 'can be reversed' do
+      expect(purchase.reverse!(order)).to_not be_nil
     end
 
     include_examples 'successful order reversal'
