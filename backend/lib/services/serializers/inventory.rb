@@ -64,3 +64,27 @@ class StoreItemSerializer < ResourceSerializer
     object.active?
   end
 end
+
+class PromotionSerializer < ResourceSerializer
+  include DeletableSerializer
+  include DisplayableSerializer
+  include ActivableSerializer
+  include ItemableSerializer
+  include PriceableSerializer
+  attribute :name
+end
+
+class BatchSerializer < ResourceSerializer
+  include DeletableSerializer
+  include ActivableSerializer
+  attribute :name
+end
+
+class CouponSerializer < ResourceSerializer
+  include DisplayableSerializer
+  attribute :promotion_id
+
+  def promotion_id
+    promotion.id
+  end
+end
