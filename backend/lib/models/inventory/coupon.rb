@@ -17,6 +17,9 @@ class Coupon < ActiveRecord::Base
   delegate :amount,      to: :promotion, allow_nil: true
   delegate :available?,  to: :promotion, allow_nil: true
 
+  scope :used, -> { where(used: true) }
+  scope :unused, -> { where(used: false) }
+
   after_initialize :set_values
 
   def active?

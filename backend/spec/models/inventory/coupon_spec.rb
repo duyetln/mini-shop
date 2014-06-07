@@ -8,6 +8,13 @@ describe Coupon do
 end
 
 describe Coupon do
+  context 'class' do
+    let(:subject) { described_class }
+
+    it { should respond_to(:used) }
+    it { should respond_to(:unused) }
+  end
+
   it { should belong_to(:batch) }
   it { should belong_to(:used_by).class_name('User').with_foreign_key(:used_by) }
 

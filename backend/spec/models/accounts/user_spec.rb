@@ -1,6 +1,13 @@
 require 'models/spec_setup'
 
 describe User do
+  context 'class' do
+    let(:subject) { described_class }
+
+    it { should respond_to(:confirmed) }
+    it { should respond_to(:unconfirmed) }
+  end
+
   it { should have_many(:purchases) }
   it { should have_many(:addresses) }
   it { should have_many(:payment_methods) }
