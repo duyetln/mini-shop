@@ -124,7 +124,7 @@ describe Services::Inventory::DigitalItems do
 
       context 'deleted digital item' do
         before :each do
-          digital_item.delete!
+          expect { digital_item.delete! }.to change { digital_item.deleted? }.to(true)
         end
 
         include_examples 'not found'

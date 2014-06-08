@@ -120,7 +120,7 @@ describe User do
 
     context 'confirmed user' do
       before :each do
-        user.confirm!
+        expect { user.confirm! }.to change { user.confirmed? }.to(true)
       end
 
       context 'wrong email' do
@@ -146,7 +146,7 @@ describe User do
   describe '.confirm!' do
     context 'confirmed user' do
       before :each do
-        user.confirm!
+        expect { user.confirm! }.to change { user.confirmed? }.to(true)
       end
 
       it 'raises an error' do

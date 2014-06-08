@@ -42,8 +42,10 @@ describe Bundle do
 
     context 'activated' do
       before :each do
-        item.activate!
-        model.activate!
+        expect do
+          item.activate!
+          model.activate!
+        end.to change { model.active? }.to(true)
       end
 
       it 'does not add or update the item' do
@@ -55,7 +57,7 @@ describe Bundle do
 
     context 'deleted' do
       before :each do
-        model.delete!
+        expect { model.delete! }.to change { model.deleted? }.to(true)
       end
 
       it 'does not add or update the item' do

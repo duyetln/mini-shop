@@ -67,7 +67,7 @@ describe Services::Accounts::Users do
 
     context 'confirmed' do
       before :each do
-        user.confirm!
+        expect { user.confirm! }.to change { user.confirmed? }.to(true)
       end
 
       context 'wrong email' do
@@ -147,7 +147,7 @@ describe Services::Accounts::Users do
 
     context 'confirmed' do
       before :each do
-        user.confirm!
+        expect { user.confirm! }.to change { user.confirmed? }.to(true)
       end
 
       include_examples 'not found'

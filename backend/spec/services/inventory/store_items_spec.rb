@@ -104,7 +104,7 @@ describe Services::Inventory::StoreItems do
 
       context 'deleted store item' do
         before :each do
-          store_item.delete!
+          expect { store_item.delete! }.to change { store_item.deleted? }.to(true)
         end
 
         include_examples 'not found'

@@ -100,8 +100,10 @@ describe Services::Inventory::Bundles do
 
       context 'activated bundle' do
         before :each do
-          bundle.items.each(&:activate!)
-          bundle.activate!
+          expect do
+            bundle.items.each(&:activate!)
+            bundle.activate!
+          end.to change { bundle.active? }.to(true)
         end
 
         include_examples 'unprocessable'
@@ -162,8 +164,10 @@ describe Services::Inventory::Bundles do
 
         context 'activated bundle' do
           before :each do
-            bundle.items.each(&:activate!)
-            bundle.activate!
+            expect do
+              bundle.items.each(&:activate!)
+              bundle.activate!
+            end.to change { bundle.active? }.to(true)
           end
 
           include_examples 'unprocessable'
@@ -228,7 +232,7 @@ describe Services::Inventory::Bundles do
 
       context 'deleted bundle' do
         before :each do
-          bundle.delete!
+          expect { bundle.delete! }.to change { bundle.deleted? }.to(true)
         end
 
         include_examples 'not found'

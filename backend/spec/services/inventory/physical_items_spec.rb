@@ -124,7 +124,7 @@ describe Services::Inventory::PhysicalItems do
 
       context 'deleted physical item' do
         before :each do
-          physical_item.delete!
+          expect { physical_item.delete! }.to change { physical_item.deleted? }.to(true)
         end
 
         include_examples 'not found'
