@@ -29,7 +29,7 @@ describe Promotion do
 
   describe '#deletable?' do
     it 'equals item being deleted and itself being kept' do
-      expect(model.deletable?).to eq(model.item.deleted? && model.kept?)
+      expect(model.deletable?).to eq(model.inactive? && model.kept?)
     end
   end
 

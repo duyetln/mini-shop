@@ -26,7 +26,7 @@ class Promotion < ActiveRecord::Base
   end
 
   def deletable?
-    item.deleted? && super
+    inactive? && super
   end
 
   def create_batches(qty, batch_size, batch_name = nil)
