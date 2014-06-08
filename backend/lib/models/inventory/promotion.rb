@@ -36,13 +36,13 @@ class Promotion < ActiveRecord::Base
     batch_num.times do |index|
       batches << create_batch(
         batch_size,
-        batch_name || "Auto generated batch #{index + 1}"
+        batch_name.present? && batch_name || "Auto generated batch #{index + 1}"
       )
     end
     if remainder > 0
       batches << create_batch(
         remainder,
-        batch_name || "Auto generated batch #{batch_num + 1}"
+        batch_name.present? && batch_name || "Auto generated batch #{batch_num + 1}"
       )
     end
     batches

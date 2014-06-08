@@ -71,7 +71,6 @@ promotion = Promotion.create!(
 )
 promotion.create_batches(20, 10)
 
-
 PhysicalItem.all.each(&:activate!)
 DigitalItem.all.each(&:activate!)
 Bundle.all.each(&:activate!)
