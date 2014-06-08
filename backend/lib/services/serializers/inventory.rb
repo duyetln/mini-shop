@@ -85,6 +85,6 @@ class CouponSerializer < ResourceSerializer
   attribute :promotion_id
 
   def promotion_id
-    promotion.id
+    object.promotion.id
   end
 end
