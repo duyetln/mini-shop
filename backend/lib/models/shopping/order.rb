@@ -36,6 +36,7 @@ class Order < ActiveRecord::Base
   delegate :committed?,       to: :purchase, prefix: true
   delegate :pending?,         to: :purchase, prefix: true
   delegate :paid?,            to: :purchase, prefix: true
+  delegate :free?,            to: :purchase, prefix: true
   delegate :payment,          to: :purchase, prefix: true
 
   def deletable?
@@ -57,7 +58,7 @@ class Order < ActiveRecord::Base
           mark_fulfilled!
         end
       rescue
-        make_refund!
+        refund!
         mark_failed!
       end
       reload
@@ -77,7 +78,7 @@ class Order < ActiveRecord::Base
                   fulfillments.all? { |f| f.reverse! }
             fail Fulfillment::ReversalFailure
           end
-          make_refund!
+          refund!
           mark_reversed!
         end
       rescue
@@ -122,7 +123,7 @@ class Order < ActiveRecord::Base
 
   private
 
-  def make_refund!
+  def refund!
     if purchase_committed?
       if refund.blank? && purchase_paid? && total > 0
         build_refund

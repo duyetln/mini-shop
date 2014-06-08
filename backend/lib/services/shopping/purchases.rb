@@ -61,6 +61,7 @@ module Services
         process_request do
           purchase = current_purchase.first!
           purchase.commit!
+          purchase.pay!
           purchase.fulfill!
           respond_with(PurchaseSerializer.new(purchase))
         end

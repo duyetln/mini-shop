@@ -377,6 +377,7 @@ describe Services::Shopping::Purchases do
         context 'committed, fulfilled purchase' do
           before :each do
             purchase.commit!
+            purchase.pay!
             purchase.fulfill!
           end
 
@@ -429,6 +430,7 @@ describe Services::Shopping::Purchases do
             context 'committed, fulfilled purchase' do
               before :each do
                 purchase.commit!
+                purchase.pay!
                 purchase.fulfill!
               end
 

@@ -154,13 +154,14 @@ describe Purchase do
     end
   end
 
-  describe '#make_payment!' do
+  describe '#pay!' do
     before :each do
       model.save!
       model.commit!
+      model.stub(:free?).and_return(false)
       model.stub(:paid?).and_return(false)
-      model.payment_method.stub(:enough?).and_return(true)
       model.stub(:total).and_return(amount)
+      model.payment_method.stub(:enough?).with(amount).and_return(true)
     end
 
     context 'pending' do
@@ -169,7 +170,17 @@ describe Purchase do
       end
 
       it 'does not do anything' do
-        expect { model.send(:make_payment!) }.to_not change { model.payment }
+        expect { model.pay! }.to_not change { model.payment }
+      end
+    end
+
+    context 'free' do
+      before :each do
+        model.stub(:free?).and_return(true)
+      end
+
+      it 'does nothing' do
+        expect { model.pay! }.to_not change { model.payment }
       end
     end
 
@@ -179,37 +190,27 @@ describe Purchase do
       end
 
       it 'does not do anything' do
-        expect { model.send(:make_payment!) }.to_not change { model.payment }
+        expect { model.pay! }.to_not change { model.payment }
       end
     end
 
     context 'not enought balance' do
       before :each do
-        model.payment_method.stub(:enough?).and_return(false)
+        model.payment_method.stub(:enough?).with(amount).and_return(false)
       end
 
       it 'does not do anything' do
-        expect { model.send(:make_payment!) }.to_not change { model.payment }
-      end
-    end
-
-    context 'zero total' do
-      before :each do
-        model.stub(:total).and_return(0)
-      end
-
-      it 'does not do anything' do
-        expect { model.send(:make_payment!) }.to_not change { model.payment }
+        expect { model.pay! }.to_not change { model.payment }
       end
     end
 
     it 'creates new payment' do
-      expect { model.send(:make_payment!) }.to change { model.payment }
+      expect { model.pay! }.to change { model.payment }
       expect(model.payment).to be_present
     end
 
     it 'sets correct information' do
-      model.send(:make_payment!)
+      model.pay!
       expect(model.payment.user).to eq(model.user)
       expect(model.payment.amount).to eq(model.total)
       expect(model.payment.currency).to eq(model.payment_method_currency)
@@ -218,18 +219,25 @@ describe Purchase do
     end
 
     it 'does not create a new payment' do
+      model.unstub(:free?)
       model.unstub(:paid?)
       model.payment_method.unstub(:enough?)
       model.unstub(:total)
 
-      model.send(:make_payment!)
-      expect(model.payment).to eq(model.send(:make_payment!))
+      model.pay!
+      expect(model.payment).to eq(model.pay!)
     end
   end
 
   describe '#transactions' do
     it 'returns all related transactions' do
       expect(model.transactions).to eq([model.orders.map(&:refund), model.payment].flatten.compact)
+    end
+  end
+
+  describe '#free?' do
+    it 'checks the total amount' do
+      expect(model.free?).to eq(model.total <= 0)
     end
   end
 
@@ -241,7 +249,7 @@ describe Purchase do
 
   describe '#fulfillable?' do
     it 'equals #committed?' do
-      expect(model.fulfillable?).to eq(model.committed?)
+      expect(model.fulfillable?).to eq(model.committed? && (model.free? || model.paid?))
     end
   end
 
@@ -292,7 +300,6 @@ describe Purchase do
 
       context 'ready' do
         it 'processes, marks status, and returns' do
-          expect(model).to receive(:make_payment!)
           expect(order).to receive(process_method)
           expect(transaction).to receive(:commit!)
           expect(model).to receive(:reload)

@@ -135,8 +135,34 @@ describe 'purchase flow' do
       expect { purchase.commit! }.to change { purchase.committed? }.to(true)
     end
 
+    it 'does not have enough balance in payment method' do
+      expect do
+        payment_method = purchase.payment_method
+        payment_method.balance = 0
+        payment_method.save!
+      end.to change { purchase.payment_method.enough?(purchase.total) }.to be_false
+    end
+
+    it 'cannot be paid' do
+      expect(purchase.pay!).to be_nil
+      expect(purchase.payment).to_not be_present
+    end
+
+    it 'cannot be fulfilled' do
+      expect(purchase.fulfill!).to be_nil
+      expect(purchase.orders.all?(&:unmarked?)).to be_true
+    end
+
     it 'has enough balance in payment method' do
-      expect { purchase.payment_method.enough?(purchase.total) }.to be_true
+      expect do
+        payment_method = purchase.payment_method
+        payment_method.balance = pmethod_amount
+        payment_method.save!
+      end.to change { purchase.payment_method.enough?(purchase.total) }.to(true)
+    end
+
+    it 'can be paid' do
+      expect(purchase.pay!).to be_present
     end
 
     it 'can be fulfilled' do

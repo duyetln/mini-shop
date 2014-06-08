@@ -57,12 +57,11 @@ class Purchase < ActiveRecord::Base
   end
 
   def fulfillable?
-    committed?
+    committed? && (free? || paid?)
   end
 
   def fulfill!
     if fulfillable?
-      make_payment!
       orders.each do |order|
         order.fulfill!
       end
@@ -115,23 +114,17 @@ class Purchase < ActiveRecord::Base
     end
   end
 
+  def free?
+    total <= 0
+  end
+
   def paid?
     payment.present?
   end
 
-  protected
-
-  def pending
-    if persisted? && committed? && changes.except(:committed, :committed_at).present?
-      errors.add(:purchase, 'cannot be changed after committed')
-    end
-  end
-
-  private
-
-  def make_payment!
+  def pay!
     if committed?
-      if !paid? && payment_method.enough?(total) && total > 0
+      if !free? && !paid? && payment_method.enough?(total)
         build_payment
         payment.user = user
         payment.amount = total
@@ -142,6 +135,14 @@ class Purchase < ActiveRecord::Base
         save!
       end
       payment
+    end
+  end
+
+  protected
+
+  def pending
+    if persisted? && committed? && changes.except(:committed, :committed_at).present?
+      errors.add(:purchase, 'cannot be changed after committed')
     end
   end
 end
