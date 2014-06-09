@@ -111,48 +111,4 @@ describe Services::Inventory::Pricepoints do
       end
     end
   end
-
-  describe 'put /pricepoints/:id/pricepoint_prices/:pricepoint_price_id' do
-    let(:method) { :put }
-    let(:path) { "/pricepoints/#{id}/pricepoint_prices/#{pricepoint_price_id}" }
-    let(:pricepoint_price_id) { rand_str }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      let(:pricepoint) { FactoryGirl.create :pricepoint }
-      let(:id) { pricepoint.id }
-
-      context 'invalid pricepoint price id' do
-        let(:pricepoint_price_id) { rand_str }
-
-        include_examples 'not found'
-      end
-
-      context 'valid pricepoint price id' do
-        let(:pricepoint_price) { FactoryGirl.create :pricepoint_price, pricepoint: pricepoint }
-        let(:pricepoint_price_id) { pricepoint_price.id }
-
-        context 'invalid parameters' do
-          let(:params) { { pricepoint_price: { amount: nil } } }
-
-          include_examples 'bad request'
-
-          it 'does not update the pricepoint price' do
-            expect { send_request }.to_not change { pricepoint_price.reload.attributes }
-          end
-        end
-
-        context 'valid parameters' do
-          let(:params) { { pricepoint_price: { amount: amount } } }
-
-          it 'updates the existing pricepoint price' do
-            expect { send_request }.to change { pricepoint_price.reload.attributes }
-            expect_status(200)
-            expect_response(PricepointSerializer.new(pricepoint).to_json)
-          end
-        end
-      end
-    end
-  end
 end

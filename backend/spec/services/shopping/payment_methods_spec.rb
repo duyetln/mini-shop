@@ -53,35 +53,27 @@ describe Services::Shopping::PaymentMethods do
     end
   end
 
-  describe 'put /users/:id/payment_methods/:payment_method_id' do
+  describe 'put /payment_methods/:id' do
     let(:method) { :put }
-    let(:path) { "/users/#{id}/payment_methods/#{payment_method_id}" }
+    let(:path) { "/payment_methods/#{id}" }
     let(:payment_method) { FactoryGirl.create(:payment_method, user: user) }
-    let(:payment_method_id) { payment_method.id }
+    let(:id) { payment_method.id }
     let(:params) { { payment_method: payment_method.attributes } }
 
     include_examples 'invalid id'
 
     context 'valid id' do
-      context 'invalid payment method id' do
-        let(:payment_method_id) { rand_str }
+      context 'invalid parameters' do
+        let(:params) { { payment_method: { balance: nil } } }
 
-        include_examples 'not found'
+        include_examples 'bad request'
       end
 
-      context 'valid payment method id' do
-        context 'invalid parameters' do
-          let(:params) { { payment_method: { balance: nil } } }
-
-          include_examples 'bad request'
-        end
-
-        context 'valid parameters' do
-          it 'updates the payment method' do
-            send_request
-            expect_status(200)
-            expect_response(PaymentMethodSerializer.new(payment_method).to_json)
-          end
+      context 'valid parameters' do
+        it 'updates the payment method' do
+          send_request
+          expect_status(200)
+          expect_response(PaymentMethodSerializer.new(payment_method).to_json)
         end
       end
     end

@@ -20,9 +20,9 @@ module Services
         end
       end
 
-      put '/users/:id/payment_methods/:payment_method_id' do
+      put '/payment_methods/:id' do
         process_request do
-          payment_method = User.find(params[:id]).payment_methods.find(params[:payment_method_id])
+          payment_method = PaymentMethod.find(params[:id])
           payment_method.update_attributes!(params[:payment_method])
           respond_with(PaymentMethodSerializer.new(payment_method))
         end

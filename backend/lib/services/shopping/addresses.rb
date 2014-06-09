@@ -20,9 +20,9 @@ module Services
         end
       end
 
-      put '/users/:id/addresses/:address_id' do
+      put '/addresses/:id' do
         process_request do
-          address = User.find(params[:id]).addresses.find(params[:address_id])
+          address = Address.find(params[:id])
           address.update_attributes!(params[:address])
           respond_with(AddressSerializer.new(address))
         end

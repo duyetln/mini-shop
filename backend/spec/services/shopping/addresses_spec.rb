@@ -53,35 +53,27 @@ describe Services::Shopping::Addresses do
     end
   end
 
-  describe 'put /users/:id/addresses/:address_id' do
+  describe 'put /addresses/:id' do
     let(:method) { :put }
-    let(:path) { "/users/#{id}/addresses/#{address_id}" }
+    let(:path) { "/addresses/#{id}" }
     let(:address) { FactoryGirl.create(:address, user: user) }
-    let(:address_id) { address.id }
+    let(:id) { address.id }
     let(:params) { { address: address.attributes } }
 
     include_examples 'invalid id'
 
     context 'valid id' do
-      context 'invalid address id' do
-        let(:address_id) { rand_str }
+      context 'invalid parameters' do
+        let(:params) { { address: { line1: nil } } }
 
-        include_examples 'not found'
+        include_examples 'bad request'
       end
 
-      context 'valid address id' do
-        context 'invalid parameters' do
-          let(:params) { { address: { line1: nil } } }
-
-          include_examples 'bad request'
-        end
-
-        context 'valid parameters' do
-          it 'updates the address' do
-            send_request
-            expect_status(200)
-            expect_response(AddressSerializer.new(address).to_json)
-          end
+      context 'valid parameters' do
+        it 'updates the address' do
+          send_request
+          expect_status(200)
+          expect_response(AddressSerializer.new(address).to_json)
         end
       end
     end

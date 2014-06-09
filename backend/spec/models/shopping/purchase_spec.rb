@@ -31,7 +31,6 @@ describe Purchase do
     it { should_not validate_presence_of(:payment_method) }
     it { should_not validate_presence_of(:billing_address) }
     it { should_not validate_presence_of(:shipping_address) }
-    it { should validate_uniqueness_of(:committed).scoped_to(:user_id) }
   end
 
   context 'committed' do

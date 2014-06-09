@@ -338,7 +338,7 @@ describe 'service api' do
 
     it 'adds physical item to purchase' do
       expect do
-        post "/users/#{user.id}/purchases/current/orders",
+        post "/purchases/#{purchase.id}/orders",
              order: {
                item_type: psi.item.class.name,
                item_id: psi.item.id,
@@ -353,7 +353,7 @@ describe 'service api' do
 
     it 'adds digital item to purchase' do
       expect do
-        post "/users/#{user.id}/purchases/current/orders",
+        post "/purchases/#{purchase.id}/orders",
              order: {
                item_type: dsi.item.class.name,
                item_id: dsi.item.id,
@@ -368,7 +368,7 @@ describe 'service api' do
 
     it 'adds bundle to purchase' do
       expect do
-        post "/users/#{user.id}/purchases/current/orders",
+        post "/purchases/#{purchase.id}/orders",
              order: {
                item_type: bsi.item.class.name,
                item_id: bsi.item.id,
@@ -383,7 +383,7 @@ describe 'service api' do
 
     it 'submits the purchase' do
       expect do
-        put "/users/#{user.id}/purchases/current/submit"
+        put "/purchases/#{purchase.id}/submit"
       end.to change { purchase.orders.all?(&:fulfilled?) }.from(false).to(true)
       expect(purchase.orders.any?(&:unmarked?)).to be_false
       expect(purchase).to be_committed
@@ -393,7 +393,7 @@ describe 'service api' do
 
     it 'reverses the purchase' do
       expect do
-        put "/users/#{user.id}/purchases/#{purchase.id}/return"
+        put "/purchases/#{purchase.id}/return"
       end.to change { purchase.orders.all?(&:reversed?) }.from(false).to(true)
       expect(purchase.orders.any?(&:unmarked?)).to be_false
       expect(purchase).to be_committed

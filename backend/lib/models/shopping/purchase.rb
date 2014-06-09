@@ -19,7 +19,6 @@ class Purchase < ActiveRecord::Base
   validates :billing_address,  presence: true, if: :committed?
   validates :shipping_address, presence: true, if: :committed?
 
-  validates :committed, uniqueness: { scope: :user_id }, unless: :committed?
   validate  :pending
 
   delegate :currency, to: :payment_method, prefix: true, allow_nil: true

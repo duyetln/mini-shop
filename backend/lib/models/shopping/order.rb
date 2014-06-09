@@ -57,7 +57,7 @@ class Order < ActiveRecord::Base
           end
           mark_fulfilled!
         end
-      rescue
+      rescue => ex
         refund!
         mark_failed!
       end

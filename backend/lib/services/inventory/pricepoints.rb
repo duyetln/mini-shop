@@ -38,17 +38,6 @@ module Services
           respond_with(PricepointSerializer.new(pricepoint))
         end
       end
-
-      put '/pricepoints/:id/pricepoint_prices/:pricepoint_price_id' do
-        process_request do
-          pricepoint = Pricepoint.find(params[:id])
-          pricepoint
-            .pricepoint_prices
-            .find(params[:pricepoint_price_id])
-            .update_attributes!(params[:pricepoint_price])
-          respond_with(PricepointSerializer.new(pricepoint))
-        end
-      end
     end
   end
 end
