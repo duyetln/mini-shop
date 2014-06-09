@@ -2,10 +2,11 @@ require 'integration/spec_setup'
 
 describe 'service api' do
   before :all do
+    @pmethod_amount = 50_000
     @ids = {}
   end
 
-  attr_reader :ids
+  attr_reader :ids, :pmethod_amount
 
   def user; User.find ids[:user]; end
   def usd; Currency.find ids[:usd]; end
@@ -296,7 +297,7 @@ describe 'service api' do
         post "/users/#{user.id}/payment_methods",
              payment_method: {
                name: rand_str,
-               balance: 1_000_000,
+               balance: 0,
                currency_id: usd.id
              }
       end.to change { PaymentMethod.count }.by(1)
@@ -384,6 +385,30 @@ describe 'service api' do
     it 'submits the purchase' do
       expect do
         put "/purchases/#{purchase.id}/submit"
+      end.to_not change { purchase.orders.all?(&:unmarked?) }
+      expect(purchase).to be_committed
+      expect_status(200)
+      ids[:purchase] = parsed_response[:id]
+    end
+  end
+
+  describe Services::Shopping::PaymentMethods do
+    it 'updates payment method balance' do
+      expect do
+        put "/payment_methods/#{pmethod.id}",
+            payment_method: {
+              balance: pmethod_amount
+            }
+      end.to change { pmethod.balance }.to(pmethod_amount)
+      expect_status(200)
+      ids[:pmethod] = parsed_response[:id]
+    end
+  end
+
+  describe Services::Shopping::Purchases do
+    it 'submits the purchase' do
+      expect do
+        put "/purchases/#{purchase.id}/submit"
       end.to change { purchase.orders.all?(&:fulfilled?) }.from(false).to(true)
       expect(purchase.orders.any?(&:unmarked?)).to be_false
       expect(purchase).to be_committed
@@ -399,6 +424,10 @@ describe 'service api' do
       expect(purchase).to be_committed
       expect_status(200)
       ids[:purchase] = parsed_response[:id]
+    end
+
+    it 'refunds the purchase fully' do
+      expect(pmethod.balance).to eq(pmethod_amount)
     end
   end
 
