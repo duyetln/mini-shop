@@ -16,5 +16,15 @@ Here are the goals set for this project:
 
 ## Releases
 
-  * 0.1.0: Add support for simple account creation, shopping cart, payment/transaction, and fulfillment/reversal system.
-  * 0.1.1: Add missing endpoints for a few services.
+  * 0.1.0:
+    - Add service endpoints for creating and authenticating user accounts.
+    - Add service endpoints for creating and managing inventory items.
+    - Add service endpoints for creating, fulfilling, and reversing purchases.
+  * 0.1.1:
+    - Add missing endpoints for a few inventory service endpoints.
+  * 0.2.0:
+    - Add service endpoints for creating and managing promotions and coupons.
+    - Allow purchase to fulfill even when total amount is zero.
+    - Store items are no longer activable.
+    - Remove nested service path in favor of leaner api.
+    - Inventory items now cannot be deleted when active.
