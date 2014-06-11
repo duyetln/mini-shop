@@ -24,6 +24,9 @@ describe 'service api' do
   def pmethod; PaymentMethod.find ids[:pmethod]; end
   def address; Address.find ids[:address]; end
   def purchase; Purchase.find ids[:purchase]; end
+  def promotion; Promotion.find ids[:promotion]; end
+  def batch; Batch.find ids[:batch]; end
+  def coupon; Coupon.find ids[:coupon]; end
 
   describe Services::Accounts::Users do
     it 'creates new user' do
@@ -247,6 +250,61 @@ describe 'service api' do
     end
   end
 
+  describe Services::Inventory::Promotions do
+    it 'creates promotion for digital item' do
+      expect do
+        post '/promotions',
+             promotion: {
+               name: rand_str,
+               title: rand_str,
+               description: rand_str,
+               item_type: ditem.class.name,
+               item_id: ditem.id,
+               price_id: price.id
+             }
+      end.to change { Promotion.count }.by(1)
+      expect_status(200)
+      ids[:promotion] = parsed_response[:id]
+    end
+
+    it 'activates promotion' do
+      expect do
+        put "/promotions/#{promotion.id}/activate"
+      end.to change { promotion.active? }.to(true)
+    end
+  end
+
+  describe Services::Inventory::Batches do
+    it 'creates batch for promotion' do
+      expect do
+        post "/promotions/#{promotion.id}/batches",
+             batch: {
+               name: rand_str,
+               size: qty
+             }
+      end.to change { promotion.batches.count }.by(1)
+      expect_status(200)
+      ids[:batch] = parsed_response[:id]
+    end
+
+    it 'activates batch' do
+      expect do
+        put "/batches/#{batch.id}/activate"
+      end.to change { batch.active? }.to(true)
+      expect_status(200)
+      ids[:batch] = parsed_response[:id]
+    end
+
+    it 'returns coupons for batch' do
+      expect do
+        get "/batches/#{batch.id}/coupons"
+      end.to_not change { batch.coupons.count }
+      expect_status(200)
+      expect(parsed_response.count).to eq(batch.coupons.count)
+      ids[:coupon] = parsed_response.first[:id]
+    end
+  end
+
   describe Services::Inventory::StoreItems do
     it 'creates store item for physical item' do
       expect do
@@ -382,6 +440,21 @@ describe 'service api' do
       ids[:purchase] = parsed_response[:id]
     end
 
+    it 'adds coupon to purchase' do
+      expect do
+        post "/purchases/#{purchase.id}/orders",
+             order: {
+               item_type: coupon.class.name,
+               item_id: coupon.id,
+               amount: promotion.amount(usd) * 1,
+               currency_id: usd.id,
+               qty: 1
+             }
+      end.to change { purchase.orders.count }.by(1)
+      expect_status(200)
+      ids[:purchase] = parsed_response[:id]
+    end
+
     it 'submits the purchase' do
       expect do
         put "/purchases/#{purchase.id}/submit"
@@ -415,7 +488,29 @@ describe 'service api' do
       expect_status(200)
       ids[:purchase] = parsed_response[:id]
     end
+  end
 
+  describe Services::Fulfillment::Ownerships do
+    it 'returns all user ownerships' do
+      expect do
+        get "/users/#{user.id}/ownerships"
+      end.to_not change { user.ownerships.count }
+      expect_status(200)
+      expect(parsed_response.count).to eq(3)
+    end
+  end
+
+  describe Services::Fulfillment::Shipments do
+    it 'returns all user ownerships' do
+      expect do
+        get "/users/#{user.id}/shipments"
+      end.to_not change { user.shipments.count }
+      expect_status(200)
+      expect(parsed_response.count).to eq(2)
+    end
+  end
+
+  describe Services::Shopping::Purchases do
     it 'reverses the purchase' do
       expect do
         put "/purchases/#{purchase.id}/return"
