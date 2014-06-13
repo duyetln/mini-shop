@@ -7,6 +7,7 @@ namespace :db do
   task :migrate => :boot do
     ActiveRecord::Migration.verbose = true
     ActiveRecord::Migrator.migrate 'db/migrate', ENV['VERSION'] ? ENV['VERSION'].to_i : nil
+    Rake::Task['db:schema:dump'].invoke
   end
 
   desc 'Rolls the schema back to the previous version (specify steps w/ STEP=n)'
@@ -18,6 +19,20 @@ namespace :db do
   task :seed => :boot do
     Application.load_models!
     require 'db/seeds'
+  end
+
+  namespace :schema do
+    desc 'Dump database schema'
+    task :dump => :boot do
+      File.open('db/schema.rb', 'w:utf-8') do |file|
+        ActiveRecord::SchemaDumper.dump ActiveRecord::Base.connection, file
+      end
+    end
+
+    desc 'Load database schema'
+    task :load => :boot do
+      load 'db/schema.rb' if File.exists?('db/schema.rb')
+    end
   end
 end
 
