@@ -105,7 +105,7 @@ class Order < ActiveRecord::Base
         Currency.find(currency_id)
       )
     end
-    self.tax_rate ||= (5 + rand(15)) / 100.0
+    self.tax_rate ||= ((5 + rand(15)) / 100.0).round(2)
     self.tax = amount * tax_rate
   end
 

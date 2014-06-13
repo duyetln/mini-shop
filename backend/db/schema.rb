@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140521060726) do
+ActiveRecord::Schema.define(:version => 20140613192512) do
 
   create_table "addresses", :force => true do |t|
     t.integer "user_id"
@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(:version => 20140521060726) do
 
   create_table "discounts", :force => true do |t|
     t.string   "name"
-    t.decimal  "rate",       :precision => 6, :scale => 5
+    t.decimal  "rate",       :precision => 5, :scale => 4
     t.datetime "start_at"
     t.datetime "end_at"
     t.datetime "created_at"
@@ -110,13 +110,13 @@ ActiveRecord::Schema.define(:version => 20140521060726) do
     t.string   "item_type"
     t.integer  "item_id"
     t.integer  "currency_id"
-    t.decimal  "amount",      :precision => 20, :scale => 4
-    t.decimal  "tax",         :precision => 20, :scale => 4
+    t.decimal  "amount",      :precision => 20, :scale => 2
+    t.decimal  "tax",         :precision => 20, :scale => 2
     t.integer  "qty"
     t.boolean  "deleted"
     t.integer  "refund_id"
     t.datetime "created_at"
-    t.decimal  "tax_rate",    :precision => 7,  :scale => 4
+    t.decimal  "tax_rate",    :precision => 5,  :scale => 4
   end
 
   add_index "orders", ["item_type", "item_id"], :name => "index_orders_on_item_type_and_item_id"
@@ -139,7 +139,7 @@ ActiveRecord::Schema.define(:version => 20140521060726) do
   create_table "payment_methods", :force => true do |t|
     t.integer  "user_id"
     t.string   "name"
-    t.decimal  "balance",     :precision => 20, :scale => 4
+    t.decimal  "balance",     :precision => 20, :scale => 2
     t.datetime "created_at"
     t.integer  "currency_id"
   end
@@ -156,7 +156,7 @@ ActiveRecord::Schema.define(:version => 20140521060726) do
   end
 
   create_table "pricepoint_prices", :force => true do |t|
-    t.decimal "amount",        :precision => 20, :scale => 4
+    t.decimal "amount",        :precision => 20, :scale => 2
     t.integer "pricepoint_id"
     t.integer "currency_id"
   end
@@ -247,7 +247,7 @@ ActiveRecord::Schema.define(:version => 20140521060726) do
     t.integer  "user_id"
     t.integer  "payment_method_id"
     t.integer  "billing_address_id"
-    t.decimal  "amount",             :precision => 20, :scale => 4
+    t.decimal  "amount",             :precision => 20, :scale => 2
     t.integer  "currency_id"
     t.boolean  "committed"
     t.datetime "committed_at"
