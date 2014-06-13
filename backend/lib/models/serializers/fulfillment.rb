@@ -1,6 +1,6 @@
-require 'services/serializers/base'
-require 'services/serializers/shopping'
-require 'services/serializers/shared'
+require 'models/serializers/base'
+require 'models/serializers/shopping'
+require 'models/serializers/shared'
 
 class OwnershipSerializer < ResourceSerializer
   include ItemCombinableSerializer

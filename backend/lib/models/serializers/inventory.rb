@@ -1,5 +1,5 @@
-require 'services/serializers/base'
-require 'services/serializers/shared'
+require 'models/serializers/base'
+require 'models/serializers/shared'
 
 class CurrencySerializer < ResourceSerializer
   attributes :code

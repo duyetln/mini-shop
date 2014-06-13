@@ -1,5 +1,5 @@
 require 'services/base'
-require 'services/serializers/shopping'
+require 'models/serializers/shopping'
 
 module Services
   module Shopping

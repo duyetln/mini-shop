@@ -1,5 +1,5 @@
-require 'services/serializers/base'
-require 'services/serializers/shared'
+require 'models/serializers/base'
+require 'models/serializers/shared'
 
 class AddressSerializer < ResourceSerializer
   attributes :user_id, :line1, :line2, :line3, :city, :region, :postal_code, :country

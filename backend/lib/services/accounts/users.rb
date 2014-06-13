@@ -1,5 +1,5 @@
 require 'services/base'
-require 'services/serializers/accounts'
+require 'models/serializers/accounts'
 
 module Services
   module Accounts
