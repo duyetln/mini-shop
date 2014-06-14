@@ -17,10 +17,10 @@ deluxe_ed.bundleds.destroy_all
 collector_ed.bundleds.destroy_all
 [sc2_retail, art_book, mousepad, dvd_set, soundtrack, skin, pet, wings].each { |asset| collector_ed.add_or_update(asset) }
 
-usd = Currency.create!(code: 'USD')
-eur = Currency.create!(code: 'EUR')
-krw = Currency.create!(code: 'KRW')
-gbp = Currency.create!(code: 'GBP')
+usd = Currency.create!(code: 'USD', sign: '&#36;')
+eur = Currency.create!(code: 'EUR', sign: '&#128;')
+krw = Currency.create!(code: 'KRW', sign: '&#8361;')
+gbp = Currency.create!(code: 'GBP', sign: '&#163;')
 
 half_discount = Discount.create!(name: 'Half Discount', rate: 0.5)
 no_discount   = Discount.create!(name: 'No Discount', rate: 0.0)

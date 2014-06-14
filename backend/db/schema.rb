@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140613192512) do
+ActiveRecord::Schema.define(:version => 20140614000402) do
 
   create_table "addresses", :force => true do |t|
     t.integer "user_id"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(:version => 20140613192512) do
 
   create_table "currencies", :force => true do |t|
     t.string "code"
+    t.string "sign"
   end
 
   add_index "currencies", ["code"], :name => "index_currencies_on_code"
