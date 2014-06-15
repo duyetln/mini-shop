@@ -13,6 +13,7 @@ gem 'sinatra-contrib'
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'slim'
 gem 'mail'
+gem 'sass'
 
 
 group :development do
