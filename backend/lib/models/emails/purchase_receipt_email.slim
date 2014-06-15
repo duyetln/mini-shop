@@ -61,6 +61,11 @@ html
                       ' Email:
                     = @purchase.user.email
                 tr
+                  td colspan=2
+                    strong
+                      ' Payment method:
+                    = @purchase.payment_method.name
+                tr
                   td
                     strong Billing address
                   td
