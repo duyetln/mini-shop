@@ -4,17 +4,17 @@ html
     title Purchase Confirmation
     == include_css '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css'
     == include_css '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css'
-    == include_js '//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js'
-    == embed_scss 'lib/models/emails/style.scss'
+    == embed_scss 'lib/models/emails/templates/style.scss'
 
   body
     div.container
       div.row
-        div.content.col-sm-offset-3.col-sm-6
-          div.greeting
+        div.content.col-sm-offset-2.col-sm-8
+          div.greeting.bg-primary
             h1 Thank you for your purchase!
           div.details
             p Your purchase has been received on #{@purchase.committed_at.strftime("%m/%d/%Y")} and is now being processed. Your purchase details are listed below for your reference:
+            br
             h4 Purchase details
             div.orders.table-responsive
               table.table.table-striped.table-bordered
@@ -48,6 +48,7 @@ html
                     td colspan=3
                       strong Total
                     td.text-right == number_with_currency @purchase.total, @purchase.payment_method_currency
+            br
             h4 Customer details
             div.customer.table-responsive
               table.table

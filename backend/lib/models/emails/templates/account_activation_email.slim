@@ -4,14 +4,13 @@ html
     title Purchase Confirmation
     == include_css '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css'
     == include_css '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css'
-    == include_js '//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js'
-    == embed_scss 'lib/models/emails/style.scss'
+    == embed_scss 'lib/models/emails/templates/style.scss'
 
   body
     div.container
       div.row
-        div.content.col-sm-offset-3.col-sm-6
-          div.greeting
+        div.content.col-sm-offset-2.col-sm-8
+          div.greeting.bg-primary
             h1 Thank you for your registration!
           div.details
             p Before you can purchase our products, please activate your account by clicking the link below:
