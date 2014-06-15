@@ -1,0 +1,69 @@
+doctype html
+html
+  head
+    title Purchase Confirmation
+    == include_css '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css'
+    == include_css '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css'
+    == embed_scss 'lib/models/emails/templates/style.scss'
+
+  body
+    div.container
+      div.row
+        div.content.col-sm-offset-2.col-sm-8
+          div.greeting.bg-primary
+            h1 Thank you for your purchase!
+          div.details
+            p Your purchase has been received and processed. Your purchase status is listed below for your information:
+            br
+            h4 Purchase status
+            div.orders.table-responsive
+              table.table.table-bordered
+                thead
+                  tr
+                    td.text-center
+                      strong Order #
+                    td.text-center
+                      strong Product
+                    td.text-center
+                      strong Qty
+                    td.text-center
+                      strong Amount
+                    td.text-center
+                      strong Status*
+                tbody
+                  - @purchase.orders.each do |order|
+                    - if order.fulfilled?
+                      - klass = 'bg-success'
+                      - status_text = 'Charged'
+                    - elsif order.reversed?
+                      - klass = 'bg-warning'
+                      - status_text = 'Refunded'
+                    - elsif order.failed?
+                      - klass = 'bg-danger'
+                      - status_text = 'Refunded'
+                    tr class="#{klass}"
+                      td = order.uuid
+                      td = order.item.title
+                      td.text-center = order.qty
+                      td.text-right == number_with_currency order.amount, order.currency
+                      td.text-center = status_text
+                tfoot
+                  tr
+                    td colspan=3
+                      strong Subtotal
+                    td.text-right == number_with_currency @purchase.amount, @purchase.payment_method_currency
+                  tr
+                    td colspan=3
+                      strong Tax
+                    td.text-right == number_with_currency @purchase.tax, @purchase.payment_method_currency
+                  tr
+                    td colspan=3
+                      strong Total
+                    td.text-right == number_with_currency @purchase.total, @purchase.payment_method_currency
+                  tr.bg-info
+                    td colspan=3
+                      strong Actual amount charged (plus refunds)
+                    td.text-right == number_with_currency @purchase.transactions.map(&:amount).reduce(&:+), @purchase.payment_method_currency
+            p
+              small * Green indicates an order has been fulfilled. Yellow indicates an order has been returned. Red indicates an order failed to fulfill.
+            br

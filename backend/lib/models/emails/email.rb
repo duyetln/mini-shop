@@ -43,3 +43,12 @@ class AccountActivationEmail < Email
     email
   end
 end
+
+class PurchaseStatusEmail < Email
+  def generate_email(payload = {})
+    @purchase = Purchase.committed.find(payload[:purchase_id])
+    email.to @purchase.user.email
+    email.subject 'Purchase Status'
+    email
+  end
+end
