@@ -1,0 +1,78 @@
+doctype html
+html
+  head
+    title Purchase Confirmation
+    == include_css '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css'
+    == include_css '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css'
+    == include_js '//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js'
+    == embed_scss 'lib/models/emails/style.scss'
+
+  body
+    div.container
+      div.row
+        div.content.col-sm-offset-3.col-sm-6
+          div.greeting
+            h1 Thank you for your purchase!
+          div.details
+            p Your purchase has been received on #{@purchase.committed_at.strftime("%m/%d/%Y")} and is now being processed. Your purchase details are listed below for your reference:
+            h4 Purchase details
+            div.orders.table-responsive
+              table.table.table-striped.table-bordered
+                thead
+                  tr
+                    td.text-center
+                      strong Order #
+                    td.text-center
+                      strong Product
+                    td.text-center
+                      strong Qty
+                    td.text-center
+                      strong Amount
+                tbody
+                  - @purchase.orders.each do |order|
+                    tr
+                      td = order.uuid
+                      td = order.item.title
+                      td.text-center = order.qty
+                      td.text-right == number_with_currency order.amount, order.currency
+                tfoot
+                  tr
+                    td colspan=3
+                      strong Subtotal
+                    td.text-right == number_with_currency @purchase.amount, @purchase.payment_method_currency
+                  tr
+                    td colspan=3
+                      strong Tax
+                    td.text-right == number_with_currency @purchase.tax, @purchase.payment_method_currency
+                  tr
+                    td colspan=3
+                      strong Total
+                    td.text-right == number_with_currency @purchase.total, @purchase.payment_method_currency
+            h4 Customer details
+            div.customer.table-responsive
+              table.table
+                tr
+                  td
+                    strong
+                      ' Name:
+                    = "#{@purchase.user.first_name} #{@purchase.user.last_name}"
+                  td
+                    strong
+                      ' Email:
+                    = @purchase.user.email
+                tr
+                  td
+                    strong Billing address
+                  td
+                    strong Shipping address
+                tr
+                  - [@purchase.billing_address, @purchase.shipping_address].each do |address|
+                    td
+                      - [address.line1,
+                         address.line2,
+                         address.line3,
+                         address.city,
+                         "#{address.region}, #{address.postal_code}",
+                         address.country].compact.select { |value| value.present? }.each do |value|
+                        = value
+                        br
