@@ -33,3 +33,13 @@ class PurchaseReceiptEmail < Email
     email
   end
 end
+
+class AccountActivationEmail < Email
+  def generate_email(payload = {})
+    @user = User.unconfirmed.find(payload[:user_id])
+    @actv_url = payload[:actv_url]
+    email.to @user.email
+    email.subject 'Account Activation'
+    email
+  end
+end
