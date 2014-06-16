@@ -62,7 +62,7 @@ html
                     td.text-right == number_with_currency @purchase.total, @purchase.payment_method_currency
                   tr.bg-info
                     td colspan=3
-                      strong Actual amount charged (plus refunds)
+                      strong Actual charge (plus refunds)
                     td.text-right == number_with_currency @purchase.transactions.map(&:amount).reduce(&:+), @purchase.payment_method_currency
             p
               small * Green indicates an order has been fulfilled. Yellow indicates an order has been returned. Red indicates an order failed to fulfill.
