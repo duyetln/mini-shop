@@ -43,6 +43,14 @@ module SpecHelpers
         ].sample
       end
     end
+
+    def activate_inventory!
+      PhysicalItem.all.each(&:activate!)
+      DigitalItem.all.each(&:activate!)
+      Bundle.all.each(&:activate!)
+      Batch.all.each(&:activate!)
+      Promotion.all.each(&:activate!)
+    end
   end
 
   module Services
@@ -76,15 +84,19 @@ module SpecHelpers
   end
 end
 
-FactoryGirl.find_definitions
-
 RSpec.configure do |config|
   config.include SpecHelpers::Common
+  config.include Mail::Matchers
   config.color_enabled = true
   config.tty = true
   config.order = 'random'
 
   config.before :suite do
+    FactoryGirl.find_definitions
+    Mail.defaults do
+      delivery_method :test
+    end
+
     begin
       DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.clean_with :truncation
