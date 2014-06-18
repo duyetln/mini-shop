@@ -81,6 +81,7 @@ task :pry do
       puts "loading lib..."; Application.load_lib!;
       puts "loading models..."; Application.load_models!;
       puts "loading config..."; Application.load_config!;
+      puts "configuring emails..."; Mail.defaults { delivery_method :smtp, address: "localhost", port: 1025 };
       puts "finding factories..."; FactoryGirl.find_definitions;
       puts "checking factory validity..."; FactoryGirl.lint;
       puts "done"
