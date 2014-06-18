@@ -43,7 +43,7 @@ html
                       - status_text = 'Refunded'
                     - elsif order.unmarked?
                       - klass = 'active'
-                      - status_text = 'Processing'
+                      - status_text = 'Pending'
                     tr class="#{klass}"
                       td = order.uuid
                       td = order.item.title
