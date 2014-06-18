@@ -23,6 +23,7 @@ class ApplicationService < Sinatra::Base
   use Services::Inventory::Prices
   use Services::Inventory::Promotions
   use Services::Inventory::StoreItems
+  use Services::Mailing::Emails
   use Services::Shopping::Addresses
   use Services::Shopping::Orders
   use Services::Shopping::PaymentMethods
