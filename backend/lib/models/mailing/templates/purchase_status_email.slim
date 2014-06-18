@@ -33,14 +33,17 @@ html
                 tbody
                   - @purchase.orders.each do |order|
                     - if order.fulfilled?
-                      - klass = 'bg-success'
+                      - klass = 'success'
                       - status_text = 'Charged'
                     - elsif order.reversed?
-                      - klass = 'bg-warning'
+                      - klass = 'warning'
                       - status_text = 'Refunded'
                     - elsif order.failed?
-                      - klass = 'bg-danger'
+                      - klass = 'danger'
                       - status_text = 'Refunded'
+                    - elsif order.unmarked?
+                      - klass = 'active'
+                      - status_text = 'Processing'
                     tr class="#{klass}"
                       td = order.uuid
                       td = order.item.title
@@ -63,7 +66,7 @@ html
                   tr.bg-info
                     td colspan=3
                       strong Actual charge (plus refunds)
-                    td.text-right == number_with_currency @purchase.transactions.map(&:amount).reduce(&:+), @purchase.payment_method_currency
+                    td.text-right == number_with_currency @purchase.transactions.map(&:amount).reduce(BigDecimal.new('0.0'), &:+), @purchase.payment_method_currency
             p
               small * Green indicates an order has been fulfilled. Yellow indicates an order has been returned. Red indicates an order failed to fulfill.
             br
