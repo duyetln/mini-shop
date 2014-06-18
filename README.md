@@ -28,3 +28,5 @@ Here are the goals set for this project:
     - Store items are no longer activable.
     - Remove nested service path in favor of leaner api.
     - Inventory items now cannot be deleted when active.
+  * 0.3.0
+    - Add service endpoints for sending account activation, purchase receipt, and purchase status emails.
