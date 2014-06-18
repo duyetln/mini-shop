@@ -38,6 +38,18 @@ describe 'purchase flow' do
   def promotion; @promotion.reload; end
   def coupon; @coupon.reload; end
 
+  describe 'mailing' do
+    before :each do
+      expect do
+        AccountActivationEmail.new(user_id: user.id, actv_url: 'actv_url').deliver!
+      end.to change { Mail::TestMailer.deliveries.count }.by(1)
+    end
+
+    context 'account activation email' do
+      it { should have_sent_email.to(user.email) }
+    end
+  end
+
   describe 'user' do
     it 'confirms and changes status' do
       expect { user.confirm! }.to change { user.confirmed? }.to(true)
@@ -172,7 +184,21 @@ describe 'purchase flow' do
     it 'pays the purchase' do
       expect(purchase).to be_paid
     end
+  end
 
+  describe 'mailing' do
+    before :each do
+      expect do
+        PurchaseReceiptEmail.new(purchase_id: purchase.id).deliver!
+      end.to change { Mail::TestMailer.deliveries.count }.by(1)
+    end
+
+    context 'purchase receipt email' do
+      it { should have_sent_email.to(purchase.user.email) }
+    end
+  end
+
+  describe 'fulfillment' do
     describe 'physical item order' do
       def order; purchase.orders.retrieve(pitem); end
 
@@ -339,6 +365,18 @@ describe 'purchase flow' do
     end
 
     include_examples 'successful order reversal'
+  end
+
+  describe 'mailing' do
+    before :each do
+      expect do
+        PurchaseStatusEmail.new(purchase_id: purchase.id).deliver!
+      end.to change { Mail::TestMailer.deliveries.count }.by(1)
+    end
+
+    context 'purchase status email' do
+      it { should have_sent_email.to(purchase.user.email) }
+    end
   end
 
   describe 'payment method' do

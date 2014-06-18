@@ -43,7 +43,23 @@ describe 'service api' do
       expect_status(200)
       ids[:user] = parsed_response[:id]
     end
+  end
 
+  describe Services::Mailing::Emails do
+    before :each do
+      expect do
+      post '/emails',
+           type: 'AccountActivationEmail',
+           payload: {
+             user_id: user.id
+           }
+      end.to change { Mail::TestMailer.deliveries.count }.by(1)
+    end
+
+    it { should have_sent_email.to(user.email) }
+  end
+
+  describe Services::Accounts::Users do
     it 'confirms the user' do
       expect do
         put "/users/#{user.uuid}/confirm/#{user.actv_code}"
@@ -465,6 +481,20 @@ describe 'service api' do
     end
   end
 
+  describe Services::Mailing::Emails do
+    before :each do
+      expect do
+      post '/emails',
+           type: 'PurchaseReceiptEmail',
+           payload: {
+             purchase_id: purchase.id
+           }
+      end.to change { Mail::TestMailer.deliveries.count }.by(1)
+    end
+
+    it { should have_sent_email.to(purchase.user.email) }
+  end
+
   describe Services::Shopping::PaymentMethods do
     it 'updates payment method balance' do
       expect do
@@ -524,6 +554,20 @@ describe 'service api' do
     it 'refunds the purchase fully' do
       expect(pmethod.balance).to eq(pmethod_amount)
     end
+  end
+
+  describe Services::Mailing::Emails do
+    before :each do
+      expect do
+      post '/emails',
+           type: 'PurchaseStatusEmail',
+           payload: {
+             purchase_id: purchase.id
+           }
+      end.to change { Mail::TestMailer.deliveries.count }.by(1)
+    end
+
+    it { should have_sent_email.to(purchase.user.email) }
   end
 
   describe Services::Fulfillment::Ownerships do
