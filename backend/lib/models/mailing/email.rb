@@ -1,4 +1,4 @@
-require 'models/emails/slim_helpers'
+require 'models/mailing/slim_helpers'
 
 class Email < SimpleDelegator
   include SlimHelpers
@@ -14,7 +14,7 @@ class Email < SimpleDelegator
   protected
 
   def email
-    email_body = Slim::Template.new("lib/models/emails/templates/#{self.class.name.underscore}.slim").render(self)
+    email_body = Slim::Template.new("lib/models/mailing/templates/#{self.class.name.underscore}.slim").render(self)
     @email ||= Mail.new do
       content_type 'text/html; charset=UTF-8'
       from 'noreply@mini.shop'
