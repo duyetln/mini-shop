@@ -44,6 +44,38 @@ module Services
           respond_with(PromotionSerializer.new(promotion))
         end
       end
+
+      get '/promotions/:id/batches' do
+        process_request do
+          batches = Promotion.find(params[:id]).batches
+          respond_with(batches.map do |batch|
+            BatchSerializer.new(batch)
+          end)
+        end
+      end
+
+      post '/promotions/:id/batches' do
+        process_request do
+          batch = Promotion.find(params[:id]).create_batch(
+            params[:batch][:size].to_i,
+            params[:batch][:name].to_s
+          )
+          respond_with(BatchSerializer.new(batch))
+        end
+      end
+
+      post '/promotions/:id/batches/generate' do
+        process_request do
+          batches = Promotion.find(params[:id]).create_batches(
+            params[:qty].to_i,
+            params[:batch][:size].to_i,
+            params[:batch][:name].to_s
+          )
+          respond_with(batches.map do |batch|
+            BatchSerializer.new(batch)
+          end)
+        end
+      end
     end
   end
 end

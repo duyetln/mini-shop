@@ -28,59 +28,6 @@ describe Services::Shopping::Purchases do
     item.reload
   end
 
-  describe 'get /users/:id/purchases' do
-    let(:method) { :get }
-    let(:path) { "/users/#{id}/purchases" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      let(:user) { FactoryGirl.create(:user) }
-      let(:id) { user.id }
-
-      before :each do
-        FactoryGirl.create :purchase, user: user
-      end
-
-      it 'returns the purchases' do
-        send_request
-        expect_status(200)
-        expect_response(user.purchases.map do |purchase|
-          PurchaseSerializer.new(purchase)
-        end.to_json)
-      end
-    end
-  end
-
-  describe 'post /users/:id/purchases' do
-    let(:method) { :post }
-    let(:path) { "/users/#{id}/purchases" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      let(:user) { FactoryGirl.create(:user) }
-      let(:id) { user.id }
-
-      context 'valid parameters' do
-        let(:address) { FactoryGirl.create :address, user: user }
-        let(:params) { { purchase: { billing_address_id: address.id } } }
-
-        it 'creates new purchase' do
-          expect { send_request }.to change { user.purchases.count }.by(1)
-          expect_status(200)
-          expect_response(PurchaseSerializer.new(user.purchases.last).to_json)
-        end
-
-        it 'sets the attributes' do
-          send_request
-          expect(user.purchases.last.billing_address).to eq(address)
-          expect(user.purchases.last).to be_pending
-        end
-      end
-    end
-  end
-
   describe 'put /purchases/:id' do
     let(:method) { :put }
     let(:path) { "/purchases/#{id}" }

@@ -288,9 +288,7 @@ describe 'service api' do
         put "/promotions/#{promotion.id}/activate"
       end.to change { promotion.active? }.to(true)
     end
-  end
 
-  describe Services::Inventory::Batches do
     it 'creates batch for promotion' do
       expect do
         post "/promotions/#{promotion.id}/batches",
@@ -302,7 +300,9 @@ describe 'service api' do
       expect_status(200)
       ids[:batch] = parsed_response[:id]
     end
+  end
 
+  describe Services::Inventory::Batches do
     it 'activates batch' do
       expect do
         put "/batches/#{batch.id}/activate"
@@ -365,7 +365,7 @@ describe 'service api' do
     end
   end
 
-  describe Services::Shopping::PaymentMethods do
+  describe Services::Accounts::Users do
     it 'creates new payment method' do
       expect do
         post "/users/#{user.id}/payment_methods",
@@ -378,9 +378,7 @@ describe 'service api' do
       expect_status(200)
       ids[:pmethod] = parsed_response[:id]
     end
-  end
 
-  describe Services::Shopping::Addresses do
     it 'creates new address' do
       expect do
         post "/users/#{user.id}/addresses",
@@ -395,9 +393,7 @@ describe 'service api' do
       expect_status(200)
       ids[:address] = parsed_response[:id]
     end
-  end
 
-  describe Services::Shopping::Purchases do
     it 'creates new purchase' do
       expect do
         post "/users/#{user.id}/purchases",
@@ -410,7 +406,9 @@ describe 'service api' do
       expect_status(200)
       ids[:purchase] = parsed_response[:id]
     end
+  end
 
+  describe Services::Shopping::Purchases do
     it 'adds physical item to purchase' do
       expect do
         post "/purchases/#{purchase.id}/orders",
@@ -520,7 +518,7 @@ describe 'service api' do
     end
   end
 
-  describe Services::Fulfillment::Ownerships do
+  describe Services::Accounts::Users do
     it 'returns all user ownerships' do
       expect do
         get "/users/#{user.id}/ownerships"
@@ -528,9 +526,7 @@ describe 'service api' do
       expect_status(200)
       expect(parsed_response.count).to eq(3)
     end
-  end
 
-  describe Services::Fulfillment::Shipments do
     it 'returns all user ownerships' do
       expect do
         get "/users/#{user.id}/shipments"
@@ -570,7 +566,7 @@ describe 'service api' do
     it { should have_sent_email.to(purchase.user.email) }
   end
 
-  describe Services::Fulfillment::Ownerships do
+  describe Services::Accounts::Users do
     it 'returns all user ownerships' do
       expect do
         get "/users/#{user.id}/ownerships"
@@ -578,9 +574,7 @@ describe 'service api' do
       expect_status(200)
       expect(parsed_response.count).to eq(0)
     end
-  end
 
-  describe Services::Fulfillment::Shipments do
     it 'returns all user ownerships' do
       expect do
         get "/users/#{user.id}/shipments"

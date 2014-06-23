@@ -169,4 +169,210 @@ describe Services::Accounts::Users do
       end
     end
   end
+
+  describe 'get /users/:id/ownerships' do
+    let(:method) { :get }
+    let(:path) { "/users/#{id}/ownerships" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      before :each do
+        FactoryGirl.create :ownership, user: user
+      end
+
+      it 'returns the ownerships' do
+        send_request
+        expect_status(200)
+        expect_response(user.ownerships.map do |ownership|
+          OwnershipSerializer.new(ownership)
+        end.to_json)
+      end
+    end
+  end
+
+  describe 'get /users/:id/shipments' do
+    let(:method) { :get }
+    let(:path) { "/users/#{id}/shipments" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      before :each do
+        FactoryGirl.create :shipment, user: user
+      end
+
+      it 'returns the shipments' do
+        send_request
+        expect_status(200)
+        expect_response(user.shipments.map do |shipment|
+          ShipmentSerializer.new(shipment)
+        end.to_json)
+      end
+    end
+  end
+
+  describe 'get /users/:id/addresses' do
+    let(:method) { :get }
+    let(:path) { "/users/#{id}/addresses" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      before :each do
+        FactoryGirl.create :address, user: user
+      end
+
+      it 'returns the addresses' do
+        send_request
+        expect_status(200)
+        expect_response(user.addresses.map do |address|
+          AddressSerializer.new(address)
+        end.to_json)
+      end
+    end
+  end
+
+  describe 'post /users/:id/addresses' do
+    let(:method) { :post }
+    let(:path) { "/users/#{id}/addresses" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      context 'invalid parameters' do
+        let(:params) { {} }
+
+        include_examples 'bad request'
+      end
+
+      context 'valid parameters' do
+        let :params do
+          { address: FactoryGirl.build(:address).attributes }
+        end
+
+        it 'creates a new address' do
+          expect { send_request }.to change { user.addresses.count }.by(1)
+          expect_status(200)
+          expect_response(AddressSerializer.new(user.addresses.last).to_json)
+        end
+      end
+    end
+  end
+
+  describe 'get /users/:id/orders' do
+    let(:method) { :get }
+    let(:path) { "/users/#{id}/orders" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      before :each do
+        FactoryGirl.create :order, purchase: FactoryGirl.create(:purchase, user: user)
+      end
+
+      it 'returns the orders' do
+        send_request
+        expect_status(200)
+        expect_response(user.purchases.map(&:orders).flatten.map do |order|
+          OrderSerializer.new(order)
+        end.to_json)
+      end
+    end
+  end
+
+  describe 'get /users/:id/payment_methods' do
+    let(:method) { :get }
+    let(:path) { "/users/#{id}/payment_methods" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      before :each do
+        FactoryGirl.create :payment_method, user: user
+      end
+
+      it 'returns the payment methods' do
+        send_request
+        expect_status(200)
+        expect_response(user.payment_methods.map do |payment_method|
+          PaymentMethodSerializer.new(payment_method)
+        end.to_json)
+      end
+    end
+  end
+
+  describe 'post /users/:id/payment_methods' do
+    let(:method) { :post }
+    let(:path) { "/users/#{id}/payment_methods" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      context 'invalid parameters' do
+        let(:params) { {} }
+
+        include_examples 'bad request'
+      end
+
+      context 'valid parameters' do
+        let :params do
+          { payment_method: FactoryGirl.build(:payment_method).attributes }
+        end
+
+        it 'creates a new payment method' do
+          expect { send_request }.to change { user.payment_methods.count }.by(1)
+          expect_status(200)
+          expect_response(PaymentMethodSerializer.new(user.payment_methods.last).to_json)
+        end
+      end
+    end
+  end
+
+  describe 'get /users/:id/purchases' do
+    let(:method) { :get }
+    let(:path) { "/users/#{id}/purchases" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      before :each do
+        FactoryGirl.create :purchase, user: user
+      end
+
+      it 'returns the purchases' do
+        send_request
+        expect_status(200)
+        expect_response(user.purchases.map do |purchase|
+          PurchaseSerializer.new(purchase)
+        end.to_json)
+      end
+    end
+  end
+
+  describe 'post /users/:id/purchases' do
+    let(:method) { :post }
+    let(:path) { "/users/#{id}/purchases" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      context 'valid parameters' do
+        let(:address) { FactoryGirl.create :address, user: user }
+        let(:params) { { purchase: { billing_address_id: address.id } } }
+
+        it 'creates new purchase' do
+          expect { send_request }.to change { user.purchases.count }.by(1)
+          expect_status(200)
+          expect_response(PurchaseSerializer.new(user.purchases.last).to_json)
+        end
+
+        it 'sets the attributes' do
+          send_request
+          expect(user.purchases.last.billing_address).to eq(address)
+          expect(user.purchases.last).to be_pending
+        end
+      end
+    end
+  end
 end

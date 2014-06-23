@@ -44,6 +44,81 @@ module Services
         end
       end
 
+      get '/users/:id/ownerships' do
+        process_request do
+          user = User.find(params[:id])
+          respond_with(user.ownerships.map do |ownership|
+            OwnershipSerializer.new(ownership)
+          end)
+        end
+      end
+
+      get '/users/:id/shipments' do
+        process_request do
+          user = User.find(params[:id])
+          respond_with(user.shipments.map do |shipment|
+            ShipmentSerializer.new(shipment)
+          end)
+        end
+      end
+
+      get '/users/:id/addresses' do
+        process_request do
+          addresses = User.find(params[:id]).addresses
+          respond_with(addresses.map do |address|
+            AddressSerializer.new(address)
+          end)
+        end
+      end
+
+      post '/users/:id/addresses' do
+        process_request do
+          address = User.find(params[:id]).addresses.create!(params[:address])
+          respond_with(AddressSerializer.new(address))
+        end
+      end
+
+      get '/users/:id/orders' do
+        process_request do
+          orders = User.find(params[:id]).purchases.map(&:orders).flatten
+          respond_with(orders.map do |order|
+            OrderSerializer.new(order)
+          end)
+        end
+      end
+
+      get '/users/:id/payment_methods' do
+        process_request do
+          payment_methods = User.find(params[:id]).payment_methods
+          respond_with(payment_methods.map do |payment_method|
+            PaymentMethodSerializer.new(payment_method)
+          end)
+        end
+      end
+
+      post '/users/:id/payment_methods' do
+        process_request do
+          payment_method = User.find(params[:id]).payment_methods.create!(params[:payment_method])
+          respond_with(PaymentMethodSerializer.new(payment_method))
+        end
+      end
+
+      get '/users/:id/purchases' do
+        process_request do
+          purchases = User.find(params[:id]).purchases
+          respond_with(purchases.map do |purchase|
+            PurchaseSerializer.new(purchase)
+          end)
+        end
+      end
+
+      post '/users/:id/purchases' do
+        process_request do
+          purchase = User.find(params[:id]).purchases.create!(params[:purchase])
+          respond_with(PurchaseSerializer.new(purchase))
+        end
+      end
+
       protected
 
       def user_params

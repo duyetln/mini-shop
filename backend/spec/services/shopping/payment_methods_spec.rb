@@ -2,60 +2,10 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Shopping::PaymentMethods do
-  let(:user) { FactoryGirl.create(:user).reload }
-  let(:id) { user.id }
-
-  describe 'get /users/:id/payment_methods' do
-    let(:method) { :get }
-    let(:path) { "/users/#{id}/payment_methods" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      before :each do
-        FactoryGirl.create :payment_method, user: user
-      end
-
-      it 'returns the payment methods' do
-        send_request
-        expect_status(200)
-        expect_response(user.payment_methods.map do |payment_method|
-          PaymentMethodSerializer.new(payment_method)
-        end.to_json)
-      end
-    end
-  end
-
-  describe 'post /users/:id/payment_methods' do
-    let(:method) { :post }
-    let(:path) { "/users/#{id}/payment_methods" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      context 'invalid parameters' do
-        let(:params) { {} }
-
-        include_examples 'bad request'
-      end
-
-      context 'valid parameters' do
-        let :params do
-          { payment_method: FactoryGirl.build(:payment_method).attributes }
-        end
-
-        it 'creates a new payment method' do
-          expect { send_request }.to change { user.payment_methods.count }.by(1)
-          expect_status(200)
-          expect_response(PaymentMethodSerializer.new(user.payment_methods.last).to_json)
-        end
-      end
-    end
-  end
-
   describe 'put /payment_methods/:id' do
     let(:method) { :put }
     let(:path) { "/payment_methods/#{id}" }
+    let(:user) { FactoryGirl.create(:user).reload }
     let(:payment_method) { FactoryGirl.create(:payment_method, user: user) }
     let(:id) { payment_method.id }
     let(:params) { { payment_method: payment_method.attributes } }

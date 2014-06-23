@@ -4,22 +4,6 @@ require 'models/serializers/shopping'
 module Services
   module Shopping
     class Purchases < Services::Base
-      get '/users/:id/purchases' do
-        process_request do
-          purchases = User.find(params[:id]).purchases
-          respond_with(purchases.map do |purchase|
-            PurchaseSerializer.new(purchase)
-          end)
-        end
-      end
-
-      post '/users/:id/purchases' do
-        process_request do
-          purchase = User.find(params[:id]).purchases.create!(purchase_params)
-          respond_with(PurchaseSerializer.new(purchase))
-        end
-      end
-
       put '/purchases/:id' do
         process_request do
           purchase = Purchase.find(params[:id])

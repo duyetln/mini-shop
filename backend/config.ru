@@ -9,8 +9,6 @@ use Rack::Parser, parsers: { 'application/json' => proc { |data| Yajl::Parser.pa
 
 class ApplicationService < Sinatra::Base
   use Services::Accounts::Users
-  use Services::Fulfillment::Ownerships
-  use Services::Fulfillment::Shipments
   use Services::Inventory::Batches
   use Services::Inventory::Bundles
   use Services::Inventory::Coupons
@@ -25,7 +23,6 @@ class ApplicationService < Sinatra::Base
   use Services::Inventory::StoreItems
   use Services::Mailing::Emails
   use Services::Shopping::Addresses
-  use Services::Shopping::Orders
   use Services::Shopping::PaymentMethods
   use Services::Shopping::Purchases
 end
