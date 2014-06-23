@@ -30,3 +30,5 @@ Here are the goals set for this project:
     - Inventory items now cannot be deleted when active.
   * 0.3.0
     - Add service endpoints for sending account activation, purchase receipt, and purchase status emails.
+  * 0.3.1
+    - Use routing table in favor of stacking service endpoints as middlewares.
