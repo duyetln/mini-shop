@@ -28,9 +28,9 @@ describe Services::Shopping::Purchases do
     item.reload
   end
 
-  describe 'put /purchases/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/purchases/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 
@@ -91,9 +91,9 @@ describe Services::Shopping::Purchases do
     end
   end
 
-  describe 'post /purchases/:id/orders' do
+  describe 'post /:id/orders' do
     let(:method) { :post }
-    let(:path) { "/purchases/#{id}/orders" }
+    let(:path) { "/#{id}/orders" }
 
     include_examples 'invalid id'
 
@@ -187,9 +187,9 @@ describe Services::Shopping::Purchases do
     end
   end
 
-  describe 'delete /purchases/:id/orders/:order_id' do
+  describe 'delete /:id/orders/:order_id' do
     let(:method) { :delete }
-    let(:path) { "/purchases/#{id}/orders/#{order_id}" }
+    let(:path) { "/#{id}/orders/#{order_id}" }
     let(:order_id) { rand_str }
 
     include_examples 'invalid id'
@@ -248,9 +248,9 @@ describe Services::Shopping::Purchases do
     end
   end
 
-  describe 'put /purchases/:id/submit' do
+  describe 'put /:id/submit' do
     let(:method) { :put }
-    let(:path) { "/purchases/#{id}/submit" }
+    let(:path) { "/#{id}/submit" }
 
     include_examples 'invalid id'
 
@@ -272,9 +272,9 @@ describe Services::Shopping::Purchases do
     end
   end
 
-  describe 'get /purchases/:id' do
+  describe 'get /:id' do
     let(:method) { :get }
-    let(:path) { "/purchases/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 
@@ -290,9 +290,9 @@ describe Services::Shopping::Purchases do
     end
   end
 
-  describe 'put /purchases/:id/return' do
+  describe 'put /:id/return' do
     let(:method) { :put }
-    let(:path) { "/purchases/#{id}/return" }
+    let(:path) { "/#{id}/return" }
 
     include_examples 'invalid id'
 
@@ -332,9 +332,9 @@ describe Services::Shopping::Purchases do
       end
     end
 
-    describe 'put /purchases/:id/orders/:order_id/return' do
+    describe 'put /:id/orders/:order_id/return' do
       let(:method) { :put }
-      let(:path) { "/purchases/#{id}/orders/#{order_id}/return" }
+      let(:path) { "/#{id}/orders/#{order_id}/return" }
       let(:order_id) { rand_str }
 
       include_examples 'invalid id'

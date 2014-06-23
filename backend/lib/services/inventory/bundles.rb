@@ -4,7 +4,7 @@ require 'models/serializers/inventory'
 module Services
   module Inventory
     class Bundles < Services::Base
-      get '/bundles' do
+      get '/' do
         process_request do
           bundles = Bundle.all
           respond_with(bundles.map do |item|
@@ -13,7 +13,7 @@ module Services
         end
       end
 
-      post '/bundles' do
+      post '/' do
         process_request do
           bundle = Bundle.new(params[:bundle])
           bundle.save!
@@ -21,7 +21,7 @@ module Services
         end
       end
 
-      put '/bundles/:id' do
+      put '/:id' do
         process_request do
           bundle = Bundle.find(params[:id])
           bundle.update_attributes!(params[:bundle])
@@ -29,7 +29,7 @@ module Services
         end
       end
 
-      post '/bundles/:id/bundleds' do
+      post '/:id/bundleds' do
         process_request do
           bundle = Bundle.find(params[:id])
           bundle.add_or_update(
@@ -41,7 +41,7 @@ module Services
         end
       end
 
-      delete '/bundles/:id/bundleds/:bundled_id' do
+      delete '/:id/bundleds/:bundled_id' do
         process_request do
           bundle = Bundle.find(params[:id])
           bundled = bundle.bundleds.find(params[:bundled_id])
@@ -50,7 +50,7 @@ module Services
         end
       end
 
-      put '/bundles/:id/activate' do
+      put '/:id/activate' do
         process_request do
           bundle = Bundle.find(params[:id])
           bundle.activate! || unprocessable!
@@ -58,7 +58,7 @@ module Services
         end
       end
 
-      delete '/bundles/:id' do
+      delete '/:id' do
         process_request do
           bundle = Bundle.find(params[:id])
           bundle.delete! || unprocessable!

@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Mailing::Emails do
-  describe 'post /emails' do
+  describe 'post /' do
     let(:method) { :post }
-    let(:path) { '/emails' }
+    let(:path) { '/' }
 
     shared_examples 'invalid email type' do
       context 'invalid email type' do

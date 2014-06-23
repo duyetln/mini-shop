@@ -4,7 +4,7 @@ require 'models/serializers/inventory'
 module Services
   module Inventory
     class StoreItems < Services::Base
-      get '/store_items' do
+      get '/' do
         process_request do
           store_items = StoreItem.all
           respond_with(store_items.map do |item|
@@ -13,7 +13,7 @@ module Services
         end
       end
 
-      post '/store_items' do
+      post '/' do
         process_request do
           store_item = StoreItem.new(params[:store_item])
           store_item.save!
@@ -21,7 +21,7 @@ module Services
         end
       end
 
-      put '/store_items/:id' do
+      put '/:id' do
         process_request do
           store_item = StoreItem.find(params[:id])
           store_item.update_attributes!(params[:store_item])
@@ -29,7 +29,7 @@ module Services
         end
       end
 
-      delete '/store_items/:id' do
+      delete '/:id' do
         process_request do
           store_item = StoreItem.find(params[:id])
           store_item.delete!

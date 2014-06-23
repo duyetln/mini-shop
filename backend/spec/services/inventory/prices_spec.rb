@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::Prices do
-  describe 'get /prices' do
+  describe 'get /' do
     let(:method) { :get }
-    let(:path) { '/prices' }
+    let(:path) { '/' }
 
     before :each do
       FactoryGirl.create :price
@@ -19,9 +19,9 @@ describe Services::Inventory::Prices do
     end
   end
 
-  describe 'post /prices' do
+  describe 'post /' do
     let(:method) { :post }
-    let(:path) { '/prices' }
+    let(:path) { '/' }
 
     context 'invalid parameters' do
       let(:params) { {} }
@@ -47,9 +47,9 @@ describe Services::Inventory::Prices do
     end
   end
 
-  describe 'put /prices/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/prices/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 

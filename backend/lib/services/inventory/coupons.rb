@@ -4,7 +4,7 @@ require 'models/serializers/inventory'
 module Services
   module Inventory
     class Coupons < Services::Base
-      get '/coupons/:code' do
+      get '/:code' do
         process_request do
           coupon = Coupon.find_by_code!(params[:code])
           not_found! if coupon.deleted?

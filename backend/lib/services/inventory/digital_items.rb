@@ -4,7 +4,7 @@ require 'models/serializers/inventory'
 module Services
   module Inventory
     class DigitalItems < Services::Base
-      get '/digital_items' do
+      get '/' do
         process_request do
           digital_items = DigitalItem.all
           respond_with(digital_items.map do |item|
@@ -13,7 +13,7 @@ module Services
         end
       end
 
-      post '/digital_items' do
+      post '/' do
         process_request do
           digital_item = DigitalItem.new(params[:digital_item])
           digital_item.save!
@@ -21,7 +21,7 @@ module Services
         end
       end
 
-      put '/digital_items/:id' do
+      put '/:id' do
         process_request do
           digital_item = DigitalItem.find(params[:id])
           digital_item.update_attributes!(params[:digital_item])
@@ -29,7 +29,7 @@ module Services
         end
       end
 
-      put '/digital_items/:id/activate' do
+      put '/:id/activate' do
         process_request do
           digital_item = DigitalItem.find(params[:id])
           digital_item.activate! || unprocessable!
@@ -37,7 +37,7 @@ module Services
         end
       end
 
-      delete '/digital_items/:id' do
+      delete '/:id' do
         process_request do
           digital_item = DigitalItem.find(params[:id])
           digital_item.delete! || unprocessable!

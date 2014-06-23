@@ -4,7 +4,7 @@ require 'models/serializers/inventory'
 module Services
   module Inventory
     class Prices < Services::Base
-      get '/prices' do
+      get '/' do
         process_request do
           prices = Price.all
           respond_with(prices.map do |price|
@@ -13,7 +13,7 @@ module Services
         end
       end
 
-      post '/prices' do
+      post '/' do
         process_request do
           price = Price.new(params[:price])
           price.save!
@@ -21,7 +21,7 @@ module Services
         end
       end
 
-      put '/prices/:id' do
+      put '/:id' do
         process_request do
           price = Price.find(params[:id])
           price.update_attributes!(params[:price])

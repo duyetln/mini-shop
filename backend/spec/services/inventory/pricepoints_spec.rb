@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::Pricepoints do
-  describe 'get /pricepoints' do
+  describe 'get /' do
     let(:method) { :get }
-    let(:path) { '/pricepoints' }
+    let(:path) { '/' }
 
     before :each do
       FactoryGirl.create :pricepoint
@@ -19,9 +19,9 @@ describe Services::Inventory::Pricepoints do
     end
   end
 
-  describe 'post /pricepoints' do
+  describe 'post /' do
     let(:method) { :post }
-    let(:path) { '/pricepoints' }
+    let(:path) { '/' }
 
     context 'invalid parameters' do
       let(:params) { {} }
@@ -44,9 +44,9 @@ describe Services::Inventory::Pricepoints do
     end
   end
 
-  describe 'put /pricepoints/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/pricepoints/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 
@@ -76,9 +76,9 @@ describe Services::Inventory::Pricepoints do
     end
   end
 
-  describe 'post /pricepoints/:id/pricepoint_prices' do
+  describe 'post /:id/pricepoint_prices' do
     let(:method) { :post }
-    let(:path) { "/pricepoints/#{id}/pricepoint_prices" }
+    let(:path) { "/#{id}/pricepoint_prices" }
 
     include_examples 'invalid id'
 

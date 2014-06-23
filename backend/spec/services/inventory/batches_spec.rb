@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::Batches do
-  describe 'get /batches/:id/coupons' do
+  describe 'get /:id/coupons' do
     let(:method) { :get }
-    let(:path) { "/batches/#{id}/coupons" }
+    let(:path) { "/#{id}/coupons" }
 
     include_examples 'invalid id'
 
@@ -22,9 +22,9 @@ describe Services::Inventory::Batches do
     end
   end
 
-  describe 'put /batches/:id/activate' do
+  describe 'put /:id/activate' do
     let(:method) { :put }
-    let(:path) { "/batches/#{id}/activate" }
+    let(:path) { "/#{id}/activate" }
 
     include_examples 'invalid id'
 
@@ -58,9 +58,9 @@ describe Services::Inventory::Batches do
     end
   end
 
-  describe 'delete /batches/:id' do
+  describe 'delete /:id' do
     let(:method) { :delete }
-    let(:path) { "/batches/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 

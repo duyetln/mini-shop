@@ -4,7 +4,7 @@ require 'models/serializers/inventory'
 module Services
   module Inventory
     class Promotions < Services::Base
-      get '/promotions' do
+      get '/' do
         process_request do
           promotions = Promotion.all
           respond_with(promotions.map do |promotion|
@@ -13,7 +13,7 @@ module Services
         end
       end
 
-      post '/promotions' do
+      post '/' do
         process_request do
           promotion = Promotion.new(params[:promotion])
           promotion.save!
@@ -21,7 +21,7 @@ module Services
         end
       end
 
-      put '/promotions/:id' do
+      put '/:id' do
         process_request do
           promotion = Promotion.find(params[:id])
           promotion.update_attributes!(params[:promotion])
@@ -29,7 +29,7 @@ module Services
         end
       end
 
-      put '/promotions/:id/activate' do
+      put '/:id/activate' do
         process_request do
           promotion = Promotion.find(params[:id])
           promotion.activate! || unprocessable!
@@ -37,7 +37,7 @@ module Services
         end
       end
 
-      delete '/promotions/:id' do
+      delete '/:id' do
         process_request do
           promotion = Promotion.find(params[:id])
           promotion.delete! || unprocessable!
@@ -45,7 +45,7 @@ module Services
         end
       end
 
-      get '/promotions/:id/batches' do
+      get '/:id/batches' do
         process_request do
           batches = Promotion.find(params[:id]).batches
           respond_with(batches.map do |batch|
@@ -54,7 +54,7 @@ module Services
         end
       end
 
-      post '/promotions/:id/batches' do
+      post '/:id/batches' do
         process_request do
           batch = Promotion.find(params[:id]).create_batch(
             params[:batch][:size].to_i,
@@ -64,7 +64,7 @@ module Services
         end
       end
 
-      post '/promotions/:id/batches/generate' do
+      post '/:id/batches/generate' do
         process_request do
           batches = Promotion.find(params[:id]).create_batches(
             params[:qty].to_i,

@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::Discounts do
-  describe 'get /discounts' do
+  describe 'get /' do
     let(:method) { :get }
-    let(:path) { '/discounts' }
+    let(:path) { '/' }
 
     before :each do
       FactoryGirl.create :discount
@@ -19,9 +19,9 @@ describe Services::Inventory::Discounts do
     end
   end
 
-  describe 'post /discounts' do
+  describe 'post /' do
     let(:method) { :post }
-    let(:path) { '/discounts' }
+    let(:path) { '/' }
 
     context 'invalid parameters' do
       let(:params) { {} }
@@ -44,9 +44,9 @@ describe Services::Inventory::Discounts do
     end
   end
 
-  describe 'put /discounts/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/discounts/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 

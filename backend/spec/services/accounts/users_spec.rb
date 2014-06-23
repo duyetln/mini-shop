@@ -9,9 +9,9 @@ describe Services::Accounts::Users do
   let(:actv_code) { user.actv_code }
   let(:id) { user.id }
 
-  describe 'get /users/:id' do
+  describe 'get /:id' do
     let(:method) { :get }
-    let(:path) { "/users/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 
@@ -24,9 +24,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'post /users' do
+  describe 'post /' do
     let(:method) { :post }
-    let(:path) { '/users' }
+    let(:path) { '/' }
     let(:user) { FactoryGirl.build :user }
 
     context 'valid parameters' do
@@ -50,9 +50,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'post /users/authenticate' do
+  describe 'post /authenticate' do
     let(:method) { :post }
-    let(:path) { '/users/authenticate' }
+    let(:path) { '/authenticate' }
     let(:params) { { user: { email: input_email, password: input_password } } }
     let(:input_email) { email }
     let(:input_password) { password }
@@ -92,9 +92,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'put /users/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/users/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 
@@ -121,9 +121,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'put /users/:uuid/confirm/:actv_code' do
+  describe 'put /:uuid/confirm/:actv_code' do
     let(:method) { :put }
-    let(:path) { "/users/#{uuid}/confirm/#{actv_code}" }
+    let(:path) { "/#{uuid}/confirm/#{actv_code}" }
 
     context 'invalid uuid' do
       let(:uuid) { rand_str }
@@ -170,9 +170,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'get /users/:id/ownerships' do
+  describe 'get /:id/ownerships' do
     let(:method) { :get }
-    let(:path) { "/users/#{id}/ownerships" }
+    let(:path) { "/#{id}/ownerships" }
 
     include_examples 'invalid id'
 
@@ -191,9 +191,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'get /users/:id/shipments' do
+  describe 'get /:id/shipments' do
     let(:method) { :get }
-    let(:path) { "/users/#{id}/shipments" }
+    let(:path) { "/#{id}/shipments" }
 
     include_examples 'invalid id'
 
@@ -212,9 +212,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'get /users/:id/addresses' do
+  describe 'get /:id/addresses' do
     let(:method) { :get }
-    let(:path) { "/users/#{id}/addresses" }
+    let(:path) { "/#{id}/addresses" }
 
     include_examples 'invalid id'
 
@@ -233,9 +233,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'post /users/:id/addresses' do
+  describe 'post /:id/addresses' do
     let(:method) { :post }
-    let(:path) { "/users/#{id}/addresses" }
+    let(:path) { "/#{id}/addresses" }
 
     include_examples 'invalid id'
 
@@ -260,9 +260,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'get /users/:id/orders' do
+  describe 'get /:id/orders' do
     let(:method) { :get }
-    let(:path) { "/users/#{id}/orders" }
+    let(:path) { "/#{id}/orders" }
 
     include_examples 'invalid id'
 
@@ -281,9 +281,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'get /users/:id/payment_methods' do
+  describe 'get /:id/payment_methods' do
     let(:method) { :get }
-    let(:path) { "/users/#{id}/payment_methods" }
+    let(:path) { "/#{id}/payment_methods" }
 
     include_examples 'invalid id'
 
@@ -302,9 +302,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'post /users/:id/payment_methods' do
+  describe 'post /:id/payment_methods' do
     let(:method) { :post }
-    let(:path) { "/users/#{id}/payment_methods" }
+    let(:path) { "/#{id}/payment_methods" }
 
     include_examples 'invalid id'
 
@@ -329,9 +329,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'get /users/:id/purchases' do
+  describe 'get /:id/purchases' do
     let(:method) { :get }
-    let(:path) { "/users/#{id}/purchases" }
+    let(:path) { "/#{id}/purchases" }
 
     include_examples 'invalid id'
 
@@ -350,9 +350,9 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'post /users/:id/purchases' do
+  describe 'post /:id/purchases' do
     let(:method) { :post }
-    let(:path) { "/users/#{id}/purchases" }
+    let(:path) { "/#{id}/purchases" }
 
     include_examples 'invalid id'
 

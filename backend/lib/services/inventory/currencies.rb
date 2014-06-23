@@ -4,7 +4,7 @@ require 'models/serializers/inventory'
 module Services
   module Inventory
     class Currencies < Services::Base
-      get '/currencies' do
+      get '/' do
         process_request do
           currencies = Currency.all
           respond_with(currencies.map do |currency|
@@ -13,7 +13,7 @@ module Services
         end
       end
 
-      post '/currencies' do
+      post '/' do
         process_request do
           currency = Currency.new(params[:currency])
           currency.save!

@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::Currencies do
-  describe 'get /currencies' do
+  describe 'get /' do
     let(:method) { :get }
-    let(:path) { '/currencies' }
+    let(:path) { '/' }
 
     before :each do
       Currency.where(code: 'USD').first_or_create!
@@ -19,9 +19,9 @@ describe Services::Inventory::Currencies do
     end
   end
 
-  describe 'post /currencies' do
+  describe 'post /' do
     let(:method) { :post }
-    let(:path) { '/currencies' }
+    let(:path) { '/' }
 
     context 'invalid parameters' do
       let(:params) { { currency: { code: nil } } }

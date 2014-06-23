@@ -3,7 +3,7 @@ require 'services/base'
 module Services
   module Mailing
     class Emails < Services::Base
-      post '/emails' do
+      post '/' do
         process_request do
           bad_request! unless email_types.include?(params[:type])
           email = params[:type].constantize.new(params[:payload])

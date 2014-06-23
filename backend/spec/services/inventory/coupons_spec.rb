@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::Coupons do
-  describe 'get /coupons/:code' do
+  describe 'get /:code' do
     let(:method) { :get }
-    let(:path) { "/coupons/#{code}" }
+    let(:path) { "/#{code}" }
 
     context 'invalid code' do
       let(:code) { rand_str }

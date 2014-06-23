@@ -4,7 +4,7 @@ require 'models/serializers/inventory'
 module Services
   module Inventory
     class Discounts < Services::Base
-      get '/discounts' do
+      get '/' do
         process_request do
           discounts = Discount.all
           respond_with(discounts.map do |discount|
@@ -13,7 +13,7 @@ module Services
         end
       end
 
-      post '/discounts' do
+      post '/' do
         process_request do
           discount = Discount.new(params[:discount])
           discount.save!
@@ -21,7 +21,7 @@ module Services
         end
       end
 
-      put '/discounts/:id' do
+      put '/:id' do
         process_request do
           discount = Discount.find(params[:id])
           discount.update_attributes!(params[:discount])

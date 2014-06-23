@@ -4,14 +4,14 @@ require 'models/serializers/accounts'
 module Services
   module Accounts
     class Users < Services::Base
-      get '/users/:id' do
+      get '/:id' do
         process_request do
           user = User.find(params[:id])
           respond_with(UserSerializer.new(user))
         end
       end
 
-      post '/users' do
+      post '/' do
         process_request do
           user = User.new(user_params)
           user.save!
@@ -19,7 +19,7 @@ module Services
         end
       end
 
-      post '/users/authenticate' do
+      post '/authenticate' do
         process_request do
           user = User.authenticate!(
             user_params[:email],
@@ -29,7 +29,7 @@ module Services
         end
       end
 
-      put '/users/:id' do
+      put '/:id' do
         process_request do
           user = User.find(params[:id])
           user.update_attributes!(user_params)
@@ -37,14 +37,14 @@ module Services
         end
       end
 
-      put '/users/:uuid/confirm/:actv_code' do
+      put '/:uuid/confirm/:actv_code' do
         process_request do
           user = User.confirm!(params[:uuid], params[:actv_code])
           respond_with(UserSerializer.new(user))
         end
       end
 
-      get '/users/:id/ownerships' do
+      get '/:id/ownerships' do
         process_request do
           user = User.find(params[:id])
           respond_with(user.ownerships.map do |ownership|
@@ -53,7 +53,7 @@ module Services
         end
       end
 
-      get '/users/:id/shipments' do
+      get '/:id/shipments' do
         process_request do
           user = User.find(params[:id])
           respond_with(user.shipments.map do |shipment|
@@ -62,7 +62,7 @@ module Services
         end
       end
 
-      get '/users/:id/addresses' do
+      get '/:id/addresses' do
         process_request do
           addresses = User.find(params[:id]).addresses
           respond_with(addresses.map do |address|
@@ -71,14 +71,14 @@ module Services
         end
       end
 
-      post '/users/:id/addresses' do
+      post '/:id/addresses' do
         process_request do
           address = User.find(params[:id]).addresses.create!(params[:address])
           respond_with(AddressSerializer.new(address))
         end
       end
 
-      get '/users/:id/orders' do
+      get '/:id/orders' do
         process_request do
           orders = User.find(params[:id]).purchases.map(&:orders).flatten
           respond_with(orders.map do |order|
@@ -87,7 +87,7 @@ module Services
         end
       end
 
-      get '/users/:id/payment_methods' do
+      get '/:id/payment_methods' do
         process_request do
           payment_methods = User.find(params[:id]).payment_methods
           respond_with(payment_methods.map do |payment_method|
@@ -96,14 +96,14 @@ module Services
         end
       end
 
-      post '/users/:id/payment_methods' do
+      post '/:id/payment_methods' do
         process_request do
           payment_method = User.find(params[:id]).payment_methods.create!(params[:payment_method])
           respond_with(PaymentMethodSerializer.new(payment_method))
         end
       end
 
-      get '/users/:id/purchases' do
+      get '/:id/purchases' do
         process_request do
           purchases = User.find(params[:id]).purchases
           respond_with(purchases.map do |purchase|
@@ -112,7 +112,7 @@ module Services
         end
       end
 
-      post '/users/:id/purchases' do
+      post '/:id/purchases' do
         process_request do
           purchase = User.find(params[:id]).purchases.create!(params[:purchase])
           respond_with(PurchaseSerializer.new(purchase))

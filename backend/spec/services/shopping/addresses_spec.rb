@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Shopping::Addresses do
-  describe 'put /addresses/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/addresses/#{id}" }
+    let(:path) { "/#{id}" }
     let(:user) { FactoryGirl.create(:user).reload }
     let(:address) { FactoryGirl.create(:address, user: user) }
     let(:id) { address.id }

@@ -31,7 +31,7 @@ describe 'service api' do
   describe Services::Accounts::Users do
     it 'creates new user' do
       expect do
-        post '/users',
+        post '/',
              user: {
                first_name: Faker::Name.first_name.gsub(/[^a-zA-Z]+/, ''),
                last_name: Faker::Name.last_name.gsub(/[^a-zA-Z]+/, ''),
@@ -48,7 +48,7 @@ describe 'service api' do
   describe Services::Mailing::Emails do
     before :each do
       expect do
-      post '/emails',
+      post '/',
            type: 'AccountActivationEmail',
            payload: {
              user_id: user.id
@@ -62,7 +62,7 @@ describe 'service api' do
   describe Services::Accounts::Users do
     it 'confirms the user' do
       expect do
-        put "/users/#{user.uuid}/confirm/#{user.actv_code}"
+        put "/#{user.uuid}/confirm/#{user.actv_code}"
       end.to change { user.confirmed? }.from(false).to(true)
       expect_status(200)
       ids[:user] = parsed_response[:id]
@@ -72,7 +72,7 @@ describe 'service api' do
   describe Services::Inventory::Currencies do
     it 'creates USD currency' do
       expect do
-        post '/currencies',
+        post '/',
              currency: {
                code: 'USD'
              }
@@ -83,7 +83,7 @@ describe 'service api' do
 
     it 'creates EUR currency' do
       expect do
-        post '/currencies',
+        post '/',
              currency: {
                code: 'EUR'
              }
@@ -94,7 +94,7 @@ describe 'service api' do
 
     it 'creates GBP currency' do
       expect do
-        post '/currencies',
+        post '/',
              currency: {
                code: 'GBP'
              }
@@ -107,7 +107,7 @@ describe 'service api' do
   describe Services::Inventory::Pricepoints do
     it 'creates new pricepoint' do
       expect do
-        post '/pricepoints',
+        post '/',
              pricepoint: {
                name: rand_str
              }
@@ -118,7 +118,7 @@ describe 'service api' do
 
     it 'adds new price for USD currency' do
       expect do
-        post "/pricepoints/#{ppoint.id}/pricepoint_prices",
+        post "/#{ppoint.id}/pricepoint_prices",
              pricepoint_price: {
                amount: amount,
                currency_id: usd.id
@@ -130,7 +130,7 @@ describe 'service api' do
 
     it 'adds new price for EUR currency' do
       expect do
-        post "/pricepoints/#{ppoint.id}/pricepoint_prices",
+        post "/#{ppoint.id}/pricepoint_prices",
              pricepoint_price: {
                amount: amount,
                currency_id: eur.id
@@ -142,7 +142,7 @@ describe 'service api' do
 
     it 'adds new price for EUR currency' do
       expect do
-        post "/pricepoints/#{ppoint.id}/pricepoint_prices",
+        post "/#{ppoint.id}/pricepoint_prices",
              pricepoint_price: {
                amount: amount,
                currency_id: gbp.id
@@ -156,7 +156,7 @@ describe 'service api' do
   describe Services::Inventory::Discounts do
     it 'creates new discount' do
       expect do
-        post '/discounts',
+        post '/',
              discount: {
                name: rand_str,
                rate: amount / 100.0
@@ -170,7 +170,7 @@ describe 'service api' do
   describe Services::Inventory::Prices do
     it 'creates new price' do
       expect do
-        post '/prices',
+        post '/',
              price: {
                name: rand_str,
                pricepoint_id: ppoint.id,
@@ -185,7 +185,7 @@ describe 'service api' do
   describe Services::Inventory::PhysicalItems do
     it 'creates new physical item' do
       expect do
-        post '/physical_items',
+        post '/',
              physical_item: {
                title: rand_str,
                qty: 1_000
@@ -197,7 +197,7 @@ describe 'service api' do
 
     it 'activates physical item' do
       expect do
-        put "/physical_items/#{pitem.id}/activate"
+        put "/#{pitem.id}/activate"
       end.to change { pitem.active? }.to(true)
     end
   end
@@ -205,7 +205,7 @@ describe 'service api' do
   describe Services::Inventory::DigitalItems do
     it 'creates new digital item' do
       expect do
-        post '/digital_items',
+        post '/',
              digital_item: {
                title: rand_str
              }
@@ -216,7 +216,7 @@ describe 'service api' do
 
     it 'activates digital item' do
       expect do
-        put "/digital_items/#{ditem.id}/activate"
+        put "/#{ditem.id}/activate"
       end.to change { ditem.active? }.to(true)
     end
   end
@@ -224,7 +224,7 @@ describe 'service api' do
   describe Services::Inventory::Bundles do
     it 'creates new bundle' do
       expect do
-        post '/bundles',
+        post '/',
              bundle: {
                title: rand_str
              }
@@ -235,7 +235,7 @@ describe 'service api' do
 
     it 'adds physical item to bundle' do
       expect do
-        post "/bundles/#{bundle.id}/bundleds",
+        post "/#{bundle.id}/bundleds",
              bundled: {
                item_type: pitem.class.name,
                item_id: pitem.id,
@@ -248,7 +248,7 @@ describe 'service api' do
 
     it 'adds digital item to bundle' do
       expect do
-        post "/bundles/#{bundle.id}/bundleds",
+        post "/#{bundle.id}/bundleds",
              bundled: {
                item_type: ditem.class.name,
                item_id: ditem.id,
@@ -261,7 +261,7 @@ describe 'service api' do
 
     it 'activates bundle' do
       expect do
-        put "/bundles/#{bundle.id}/activate"
+        put "/#{bundle.id}/activate"
       end.to change { bundle.active? }.to(true)
     end
   end
@@ -269,7 +269,7 @@ describe 'service api' do
   describe Services::Inventory::Promotions do
     it 'creates promotion for digital item' do
       expect do
-        post '/promotions',
+        post '/',
              promotion: {
                name: rand_str,
                title: rand_str,
@@ -285,13 +285,13 @@ describe 'service api' do
 
     it 'activates promotion' do
       expect do
-        put "/promotions/#{promotion.id}/activate"
+        put "/#{promotion.id}/activate"
       end.to change { promotion.active? }.to(true)
     end
 
     it 'creates batch for promotion' do
       expect do
-        post "/promotions/#{promotion.id}/batches",
+        post "/#{promotion.id}/batches",
              batch: {
                name: rand_str,
                size: qty
@@ -305,7 +305,7 @@ describe 'service api' do
   describe Services::Inventory::Batches do
     it 'activates batch' do
       expect do
-        put "/batches/#{batch.id}/activate"
+        put "/#{batch.id}/activate"
       end.to change { batch.active? }.to(true)
       expect_status(200)
       ids[:batch] = parsed_response[:id]
@@ -313,7 +313,7 @@ describe 'service api' do
 
     it 'returns coupons for batch' do
       expect do
-        get "/batches/#{batch.id}/coupons"
+        get "/#{batch.id}/coupons"
       end.to_not change { batch.coupons.count }
       expect_status(200)
       expect(parsed_response.count).to eq(batch.coupons.count)
@@ -324,7 +324,7 @@ describe 'service api' do
   describe Services::Inventory::StoreItems do
     it 'creates store item for physical item' do
       expect do
-        post '/store_items',
+        post '/',
              store_item: {
                name: rand_str,
                item_type: pitem.class.name,
@@ -338,7 +338,7 @@ describe 'service api' do
 
     it 'creates store item for digital item' do
       expect do
-        post '/store_items',
+        post '/',
              store_item: {
                name: rand_str,
                item_type: ditem.class.name,
@@ -352,7 +352,7 @@ describe 'service api' do
 
     it 'creates store item for bundle item' do
       expect do
-        post '/store_items',
+        post '/',
              store_item: {
                name: rand_str,
                item_type: bundle.class.name,
@@ -368,7 +368,7 @@ describe 'service api' do
   describe Services::Accounts::Users do
     it 'creates new payment method' do
       expect do
-        post "/users/#{user.id}/payment_methods",
+        post "/#{user.id}/payment_methods",
              payment_method: {
                name: rand_str,
                balance: 0,
@@ -381,7 +381,7 @@ describe 'service api' do
 
     it 'creates new address' do
       expect do
-        post "/users/#{user.id}/addresses",
+        post "/#{user.id}/addresses",
              address: {
                line1: Faker::Address.street_address,
                city: Faker::Address.city,
@@ -396,7 +396,7 @@ describe 'service api' do
 
     it 'creates new purchase' do
       expect do
-        post "/users/#{user.id}/purchases",
+        post "/#{user.id}/purchases",
              purchase: {
                payment_method_id: pmethod.id,
                billing_address_id: address.id,
@@ -411,7 +411,7 @@ describe 'service api' do
   describe Services::Shopping::Purchases do
     it 'adds physical item to purchase' do
       expect do
-        post "/purchases/#{purchase.id}/orders",
+        post "/#{purchase.id}/orders",
              order: {
                item_type: psi.item.class.name,
                item_id: psi.item.id,
@@ -426,7 +426,7 @@ describe 'service api' do
 
     it 'adds digital item to purchase' do
       expect do
-        post "/purchases/#{purchase.id}/orders",
+        post "/#{purchase.id}/orders",
              order: {
                item_type: dsi.item.class.name,
                item_id: dsi.item.id,
@@ -441,7 +441,7 @@ describe 'service api' do
 
     it 'adds bundle to purchase' do
       expect do
-        post "/purchases/#{purchase.id}/orders",
+        post "/#{purchase.id}/orders",
              order: {
                item_type: bsi.item.class.name,
                item_id: bsi.item.id,
@@ -456,7 +456,7 @@ describe 'service api' do
 
     it 'adds coupon to purchase' do
       expect do
-        post "/purchases/#{purchase.id}/orders",
+        post "/#{purchase.id}/orders",
              order: {
                item_type: coupon.class.name,
                item_id: coupon.id,
@@ -471,7 +471,7 @@ describe 'service api' do
 
     it 'submits the purchase' do
       expect do
-        put "/purchases/#{purchase.id}/submit"
+        put "/#{purchase.id}/submit"
       end.to_not change { purchase.orders.all?(&:unmarked?) }
       expect(purchase).to be_committed
       expect_status(200)
@@ -482,7 +482,7 @@ describe 'service api' do
   describe Services::Mailing::Emails do
     before :each do
       expect do
-      post '/emails',
+      post '/',
            type: 'PurchaseReceiptEmail',
            payload: {
              purchase_id: purchase.id
@@ -496,7 +496,7 @@ describe 'service api' do
   describe Services::Shopping::PaymentMethods do
     it 'updates payment method balance' do
       expect do
-        put "/payment_methods/#{pmethod.id}",
+        put "/#{pmethod.id}",
             payment_method: {
               balance: pmethod_amount
             }
@@ -509,7 +509,7 @@ describe 'service api' do
   describe Services::Shopping::Purchases do
     it 'submits the purchase' do
       expect do
-        put "/purchases/#{purchase.id}/submit"
+        put "/#{purchase.id}/submit"
       end.to change { purchase.orders.all?(&:fulfilled?) }.from(false).to(true)
       expect(purchase.orders.any?(&:unmarked?)).to be_false
       expect(purchase).to be_committed
@@ -521,7 +521,7 @@ describe 'service api' do
   describe Services::Accounts::Users do
     it 'returns all user ownerships' do
       expect do
-        get "/users/#{user.id}/ownerships"
+        get "/#{user.id}/ownerships"
       end.to_not change { user.ownerships.count }
       expect_status(200)
       expect(parsed_response.count).to eq(3)
@@ -529,7 +529,7 @@ describe 'service api' do
 
     it 'returns all user ownerships' do
       expect do
-        get "/users/#{user.id}/shipments"
+        get "/#{user.id}/shipments"
       end.to_not change { user.shipments.count }
       expect_status(200)
       expect(parsed_response.count).to eq(2)
@@ -539,7 +539,7 @@ describe 'service api' do
   describe Services::Shopping::Purchases do
     it 'reverses the purchase' do
       expect do
-        put "/purchases/#{purchase.id}/return"
+        put "/#{purchase.id}/return"
       end.to change { purchase.orders.all?(&:reversed?) }.from(false).to(true)
       expect(purchase.orders.any?(&:unmarked?)).to be_false
       expect(purchase).to be_committed
@@ -555,7 +555,7 @@ describe 'service api' do
   describe Services::Mailing::Emails do
     before :each do
       expect do
-      post '/emails',
+      post '/',
            type: 'PurchaseStatusEmail',
            payload: {
              purchase_id: purchase.id
@@ -569,7 +569,7 @@ describe 'service api' do
   describe Services::Accounts::Users do
     it 'returns all user ownerships' do
       expect do
-        get "/users/#{user.id}/ownerships"
+        get "/#{user.id}/ownerships"
       end.to_not change { user.ownerships.count }
       expect_status(200)
       expect(parsed_response.count).to eq(0)
@@ -577,7 +577,7 @@ describe 'service api' do
 
     it 'returns all user ownerships' do
       expect do
-        get "/users/#{user.id}/shipments"
+        get "/#{user.id}/shipments"
       end.to_not change { user.shipments.count }
       expect_status(200)
       expect(parsed_response.count).to eq(2)

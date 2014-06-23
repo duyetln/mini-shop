@@ -4,7 +4,7 @@ require 'models/serializers/inventory'
 module Services
   module Inventory
     class PhysicalItems < Services::Base
-      get '/physical_items' do
+      get '/' do
         process_request do
           physical_items = PhysicalItem.all
           respond_with(physical_items.map do |item|
@@ -13,7 +13,7 @@ module Services
         end
       end
 
-      post '/physical_items' do
+      post '/' do
         process_request do
           physical_item = PhysicalItem.new(params[:physical_item])
           physical_item.save!
@@ -21,7 +21,7 @@ module Services
         end
       end
 
-      put '/physical_items/:id' do
+      put '/:id' do
         process_request do
           physical_item = PhysicalItem.find(params[:id])
           physical_item.update_attributes!(params[:physical_item])
@@ -29,7 +29,7 @@ module Services
         end
       end
 
-      put '/physical_items/:id/activate' do
+      put '/:id/activate' do
         process_request do
           physical_item = PhysicalItem.find(params[:id])
           physical_item.activate! || unprocessable!
@@ -37,7 +37,7 @@ module Services
         end
       end
 
-      delete '/physical_items/:id' do
+      delete '/:id' do
         process_request do
           physical_item = PhysicalItem.find(params[:id])
           physical_item.delete! || unprocessable!

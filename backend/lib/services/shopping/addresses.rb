@@ -4,7 +4,7 @@ require 'models/serializers/shopping'
 module Services
   module Shopping
     class Addresses < Services::Base
-      put '/addresses/:id' do
+      put '/:id' do
         process_request do
           address = Address.find(params[:id])
           address.update_attributes!(params[:address])

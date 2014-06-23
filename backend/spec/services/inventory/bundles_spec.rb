@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::Bundles do
-  describe 'get /bundles' do
+  describe 'get /' do
     let(:method) { :get }
-    let(:path) { '/bundles' }
+    let(:path) { '/' }
 
     before :each do
       FactoryGirl.create :bundle
@@ -19,9 +19,9 @@ describe Services::Inventory::Bundles do
     end
   end
 
-  describe 'post /bundles' do
+  describe 'post /' do
     let(:method) { :post }
-    let(:path) { '/bundles' }
+    let(:path) { '/' }
 
     context 'invalid parameters' do
       let(:params) { {} }
@@ -44,9 +44,9 @@ describe Services::Inventory::Bundles do
     end
   end
 
-  describe 'put /bundles/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/bundles/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 
@@ -76,9 +76,9 @@ describe Services::Inventory::Bundles do
     end
   end
 
-  describe 'post /bundles/:id/bundleds' do
+  describe 'post /:id/bundleds' do
     let(:method) { :post }
-    let(:path) { "/bundles/#{id}/bundleds" }
+    let(:path) { "/#{id}/bundleds" }
 
     include_examples 'invalid id'
 
@@ -138,9 +138,9 @@ describe Services::Inventory::Bundles do
     end
   end
 
-  describe 'delete /bundles/:id/bundleds/:bundled_id' do
+  describe 'delete /:id/bundleds/:bundled_id' do
     let(:method) { :delete }
-    let(:path) { "/bundles/#{id}/bundleds/#{bundled_id}" }
+    let(:path) { "/#{id}/bundleds/#{bundled_id}" }
     let(:bundled_id) { rand_str }
 
     include_examples 'invalid id'
@@ -184,9 +184,9 @@ describe Services::Inventory::Bundles do
     end
   end
 
-  describe 'put /bundles/:id/activate' do
+  describe 'put /:id/activate' do
     let(:method) { :put }
-    let(:path) { "/bundles/#{id}/activate" }
+    let(:path) { "/#{id}/activate" }
 
     include_examples 'invalid id'
 
@@ -220,9 +220,9 @@ describe Services::Inventory::Bundles do
     end
   end
 
-  describe 'delete /bundles/:id' do
+  describe 'delete /:id' do
     let(:method) { :delete }
-    let(:path) { "/bundles/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 

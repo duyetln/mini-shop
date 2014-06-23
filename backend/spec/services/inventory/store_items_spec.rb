@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::StoreItems do
-  describe 'get /store_items' do
+  describe 'get /' do
     let(:method) { :get }
-    let(:path) { '/store_items' }
+    let(:path) { '/' }
 
     before :each do
       FactoryGirl.create :store_item
@@ -19,9 +19,9 @@ describe Services::Inventory::StoreItems do
     end
   end
 
-  describe 'post /store_items' do
+  describe 'post /' do
     let(:method) { :post }
-    let(:path) { '/store_items' }
+    let(:path) { '/' }
 
     context 'invalid parameters' do
       let(:params) { {} }
@@ -60,9 +60,9 @@ describe Services::Inventory::StoreItems do
     end
   end
 
-  describe 'put /store_items/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/store_items/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 
@@ -92,9 +92,9 @@ describe Services::Inventory::StoreItems do
     end
   end
 
-  describe 'delete /store_items/:id' do
+  describe 'delete /:id' do
     let(:method) { :delete }
-    let(:path) { "/store_items/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 

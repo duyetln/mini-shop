@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Shopping::PaymentMethods do
-  describe 'put /payment_methods/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/payment_methods/#{id}" }
+    let(:path) { "/#{id}" }
     let(:user) { FactoryGirl.create(:user).reload }
     let(:payment_method) { FactoryGirl.create(:payment_method, user: user) }
     let(:id) { payment_method.id }

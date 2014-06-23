@@ -4,7 +4,7 @@ require 'models/serializers/inventory'
 module Services
   module Inventory
     class Pricepoints < Services::Base
-      get '/pricepoints' do
+      get '/' do
         process_request do
           pricepoints = Pricepoint.all
           respond_with(pricepoints.map do |pricepoint|
@@ -13,7 +13,7 @@ module Services
         end
       end
 
-      post '/pricepoints' do
+      post '/' do
         process_request do
           pricepoint = Pricepoint.new(params[:pricepoint])
           pricepoint.save!
@@ -21,7 +21,7 @@ module Services
         end
       end
 
-      put '/pricepoints/:id' do
+      put '/:id' do
         process_request do
           pricepoint = Pricepoint.find(params[:id])
           pricepoint.update_attributes!(params[:pricepoint])
@@ -29,7 +29,7 @@ module Services
         end
       end
 
-      post '/pricepoints/:id/pricepoint_prices' do
+      post '/:id/pricepoint_prices' do
         process_request do
           pricepoint = Pricepoint.find(params[:id])
           pricepoint

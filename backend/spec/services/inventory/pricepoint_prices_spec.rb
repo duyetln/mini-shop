@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::PricepointPrices do
-  describe 'put /pricepoint_prices/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/pricepoint_prices/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 

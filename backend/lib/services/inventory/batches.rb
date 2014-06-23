@@ -4,7 +4,7 @@ require 'models/serializers/inventory'
 module Services
   module Inventory
     class Batches < Services::Base
-      get '/batches/:id/coupons' do
+      get '/:id/coupons' do
         process_request do
           coupons = Batch.find(params[:id]).coupons
           respond_with(coupons.map do |coupon|
@@ -13,7 +13,7 @@ module Services
         end
       end
 
-      put '/batches/:id/activate' do
+      put '/:id/activate' do
         process_request do
           batch = Batch.find(params[:id])
           batch.activate! || unprocessable!
@@ -21,7 +21,7 @@ module Services
         end
       end
 
-      delete '/batches/:id' do
+      delete '/:id' do
         process_request do
           batch = Batch.find(params[:id])
           batch.delete! || unprocessable!

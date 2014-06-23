@@ -4,7 +4,7 @@ require 'models/serializers/shopping'
 module Services
   module Shopping
     class Purchases < Services::Base
-      put '/purchases/:id' do
+      put '/:id' do
         process_request do
           purchase = Purchase.find(params[:id])
           purchase.committed? &&
@@ -14,7 +14,7 @@ module Services
         end
       end
 
-      post '/purchases/:id/orders' do
+      post '/:id/orders' do
         process_request do
           purchase = Purchase.find(params[:id])
           purchase.add_or_update(
@@ -27,7 +27,7 @@ module Services
         end
       end
 
-      delete '/purchases/:id/orders/:order_id' do
+      delete '/:id/orders/:order_id' do
         process_request do
           purchase = Purchase.find(params[:id])
           order = purchase.orders.find(params[:order_id])
@@ -36,7 +36,7 @@ module Services
         end
       end
 
-      put '/purchases/:id/submit' do
+      put '/:id/submit' do
         process_request do
           purchase = Purchase.find(params[:id])
           purchase.commit!
@@ -46,14 +46,14 @@ module Services
         end
       end
 
-      get '/purchases/:id' do
+      get '/:id' do
         process_request do
           purchase = Purchase.find(params[:id])
           respond_with(PurchaseSerializer.new(purchase))
         end
       end
 
-      put '/purchases/:id/return' do
+      put '/:id/return' do
         process_request do
           purchase = Purchase.find(params[:id])
           purchase.reverse! || unprocessable!
@@ -61,7 +61,7 @@ module Services
         end
       end
 
-      put '/purchases/:id/orders/:order_id/return' do
+      put '/:id/orders/:order_id/return' do
         process_request do
           purchase = Purchase.find(params[:id])
           order = purchase.orders.find(params[:order_id])

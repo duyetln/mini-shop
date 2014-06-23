@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::Promotions do
-  describe 'get /promotions' do
+  describe 'get /' do
     let(:method) { :get }
-    let(:path) { '/promotions' }
+    let(:path) { '/' }
 
     before :each do
       FactoryGirl.create :promotion
@@ -19,9 +19,9 @@ describe Services::Inventory::Promotions do
     end
   end
 
-  describe 'post /promotions' do
+  describe 'post /' do
     let(:method) { :post }
-    let(:path) { '/promotions' }
+    let(:path) { '/' }
 
     context 'invalid parameters' do
       let(:params) { {} }
@@ -61,9 +61,9 @@ describe Services::Inventory::Promotions do
     end
   end
 
-  describe 'put /promotions/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/promotions/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 
@@ -93,9 +93,9 @@ describe Services::Inventory::Promotions do
     end
   end
 
-  describe 'put /promotions/:id/activate' do
+  describe 'put /:id/activate' do
     let(:method) { :put }
-    let(:path) { "/promotions/#{id}/activate" }
+    let(:path) { "/#{id}/activate" }
 
     include_examples 'invalid id'
 
@@ -129,9 +129,9 @@ describe Services::Inventory::Promotions do
     end
   end
 
-  describe 'delete /promotions/:id' do
+  describe 'delete /:id' do
     let(:method) { :delete }
-    let(:path) { "/promotions/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 
@@ -179,9 +179,9 @@ describe Services::Inventory::Promotions do
     end
   end
 
-  describe 'get /promotions/:id/batches' do
+  describe 'get /:id/batches' do
     let(:method) { :get }
-    let(:path) { "/promotions/#{id}/batches" }
+    let(:path) { "/#{id}/batches" }
 
     include_examples 'invalid id'
 
@@ -199,9 +199,9 @@ describe Services::Inventory::Promotions do
     end
   end
 
-  describe 'post /promotions/:id/batches' do
+  describe 'post /:id/batches' do
     let(:method) { :post }
-    let(:path) { "/promotions/#{id}/batches" }
+    let(:path) { "/#{id}/batches" }
 
     include_examples 'invalid id'
 
@@ -232,9 +232,9 @@ describe Services::Inventory::Promotions do
     end
   end
 
-  describe 'post /promotions/:id/batches/generate' do
+  describe 'post /:id/batches/generate' do
     let(:method) { :post }
-    let(:path) { "/promotions/#{id}/batches/generate" }
+    let(:path) { "/#{id}/batches/generate" }
 
     include_examples 'invalid id'
 

@@ -2,9 +2,9 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::PhysicalItems do
-  describe 'get /physical_items' do
+  describe 'get /' do
     let(:method) { :get }
-    let(:path) { '/physical_items' }
+    let(:path) { '/' }
 
     before :each do
       FactoryGirl.create :physical_item
@@ -19,9 +19,9 @@ describe Services::Inventory::PhysicalItems do
     end
   end
 
-  describe 'post /physical_items' do
+  describe 'post /' do
     let(:method) { :post }
-    let(:path) { '/physical_items' }
+    let(:path) { '/' }
 
     context 'invalid parameters' do
       let(:params) { {} }
@@ -44,9 +44,9 @@ describe Services::Inventory::PhysicalItems do
     end
   end
 
-  describe 'put /physical_items/:id' do
+  describe 'put /:id' do
     let(:method) { :put }
-    let(:path) { "/physical_items/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 
@@ -76,9 +76,9 @@ describe Services::Inventory::PhysicalItems do
     end
   end
 
-  describe 'put /physical_items/:id/activate' do
+  describe 'put /:id/activate' do
     let(:method) { :put }
-    let(:path) { "/physical_items/#{id}/activate" }
+    let(:path) { "/#{id}/activate" }
 
     include_examples 'invalid id'
 
@@ -112,9 +112,9 @@ describe Services::Inventory::PhysicalItems do
     end
   end
 
-  describe 'delete /physical_items/:id' do
+  describe 'delete /:id' do
     let(:method) { :delete }
-    let(:path) { "/physical_items/#{id}" }
+    let(:path) { "/#{id}" }
 
     include_examples 'invalid id'
 

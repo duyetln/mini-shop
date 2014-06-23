@@ -7,24 +7,24 @@ Application.load_config!
 
 use Rack::Parser, parsers: { 'application/json' => proc { |data| Yajl::Parser.parse data } }
 
-class ApplicationService < Sinatra::Base
-  use Services::Accounts::Users
-  use Services::Inventory::Batches
-  use Services::Inventory::Bundles
-  use Services::Inventory::Coupons
-  use Services::Inventory::Currencies
-  use Services::Inventory::DigitalItems
-  use Services::Inventory::Discounts
-  use Services::Inventory::PhysicalItems
-  use Services::Inventory::PricepointPrices
-  use Services::Inventory::Pricepoints
-  use Services::Inventory::Prices
-  use Services::Inventory::Promotions
-  use Services::Inventory::StoreItems
-  use Services::Mailing::Emails
-  use Services::Shopping::Addresses
-  use Services::Shopping::PaymentMethods
-  use Services::Shopping::Purchases
+map '/svc' do
+  run Rack::URLMap.new(
+    '/users' => Services::Accounts::Users,
+    '/batches' => Services::Inventory::Batches,
+    '/bundles' => Services::Inventory::Bundles,
+    '/coupons' => Services::Inventory::Coupons,
+    '/currencies' => Services::Inventory::Currencies,
+    '/digital_items' => Services::Inventory::DigitalItems,
+    '/discounts' => Services::Inventory::Discounts,
+    '/physical_items' => Services::Inventory::PhysicalItems,
+    '/pricepoint_prices' => Services::Inventory::PricepointPrices,
+    '/pricepoints' => Services::Inventory::Pricepoints,
+    '/prices' => Services::Inventory::Prices,
+    '/promotions' => Services::Inventory::Promotions,
+    '/store_items' => Services::Inventory::StoreItems,
+    '/emails' => Services::Mailing::Emails,
+    '/addresses' => Services::Shopping::Addresses,
+    '/payment_methods' => Services::Shopping::PaymentMethods,
+    '/purchases' => Services::Shopping::Purchases
+  )
 end
-
-map('/svc') { run ApplicationService }

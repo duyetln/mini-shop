@@ -4,7 +4,7 @@ require 'models/serializers/shopping'
 module Services
   module Shopping
     class PaymentMethods < Services::Base
-      put '/payment_methods/:id' do
+      put '/:id' do
         process_request do
           payment_method = PaymentMethod.find(params[:id])
           payment_method.update_attributes!(params[:payment_method])
