@@ -16,7 +16,7 @@ GEM
       multi_json (~> 1.0)
     arel (3.0.3)
     backports (3.6.0)
-    bcrypt-ruby (3.1.2)
+    bcrypt (3.1.7)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.0.4)
@@ -111,7 +111,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.39)
-    yajl-ruby (1.1.0)
+    yajl-ruby (1.2.0)
 
 PLATFORMS
   ruby
@@ -119,7 +119,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.8.1)
   activerecord (= 3.2.18)
-  bcrypt-ruby (= 3.1.2)
+  bcrypt (~> 3.1.7)
   database_cleaner
   factory_girl
   faker
@@ -143,4 +143,4 @@ DEPENDENCIES
   slim
   thin
   timecop
-  yajl-ruby (= 1.1.0)
+  yajl-ruby (~> 1.2)
