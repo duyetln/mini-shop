@@ -17,7 +17,6 @@ namespace :db do
 
   desc 'Populate database with sample data'
   task :seed => :boot do
-    Application.load_models!
     require 'db/seeds'
   end
 
@@ -77,14 +76,12 @@ end
 desc 'Start a pry session'
 task :pry do
   system(<<-EOF
-    RACK_ENV=test bundle exec pry -I. -r ./boot -e '
-      puts "loading lib..."; Application.load_lib!;
-      puts "loading models..."; Application.load_models!;
-      puts "loading config..."; Application.load_config!;
-      puts "configuring emails..."; Mail.defaults { delivery_method :smtp, address: "localhost", port: 1025 };
-      puts "finding factories..."; FactoryGirl.find_definitions;
-      puts "checking factory validity..."; FactoryGirl.lint;
-      puts "done"
+    bundle exec pry -I. -r ./boot -e '
+      if ENV["RACK_ENV"] == "test"
+        Mail.defaults { delivery_method :smtp, address: "localhost", port: 1025 }
+        FactoryGirl.find_definitions
+        FactoryGirl.lint
+      end
     '
   EOF
   )

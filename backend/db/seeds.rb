@@ -1,10 +1,9 @@
 if Application.env == 'test'
-  require 'database_cleaner'
-  DatabaseCleaner.strategy = :truncation
-  DatabaseCleaner.clean
-
   begin
     ActiveRecord::Base.transaction do
+      require 'database_cleaner'
+      DatabaseCleaner.strategy = :truncation
+      DatabaseCleaner.clean
       require 'db/seeds/accounts'
       require 'db/seeds/inventory'
       require 'db/seeds/shopping'

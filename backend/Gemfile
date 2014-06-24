@@ -15,13 +15,8 @@ gem 'slim'
 gem 'mail'
 gem 'sass'
 
-
 group :development do
   gem 'thin'
-  gem 'pry'
-  gem 'pry-remote'
-  gem 'pry-debugger'
-  gem 'pry-stack_explorer'
 end
 
 group :test do
@@ -33,4 +28,11 @@ group :test do
   gem 'database_cleaner'
   gem 'rack-test', require: 'rack/test'
   gem 'simplecov', '~> 0.7.1'
+end
+
+group :development, :test do
+  gem 'pry'
+  gem 'pry-remote'
+  gem 'pry-debugger'
+  gem 'pry-stack_explorer'
 end
