@@ -63,3 +63,8 @@ Application.root = File.dirname(__FILE__)
 Application.load_path! Application.root, 'lib'
 Application.load_bundle!
 Application.connect_db!
+
+Application.load_lib!
+Application.load_models!
+Application.load_services!
+Application.load_config!

@@ -14,10 +14,6 @@ end
 require './boot'
 require 'spec/spec_helpers'
 
-Application.load_lib!
-Application.load_models!
-Application.load_config!
-
 RSpec.configure do |config|
   config.include SpecHelpers::Common
   config.include Mail::Matchers
