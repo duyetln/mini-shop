@@ -44,9 +44,14 @@ class DigitalItemSerializer < ResourceSerializer
   include ItemResourceSerializer
 end
 
+class BundledSerializer < ResourceSerializer
+  include ItemCombinableSerializer
+  attributes :bundle_id
+end
+
 class BundleSerializer < ResourceSerializer
   include ItemResourceSerializer
-  has_many :items, serializer: 'DynamicSerializer'
+  has_many :bundleds, serializer: 'BundledSerializer'
 end
 
 class StoreItemSerializer < ResourceSerializer
