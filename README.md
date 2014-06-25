@@ -32,3 +32,5 @@ Here are the goals set for this project:
     - Add service endpoints for sending account activation, purchase receipt, and purchase status emails.
   * 0.3.1
     - Use routing table in favor of stacking service endpoints as middlewares.
+  * 0.3.2
+    - Include item quantity in the response of Bundle endpoints.
