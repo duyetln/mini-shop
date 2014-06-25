@@ -1,4 +1,4 @@
-class ResourceSerializer < ActiveModel::Serializer
+class ServiceResourceSerializer < ActiveModel::Serializer
   self.root = false
   attributes :id, :resource_type, :resource_id
 
@@ -11,7 +11,7 @@ class ResourceSerializer < ActiveModel::Serializer
   end
 end
 
-class StatusSerializer < ResourceSerializer
+class StatusSerializer < ServiceResourceSerializer
   attributes :source_type, :source_id, :status, :created_at
 end
 
