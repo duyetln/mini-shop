@@ -376,7 +376,7 @@ describe 'service api' do
              }
       end.to change { PaymentMethod.count }.by(1)
       expect_status(200)
-      ids[:pmethod] = parsed_response[:id]
+      ids[:pmethod] = parsed_response[:payment_methods].last[:id]
     end
 
     it 'creates new address' do
@@ -391,7 +391,7 @@ describe 'service api' do
              }
       end.to change { Address.count }.by(1)
       expect_status(200)
-      ids[:address] = parsed_response[:id]
+      ids[:address] = parsed_response[:addresses].last[:id]
     end
 
     it 'creates new purchase' do

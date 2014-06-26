@@ -233,7 +233,7 @@ describe Services::Accounts::Users do
         it 'creates a new address' do
           expect { send_request }.to change { user.addresses.count }.by(1)
           expect_status(200)
-          expect_response(AddressSerializer.new(user.addresses.last).to_json)
+          expect_response(UserSerializer.new(user).to_json)
         end
       end
     end
@@ -260,7 +260,7 @@ describe Services::Accounts::Users do
         it 'creates a new payment method' do
           expect { send_request }.to change { user.payment_methods.count }.by(1)
           expect_status(200)
-          expect_response(PaymentMethodSerializer.new(user.payment_methods.last).to_json)
+          expect_response(UserSerializer.new(user).to_json)
         end
       end
     end
