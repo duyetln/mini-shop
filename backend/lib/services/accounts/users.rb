@@ -61,19 +61,17 @@ module Services
         end
       end
 
-      get '/:id/addresses' do
-        process_request do
-          addresses = User.find(params[:id]).addresses
-          respond_with(addresses.map do |address|
-            AddressSerializer.new(address)
-          end)
-        end
-      end
-
       post '/:id/addresses' do
         process_request do
           address = User.find(params[:id]).addresses.create!(params[:address])
           respond_with(AddressSerializer.new(address))
+        end
+      end
+
+      post '/:id/payment_methods' do
+        process_request do
+          payment_method = User.find(params[:id]).payment_methods.create!(params[:payment_method])
+          respond_with(PaymentMethodSerializer.new(payment_method))
         end
       end
 
@@ -83,22 +81,6 @@ module Services
           respond_with(orders.map do |order|
             OrderSerializer.new(order)
           end)
-        end
-      end
-
-      get '/:id/payment_methods' do
-        process_request do
-          payment_methods = User.find(params[:id]).payment_methods
-          respond_with(payment_methods.map do |payment_method|
-            PaymentMethodSerializer.new(payment_method)
-          end)
-        end
-      end
-
-      post '/:id/payment_methods' do
-        process_request do
-          payment_method = User.find(params[:id]).payment_methods.create!(params[:payment_method])
-          respond_with(PaymentMethodSerializer.new(payment_method))
         end
       end
 

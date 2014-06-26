@@ -212,27 +212,6 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'get /:id/addresses' do
-    let(:method) { :get }
-    let(:path) { "/#{id}/addresses" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      before :each do
-        FactoryGirl.create :address, user: user
-      end
-
-      it 'returns the addresses' do
-        send_request
-        expect_status(200)
-        expect_response(user.addresses.map do |address|
-          AddressSerializer.new(address)
-        end.to_json)
-      end
-    end
-  end
-
   describe 'post /:id/addresses' do
     let(:method) { :post }
     let(:path) { "/#{id}/addresses" }
@@ -260,48 +239,6 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'get /:id/orders' do
-    let(:method) { :get }
-    let(:path) { "/#{id}/orders" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      before :each do
-        FactoryGirl.create :order, purchase: FactoryGirl.create(:purchase, user: user)
-      end
-
-      it 'returns the orders' do
-        send_request
-        expect_status(200)
-        expect_response(user.purchases.map(&:orders).flatten.map do |order|
-          OrderSerializer.new(order)
-        end.to_json)
-      end
-    end
-  end
-
-  describe 'get /:id/payment_methods' do
-    let(:method) { :get }
-    let(:path) { "/#{id}/payment_methods" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      before :each do
-        FactoryGirl.create :payment_method, user: user
-      end
-
-      it 'returns the payment methods' do
-        send_request
-        expect_status(200)
-        expect_response(user.payment_methods.map do |payment_method|
-          PaymentMethodSerializer.new(payment_method)
-        end.to_json)
-      end
-    end
-  end
-
   describe 'post /:id/payment_methods' do
     let(:method) { :post }
     let(:path) { "/#{id}/payment_methods" }
@@ -325,6 +262,27 @@ describe Services::Accounts::Users do
           expect_status(200)
           expect_response(PaymentMethodSerializer.new(user.payment_methods.last).to_json)
         end
+      end
+    end
+  end
+
+  describe 'get /:id/orders' do
+    let(:method) { :get }
+    let(:path) { "/#{id}/orders" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      before :each do
+        FactoryGirl.create :order, purchase: FactoryGirl.create(:purchase, user: user)
+      end
+
+      it 'returns the orders' do
+        send_request
+        expect_status(200)
+        expect_response(user.purchases.map(&:orders).flatten.map do |order|
+          OrderSerializer.new(order)
+        end.to_json)
       end
     end
   end
