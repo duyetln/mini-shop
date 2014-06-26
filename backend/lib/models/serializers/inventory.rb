@@ -76,18 +76,18 @@ class PromotionSerializer < ServiceResourceSerializer
   include ActivableSerializer
   include ItemableSerializer
   include PriceableSerializer
-  attribute :name
+  attributes :name
 end
 
 class BatchSerializer < ServiceResourceSerializer
   include DeletableSerializer
   include ActivableSerializer
-  attribute :name
+  attributes :name
 end
 
 class CouponSerializer < ServiceResourceSerializer
   include DisplayableSerializer
-  attribute :promotion_id
+  attributes :promotion_id, :batch_id, :code, :used, :used_by, :used_at
 
   def promotion_id
     object.promotion.id
