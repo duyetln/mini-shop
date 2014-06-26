@@ -77,6 +77,15 @@ module Services
         end
       end
 
+      get '/:id/transactions' do
+        process_request do
+          transactions = User.find(params[:id]).transactions
+          respond_with(transactions.map do |transaction|
+            TransactionSerializer.new(transaction)
+          end)
+        end
+      end
+
       get '/:id/orders' do
         process_request do
           orders = User.find(params[:id]).purchases.map(&:orders).flatten

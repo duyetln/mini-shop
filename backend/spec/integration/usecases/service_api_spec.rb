@@ -575,12 +575,20 @@ describe 'service api' do
       expect(parsed_response.count).to eq(0)
     end
 
-    it 'returns all user ownerships' do
+    it 'returns all user shipments' do
       expect do
         get "/#{user.id}/shipments"
       end.to_not change { user.shipments.count }
       expect_status(200)
       expect(parsed_response.count).to eq(2)
+    end
+
+    it 'returns all transactions' do
+      expect do
+        get "/#{user.id}/transactions"
+      end.to_not change { user.transactions.count }
+      expect_status(200)
+      expect(parsed_response.count).to eq(5)
     end
   end
 end

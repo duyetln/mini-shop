@@ -266,6 +266,27 @@ describe Services::Accounts::Users do
     end
   end
 
+  describe 'get /:id/transactions' do
+    let(:method) { :get }
+    let(:path) { "/#{id}/transactions" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      before :each do
+        FactoryGirl.create :transaction, user: user
+      end
+
+      it 'returns the transactions' do
+        send_request
+        expect_status(200)
+        expect_response(user.transactions.map do |transaction|
+          TransactionSerializer.new(transaction)
+        end.to_json)
+      end
+    end
+  end
+
   describe 'get /:id/orders' do
     let(:method) { :get }
     let(:path) { "/#{id}/orders" }
