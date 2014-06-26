@@ -11,19 +11,19 @@ end
 
 class TransactionSerializer < ServiceResourceSerializer
   include CommittableSerializer
-  attributes :user_id, :uuid, :payment_method_id, :billing_address_id, :amount, :currency_id, :created_at
+  attributes :user_id, :uuid, :payment_method_id, :billing_address_id, :amount, :currency_id
 end
 
 class OrderSerializer < ServiceResourceSerializer
   include ItemCombinableSerializer
   include DeletableSerializer
-  attributes :uuid, :purchase_id, :currency_id, :amount, :tax, :tax_rate, :qty, :refund_id, :created_at
+  attributes :uuid, :purchase_id, :currency_id, :amount, :tax, :tax_rate, :qty, :refund_id
   has_one :refund, serializer: 'TransactionSerializer'
   has_one :status, serializer: 'StatusSerializer'
 end
 
 class PurchaseSerializer < ServiceResourceSerializer
-  attributes :user_id, :payment_method_id, :billing_address_id, :shipping_address_id, :payment_id, :committed, :committed_at, :created_at
+  attributes :user_id, :payment_method_id, :billing_address_id, :shipping_address_id, :payment_id, :committed, :committed_at
   attributes :order_ids
   has_one :payment_method, serializer: 'PaymentMethodSerializer'
   has_one :billing_address, serializer: 'AddressSerializer'
