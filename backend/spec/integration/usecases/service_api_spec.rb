@@ -590,5 +590,13 @@ describe 'service api' do
       expect_status(200)
       expect(parsed_response.count).to eq(5)
     end
+
+    it 'returns all coupons' do
+      expect do
+        get "/#{user.id}/coupons"
+      end.to_not change { user.coupons.count }
+      expect_status(200)
+      expect(parsed_response.count).to eq(1)
+    end
   end
 end

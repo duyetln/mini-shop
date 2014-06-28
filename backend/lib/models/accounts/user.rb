@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :transactions
   has_many :ownerships
   has_many :shipments
+  has_many :coupons, foreign_key: :used_by
 
   validates :first_name, presence: true
   validates :last_name,  presence: true

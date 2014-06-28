@@ -6,7 +6,7 @@ class Coupon < ActiveRecord::Base
   include Orderable
 
   belongs_to :batch
-  belongs_to :used_by, class_name: 'User', foreign_key: :used_by
+  belongs_to :user, class_name: 'User', foreign_key: :used_by
 
   validates :batch, presence: true
   validates :code, uniqueness: true
@@ -54,7 +54,7 @@ class Coupon < ActiveRecord::Base
   def used_by!(user)
     unless used?
       self.used = true
-      self.used_by = user
+      self.used_by = user.id
       self.used_at = DateTime.now
       save!
     end

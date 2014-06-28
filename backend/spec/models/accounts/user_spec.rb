@@ -14,6 +14,7 @@ describe User do
   it { should have_many(:transactions) }
   it { should have_many(:ownerships) }
   it { should have_many(:shipments) }
+  it { should have_many(:coupons) }
 
   it { should allow_mass_assignment_of(:first_name) }
   it { should allow_mass_assignment_of(:last_name) }

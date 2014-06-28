@@ -16,7 +16,7 @@ describe Coupon do
   end
 
   it { should belong_to(:batch) }
-  it { should belong_to(:used_by).class_name('User').with_foreign_key(:used_by) }
+  it { should belong_to(:user) }
 
   it { should validate_presence_of(:batch) }
   it { should validate_uniqueness_of(:code) }
@@ -65,7 +65,7 @@ describe Coupon do
 
       it 'sets used, used_by, and used_at' do
         expect { model.used_by!(user) }.to change { model.used? }.to(true)
-        expect(model.used_by).to eq(user)
+        expect(model.used_by).to eq(user.id)
         expect(model.used_at).to be_present
       end
     end

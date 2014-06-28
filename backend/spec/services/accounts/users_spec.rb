@@ -212,6 +212,27 @@ describe Services::Accounts::Users do
     end
   end
 
+  describe 'get /:id/coupons' do
+    let(:method) { :get }
+    let(:path) { "/#{id}/coupons" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      before :each do
+        FactoryGirl.create(:coupon).used_by!(user)
+      end
+
+      it 'returns the shipments' do
+        send_request
+        expect_status(200)
+        expect_response(user.coupons.map do |coupon|
+          CouponSerializer.new(coupon)
+        end.to_json)
+      end
+    end
+  end
+
   describe 'post /:id/addresses' do
     let(:method) { :post }
     let(:path) { "/#{id}/addresses" }

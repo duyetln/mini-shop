@@ -61,6 +61,15 @@ module Services
         end
       end
 
+      get '/:id/coupons' do
+        process_request do
+          user = User.find(params[:id])
+          respond_with(user.coupons.map do |coupon|
+            CouponSerializer.new(coupon)
+          end)
+        end
+      end
+
       post '/:id/addresses' do
         process_request do
           user = User.find(params[:id])
