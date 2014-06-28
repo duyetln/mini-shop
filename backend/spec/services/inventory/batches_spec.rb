@@ -42,6 +42,38 @@ describe Services::Inventory::Batches do
     end
   end
 
+  describe 'put /:id' do
+    let(:method) { :put }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let!(:batch) { FactoryGirl.create :batch }
+      let(:id) { batch.id }
+
+      context 'invalid parameters' do
+        let(:params) { { batch: { name: nil } } }
+
+        include_examples 'bad request'
+
+        it 'does not update the promotion' do
+          expect { send_request }.to_not change { batch.reload.attributes }
+        end
+      end
+
+      context 'valid parameters' do
+        let(:params) { { batch: { name: rand_str } } }
+
+        it 'updates the the promotion' do
+          expect { send_request }.to change { batch.reload.attributes }
+          expect_status(200)
+          expect_response(BatchSerializer.new(batch).to_json)
+        end
+      end
+    end
+  end
+
   describe 'put /:id/activate' do
     let(:method) { :put }
     let(:path) { "/#{id}/activate" }

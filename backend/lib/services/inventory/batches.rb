@@ -20,6 +20,14 @@ module Services
         end
       end
 
+      put '/:id' do
+        process_request do
+          batch = Batch.find(params[:id])
+          batch.update_attributes!(params[:batch])
+          respond_with(BatchSerializer.new(batch))
+        end
+      end
+
       put '/:id/activate' do
         process_request do
           batch = Batch.find(params[:id])
