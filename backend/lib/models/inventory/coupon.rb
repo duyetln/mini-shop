@@ -5,6 +5,8 @@ class Coupon < ActiveRecord::Base
   include Displayable
   include Orderable
 
+  attr_readonly :code, :batch_id
+
   belongs_to :batch
   belongs_to :user, class_name: 'User', foreign_key: :used_by
 

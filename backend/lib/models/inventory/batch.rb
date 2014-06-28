@@ -5,6 +5,8 @@ class Batch < ActiveRecord::Base
   include Deletable
   include Activable
 
+  attr_readonly :promotion_id
+
   belongs_to :promotion
   has_many :coupons
 

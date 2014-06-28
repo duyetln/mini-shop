@@ -15,6 +15,9 @@ describe Coupon do
     it { should respond_to(:unused) }
   end
 
+  it { should have_readonly_attribute(:code) }
+  it { should have_readonly_attribute(:batch_id) }
+
   it { should belong_to(:batch) }
   it { should belong_to(:user) }
 

@@ -9,6 +9,8 @@ describe Batch do
 end
 
 describe Batch do
+  it { should have_readonly_attribute(:promotion_id) }
+
   it { should belong_to :promotion }
   it { should have_many :coupons }
 
