@@ -12,6 +12,14 @@ module Services
         end
       end
 
+      post '/:id/coupons/generate' do
+        process_request do
+          batch = Batch.find(params[:id])
+          batch.create_coupons(params[:qty].to_i)
+          respond_with(BatchSerializer.new(batch))
+        end
+      end
+
       put '/:id/activate' do
         process_request do
           batch = Batch.find(params[:id])

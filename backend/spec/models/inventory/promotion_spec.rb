@@ -43,7 +43,7 @@ describe Promotion do
     end
 
     it 'creates a batch with codes' do
-      expect { model.create_batch(batch_size, batch_name) }.to change { model.batches.count }.by(1)
+      expect { model.create_batch(batch_name, batch_size) }.to change { model.batches.count }.by(1)
       expect(batch.coupons.count).to eq(batch_size)
       expect(batch.name).to eq(batch_name)
     end
@@ -52,7 +52,6 @@ describe Promotion do
   describe '#create_batches' do
     let(:qty) { 5 }
     let(:batch_size) { 2 }
-    let(:batch_num) { (qty.to_f / batch_size).ceil }
 
     before :each do
       model.save!
@@ -60,12 +59,10 @@ describe Promotion do
 
     it 'creates batches with codes' do
       expect do
-        batches = model.create_batches(qty, batch_size)
-        batches[0...(batches.size - 1)].each do |batch|
+        model.create_batches(qty, batch_size).each do |batch|
           expect(batch.coupons.count).to eq(batch_size)
         end
-        expect(batches.last.coupons.count).to eq(qty % batch_size)
-      end.to change { model.batches.count }.by(batch_num)
+      end.to change { model.batches.count }.by(qty)
     end
   end
 end

@@ -14,4 +14,11 @@ class Batch < ActiveRecord::Base
   def deletable?
     inactive? && super
   end
+
+  def create_coupons(qty = 0)
+    qty.times do
+      until coupons.create
+      end
+    end
+  end
 end

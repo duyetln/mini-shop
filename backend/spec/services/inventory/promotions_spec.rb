@@ -243,32 +243,28 @@ describe Services::Inventory::Promotions do
       let(:id) { promotion.id }
       let(:qty) { 10 }
       let(:size) { 3 }
-      let(:batch_num) { (qty.to_f / size).ceil }
       let :params do
         {
           qty: qty,
           batch: {
-            size: size,
-            name: 'batch name'
+            size: size
           }
         }
       end
 
       it 'creates new batch' do
-        expect { send_request }.to change { promotion.batches.count }.by(batch_num)
+        expect { send_request }.to change { promotion.batches.count }.by(qty)
         expect_status(200)
-        expect_response(promotion.batches.last(batch_num).map do |batch|
+        expect_response(promotion.batches.last(qty).map do |batch|
           BatchSerializer.new(batch)
         end.to_json)
       end
 
       it 'sets batch attributes correctly' do
         send_request
-        batches = promotion.batches.last(batch_num)
-        batches[0...(batches.size - 1)].each do |batch|
+        promotion.batches.last(qty).each do |batch|
           expect(batch.coupons.count).to eq(size)
         end
-        expect(batches.last.coupons.count).to eq(qty % size)
       end
     end
   end

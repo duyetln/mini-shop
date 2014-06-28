@@ -29,31 +29,20 @@ class Promotion < ActiveRecord::Base
     inactive? && super
   end
 
-  def create_batches(qty, batch_size, batch_name = nil)
+  def create_batches(qty, batch_size = 0)
     batches = []
-    batch_num = qty / batch_size
-    remainder = qty % batch_size
-    batch_num.times do |index|
+    qty.times do |index|
       batches << create_batch(
-        batch_size,
-        batch_name.present? && batch_name || "Auto generated batch #{index + 1}"
-      )
-    end
-    if remainder > 0
-      batches << create_batch(
-        remainder,
-        batch_name.present? && batch_name || "Auto generated batch #{batch_num + 1}"
+        "Auto generated batch #{index + 1}",
+        batch_size
       )
     end
     batches
   end
 
-  def create_batch(batch_size, batch_name = nil)
+  def create_batch(batch_name, batch_size = 0)
     batch = batches.create(name: batch_name)
-    batch_size.times do
-      until batch.coupons.create
-      end
-    end
+    batch.create_coupons(batch_size)
     batch
   end
 end

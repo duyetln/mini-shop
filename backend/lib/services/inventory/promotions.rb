@@ -56,8 +56,8 @@ module Services
       post '/:id/batches' do
         process_request do
           batch = Promotion.find(params[:id]).create_batch(
-            params[:batch][:size].to_i,
-            params[:batch][:name].to_s
+            params[:batch][:name].to_s,
+            params[:batch][:size].to_i
           )
           respond_with(BatchSerializer.new(batch))
         end
@@ -67,8 +67,7 @@ module Services
         process_request do
           batches = Promotion.find(params[:id]).create_batches(
             params[:qty].to_i,
-            params[:batch][:size].to_i,
-            params[:batch][:name].to_s
+            params[:batch][:size].to_i
           )
           respond_with(batches.map do |batch|
             BatchSerializer.new(batch)

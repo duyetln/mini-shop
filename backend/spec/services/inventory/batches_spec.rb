@@ -22,6 +22,26 @@ describe Services::Inventory::Batches do
     end
   end
 
+  describe 'post /:id/coupons/generate' do
+    let(:method) { :post }
+    let(:path) { "/#{id}/coupons/generate" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:batch) { FactoryGirl.create :batch }
+      let(:id) { batch.id }
+      let(:qty) { 10 }
+      let(:params) { { qty: qty } }
+
+      it 'creates coupons' do
+        expect { send_request }.to change { batch.coupons.count }.by(qty)
+        expect_status(200)
+        expect_response(BatchSerializer.new(batch).to_json)
+      end
+    end
+  end
+
   describe 'put /:id/activate' do
     let(:method) { :put }
     let(:path) { "/#{id}/activate" }

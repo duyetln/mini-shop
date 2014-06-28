@@ -10,14 +10,24 @@ end
 
 describe Batch do
   it { should belong_to :promotion }
-
   it { should have_many :coupons }
+
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:promotion) }
 
   describe '#deletable?' do
     it 'equals itself being inactive and kept' do
       expect(model.deletable?).to eq(model.inactive? && model.kept?)
+    end
+  end
+
+  describe '#create_coupons' do
+    before :each do
+      model.save!
+    end
+
+    it 'creates coupons' do
+      expect { model.create_coupons(qty) }.to change { model.coupons.count }.by(qty)
     end
   end
 end
