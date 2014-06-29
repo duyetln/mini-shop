@@ -6,7 +6,7 @@ class Order < ServiceResource
       order.tax = BigDecimal.new(order.tax)
       order.tax_rate = BigDecimal.new(order.tax_rate)
       order.refund = Transaction.instantiate(order.refund)
-      order.status = Status.instantiate(order.status)
+      order.statuses.map! { |status| Status.instantiate(status) }
     end
   end
 end

@@ -2,6 +2,7 @@ class StoreItem < ServiceResource
   extend DefaultAll
   extend DefaultCreate
   include DefaultUpdate
+  include DefaultDelete
 
   def self.instantiate(hash = {})
     super do |store_item|

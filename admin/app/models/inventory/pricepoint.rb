@@ -10,4 +10,15 @@ class Pricepoint < ServiceResource
       end
     end
   end
+
+  def create_pricepoint_price(pricepoint_price = {})
+    if pricepoint_price.present?
+      self.class.parse(
+        self.class.resource["/#{id}/pricepoint_prices"].post PricepointPrice.params(pricepoint_price)
+      ) do |hash|
+        load!(hash)
+        pricepoint_prices.last
+      end
+    end
+  end
 end
