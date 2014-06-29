@@ -10,7 +10,7 @@ class ServiceResource < Hashie::Mash
   module DefaultCreate
     def create(params = {})
       if params.present?
-        parse(resource.post currency: params) do |hash|
+        parse(resource.post params(params)) do |hash|
           instantiate(hash)
         end
       end
@@ -19,7 +19,7 @@ class ServiceResource < Hashie::Mash
 
   module DefaultFind
     def find(id)
-      parse(resource["#{id}"].get) do |hash|
+      parse(resource["/#{id}"].get) do |hash|
         instantiate(hash)
       end
     end
@@ -29,12 +29,30 @@ class ServiceResource < Hashie::Mash
     def update!
       if attributes.present?
         self.class.parse(
-          self.class.resource["#{id}"].put(
-            self.class.name.underscore.symbolize => attributes
-          )
+          self.class.resource["/#{id}"].put(to_params)
         ) do |hash|
           load!(hash)
         end
+      end
+    end
+  end
+
+  module DefaultActivate
+    def activate!
+      self.class.parse(
+        self.class.resource["/#{id}/activate"].put({})
+      ) do |hash|
+        load!(hash)
+      end
+    end
+  end
+
+  module DefaultDelete
+    def delete!
+      self.class.parse(
+        self.class.resource["/#{id}"].delete
+      ) do |hash|
+        load!(hash)
       end
     end
   end
@@ -42,16 +60,17 @@ end
 
 class ServiceResource < Hashie::Mash
   alias_method :attributes, :to_hash
+  delegate :namespace, to: :class
 
-  def ==(comparison_object)
+  def ==(other)
     super ||
-      comparison_object.instance_of?(self.class) &&
+      other.instance_of?(self.class) &&
       id.present? &&
-      comparison_object.id == id
+      other.id == id
   end
 
   def self.resource
-    RestClient::Resource.new "localhost:8002/svc/#{name.underscore.pluralize}"
+    RestClient::Resource.new "localhost:8002/svc/#{namespace.pluralize}"
   end
 
   def self.concretize(hash = {})
@@ -70,8 +89,20 @@ class ServiceResource < Hashie::Mash
     end
   end
 
+  def self.namespace
+    name.underscore
+  end
+
+  def self.params(hash = {})
+    { namespace.to_sym => hash }
+  end
+
+  def to_params
+    self.class.params(attributes)
+  end
+
   def load!(hash = {})
-    replace(self.class.instantiate(hash).attributes) if hash.present?
+    hash.present? ? replace(self.class.instantiate(hash).attributes) : self
   end
 
   def self.parse(response)
