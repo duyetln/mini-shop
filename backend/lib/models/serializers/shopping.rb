@@ -17,9 +17,20 @@ end
 class OrderSerializer < ServiceResourceSerializer
   include ItemCombinableSerializer
   include DeletableSerializer
-  attributes :uuid, :purchase_id, :currency_id, :amount, :tax, :tax_rate, :qty, :refund_id
+  attributes :uuid, :purchase_id, :currency_id, :amount, :tax, :tax_rate, :qty, :refund_id, :status_id
   has_one :refund, serializer: 'TransactionSerializer'
-  has_one :status, serializer: 'StatusSerializer'
+  has_many :statuses, serializer: 'StatusSerializer'
+
+  def status_id
+    object.status.try(:id)
+  end
+
+  [:unmarked, :marked, :failed, :invalid, :fulfilled, :reversed].each do |key|
+    attributes key
+    define_method key do
+      object.send("#{key}?")
+    end
+  end
 end
 
 class PurchaseSerializer < ServiceResourceSerializer
