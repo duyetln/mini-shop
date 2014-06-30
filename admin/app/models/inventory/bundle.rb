@@ -1,5 +1,6 @@
 class Bundle < ServiceResource
   extend DefaultAll
+  extend DefaultFind
   extend DefaultCreate
   include DefaultUpdate
   include DefaultActivate

@@ -1,6 +1,7 @@
 class User < ServiceResource
-  extend DefaultCreate
+  extend DefaultAll
   extend DefaultFind
+  extend DefaultCreate
   include DefaultUpdate
 
   [:ownerships, :shipments, :coupons, :transactions, :orders, :purchases].each do |association|

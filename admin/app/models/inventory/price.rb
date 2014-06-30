@@ -1,12 +1,13 @@
 class Price < ServiceResource
   extend DefaultAll
+  extend DefaultFind
   extend DefaultCreate
   include DefaultUpdate
 
   def self.instantiate(hash = {})
     super do |price|
-      price.pricepoint = Pricepoint.all.find { |pricepoint| pricepoint.id == price.pricepoint_id }
-      price.discount = Discount.all.find { |discount| discount.id == price.discount_id }
+      price.pricepoint = Pricepoint.instantiate(price.pricepoint)
+      price.discount = Discount.instantiate(price.discount)
     end
   end
 end
