@@ -16,7 +16,11 @@ class PricepointSerializer < ServiceResourceSerializer
 end
 
 class DiscountSerializer < ServiceResourceSerializer
-  attributes :name, :rate, :start_at, :end_at
+  attributes :name, :rate, :start_at, :end_at, :discounted
+
+  def discounted
+    object.discounted?
+  end
 end
 
 class PriceSerializer < ServiceResourceSerializer
