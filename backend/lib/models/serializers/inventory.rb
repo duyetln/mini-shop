@@ -25,6 +25,8 @@ end
 
 class PriceSerializer < ServiceResourceSerializer
   attributes :name, :pricepoint_id, :discount_id
+  has_one :pricepoint, serializer: 'PricepointSerializer'
+  has_one :discount, serializer: 'DiscountSerializer'
 end
 
 module ItemResourceSerializer
