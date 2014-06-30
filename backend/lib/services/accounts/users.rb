@@ -3,6 +3,15 @@ require 'services/base'
 module Services
   module Accounts
     class Users < Services::Base
+      get '/' do
+        process_request do
+          users = User.all
+          respond_with(users.map do |user|
+            UserSerializer.new(user)
+          end)
+        end
+      end
+
       get '/:id' do
         process_request do
           user = User.find(params[:id])

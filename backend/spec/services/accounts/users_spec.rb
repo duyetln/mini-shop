@@ -9,6 +9,23 @@ describe Services::Accounts::Users do
   let(:actv_code) { user.actv_code }
   let(:id) { user.id }
 
+  describe 'get /' do
+    let(:method) { :get }
+    let(:path) { '/' }
+
+    before :each do
+      user.save!
+    end
+
+    it 'returns all users' do
+      send_request
+      expect_status(200)
+      expect_response(User.all.map do |user|
+        UserSerializer.new(user)
+      end.to_json)
+    end
+  end
+
   describe 'get /:id' do
     let(:method) { :get }
     let(:path) { "/#{id}" }
