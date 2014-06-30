@@ -67,6 +67,35 @@ describe Services::Accounts::Users do
     end
   end
 
+  describe 'put /:id' do
+    let(:method) { :put }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      context 'invalid parameters' do
+        let(:params) { { user: { first_name: nil } } }
+
+        include_examples 'bad request'
+
+        it 'does not update the user' do
+          expect { send_request }.to_not change { user.reload.attributes }
+        end
+      end
+
+      context 'valid parameters' do
+        let(:params) { { user: { first_name: rand_str } } }
+
+        it 'updates the user' do
+          expect { send_request }.to change { user.reload.attributes }
+          expect_status(200)
+          expect_response(UserSerializer.new(user).to_json)
+        end
+      end
+    end
+  end
+
   describe 'post /authenticate' do
     let(:method) { :post }
     let(:path) { '/authenticate' }
@@ -102,35 +131,6 @@ describe Services::Accounts::Users do
       context 'correct credentials' do
         it 'authenticates the user' do
           send_request
-          expect_status(200)
-          expect_response(UserSerializer.new(user).to_json)
-        end
-      end
-    end
-  end
-
-  describe 'put /:id' do
-    let(:method) { :put }
-    let(:path) { "/#{id}" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      context 'invalid parameters' do
-        let(:params) { { user: { first_name: nil } } }
-
-        include_examples 'bad request'
-
-        it 'does not update the user' do
-          expect { send_request }.to_not change { user.reload.attributes }
-        end
-      end
-
-      context 'valid parameters' do
-        let(:params) { { user: { first_name: rand_str } } }
-
-        it 'updates the user' do
-          expect { send_request }.to change { user.reload.attributes }
           expect_status(200)
           expect_response(UserSerializer.new(user).to_json)
         end

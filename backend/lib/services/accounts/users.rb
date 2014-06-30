@@ -27,20 +27,20 @@ module Services
         end
       end
 
+      put '/:id' do
+        process_request do
+          user = User.find(params[:id])
+          user.update_attributes!(user_params)
+          respond_with(UserSerializer.new(user))
+        end
+      end
+
       post '/authenticate' do
         process_request do
           user = User.authenticate!(
             user_params[:email],
             user_params[:password]
           ) || unauthorized!
-          respond_with(UserSerializer.new(user))
-        end
-      end
-
-      put '/:id' do
-        process_request do
-          user = User.find(params[:id])
-          user.update_attributes!(user_params)
           respond_with(UserSerializer.new(user))
         end
       end

@@ -28,6 +28,24 @@ describe Services::Shopping::Purchases do
     item.reload
   end
 
+  describe 'get /:id' do
+    let(:method) { :get }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:purchase) { FactoryGirl.create :purchase }
+      let(:id) { purchase.id }
+
+      it 'returns the purchase' do
+        send_request
+        expect_status(200)
+        expect_response(PurchaseSerializer.new(purchase).to_json)
+      end
+    end
+  end
+
   describe 'put /:id' do
     let(:method) { :put }
     let(:path) { "/#{id}" }
@@ -266,24 +284,6 @@ describe Services::Shopping::Purchases do
         expect { send_request }.to change { purchase.reload.committed? }.to(true)
         expect(purchase.orders.all?(&:fulfilled?)).to be_true
         expect(purchase.orders.any?(&:unmarked?)).to be_false
-        expect_status(200)
-        expect_response(PurchaseSerializer.new(purchase).to_json)
-      end
-    end
-  end
-
-  describe 'get /:id' do
-    let(:method) { :get }
-    let(:path) { "/#{id}" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      let(:purchase) { FactoryGirl.create :purchase }
-      let(:id) { purchase.id }
-
-      it 'returns the purchase' do
-        send_request
         expect_status(200)
         expect_response(PurchaseSerializer.new(purchase).to_json)
       end

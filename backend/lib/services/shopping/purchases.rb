@@ -3,6 +3,13 @@ require 'services/base'
 module Services
   module Shopping
     class Purchases < Services::Base
+      get '/:id' do
+        process_request do
+          purchase = Purchase.find(params[:id])
+          respond_with(PurchaseSerializer.new(purchase))
+        end
+      end
+
       put '/:id' do
         process_request do
           purchase = Purchase.find(params[:id])
@@ -41,13 +48,6 @@ module Services
           purchase.commit!
           purchase.pay!
           purchase.fulfill!
-          respond_with(PurchaseSerializer.new(purchase))
-        end
-      end
-
-      get '/:id' do
-        process_request do
-          purchase = Purchase.find(params[:id])
           respond_with(PurchaseSerializer.new(purchase))
         end
       end
