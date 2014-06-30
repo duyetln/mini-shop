@@ -19,6 +19,24 @@ describe Services::Inventory::DigitalItems do
     end
   end
 
+  describe 'get /:id' do
+    let(:method) { :get }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:digital_item) { FactoryGirl.create :digital_item }
+      let(:id) { digital_item.id }
+
+      it 'returns the user' do
+        send_request
+        expect_status(200)
+        expect_response(DigitalItemSerializer.new(digital_item).to_json)
+      end
+    end
+  end
+
   describe 'post /' do
     let(:method) { :post }
     let(:path) { '/' }

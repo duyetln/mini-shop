@@ -12,6 +12,13 @@ module Services
         end
       end
 
+      get '/:id' do
+        process_request do
+          store_item = StoreItem.find(params[:id])
+          respond_with(StoreItemSerializer.new(store_item))
+        end
+      end
+
       post '/' do
         process_request do
           store_item = StoreItem.new(params[:store_item])

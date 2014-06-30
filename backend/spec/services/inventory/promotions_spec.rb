@@ -19,6 +19,24 @@ describe Services::Inventory::Promotions do
     end
   end
 
+  describe 'get /:id' do
+    let(:method) { :get }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:promotion) { FactoryGirl.create :promotion }
+      let(:id) { promotion.id }
+
+      it 'returns the user' do
+        send_request
+        expect_status(200)
+        expect_response(PromotionSerializer.new(promotion).to_json)
+      end
+    end
+  end
+
   describe 'post /' do
     let(:method) { :post }
     let(:path) { '/' }

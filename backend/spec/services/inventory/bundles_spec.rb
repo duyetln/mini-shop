@@ -19,6 +19,24 @@ describe Services::Inventory::Bundles do
     end
   end
 
+  describe 'get /:id' do
+    let(:method) { :get }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:bundle) { FactoryGirl.create :bundle }
+      let(:id) { bundle.id }
+
+      it 'returns the user' do
+        send_request
+        expect_status(200)
+        expect_response(BundleSerializer.new(bundle).to_json)
+      end
+    end
+  end
+
   describe 'post /' do
     let(:method) { :post }
     let(:path) { '/' }

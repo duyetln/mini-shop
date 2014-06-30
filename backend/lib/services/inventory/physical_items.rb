@@ -12,6 +12,13 @@ module Services
         end
       end
 
+      get '/:id' do
+        process_request do
+          physical_item = PhysicalItem.find(params[:id])
+          respond_with(PhysicalItemSerializer.new(physical_item))
+        end
+      end
+
       post '/' do
         process_request do
           physical_item = PhysicalItem.new(params[:physical_item])

@@ -12,6 +12,13 @@ module Services
         end
       end
 
+      get '/:id' do
+        process_request do
+          promotion = Promotion.find(params[:id])
+          respond_with(PromotionSerializer.new(promotion))
+        end
+      end
+
       post '/' do
         process_request do
           promotion = Promotion.new(params[:promotion])

@@ -19,6 +19,24 @@ describe Services::Inventory::Prices do
     end
   end
 
+  describe 'get /:id' do
+    let(:method) { :get }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:price) { FactoryGirl.create :price }
+      let(:id) { price.id }
+
+      it 'returns the user' do
+        send_request
+        expect_status(200)
+        expect_response(PriceSerializer.new(price).to_json)
+      end
+    end
+  end
+
   describe 'post /' do
     let(:method) { :post }
     let(:path) { '/' }

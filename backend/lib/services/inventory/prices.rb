@@ -12,6 +12,13 @@ module Services
         end
       end
 
+      get '/:id' do
+        process_request do
+          price = Price.find(params[:id])
+          respond_with(PriceSerializer.new(price))
+        end
+      end
+
       post '/' do
         process_request do
           price = Price.new(params[:price])

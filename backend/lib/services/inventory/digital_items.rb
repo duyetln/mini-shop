@@ -12,6 +12,13 @@ module Services
         end
       end
 
+      get '/:id' do
+        process_request do
+          digital_item = DigitalItem.find(params[:id])
+          respond_with(DigitalItemSerializer.new(digital_item))
+        end
+      end
+
       post '/' do
         process_request do
           digital_item = DigitalItem.new(params[:digital_item])

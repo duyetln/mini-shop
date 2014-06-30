@@ -19,6 +19,24 @@ describe Services::Inventory::StoreItems do
     end
   end
 
+  describe 'get /:id' do
+    let(:method) { :get }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:store_item) { FactoryGirl.create :store_item }
+      let(:id) { store_item.id }
+
+      it 'returns the user' do
+        send_request
+        expect_status(200)
+        expect_response(StoreItemSerializer.new(store_item).to_json)
+      end
+    end
+  end
+
   describe 'post /' do
     let(:method) { :post }
     let(:path) { '/' }

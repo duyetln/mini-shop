@@ -19,6 +19,24 @@ describe Services::Inventory::PhysicalItems do
     end
   end
 
+  describe 'get /:id' do
+    let(:method) { :get }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:physical_item) { FactoryGirl.create :physical_item }
+      let(:id) { physical_item.id }
+
+      it 'returns the user' do
+        send_request
+        expect_status(200)
+        expect_response(PhysicalItemSerializer.new(physical_item).to_json)
+      end
+    end
+  end
+
   describe 'post /' do
     let(:method) { :post }
     let(:path) { '/' }

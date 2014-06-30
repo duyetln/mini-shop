@@ -12,6 +12,13 @@ module Services
         end
       end
 
+      get '/:id' do
+        process_request do
+          bundle = Bundle.find(params[:id])
+          respond_with(BundleSerializer.new(bundle))
+        end
+      end
+
       post '/' do
         process_request do
           bundle = Bundle.new(params[:bundle])
