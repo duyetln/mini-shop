@@ -16,4 +16,6 @@ RSpec.configure do |config|
   config.profile_examples = 10
   config.color = true
   config.tty = true
+
+  config.include ServiceResourcePayloads
 end
