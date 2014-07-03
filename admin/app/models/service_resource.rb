@@ -70,7 +70,7 @@ class ServiceResource < Hashie::Mash
   end
 
   def self.resource
-    RestClient::Resource.new "localhost:8002/svc/#{namespace.pluralize}"
+    @resource ||= RestClient::Resource.new "localhost:8002/svc/#{namespace.pluralize}"
   end
 
   def self.concretize(hash = {})
