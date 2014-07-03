@@ -1,3 +1,11 @@
+# This file is copied to spec/ when you run 'rails generate rspec:install'
+ENV['RAILS_ENV'] ||= 'test'
+require File.expand_path('../../config/environment', __FILE__)
+require 'rspec/rails'
+
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+
+# https://relishapp.com/rspec/rspec-rails/docs
 # http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 #
 # The settings below are suggested to provide a good initial experience
@@ -18,4 +26,6 @@ RSpec.configure do |config|
   config.tty = true
 
   config.include ServiceResourcePayloads
+  config.include SpecHelper
+  config.infer_spec_type_from_file_location!
 end
