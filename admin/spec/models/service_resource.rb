@@ -1,7 +1,7 @@
 shared_examples 'default all' do
   describe '.all' do
     it 'returns resource collection' do
-      expect(described_class.resource).to receive(:get).and_return(collection_payload)
+      expect(described_class.resource).to receive(:get).and_return(collection(resource_payload))
       expect(described_class.all).to contain_exactly(an_instance_of(described_class))
     end
   end
@@ -94,7 +94,6 @@ shared_examples 'service resource' do
   let(:namespace) { described_class.name.underscore }
   let(:doubled_resource) { double(RestClient::Resource) }
   let(:resource_payload) { send("#{namespace}_payload".to_sym) }
-  let(:collection_payload) { [parse(resource_payload)].to_json }
 
   it { is_expected.to respond_to(:attributes) }
   it { is_expected.to respond_to(:to_params) }
