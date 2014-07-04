@@ -25,6 +25,7 @@ module Admin
     # config.i18n.default_locale = :de
 
     # Initialize load paths
+    config.autoload_paths << Rails.root.to_path
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '{**/}')]
   end
 end

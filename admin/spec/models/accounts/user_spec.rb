@@ -1,5 +1,5 @@
 require 'spec_setup'
-require 'models/service_resource'
+require 'spec/models/service_resource'
 
 describe User do
   include_examples 'service resource'
