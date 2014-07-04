@@ -68,10 +68,11 @@ end
 
 shared_examples 'default activate' do
   describe '#activate!' do
-    let(:model) { described_class.new id: :id }
+    let(:id) { :id }
+    let(:model) { described_class.new id: id }
 
     it 'updates model' do
-      expect(described_class.resource).to receive(:[]).with("/#{id}/activate").and_return(doubled_resource)
+      expect(described_class.resource).to receive(:[]).with("/#{model.id}/activate").and_return(doubled_resource)
       expect(doubled_resource).to receive(:put).with({}).and_return(resource_payload)
       expect { model.activate! }.to change { model.attributes }
     end
@@ -80,12 +81,13 @@ end
 
 shared_examples 'default delete' do
   describe '#delete!' do
-    let(:model) { described_class.new }
+    let(:id) { :id }
+    let(:model) { described_class.new id: id }
 
     it 'updates model' do
-      expect(described_class.resource).to receive(:[]).with("/#{id}").and_return(doubled_resource)
+      expect(described_class.resource).to receive(:[]).with("/#{model.id}").and_return(doubled_resource)
       expect(doubled_resource).to receive(:delete).and_return(resource_payload)
-      expect { model.activate! }.to change { model.attributes }
+      expect { model.delete! }.to change { model.attributes }
     end
   end
 end

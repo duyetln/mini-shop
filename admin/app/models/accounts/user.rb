@@ -36,7 +36,7 @@ class User < ServiceResource
   end
 
   def self.authenticate(email, password)
-    parse(resource['/authenticate'].post  params(email: email, password: password)) do |hash|
+    parse(resource['/authenticate'].post params(email: email, password: password)) do |hash|
       instantiate(hash)
     end
   end

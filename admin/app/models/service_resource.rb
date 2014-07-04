@@ -102,7 +102,7 @@ class ServiceResource < Hashie::Mash
   end
 
   def load!(hash = {})
-    hash.present? ? replace(self.class.instantiate(hash).attributes) : self
+    hash.present? ? replace(self.class.instantiate(hash)) : self
   end
 
   def self.parse(response)
