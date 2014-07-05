@@ -10,4 +10,8 @@ class Coupon < ServiceResource
       instantiate(hash)
     end
   end
+
+  def promotion
+    Promotion.find(promotion_id)
+  end
 end

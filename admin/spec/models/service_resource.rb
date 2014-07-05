@@ -112,7 +112,7 @@ shared_examples 'service resource' do
     let(:params) { { foo: 'foo', bar: 'bar' } }
 
     it 'returns payload params' do
-      expect(described_class.params(params)).to eq({ described_class.namespace.to_sym => params })
+      expect(described_class.params(params)).to eq( described_class.namespace.to_sym => params )
     end
   end
 
