@@ -17,7 +17,7 @@ end
 class OrderSerializer < ServiceResourceSerializer
   include ItemCombinableSerializer
   include DeletableSerializer
-  attributes :uuid, :purchase_id, :currency_id, :amount, :tax, :tax_rate, :qty, :refund_id, :status_id
+  attributes :uuid, :purchase_id, :currency_id, :amount, :tax, :tax_rate, :total, :qty, :refund_id, :status_id
   has_one :refund, serializer: 'TransactionSerializer'
   has_many :statuses, serializer: 'StatusSerializer'
 

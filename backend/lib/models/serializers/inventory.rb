@@ -2,7 +2,7 @@ require 'models/serializers/base'
 require 'models/serializers/shared'
 
 class CurrencySerializer < ServiceResourceSerializer
-  attributes :code
+  attributes :code, :sign
 end
 
 class PricepointPriceSerializer < ServiceResourceSerializer
