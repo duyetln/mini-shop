@@ -1,0 +1,4 @@
+desc 'Start a pry session'
+task :pry do
+  system('bundle exec pry -I. -r ./boot')
+end
