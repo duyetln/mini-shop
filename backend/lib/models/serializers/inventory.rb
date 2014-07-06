@@ -1,21 +1,21 @@
 require 'models/serializers/base'
 require 'models/serializers/shared'
 
-class CurrencySerializer < ServiceResourceSerializer
+class CurrencySerializer < ResourceSerializer
   attributes :code, :sign
 end
 
-class PricepointPriceSerializer < ServiceResourceSerializer
+class PricepointPriceSerializer < ResourceSerializer
   attributes :amount, :pricepoint_id, :currency_id
   has_one :currency, serializer: 'CurrencySerializer'
 end
 
-class PricepointSerializer < ServiceResourceSerializer
+class PricepointSerializer < ResourceSerializer
   attributes :name
   has_many :pricepoint_prices, serializer: 'PricepointPriceSerializer'
 end
 
-class DiscountSerializer < ServiceResourceSerializer
+class DiscountSerializer < ResourceSerializer
   attributes :name, :rate, :start_at, :end_at, :discounted
 
   def discounted
@@ -23,7 +23,7 @@ class DiscountSerializer < ServiceResourceSerializer
   end
 end
 
-class PriceSerializer < ServiceResourceSerializer
+class PriceSerializer < ResourceSerializer
   attributes :name, :pricepoint_id, :discount_id
   has_one :pricepoint, serializer: 'PricepointSerializer'
   has_one :discount, serializer: 'DiscountSerializer'
@@ -41,26 +41,26 @@ module ItemResourceSerializer
   end
 end
 
-class PhysicalItemSerializer < ServiceResourceSerializer
+class PhysicalItemSerializer < ResourceSerializer
   include ItemResourceSerializer
   include QuantifiableSerializer
 end
 
-class DigitalItemSerializer < ServiceResourceSerializer
+class DigitalItemSerializer < ResourceSerializer
   include ItemResourceSerializer
 end
 
-class BundledSerializer < ServiceResourceSerializer
+class BundledSerializer < ResourceSerializer
   include ItemCombinableSerializer
   attributes :bundle_id
 end
 
-class BundleSerializer < ServiceResourceSerializer
+class BundleSerializer < ResourceSerializer
   include ItemResourceSerializer
   has_many :bundleds, serializer: 'BundledSerializer'
 end
 
-class StoreItemSerializer < ServiceResourceSerializer
+class StoreItemSerializer < ResourceSerializer
   include DeletableSerializer
   include DisplayableSerializer
   include ItemableSerializer
@@ -76,7 +76,7 @@ class StoreItemSerializer < ServiceResourceSerializer
   end
 end
 
-class PromotionSerializer < ServiceResourceSerializer
+class PromotionSerializer < ResourceSerializer
   include DeletableSerializer
   include DisplayableSerializer
   include ActivableSerializer
@@ -85,13 +85,13 @@ class PromotionSerializer < ServiceResourceSerializer
   attributes :name
 end
 
-class BatchSerializer < ServiceResourceSerializer
+class BatchSerializer < ResourceSerializer
   include DeletableSerializer
   include ActivableSerializer
   attributes :name
 end
 
-class CouponSerializer < ServiceResourceSerializer
+class CouponSerializer < ResourceSerializer
   include DisplayableSerializer
   attributes :promotion_id, :batch_id, :code, :used, :used_by, :used_at
 

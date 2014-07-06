@@ -1,20 +1,20 @@
 require 'models/serializers/base'
 require 'models/serializers/shared'
 
-class AddressSerializer < ServiceResourceSerializer
+class AddressSerializer < ResourceSerializer
   attributes :user_id, :line1, :line2, :line3, :city, :region, :postal_code, :country
 end
 
-class PaymentMethodSerializer < ServiceResourceSerializer
+class PaymentMethodSerializer < ResourceSerializer
   attributes :user_id, :name, :balance, :currency_id
 end
 
-class TransactionSerializer < ServiceResourceSerializer
+class TransactionSerializer < ResourceSerializer
   include CommittableSerializer
   attributes :user_id, :uuid, :payment_method_id, :billing_address_id, :amount, :currency_id
 end
 
-class OrderSerializer < ServiceResourceSerializer
+class OrderSerializer < ResourceSerializer
   include ItemCombinableSerializer
   include DeletableSerializer
   attributes :uuid, :purchase_id, :currency_id, :amount, :tax, :tax_rate, :total, :qty, :refund_id, :status_id
@@ -33,7 +33,7 @@ class OrderSerializer < ServiceResourceSerializer
   end
 end
 
-class PurchaseSerializer < ServiceResourceSerializer
+class PurchaseSerializer < ResourceSerializer
   attributes :user_id, :payment_method_id, :billing_address_id, :shipping_address_id, :payment_id, :committed, :committed_at
   has_one :payment_method, serializer: 'PaymentMethodSerializer'
   has_one :billing_address, serializer: 'AddressSerializer'
