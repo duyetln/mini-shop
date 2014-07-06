@@ -64,7 +64,7 @@ module ServiceResourcePayloads
   end
 
   def transaction_payload
-    "{\"id\":1,\"resource_type\":\"Transaction\",\"resource_id\":1,\"created_at\":\"2014-06-18T15:36:01-07:00\",\"updated_at\":null,\"committed\":true,\"committable\":false,\"user_id\":1,\"uuid\":\"D3E86FB0BEF9B506F84B263E26E7D64C\",\"payment_method_id\":1,\"billing_address_id\":1,\"amount\":\"343.17\",\"currency_id\":1}"
+    "{\"id\":1,\"resource_type\":\"Transaction\",\"resource_id\":1,\"created_at\":\"2014-06-18T15:36:01-07:00\",\"updated_at\":null,\"committed\":true,\"committed_at\":\"2014-06-18T15:36:04-07:00\",\"committable\":false,\"user_id\":1,\"uuid\":\"D3E86FB0BEF9B506F84B263E26E7D64C\",\"payment_method_id\":1,\"billing_address_id\":1,\"amount\":\"343.17\",\"currency_id\":1}"
   end
 
   def order_payload

@@ -28,7 +28,6 @@ describe Bundle do
     let(:model) { described_class.new id: id }
     let(:association) { :bundled }
     let(:association_class) { Bundled }
-    let(:association_payload) { bundled_payload }
 
     context 'params emtpy' do
       it 'does nothing' do
