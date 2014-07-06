@@ -12,7 +12,7 @@ SimpleCov.start do
 end
 
 require './boot'
-require 'spec/spec_helpers'
+Dir['spec/support/**/*.rb'].each { |f| require f }
 
 RSpec.configure do |config|
   config.include SpecHelpers::Common
