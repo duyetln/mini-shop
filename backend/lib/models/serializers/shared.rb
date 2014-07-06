@@ -26,7 +26,7 @@ module CommittableSerializer
   extend ActiveSupport::Concern
 
   included do
-    attributes :committed, :committable
+    attributes :committed, :committed_at, :committable
   end
 
   def committable
