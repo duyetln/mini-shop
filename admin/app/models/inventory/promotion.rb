@@ -21,7 +21,7 @@ class Promotion < ServiceResource
     end
   end
 
-  def create_batch(name, qty)
+  def create_batch(name, size)
     self.class.parse(
       self.class.resource["/#{id}/batches"].post Batch.params(name: name, size: size)
     ) do |hash|
