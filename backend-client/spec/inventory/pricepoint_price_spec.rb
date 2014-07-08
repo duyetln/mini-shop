@@ -6,14 +6,18 @@ describe BackendClient::PricepointPrice do
   include_examples 'default update'
 
   describe '.instantiate' do
-    let(:model) { described_class.instantiate(parse(resource_payload)) }
+    let(:model) { instantiated_model }
 
     it 'sets currency correctly' do
-      expect(model.currency).to be_an_instance_of(BackendClient::Currency)
+      expect(
+        model.currency
+      ).to be_instance_of(BackendClient::Currency)
     end
 
     it 'sets amount correctly' do
-      expect(model.amount).to be_an_instance_of(BigDecimal)
+      expect(
+        model.amount
+      ).to be_instance_of(BigDecimal)
     end
   end
 end

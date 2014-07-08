@@ -10,14 +10,18 @@ describe BackendClient::StoreItem do
   include_examples 'default delete'
 
   describe '.instantiate' do
-    let(:model) { described_class.instantiate(parse(resource_payload)) }
+    let(:model) { instantiated_model }
 
     it 'sets item correctly' do
-      expect(model.item).to be_an_instance_of(BackendClient.const_get(model.item.resource_type.classify))
+      expect(model.item).to be_instance_of(
+        BackendClient.const_get(model.item.resource_type.classify)
+      )
     end
 
     it 'sets price correctly' do
-      expect(model.price).to be_an_instance_of(BackendClient::Price)
+      expect(
+        model.price
+      ).to be_instance_of(BackendClient::Price)
     end
   end
 end

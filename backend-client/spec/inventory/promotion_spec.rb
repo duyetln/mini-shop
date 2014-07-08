@@ -11,43 +11,46 @@ describe BackendClient::Promotion do
   include_examples 'default delete'
 
   describe '.instantiate' do
-    let(:model) { described_class.instantiate(parse(resource_payload)) }
+    let(:model) { instantiated_model }
 
     it 'sets item correctly' do
-      expect(model.item).to be_an_instance_of(BackendClient.const_get(model.item.resource_type.classify))
+      expect(model.item).to be_instance_of(
+        BackendClient.const_get(model.item.resource_type.classify)
+      )
     end
 
     it 'sets price correctly' do
-      expect(model.price).to be_an_instance_of(BackendClient::Price)
+      expect(
+        model.price
+      ).to be_instance_of(BackendClient::Price)
     end
   end
 
   describe '#batches' do
-    let(:id) { :id }
-    let(:model) { described_class.new id: id }
-    let(:association) { :batches }
-    let(:association_class) { BackendClient::Batch }
-    let(:association_payload) { batch_payload }
-
     it 'returns association collection' do
-      expect(described_class.resource).to receive(:[]).with("/#{model.id}/#{association}").and_return(doubled_resource)
-      expect(doubled_resource).to receive(:get).and_return(collection(association_payload))
-      expect(model.send(association)).to contain_exactly(an_instance_of(association_class))
+      expect_get("/#{model.id}/batches", {}, collection(batch_payload))
+      expect(
+        model.batches.map(&:class).uniq
+      ).to contain_exactly(BackendClient::Batch)
     end
   end
 
   describe '.create_batch' do
-    let(:id) { :id }
-    let(:model) { described_class.new id: id }
-    let(:association) { :batch }
-    let(:association_class) { BackendClient::Batch }
-    let(:size) { 10 }
-    let(:name) { 'name' }
+    let(:name) { rand_str }
+    let(:size) { qty }
 
     it 'creates batch' do
-      expect(described_class.resource).to receive(:[]).with("/#{model.id}/#{association.to_s.pluralize}").and_return(doubled_resource)
-      expect(doubled_resource).to receive(:post).with(association_class.params(name: name, size: size)).and_return(resource_payload)
+      expect_post("/#{model.id}/batches", BackendClient::Batch.params(name: name, size: size))
       expect { model.create_batch(name, size) }.to change { model.attributes }
+    end
+  end
+
+  describe '.create_batches' do
+    let(:size) { qty }
+
+    it 'creates batches' do
+      expect_post("/#{model.id}/batches/generate", { qty: qty }.merge(BackendClient::Batch.params(size: size)))
+      expect { model.create_batches(qty, size) }.to change { model.attributes }
     end
   end
 end

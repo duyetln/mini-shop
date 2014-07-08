@@ -93,10 +93,6 @@ module BackendClient
       name.demodulize.underscore
     end
 
-    def namespace
-      self.class.namespace
-    end
-
     def self.params(hash = {})
       { namespace.to_sym => hash }
     end

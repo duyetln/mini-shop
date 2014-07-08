@@ -6,10 +6,12 @@ describe BackendClient::PaymentMethod do
   include_examples 'default update'
 
   describe '.instantiate' do
-    let(:model) { described_class.instantiate(parse(resource_payload)) }
+    let(:model) { instantiated_model }
 
     it 'sets balance correctly' do
-      expect(model.balance).to be_an_instance_of(BigDecimal)
+      expect(
+        model.balance
+      ).to be_instance_of(BigDecimal)
     end
   end
 end

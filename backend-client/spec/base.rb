@@ -16,10 +16,9 @@ shared_examples 'default create' do
     end
 
     context 'params present' do
-      let(:params) { { foo: 'foo', bar: 'bar' } }
       it 'creates new resource' do
         expect(described_class.resource).to receive(:post).with(described_class.params(params)).and_return(resource_payload)
-        expect(described_class.create(params)).to be_a(described_class)
+        expect(described_class.create(params)).to be_instance_of(described_class)
       end
     end
   end
@@ -27,12 +26,11 @@ end
 
 shared_examples 'default find' do
   describe '.find' do
-    let(:id) { :foo }
+    let(:id) { rand_str }
 
     it 'finds resource' do
-      expect(described_class.resource).to receive(:[]).with("/#{id}").and_return(doubled_resource)
-      expect(doubled_resource).to receive(:get).and_return(resource_payload)
-      expect(described_class.find(id)).to be_a(described_class)
+      expect_get("/#{id}")
+      expect(described_class.find(id)).to be_instance_of(described_class)
     end
   end
 end
@@ -54,12 +52,11 @@ shared_examples 'default update' do
     context 'attributes present' do
       before :each do
         model.id = :id
-        model.foo = :bar
+        model.key = :value
       end
 
       it 'updates model' do
-        expect(described_class.resource).to receive(:[]).with("/#{model.id}").and_return(doubled_resource)
-        expect(doubled_resource).to receive(:put).with(model.to_params).and_return(resource_payload)
+        expect_put("/#{model.id}", model.to_params)
         expect { model.update! }.to change { model.attributes }
       end
     end
@@ -68,12 +65,8 @@ end
 
 shared_examples 'default activate' do
   describe '#activate!' do
-    let(:id) { :id }
-    let(:model) { described_class.new id: id }
-
     it 'updates model' do
-      expect(described_class.resource).to receive(:[]).with("/#{model.id}/activate").and_return(doubled_resource)
-      expect(doubled_resource).to receive(:put).with({}).and_return(resource_payload)
+      expect_put("/#{model.id}/activate")
       expect { model.activate! }.to change { model.attributes }
     end
   end
@@ -81,36 +74,25 @@ end
 
 shared_examples 'default delete' do
   describe '#delete!' do
-    let(:id) { :id }
-    let(:model) { described_class.new id: id }
-
     it 'updates model' do
-      expect(described_class.resource).to receive(:[]).with("/#{model.id}").and_return(doubled_resource)
-      expect(doubled_resource).to receive(:delete).and_return(resource_payload)
+      expect_delete("/#{model.id}")
       expect { model.delete! }.to change { model.attributes }
     end
   end
 end
 
 shared_examples 'backend client' do
-  let(:namespace) { described_class.name.demodulize.underscore }
-  let(:doubled_resource) { double(RestClient::Resource) }
-  let(:resource_payload) { send("#{namespace}_payload".to_sym) }
-
   it { is_expected.to respond_to(:attributes) }
   it { is_expected.to respond_to(:to_params) }
-  it { is_expected.to respond_to(:namespace) }
   it { is_expected.to respond_to(:load!) }
 
   describe '.namespace' do
     it 'is underscored class name' do
-      expect(described_class.namespace).to eq(described_class.name.demodulize.underscore)
+      expect(described_class.namespace).to eq(namespace)
     end
   end
 
   describe '.params' do
-    let(:params) { { foo: 'foo', bar: 'bar' } }
-
     it 'returns payload params' do
       expect(described_class.params(params)).to eq(described_class.namespace.to_sym => params)
     end
@@ -131,8 +113,8 @@ shared_examples 'backend client' do
     let(:obj2) { described_class.new id: id2 }
 
     context 'same id' do
-      let(:id1) { :foo }
-      let(:id2) { id1 }
+      let(:id1) { :id1 }
+      let(:id2) {  id1 }
 
       it 'is true' do
         expect(obj1).to eq(obj2)
@@ -140,8 +122,8 @@ shared_examples 'backend client' do
     end
 
     context 'different id' do
-      let(:id1) { :foo }
-      let(:id2) { :bar }
+      let(:id1) { :id1 }
+      let(:id2) { :id2 }
 
       it 'is false' do
         expect(obj1).to_not eq(obj2)
@@ -151,7 +133,7 @@ shared_examples 'backend client' do
 
   describe '.instantiate' do
     it 'instantiates resource' do
-      expect(described_class.instantiate(parse(resource_payload))).to be_an_instance_of(described_class)
+      expect(instantiated_model).to be_instance_of(described_class)
     end
   end
 end

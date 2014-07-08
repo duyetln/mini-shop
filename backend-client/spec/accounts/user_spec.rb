@@ -9,50 +9,51 @@ describe BackendClient::User do
   include_examples 'default update'
 
   describe '.instantiate' do
-    let(:model) { described_class.instantiate(parse(resource_payload)) }
+    let(:model) { instantiated_model }
 
     it 'sets addresses correctly' do
-      expect(model.addresses).to contain_exactly(
-        an_instance_of(BackendClient::Address),
-        an_instance_of(BackendClient::Address)
-      )
+      expect(
+        model.addresses.map(&:class).uniq
+      ).to contain_exactly(BackendClient::Address)
     end
 
     it 'sets payment_methods correctly' do
-      expect(model.payment_methods).to contain_exactly(an_instance_of(BackendClient::PaymentMethod))
+      expect(
+        model.payment_methods.map(&:class).uniq
+      ).to contain_exactly(BackendClient::PaymentMethod)
     end
   end
 
   describe '.authenticate' do
-    let(:email) { Faker::Internet.email }
-    let(:password) { Faker::Lorem.characters(20) }
+    let(:email) { rand_str }
+    let(:password) { rand_str }
 
     it 'authenticates with email and password' do
-      expect(described_class.resource).to receive(:[]).with('/authenticate').and_return(doubled_resource)
-      expect(doubled_resource).to receive(:post).with(described_class.params(email: email, password: password)).and_return(resource_payload)
-      expect(described_class.authenticate(email, password)).to be_an_instance_of(described_class)
+      expect_post('/authenticate', described_class.params(email: email, password: password))
+      expect(
+        described_class.authenticate(email, password)
+      ).to be_instance_of(described_class)
     end
   end
 
   describe '.confirm' do
-    let(:uuid) { Faker::Lorem.characters(20) }
-    let(:actv_code) { Faker::Lorem.characters(20) }
+    let(:uuid) { rand_str }
+    let(:actv_code) { rand_str }
 
     it 'confirms with uuid and actv code' do
-      expect(described_class.resource).to receive(:[]).with("/#{uuid}/confirm/#{actv_code}").and_return(doubled_resource)
-      expect(doubled_resource).to receive(:put).with({}).and_return(resource_payload)
-      expect(described_class.confirm(uuid, actv_code)).to be_an_instance_of(described_class)
+      expect_put("/#{uuid}/confirm/#{actv_code}")
+      expect(
+        described_class.confirm(uuid, actv_code)
+      ).to be_instance_of(described_class)
     end
   end
 
   shared_examples 'association retreiving' do
-    let(:id) { :id }
-    let(:model) { described_class.new id: id }
-
     it 'returns association collection' do
-      expect(described_class.resource).to receive(:[]).with("/#{model.id}/#{association}").and_return(doubled_resource)
-      expect(doubled_resource).to receive(:get).and_return(collection(association_payload))
-      expect(model.send(association)).to contain_exactly(an_instance_of(association_class))
+      expect_get("/#{model.id}/#{association}", {}, collection(association_payload))
+      expect(
+        model.send(association).map(&:class).uniq
+      ).to contain_exactly(association_class)
     end
   end
 
@@ -105,9 +106,6 @@ describe BackendClient::User do
   end
 
   shared_examples 'association creation' do
-    let(:id) { :id }
-    let(:model) { described_class.new id: id }
-
     context 'params emtpy' do
       it 'does nothing' do
         expect(model.send("create_#{association}".to_sym, {})).to be_nil
@@ -115,12 +113,15 @@ describe BackendClient::User do
     end
 
     context 'params present' do
-      let(:params) { { foo: 'foo', bar: 'bar' } }
-
       it 'creates association' do
-        expect(described_class.resource).to receive(:[]).with("/#{model.id}/#{association.to_s.pluralize}").and_return(doubled_resource)
-        expect(doubled_resource).to receive(:post).with(association_class.params(params)).and_return(association_payload)
-        expect(model.send("create_#{association}".to_sym, params)).to be_an_instance_of(association_class)
+        expect_post(
+          "/#{model.id}/#{association.to_s.pluralize}",
+          association_class.params(params),
+          association_payload
+        )
+        expect(
+          model.send("create_#{association}".to_sym, params)
+        ).to be_instance_of(association_class)
       end
     end
   end

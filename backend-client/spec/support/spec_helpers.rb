@@ -32,8 +32,7 @@ module SpecHelpers
         let(:resource_payload) { send("#{namespace}_payload".to_sym) }
         let(:params) { { key1: rand_str, key2: rand_num } }
 
-        let(:id) { rand_str }
-        let(:model) { described_class.new id: id }
+        let(:model) { described_class.new id: rand_str }
         let(:instantiated_model) { described_class.instantiate(parse(resource_payload)) }
       end
 

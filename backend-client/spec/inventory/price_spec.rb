@@ -8,14 +8,18 @@ describe BackendClient::Price do
   include_examples 'default update'
 
   describe '.instantiate' do
-    let(:model) { described_class.instantiate(parse(resource_payload)) }
+    let(:model) { instantiated_model }
 
     it 'sets pricepoint correctly' do
-      expect(model.pricepoint).to be_an_instance_of(BackendClient::Pricepoint)
+      expect(
+        model.pricepoint
+      ).to be_instance_of(BackendClient::Pricepoint)
     end
 
     it 'sets discount correctly' do
-      expect(model.discount).to be_an_instance_of(BackendClient::Discount)
+      expect(
+        model.discount
+      ).to be_instance_of(BackendClient::Discount)
     end
   end
 end
