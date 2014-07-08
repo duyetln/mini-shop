@@ -11,8 +11,8 @@ require './boot'
 Dir['spec/support/**/*.rb'].each { |f| require f }
 
 RSpec.configure do |config|
-  config.include BackendClientPayloads
-  config.include SpecHelper
+  config.include SpecHelpers::Common
+  config.include SpecHelpers::SamplePayloads
   config.color = true
   config.tty = true
   config.order = 'random'
