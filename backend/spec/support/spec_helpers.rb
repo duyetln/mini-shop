@@ -5,7 +5,10 @@ module SpecHelpers
     included do
       let(:rand_str) { Faker::Lorem.words.join('') }
       let(:rand_num) { rand(1..50) }
+      let(:qty) { rand(1..5) }
+      let(:amount) { rand(1..20) }
 
+      let(:user) { FactoryGirl.build :user }
       let(:currency) do
         FactoryGirl.build [
           :usd,
@@ -13,9 +16,6 @@ module SpecHelpers
           :gbp
         ].sample
       end
-      let(:qty) { rand(1..5) }
-      let(:amount) { rand(1..20) }
-      let(:user) { FactoryGirl.build :user }
       let(:item) do
         FactoryGirl.build [
           :bundle,
@@ -36,8 +36,22 @@ module SpecHelpers
 end
 
 module SpecHelpers
+  module Models
+    extend ActiveSupport::Concern
+    include SpecHelpers::Common
+
+    included do
+      let(:model_args) { [described_class.to_s.underscore.to_sym] }
+      let(:model) { FactoryGirl.build(*model_args) }
+      let(:subject) { model }
+    end
+  end
+end
+
+module SpecHelpers
   module Services
     extend ActiveSupport::Concern
+    include SpecHelpers::Common
     include Rack::Test::Methods
 
     included do

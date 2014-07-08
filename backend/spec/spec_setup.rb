@@ -15,7 +15,6 @@ require './boot'
 Dir['spec/support/**/*.rb'].each { |f| require f }
 
 RSpec.configure do |config|
-  config.include SpecHelpers::Common
   config.include Mail::Matchers
   config.color_enabled = true
   config.tty = true
