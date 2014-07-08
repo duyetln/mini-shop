@@ -4,7 +4,11 @@ gem 'rake'
 gem 'yajl-ruby', '~> 1.2', require: ['yajl', 'yajl/json_gem']
 gem 'hashie', '~> 2.1.1'
 gem 'rest-client'
-gem 'activesupport', require: ['active_support/inflector', 'active_support/core_ext/object']
+gem 'activesupport', require: [
+  'active_support/inflector',
+  'active_support/core_ext/object',
+  'active_support/concern'
+]
 
 group :test do
   gem 'timecop'
