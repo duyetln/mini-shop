@@ -25,6 +25,14 @@ module SpecHelpers
       end
     end
 
+    def parse(json)
+      Yajl::Parser.parse(json, symbolize_keys: true)
+    end
+
+    def collection(json)
+      [parse(json)].to_json
+    end
+
     def activate_inventory!
       PhysicalItem.all.each(&:activate!)
       DigitalItem.all.each(&:activate!)
@@ -59,7 +67,7 @@ module SpecHelpers
       let(:response_status) { last_response.status }
       let(:response_body) { last_response.body }
       let :parsed_response do
-        Yajl::Parser.parse(last_response.body, symbolize_keys: true)
+        parse(last_response.body)
       end
     end
 
