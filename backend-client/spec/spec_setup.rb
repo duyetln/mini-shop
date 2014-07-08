@@ -12,7 +12,7 @@ Dir['spec/support/**/*.rb'].each { |f| require f }
 
 RSpec.configure do |config|
   config.include SpecHelpers::Common
-  config.include SpecHelpers::SamplePayloads
+  config.include SpecHelpers::BackendClient
   config.color = true
   config.tty = true
   config.order = 'random'
