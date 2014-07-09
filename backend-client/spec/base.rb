@@ -81,11 +81,7 @@ shared_examples 'default delete' do
   end
 end
 
-shared_examples 'backend client' do
-  it { is_expected.to respond_to(:attributes) }
-  it { is_expected.to respond_to(:to_params) }
-  it { is_expected.to respond_to(:load!) }
-
+shared_examples 'service resource' do
   describe '.namespace' do
     it 'is underscored class name' do
       expect(described_class.namespace).to eq(namespace)
@@ -107,6 +103,14 @@ shared_examples 'backend client' do
       expect(described_class.resource.url).to eq("localhost:8002/svc/#{namespace.pluralize}")
     end
   end
+end
+
+shared_examples 'backend client' do
+  include_examples 'service resource'
+
+  it { is_expected.to respond_to(:attributes) }
+  it { is_expected.to respond_to(:to_params) }
+  it { is_expected.to respond_to(:load!) }
 
   describe '#==' do
     let(:obj1) { described_class.new id: id1 }

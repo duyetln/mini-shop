@@ -56,10 +56,32 @@ module BackendClient
       end
     end
   end
+
+  module ServiceResource
+
+    def params(hash = {})
+      { namespace.to_sym => hash }
+    end
+
+    def namespace
+      name.demodulize.underscore
+    end
+
+    def resource
+      @resource ||= RestClient::Resource.new "localhost:8002/svc/#{namespace.pluralize}"
+    end
+
+    def parse(response)
+      parsed_response = Yajl::Parser.parse(response, symbolize_keys: true)
+      block_given? ? yield(parsed_response) : parsed_response
+    end
+  end
 end
 
 module BackendClient
   class Base < Hashie::Mash
+    extend ServiceResource
+
     alias_method :attributes, :to_hash
 
     def ==(other)
@@ -67,10 +89,6 @@ module BackendClient
         other.instance_of?(self.class) &&
         id.present? &&
         other.id == id
-    end
-
-    def self.resource
-      @resource ||= RestClient::Resource.new "localhost:8002/svc/#{namespace.pluralize}"
     end
 
     def self.concretize(hash = {})
@@ -89,25 +107,12 @@ module BackendClient
       end
     end
 
-    def self.namespace
-      name.demodulize.underscore
-    end
-
-    def self.params(hash = {})
-      { namespace.to_sym => hash }
-    end
-
     def to_params
       self.class.params(attributes)
     end
 
     def load!(hash = {})
       hash.present? ? replace(self.class.instantiate(hash)) : self
-    end
-
-    def self.parse(response)
-      parsed_response = Yajl::Parser.parse(response, symbolize_keys: true)
-      block_given? ? yield(parsed_response) : parsed_response
     end
   end
 end
