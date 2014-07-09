@@ -145,6 +145,10 @@ module SpecHelpers
       def status_payload
         "{\"id\":1,\"resource_type\":\"Status\",\"resource_id\":1,\"created_at\":\"2014-06-18T15:36:04-07:00\",\"updated_at\":null,\"source_type\":\"Fulfillment\",\"source_id\":1,\"status\":1}"
       end
+
+      def email_payload
+        "{\"to\":\"john.smith@email.com\",\"date\":\"2014-07-08T18:52:30-07:00\"}"
+      end
     end
 
     include Common
