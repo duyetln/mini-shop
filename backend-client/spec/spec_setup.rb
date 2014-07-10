@@ -18,6 +18,10 @@ RSpec.configure do |config|
   config.order = 'random'
 
   # if config.files_to_run.one?
-    # config.default_formatter = 'doc'
+  #   config.default_formatter = 'doc'
   # end
+
+  config.before :suite do
+    BackendClient::ServiceResource.host = 'host'
+  end
 end

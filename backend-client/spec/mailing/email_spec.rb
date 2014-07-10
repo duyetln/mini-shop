@@ -8,7 +8,8 @@ describe BackendClient::Email do
     let(:type) { rand_str }
 
     it 'sends email' do
-      expect(described_class.resource).to receive(:post).with(type: type, payload: params).and_return(resource_payload)
+      expect_resource
+      expect(doubled_resource).to receive(:post).with(type: type, payload: params).and_return(resource_payload)
       response = described_class.send_email(type, params)
       expect(response).to be_a(Hash)
       expect(response['date']).to be_instance_of(DateTime)

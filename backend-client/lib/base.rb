@@ -58,6 +58,13 @@ module BackendClient
   end
 
   module ServiceResource
+    class << self
+      attr_accessor :host
+    end
+
+    def proxy=(proxy)
+      RestClient.proxy = proxy
+    end
 
     def params(hash = {})
       { namespace.to_sym => hash }
@@ -68,7 +75,7 @@ module BackendClient
     end
 
     def resource
-      @resource ||= RestClient::Resource.new "localhost:8002/svc/#{namespace.pluralize}"
+      RestClient::Resource.new "#{ServiceResource.host}/svc/#{namespace.pluralize}"
     end
 
     def parse(response)

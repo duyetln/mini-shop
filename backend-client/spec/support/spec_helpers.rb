@@ -40,8 +40,13 @@ module SpecHelpers
         BackendClient.const_get(klass)
       end
 
+      def expect_resource
+        expect(described_class).to receive(:resource).and_return(doubled_resource)
+      end
+
       def expect_action(action, path, params, payload)
-        expect(described_class.resource).to receive(:[]).with(path).and_return(doubled_resource)
+        expect_resource
+        expect(doubled_resource).to receive(:[]).with(path).and_return(doubled_resource)
         match_expectation = receive(action)
         match_expectation = match_expectation.with(params) if params.present?
         match_expectation = match_expectation.and_return(payload) if payload.present?

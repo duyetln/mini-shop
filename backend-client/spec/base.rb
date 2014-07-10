@@ -1,7 +1,8 @@
 shared_examples 'default all' do
   describe '.all' do
     it 'returns resource collection' do
-      expect(described_class.resource).to receive(:get).and_return(collection(resource_payload))
+      expect_resource
+      expect(doubled_resource).to receive(:get).and_return(collection(resource_payload))
       expect(described_class.all).to contain_exactly(an_instance_of(described_class))
     end
   end
@@ -17,7 +18,8 @@ shared_examples 'default create' do
 
     context 'params present' do
       it 'creates new resource' do
-        expect(described_class.resource).to receive(:post).with(described_class.params(params)).and_return(resource_payload)
+        expect_resource
+        expect(doubled_resource).to receive(:post).with(described_class.params(params)).and_return(resource_payload)
         expect(described_class.create(params)).to be_instance_of(described_class)
       end
     end
@@ -100,7 +102,7 @@ shared_examples 'service resource' do
     end
 
     it 'sets corret service url' do
-      expect(described_class.resource.url).to eq("localhost:8002/svc/#{namespace.pluralize}")
+      expect(described_class.resource.url).to eq("#{BackendClient::ServiceResource.host}/svc/#{namespace.pluralize}")
     end
   end
 end
