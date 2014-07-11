@@ -1,3 +1,16 @@
+=begin
+dependencies: must have 'deleted' column
+interface methods:
+  deleted
+  deleted=
+  deleted?
+  kept?
+  deletable?
+  delete!
+  deleted default scope
+  kept scope
+=end
+
 module Deletable
   extend ActiveSupport::Concern
 

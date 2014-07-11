@@ -1,3 +1,18 @@
+=begin
+dependencies: must have 'committed', 'committed_at' columns
+interface methods:
+  committed
+  committed=
+  committed_at
+  committed_at=
+  committed?
+  pending?
+  committable?
+  commit!
+  committed scope
+  pending scope
+=end
+
 module Committable
   extend ActiveSupport::Concern
 
@@ -8,20 +23,6 @@ module Committable
     scope :pending,   -> { where(committed: false) }
 
     after_initialize :set_pending
-  end
-
-  def method_missing(method, *args, &block)
-    if [
-      :committed=,
-      :committed_at=,
-      :committed,
-      :committed_at,
-      :committed
-    ].include?(method.to_sym)
-      fail NotImplementedError, "Method #{method} must be defined in derived class"
-    else
-      super
-    end
   end
 
   def pending?

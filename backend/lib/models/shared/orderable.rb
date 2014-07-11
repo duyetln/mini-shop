@@ -1,5 +1,14 @@
 require 'models/shared/fulfillable'
 
+=begin
+dependencies: Fulfillable
+interface methods:
+  item
+  amount
+  active?
+  available?
+=end
+
 module Orderable
   extend ActiveSupport::Concern
   include Fulfillable

@@ -1,3 +1,16 @@
+=begin
+dependencies: must have 'active' column
+interface methods:
+  active
+  active=
+  active?
+  inactive?
+  activable?
+  activate!
+  active scope
+  inactive scope
+=end
+
 module Activable
   extend ActiveSupport::Concern
 
@@ -8,18 +21,6 @@ module Activable
     scope :inactive, -> { where(active: false) }
 
     after_initialize :set_inactive
-  end
-
-  def method_missing(method, *args, &block)
-    if [
-      :active,
-      :active?,
-      :active=
-    ].include?(method.to_sym)
-      fail NotImplementedError, "Method #{method} must be defined in derived class"
-    else
-      super
-    end
   end
 
   def inactive?

@@ -1,3 +1,13 @@
+=begin
+dependencies: must have 'price_id' column
+interface methods:
+  price_id
+  price_id=
+  price
+  amount
+  discounted?
+=end
+
 module Priceable
   extend ActiveSupport::Concern
 

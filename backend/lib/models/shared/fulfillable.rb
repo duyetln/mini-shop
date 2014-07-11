@@ -1,3 +1,10 @@
+=begin
+dependencies: none
+interface methods:
+  fulfill!
+  reverse!
+=end
+
 module Fulfillable
   extend ActiveSupport::Concern
 

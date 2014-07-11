@@ -48,7 +48,7 @@ describe 'service api' do
   describe Services::Mailing::Emails do
     before :each do
       expect do
-      post '/',
+        post '/',
            type: 'AccountActivationEmail',
            payload: {
              user_id: user.id
@@ -482,7 +482,7 @@ describe 'service api' do
   describe Services::Mailing::Emails do
     before :each do
       expect do
-      post '/',
+        post '/',
            type: 'PurchaseReceiptEmail',
            payload: {
              purchase_id: purchase.id
@@ -555,7 +555,7 @@ describe 'service api' do
   describe Services::Mailing::Emails do
     before :each do
       expect do
-      post '/',
+        post '/',
            type: 'PurchaseStatusEmail',
            payload: {
              purchase_id: purchase.id
