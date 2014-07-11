@@ -1,9 +1,9 @@
 class PaymentMethod < ActiveRecord::Base
   attr_readonly :user_id, :name, :currency_id
 
-  belongs_to :user
+  belongs_to :user, inverse_of: :payment_methods
   belongs_to :currency
-  has_many   :transactions
+  has_many   :transactions, inverse_of: :payment_method
 
   validates :name,     presence: true
   validates :balance,  presence: true

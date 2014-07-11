@@ -7,8 +7,8 @@ class Batch < ActiveRecord::Base
 
   attr_readonly :promotion_id
 
-  belongs_to :promotion
-  has_many :coupons
+  belongs_to :promotion, inverse_of: :batches
+  has_many :coupons, inverse_of: :batch
 
   validates :name, presence: true
   validates :promotion, presence: true

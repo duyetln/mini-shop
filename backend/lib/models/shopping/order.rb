@@ -11,10 +11,10 @@ class Order < ActiveRecord::Base
   attr_protected :uuid, :purchase_id
   attr_readonly :uuid, :purchase_id
 
-  belongs_to :purchase
+  belongs_to :purchase, inverse_of: :orders
   belongs_to :currency
   belongs_to :refund, class_name: 'Transaction'
-  has_many   :fulfillments
+  has_many   :fulfillments, inverse_of: :order
 
   validates :purchase, presence: true
   validates :currency, presence: true

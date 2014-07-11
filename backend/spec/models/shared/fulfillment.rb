@@ -5,7 +5,7 @@ shared_examples 'fulfillment model' do
 
   it { should have_readonly_attribute(:order_id) }
 
-  it { should belong_to(:order) }
+  it { should belong_to(:order).inverse_of(:fulfillments) }
 
   it { should validate_presence_of(:order) }
 

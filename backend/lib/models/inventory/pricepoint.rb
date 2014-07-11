@@ -1,5 +1,5 @@
 class Pricepoint < ActiveRecord::Base
-  has_many :pricepoint_prices
+  has_many :pricepoint_prices, inverse_of: :pricepoint
   has_many :currencies, through: :pricepoint_prices
 
   validates :name, presence: true

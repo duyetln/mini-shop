@@ -12,7 +12,7 @@ class Fulfillment < ActiveRecord::Base
 
   attr_readonly :order_id
 
-  belongs_to :order
+  belongs_to :order, inverse_of: :fulfillments
 
   validates :order, presence: true
   validates :order_id, uniqueness: { scope: [:item_type, :item_id] }

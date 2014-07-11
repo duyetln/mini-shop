@@ -2,13 +2,13 @@ class User < ActiveRecord::Base
   attr_protected :uuid, :actv_code, :confirmed
   attr_readonly :uuid
 
-  has_many :purchases
-  has_many :addresses
-  has_many :payment_methods
-  has_many :transactions
-  has_many :ownerships
-  has_many :shipments
-  has_many :coupons, foreign_key: :used_by
+  has_many :purchases, inverse_of: :user
+  has_many :addresses, inverse_of: :user
+  has_many :payment_methods, inverse_of: :user
+  has_many :transactions, inverse_of: :user
+  has_many :ownerships, inverse_of: :user
+  has_many :shipments, inverse_of: :user
+  has_many :coupons, foreign_key: :used_by, inverse_of: :user
 
   validates :first_name, presence: true
   validates :last_name,  presence: true

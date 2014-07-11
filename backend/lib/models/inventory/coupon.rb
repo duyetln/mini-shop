@@ -7,8 +7,8 @@ class Coupon < ActiveRecord::Base
 
   attr_readonly :code, :batch_id
 
-  belongs_to :batch
-  belongs_to :user, class_name: 'User', foreign_key: :used_by
+  belongs_to :batch, inverse_of: :coupons
+  belongs_to :user, class_name: 'User', foreign_key: :used_by, inverse_of: :coupons
 
   validates :batch, presence: true
   validates :code, uniqueness: true

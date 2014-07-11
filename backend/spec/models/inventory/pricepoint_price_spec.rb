@@ -4,7 +4,7 @@ describe PricepointPrice do
   it { should have_readonly_attribute(:currency_id) }
   it { should have_readonly_attribute(:pricepoint_id) }
 
-  it { should belong_to(:pricepoint) }
+  it { should belong_to(:pricepoint).inverse_of(:pricepoint_prices) }
   it { should belong_to(:currency) }
 
   it { should validate_presence_of(:amount) }

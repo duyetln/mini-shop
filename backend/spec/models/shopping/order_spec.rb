@@ -11,10 +11,10 @@ describe Order do
   it { should_not allow_mass_assignment_of(:uuid) }
   it { should_not allow_mass_assignment_of(:purchase_id) }
 
-  it { should belong_to(:purchase) }
+  it { should belong_to(:purchase).inverse_of(:orders) }
   it { should belong_to(:currency) }
   it { should belong_to(:refund).class_name('Transaction') }
-  it { should have_many(:fulfillments) }
+  it { should have_many(:fulfillments).inverse_of(:order) }
 
   it { should have_readonly_attribute(:uuid) }
   it { should have_readonly_attribute(:purchase_id) }

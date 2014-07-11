@@ -13,7 +13,7 @@ class Promotion < ActiveRecord::Base
   include Priceable
   include Orderable
 
-  has_many :batches
+  has_many :batches, inverse_of: :promotion
 
   validates :name, presence: true
   validates :item_type, inclusion: { in: %w{ Bundle DigitalItem PhysicalItem } }

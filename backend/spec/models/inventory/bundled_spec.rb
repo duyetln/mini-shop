@@ -8,7 +8,7 @@ end
 describe Bundled do
   it { should have_readonly_attribute(:bundle_id) }
 
-  it { should belong_to(:bundle) }
+  it { should belong_to(:bundle).inverse_of(:bundleds) }
 
   it { should validate_presence_of(:bundle) }
 

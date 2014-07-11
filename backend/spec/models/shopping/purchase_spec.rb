@@ -14,13 +14,13 @@ describe Purchase do
 
   it { should have_readonly_attribute(:user_id) }
 
-  it { should have_many(:orders) }
+  it { should have_many(:orders).inverse_of(:purchase) }
   it { should have_many(:refunds).through(:orders) }
   it { should belong_to(:payment_method) }
   it { should belong_to(:billing_address).class_name('Address') }
   it { should belong_to(:shipping_address).class_name('Address') }
   it { should belong_to(:payment).class_name('Transaction') }
-  it { should belong_to(:user) }
+  it { should belong_to(:user).inverse_of(:purchases) }
 
   it { should validate_presence_of(:user) }
 
@@ -76,7 +76,7 @@ describe Purchase do
           qty: qty,
           acc: false
         ).and_yield(order)
-        expect(model).to receive(:reload)
+        expect(model).to receive(:reload).at_least(:once)
       end
 
       it 'adds or updates order' do
@@ -104,7 +104,7 @@ describe Purchase do
     context 'pending' do
       before :each do
         expect(orders).to receive(:retrieve).with(item).and_yield(order)
-        expect(model).to receive(:reload)
+        expect(model).to receive(:reload).at_least(:once)
       end
 
       it 'retrieves the item' do

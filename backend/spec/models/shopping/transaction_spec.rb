@@ -7,9 +7,9 @@ describe Transaction do
 end
 
 describe Transaction do
-  it { should belong_to(:payment_method) }
+  it { should belong_to(:payment_method).inverse_of(:transactions) }
   it { should belong_to(:billing_address).class_name('Address') }
-  it { should belong_to(:user) }
+  it { should belong_to(:user).inverse_of(:transactions) }
   it { should belong_to(:currency) }
 
   it { should validate_presence_of(:user) }

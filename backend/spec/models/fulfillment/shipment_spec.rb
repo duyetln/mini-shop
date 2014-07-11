@@ -10,7 +10,7 @@ describe Shipment do
   it { should have_readonly_attribute(:order_id) }
   it { should have_readonly_attribute(:shipping_address_id) }
 
-  it { should belong_to(:user) }
+  it { should belong_to(:user).inverse_of(:shipments) }
   it { should belong_to(:order) }
   it { should belong_to(:shipping_address).class_name('Address') }
 

@@ -10,9 +10,9 @@ describe PaymentMethod do
   it { should have_readonly_attribute(:name) }
   it { should have_readonly_attribute(:currency_id) }
 
-  it { should belong_to(:user) }
+  it { should belong_to(:user).inverse_of(:payment_methods) }
   it { should belong_to(:currency) }
-  it { should have_many(:transactions) }
+  it { should have_many(:transactions).inverse_of(:payment_method) }
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:balance) }

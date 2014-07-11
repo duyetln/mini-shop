@@ -7,7 +7,7 @@ class Ownership < ActiveRecord::Base
 
   attr_readonly :user_id, :order_id
 
-  belongs_to :user
+  belongs_to :user, inverse_of: :ownerships
   belongs_to :order
 
   validates :user,  presence: true

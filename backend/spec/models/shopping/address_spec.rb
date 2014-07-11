@@ -9,7 +9,7 @@ describe Address do
   it { should have_readonly_attribute(:postal_code) }
   it { should have_readonly_attribute(:country) }
 
-  it { should belong_to(:user) }
+  it { should belong_to(:user).inverse_of(:addresses) }
 
   it { should validate_presence_of(:user) }
   it { should validate_presence_of(:line1) }

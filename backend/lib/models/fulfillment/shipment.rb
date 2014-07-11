@@ -5,7 +5,7 @@ class Shipment < ActiveRecord::Base
 
   attr_readonly :user_id, :order_id, :shipping_address_id
 
-  belongs_to :user
+  belongs_to :user, inverse_of: :shipments
   belongs_to :order
   belongs_to :shipping_address, class_name: 'Address'
 

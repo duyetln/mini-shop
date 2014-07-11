@@ -11,8 +11,8 @@ end
 describe Batch do
   it { should have_readonly_attribute(:promotion_id) }
 
-  it { should belong_to :promotion }
-  it { should have_many :coupons }
+  it { should belong_to(:promotion).inverse_of(:batches) }
+  it { should have_many(:coupons).inverse_of(:batch) }
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:promotion) }

@@ -8,13 +8,13 @@ describe User do
     it { should respond_to(:unconfirmed) }
   end
 
-  it { should have_many(:purchases) }
-  it { should have_many(:addresses) }
-  it { should have_many(:payment_methods) }
-  it { should have_many(:transactions) }
-  it { should have_many(:ownerships) }
-  it { should have_many(:shipments) }
-  it { should have_many(:coupons) }
+  it { should have_many(:purchases).inverse_of(:user) }
+  it { should have_many(:addresses).inverse_of(:user) }
+  it { should have_many(:payment_methods).inverse_of(:user) }
+  it { should have_many(:transactions).inverse_of(:user) }
+  it { should have_many(:ownerships).inverse_of(:user) }
+  it { should have_many(:shipments).inverse_of(:user) }
+  it { should have_many(:coupons).inverse_of(:user) }
 
   it { should allow_mass_assignment_of(:first_name) }
   it { should allow_mass_assignment_of(:last_name) }

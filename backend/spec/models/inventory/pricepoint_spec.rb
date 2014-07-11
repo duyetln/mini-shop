@@ -3,7 +3,7 @@ require 'models/spec_setup'
 describe Pricepoint do
   let(:model_args) { [:pricepoint, :pricepoint_prices] }
 
-  it { should have_many(:pricepoint_prices) }
+  it { should have_many(:pricepoint_prices).inverse_of(:pricepoint) }
   it { should have_many(:currencies).through(:pricepoint_prices) }
 
   it { should validate_uniqueness_of(:name) }

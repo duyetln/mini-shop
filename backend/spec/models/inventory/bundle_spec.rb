@@ -16,7 +16,7 @@ describe Bundle do
     model.save!
   end
 
-  it { should have_many(:bundleds) }
+  it { should have_many(:bundleds).inverse_of(:bundle) }
 
   describe '#activable?' do
     it 'equals itself being inactive and all items being active' do

@@ -18,8 +18,8 @@ describe Coupon do
   it { should have_readonly_attribute(:code) }
   it { should have_readonly_attribute(:batch_id) }
 
-  it { should belong_to(:batch) }
-  it { should belong_to(:user) }
+  it { should belong_to(:batch).inverse_of(:coupons) }
+  it { should belong_to(:user).inverse_of(:coupons) }
 
   it { should validate_presence_of(:batch) }
   it { should validate_uniqueness_of(:code) }
