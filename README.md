@@ -33,4 +33,9 @@ Here are the goals set for this project:
   * 0.3.1
     - Use routing table in favor of stacking service endpoints as middlewares.
   * 0.3.2
-    - Include item quantity in the response of Bundle endpoints.
+    - Include item quantity in bundle response payload.
+  * 0.4.0
+    - Update response payloads of a few endpoints.
+    - Remove endpoints to retrieve a user's addresses or payment methods.
+    - Add endpoints to retrieve a user's transactions and redeemed coupons, to update a batch, to generate coupons for a batch, to return all users, and to retrieve a specific inventory item.
+    - Add client for backend service endpoints.
