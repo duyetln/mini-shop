@@ -5,7 +5,7 @@ module Services
     class Addresses < Services::Base
       put '/:id' do
         process_request do
-          address = Address.find(params[:id])
+          address = Address.find(id)
           address.update_attributes!(params[:address])
           respond_with(AddressSerializer.new(address))
         end

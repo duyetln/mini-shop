@@ -14,7 +14,7 @@ module Services
 
       get '/:id' do
         process_request do
-          store_item = StoreItem.find(params[:id])
+          store_item = StoreItem.find(id)
           respond_with(StoreItemSerializer.new(store_item))
         end
       end
@@ -29,7 +29,7 @@ module Services
 
       put '/:id' do
         process_request do
-          store_item = StoreItem.find(params[:id])
+          store_item = StoreItem.find(id)
           store_item.update_attributes!(params[:store_item])
           respond_with(StoreItemSerializer.new(store_item))
         end
@@ -37,7 +37,7 @@ module Services
 
       delete '/:id' do
         process_request do
-          store_item = StoreItem.find(params[:id])
+          store_item = StoreItem.find(id)
           store_item.delete!
           respond_with(StoreItemSerializer.new(store_item))
         end

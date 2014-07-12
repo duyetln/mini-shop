@@ -22,7 +22,7 @@ module Services
 
       put '/:id' do
         process_request do
-          discount = Discount.find(params[:id])
+          discount = Discount.find(id)
           discount.update_attributes!(params[:discount])
           respond_with(DiscountSerializer.new(discount))
         end

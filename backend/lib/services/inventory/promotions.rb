@@ -14,7 +14,7 @@ module Services
 
       get '/:id' do
         process_request do
-          promotion = Promotion.find(params[:id])
+          promotion = Promotion.find(id)
           respond_with(PromotionSerializer.new(promotion))
         end
       end
@@ -29,7 +29,7 @@ module Services
 
       put '/:id' do
         process_request do
-          promotion = Promotion.find(params[:id])
+          promotion = Promotion.find(id)
           promotion.update_attributes!(params[:promotion])
           respond_with(PromotionSerializer.new(promotion))
         end
@@ -37,7 +37,7 @@ module Services
 
       put '/:id/activate' do
         process_request do
-          promotion = Promotion.find(params[:id])
+          promotion = Promotion.find(id)
           promotion.activate! || unprocessable!
           respond_with(PromotionSerializer.new(promotion))
         end
@@ -45,7 +45,7 @@ module Services
 
       delete '/:id' do
         process_request do
-          promotion = Promotion.find(params[:id])
+          promotion = Promotion.find(id)
           promotion.delete! || unprocessable!
           respond_with(PromotionSerializer.new(promotion))
         end
@@ -53,7 +53,9 @@ module Services
 
       get '/:id/batches' do
         process_request do
-          batches = Promotion.find(params[:id]).batches
+          check_id!
+          batches = Batch.joins(:promotion)
+            .where(promotions: { id: id }).readonly(true)
           respond_with(batches.map do |batch|
             BatchSerializer.new(batch)
           end)
@@ -62,7 +64,7 @@ module Services
 
       post '/:id/batches' do
         process_request do
-          batch = Promotion.find(params[:id]).create_batch(
+          batch = Promotion.find(id).create_batch(
             params[:batch][:name].to_s,
             params[:batch][:size].to_i
           )
@@ -72,7 +74,7 @@ module Services
 
       post '/:id/batches/generate' do
         process_request do
-          batches = Promotion.find(params[:id]).create_batches(
+          batches = Promotion.find(id).create_batches(
             params[:qty].to_i,
             params[:batch][:size].to_i
           )
@@ -80,6 +82,12 @@ module Services
             BatchSerializer.new(batch)
           end)
         end
+      end
+
+      protected
+
+      def check_id!
+        Promotion.exists?(id) || not_found!
       end
     end
   end

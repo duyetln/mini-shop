@@ -14,7 +14,7 @@ module Services
 
       get '/:id' do
         process_request do
-          user = User.find(params[:id])
+          user = User.find(id)
           respond_with(UserSerializer.new(user))
         end
       end
@@ -29,7 +29,7 @@ module Services
 
       put '/:id' do
         process_request do
-          user = User.find(params[:id])
+          user = User.find(id)
           user.update_attributes!(user_params)
           respond_with(UserSerializer.new(user))
         end
@@ -54,8 +54,9 @@ module Services
 
       get '/:id/ownerships' do
         process_request do
-          user = User.find(params[:id])
-          respond_with(user.ownerships.map do |ownership|
+          check_id!
+          ownerships = Ownership.for_user(id)
+          respond_with(ownerships.map do |ownership|
             OwnershipSerializer.new(ownership)
           end)
         end
@@ -63,8 +64,9 @@ module Services
 
       get '/:id/shipments' do
         process_request do
-          user = User.find(params[:id])
-          respond_with(user.shipments.map do |shipment|
+          check_id!
+          shipments = Shipment.for_user(id)
+          respond_with(shipments.map do |shipment|
             ShipmentSerializer.new(shipment)
           end)
         end
@@ -72,8 +74,9 @@ module Services
 
       get '/:id/coupons' do
         process_request do
-          user = User.find(params[:id])
-          respond_with(user.coupons.map do |coupon|
+          check_id!
+          coupons = Coupon.for_user(id)
+          respond_with(coupons.map do |coupon|
             CouponSerializer.new(coupon)
           end)
         end
@@ -81,7 +84,7 @@ module Services
 
       post '/:id/addresses' do
         process_request do
-          user = User.find(params[:id])
+          user = User.find(id)
           user.addresses.create!(params[:address])
           respond_with(UserSerializer.new(user))
         end
@@ -89,7 +92,7 @@ module Services
 
       post '/:id/payment_methods' do
         process_request do
-          user = User.find(params[:id])
+          user = User.find(id)
           user.payment_methods.create!(params[:payment_method])
           respond_with(UserSerializer.new(user))
         end
@@ -97,7 +100,8 @@ module Services
 
       get '/:id/transactions' do
         process_request do
-          transactions = User.find(params[:id]).transactions
+          check_id!
+          transactions = Transaction.for_user(id)
           respond_with(transactions.map do |transaction|
             TransactionSerializer.new(transaction)
           end)
@@ -106,7 +110,8 @@ module Services
 
       get '/:id/orders' do
         process_request do
-          orders = User.find(params[:id]).purchases.map(&:orders).flatten
+          check_id!
+          orders = Order.for_user(id)
           respond_with(orders.map do |order|
             OrderSerializer.new(order)
           end)
@@ -115,7 +120,8 @@ module Services
 
       get '/:id/purchases' do
         process_request do
-          purchases = User.find(params[:id]).purchases
+          check_id!
+          purchases = Purchase.for_user(id)
           respond_with(purchases.map do |purchase|
             PurchaseSerializer.new(purchase)
           end)
@@ -124,12 +130,17 @@ module Services
 
       post '/:id/purchases' do
         process_request do
-          purchase = User.find(params[:id]).purchases.create!(params[:purchase])
+          check_id!
+          purchase = Purchase.where(user_id: id).create!(params[:purchase])
           respond_with(PurchaseSerializer.new(purchase))
         end
       end
 
       protected
+
+      def check_id!
+        User.exists?(id) || not_found!
+      end
 
       def user_params
         params[:user] || {}

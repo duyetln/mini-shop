@@ -22,7 +22,7 @@ module Services
 
       put '/:id' do
         process_request do
-          pricepoint = Pricepoint.find(params[:id])
+          pricepoint = Pricepoint.find(id)
           pricepoint.update_attributes!(params[:pricepoint])
           respond_with(PricepointSerializer.new(pricepoint))
         end
@@ -30,7 +30,7 @@ module Services
 
       post '/:id/pricepoint_prices' do
         process_request do
-          pricepoint = Pricepoint.find(params[:id])
+          pricepoint = Pricepoint.find(id)
           pricepoint
             .pricepoint_prices
             .create!(params[:pricepoint_price])

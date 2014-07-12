@@ -14,7 +14,7 @@ module Services
 
       get '/:id' do
         process_request do
-          physical_item = PhysicalItem.find(params[:id])
+          physical_item = PhysicalItem.find(id)
           respond_with(PhysicalItemSerializer.new(physical_item))
         end
       end
@@ -29,7 +29,7 @@ module Services
 
       put '/:id' do
         process_request do
-          physical_item = PhysicalItem.find(params[:id])
+          physical_item = PhysicalItem.find(id)
           physical_item.update_attributes!(params[:physical_item])
           respond_with(PhysicalItemSerializer.new(physical_item))
         end
@@ -37,7 +37,7 @@ module Services
 
       put '/:id/activate' do
         process_request do
-          physical_item = PhysicalItem.find(params[:id])
+          physical_item = PhysicalItem.find(id)
           physical_item.activate! || unprocessable!
           respond_with(PhysicalItemSerializer.new(physical_item))
         end
@@ -45,7 +45,7 @@ module Services
 
       delete '/:id' do
         process_request do
-          physical_item = PhysicalItem.find(params[:id])
+          physical_item = PhysicalItem.find(id)
           physical_item.delete! || unprocessable!
           respond_with(PhysicalItemSerializer.new(physical_item))
         end

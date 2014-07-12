@@ -14,7 +14,7 @@ describe 'purchase flow' do
     @psi = FactoryGirl.create :store_item, item: @pitem
     @dsi = FactoryGirl.create :store_item, item: @ditem
     @bsi = FactoryGirl.create :store_item, item: @bitem
-    @purchase = Purchase.current(@user).first_or_create!
+    @purchase = Purchase.where(user_id: @user.id).create!
     @address = FactoryGirl.create :address, user: @user
     @pmethod = FactoryGirl.create :payment_method, user: @user, currency: @usd, balance: @pmethod_amount
     @promotion = FactoryGirl.create :promotion, :coupons, item: @ditem

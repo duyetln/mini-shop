@@ -5,14 +5,14 @@ module Services
     class Purchases < Services::Base
       get '/:id' do
         process_request do
-          purchase = Purchase.find(params[:id])
+          purchase = Purchase.find(id)
           respond_with(PurchaseSerializer.new(purchase))
         end
       end
 
       put '/:id' do
         process_request do
-          purchase = Purchase.find(params[:id])
+          purchase = Purchase.find(id)
           purchase.committed? &&
             unprocessable! ||
             purchase.update_attributes!(purchase_params)
@@ -22,7 +22,7 @@ module Services
 
       post '/:id/orders' do
         process_request do
-          purchase = Purchase.find(params[:id])
+          purchase = Purchase.find(id)
           purchase.add_or_update(
             order_params[:item_type].classify.constantize.find(order_params[:item_id]),
             BigDecimal.new(order_params[:amount]),
@@ -35,7 +35,7 @@ module Services
 
       delete '/:id/orders/:order_id' do
         process_request do
-          purchase = Purchase.find(params[:id])
+          purchase = Purchase.find(id)
           order = purchase.orders.find(params[:order_id])
           purchase.remove(order) || unprocessable!
           respond_with(PurchaseSerializer.new(purchase))
@@ -44,7 +44,7 @@ module Services
 
       put '/:id/submit' do
         process_request do
-          purchase = Purchase.find(params[:id])
+          purchase = Purchase.find(id)
           purchase.commit!
           purchase.pay!
           purchase.fulfill!
@@ -54,7 +54,7 @@ module Services
 
       put '/:id/return' do
         process_request do
-          purchase = Purchase.find(params[:id])
+          purchase = Purchase.find(id)
           purchase.reverse! || unprocessable!
           respond_with(PurchaseSerializer.new(purchase))
         end
@@ -62,7 +62,7 @@ module Services
 
       put '/:id/orders/:order_id/return' do
         process_request do
-          purchase = Purchase.find(params[:id])
+          purchase = Purchase.find(id)
           order = purchase.orders.find(params[:order_id])
           purchase.reverse!(order) || unprocessable!
           respond_with(PurchaseSerializer.new(purchase))

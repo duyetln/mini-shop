@@ -14,7 +14,7 @@ module Services
 
       get '/:id' do
         process_request do
-          price = Price.find(params[:id])
+          price = Price.find(id)
           respond_with(PriceSerializer.new(price))
         end
       end
@@ -29,7 +29,7 @@ module Services
 
       put '/:id' do
         process_request do
-          price = Price.find(params[:id])
+          price = Price.find(id)
           price.update_attributes!(params[:price])
           respond_with(PriceSerializer.new(price))
         end

@@ -5,7 +5,9 @@ module Services
     class Batches < Services::Base
       get '/:id/coupons' do
         process_request do
-          coupons = Batch.find(params[:id]).coupons
+          check_id!
+          coupons = Coupon.joins(:batch)
+            .where(batches: { id: id }).readonly(true)
           respond_with(coupons.map do |coupon|
             CouponSerializer.new(coupon)
           end)
@@ -14,7 +16,7 @@ module Services
 
       post '/:id/coupons/generate' do
         process_request do
-          batch = Batch.find(params[:id])
+          batch = Batch.find(id)
           batch.create_coupons(params[:qty].to_i)
           respond_with(BatchSerializer.new(batch))
         end
@@ -22,7 +24,7 @@ module Services
 
       put '/:id' do
         process_request do
-          batch = Batch.find(params[:id])
+          batch = Batch.find(id)
           batch.update_attributes!(params[:batch])
           respond_with(BatchSerializer.new(batch))
         end
@@ -30,7 +32,7 @@ module Services
 
       put '/:id/activate' do
         process_request do
-          batch = Batch.find(params[:id])
+          batch = Batch.find(id)
           batch.activate! || unprocessable!
           respond_with(BatchSerializer.new(batch))
         end
@@ -38,10 +40,16 @@ module Services
 
       delete '/:id' do
         process_request do
-          batch = Batch.find(params[:id])
+          batch = Batch.find(id)
           batch.delete! || unprocessable!
           respond_with(BatchSerializer.new(batch))
         end
+      end
+
+      protected
+
+      def check_id!
+        Batch.exists?(id) || not_found!
       end
     end
   end

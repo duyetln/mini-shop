@@ -2,6 +2,10 @@ module Services
   module Helpers
     protected
 
+    def id
+      params[:id]
+    end
+
     def process_request
       yield
     rescue ::Services::Errors::Base

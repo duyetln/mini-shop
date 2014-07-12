@@ -14,7 +14,7 @@ module Services
 
       get '/:id' do
         process_request do
-          bundle = Bundle.find(params[:id])
+          bundle = Bundle.find(id)
           respond_with(BundleSerializer.new(bundle))
         end
       end
@@ -29,7 +29,7 @@ module Services
 
       put '/:id' do
         process_request do
-          bundle = Bundle.find(params[:id])
+          bundle = Bundle.find(id)
           bundle.update_attributes!(params[:bundle])
           respond_with(BundleSerializer.new(bundle))
         end
@@ -37,7 +37,7 @@ module Services
 
       post '/:id/bundleds' do
         process_request do
-          bundle = Bundle.find(params[:id])
+          bundle = Bundle.find(id)
           bundle.add_or_update(
             bundled_params[:item_type].classify.constantize.find(bundled_params[:item_id]),
             bundled_params[:qty].to_i,
@@ -49,7 +49,7 @@ module Services
 
       delete '/:id/bundleds/:bundled_id' do
         process_request do
-          bundle = Bundle.find(params[:id])
+          bundle = Bundle.find(id)
           bundled = bundle.bundleds.find(params[:bundled_id])
           bundle.remove(bundled) || unprocessable!
           respond_with(BundleSerializer.new(bundle))
@@ -58,7 +58,7 @@ module Services
 
       put '/:id/activate' do
         process_request do
-          bundle = Bundle.find(params[:id])
+          bundle = Bundle.find(id)
           bundle.activate! || unprocessable!
           respond_with(BundleSerializer.new(bundle))
         end
@@ -66,7 +66,7 @@ module Services
 
       delete '/:id' do
         process_request do
-          bundle = Bundle.find(params[:id])
+          bundle = Bundle.find(id)
           bundle.delete! || unprocessable!
           respond_with(BundleSerializer.new(bundle))
         end
