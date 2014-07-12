@@ -15,4 +15,6 @@ class Ownership < ActiveRecord::Base
 
   validates :order_id, uniqueness: { scope: [:item_type, :item_id, :deleted] }, unless: :deleted?
   validates :item_type, inclusion: { in: %w{ DigitalItem } }
+
+  scope :for_user, -> user_id { joins(:user).where(users: { id: user_id }).readonly(true) }
 end

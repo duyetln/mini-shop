@@ -22,6 +22,8 @@ class Transaction < ActiveRecord::Base
 
   delegate :currency, to: :payment_method, prefix: true
 
+  scope :for_user, -> user_id { joins(:user).where(users: { id: user_id }).readonly(true) }
+
   def commit!
     if pending? && super
       method = payment? ? :withdraw! : :deposit!

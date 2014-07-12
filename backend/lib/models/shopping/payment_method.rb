@@ -11,6 +11,8 @@ class PaymentMethod < ActiveRecord::Base
   validates :user,     presence: true
   validates :balance,  numericality: { greater_than_or_equal_to: 0 }
 
+  scope :for_user, -> user_id { joins(:user).where(users: { id: user_id }).readonly(true) }
+
   def pending_balance
     balance - transactions.pending.reduce(BigDecimal.new('0.0')) { |a, e| a + Currency.exchange(e.amount, e.currency, currency) }
   end

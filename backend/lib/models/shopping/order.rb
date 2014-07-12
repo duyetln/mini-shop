@@ -39,6 +39,8 @@ class Order < ActiveRecord::Base
   delegate :free?,            to: :purchase, prefix: true
   delegate :payment,          to: :purchase, prefix: true
 
+  scope :for_user, -> user_id { joins(purchase: :user).where(users: { id: user_id }).readonly(true) }
+
   def deletable?
     purchase_pending? && super
   end

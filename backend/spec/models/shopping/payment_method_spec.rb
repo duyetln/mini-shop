@@ -23,6 +23,16 @@ describe PaymentMethod do
 
   let(:transaction) { FactoryGirl.create(:transaction, payment_method: model) }
 
+  describe '.for_user' do
+    before :each do
+      model.save!
+    end
+
+    it 'returns payment methods of a user' do
+      expect(described_class.for_user(model.user.id)).to include(model)
+    end
+  end
+
   describe '#pending_balance' do
     context 'no transactions' do
       it 'equals balance' do

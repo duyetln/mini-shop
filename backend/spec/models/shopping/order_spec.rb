@@ -25,6 +25,16 @@ describe Order do
 
   it { should ensure_inclusion_of(:item_type).in_array(%w{ Coupon Bundle DigitalItem PhysicalItem }) }
 
+  describe '.for_user' do
+    before :each do
+      model.save!
+    end
+
+    it 'returns orders of a user' do
+      expect(described_class.for_user(model.purchase.user.id)).to include(model)
+    end
+  end
+
   context 'uniqueness validation' do
     let :subject do
       model.save!
