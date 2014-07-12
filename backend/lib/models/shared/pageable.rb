@@ -2,12 +2,16 @@ module Pageable
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def page(page = nil, options = {})
-      if page.present? && page.to_i > 0
-        limit = options[:size].to_i || 25
-        padding = options[:padding].to_i || 0
-        offset = (page - 1) * limit
-        offset(offset).limit(limit + padding)
+    def page(page = nil, opts = {})
+      page = page.to_i
+      size = opts[:size].to_i
+      padn = opts[:padn].to_i
+
+      if page > 0
+        size =  size > 0 && size || 25
+        padn =  padn > 0 && padn || 0
+        offs = (page - 1) * size
+        offset(offs).limit(size + padn)
       else
         scoped
       end

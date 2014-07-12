@@ -19,15 +19,15 @@ base.descendants.select { |klass| klass < base }.each do |klass|
       end
 
       context 'page, size, and padding specified' do
-        let(:page) { rand_num }
-        let(:size) { rand_num }
-        let(:padding) { rand_num }
+        let(:page) { rand_num.to_s }
+        let(:size) { rand_num.to_s }
+        let(:padn) { rand_num.to_s }
 
         it 'paginates' do
-          expect(described_class).to receive(:offset).with((page - 1) * size).and_return(described_class)
-          expect(described_class).to receive(:limit).with(size + padding).and_return(described_class)
+          expect(described_class).to receive(:offset).with((page.to_i - 1) * size.to_i).and_return(described_class)
+          expect(described_class).to receive(:limit).with(size.to_i + padn.to_i).and_return(described_class)
           expect(described_class).to_not receive(:scoped)
-          expect(described_class.page(page, size: size, padding: padding)).to eq(described_class)
+          expect(described_class.page(page, size: size, padn: padn)).to eq(described_class)
         end
       end
     end
