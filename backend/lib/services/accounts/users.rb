@@ -5,7 +5,7 @@ module Services
     class Users < Services::Base
       get '/' do
         process_request do
-          users = User.all
+          users = paginate(User).all
           respond_with(users.map do |user|
             UserSerializer.new(user)
           end)

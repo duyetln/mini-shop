@@ -5,7 +5,7 @@ module Services
     class Discounts < Services::Base
       get '/' do
         process_request do
-          discounts = Discount.all
+          discounts = paginate(Discount).all
           respond_with(discounts.map do |discount|
             DiscountSerializer.new(discount)
           end)

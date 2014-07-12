@@ -2,6 +2,13 @@ module Services
   module Helpers
     protected
 
+    def paginate(scope)
+      scope.page(params[:page],
+        size: params[:size],
+        padn: params[:padn]
+      )
+    end
+
     def id
       params[:id]
     end
@@ -15,7 +22,9 @@ module Services
     rescue ActiveRecord::RecordInvalid => ex
       fail ::Services::Errors::BadRequest, ex.message
     rescue NameError => ex
-      fail ::Services::Errors::BadRequest, (ex.missing_name ? "Unrecoginzed type #{ex.missing_name}" : ex.message)
+      fail ::Services::Errors::BadRequest, (
+        ex.missing_name ? "Unrecoginzed type #{ex.missing_name}" : ex.message
+      )
     rescue => ex
       fail ::Services::Errors::ServerError, ex.message
     end

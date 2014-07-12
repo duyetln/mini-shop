@@ -5,7 +5,7 @@ module Services
     class Bundles < Services::Base
       get '/' do
         process_request do
-          bundles = Bundle.all
+          bundles = paginate(Bundle).all
           respond_with(bundles.map do |item|
             BundleSerializer.new(item)
           end)

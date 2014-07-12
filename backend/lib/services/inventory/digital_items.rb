@@ -5,7 +5,7 @@ module Services
     class DigitalItems < Services::Base
       get '/' do
         process_request do
-          digital_items = DigitalItem.all
+          digital_items = paginate(DigitalItem).all
           respond_with(digital_items.map do |item|
             DigitalItemSerializer.new(item)
           end)

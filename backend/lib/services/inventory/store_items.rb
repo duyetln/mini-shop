@@ -5,7 +5,7 @@ module Services
     class StoreItems < Services::Base
       get '/' do
         process_request do
-          store_items = StoreItem.all
+          store_items = paginate(StoreItem).all
           respond_with(store_items.map do |item|
             StoreItemSerializer.new(item)
           end)

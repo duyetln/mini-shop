@@ -5,7 +5,7 @@ module Services
     class PhysicalItems < Services::Base
       get '/' do
         process_request do
-          physical_items = PhysicalItem.all
+          physical_items = paginate(PhysicalItem).all
           respond_with(physical_items.map do |item|
             PhysicalItemSerializer.new(item)
           end)

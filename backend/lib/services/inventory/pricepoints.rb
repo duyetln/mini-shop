@@ -5,7 +5,7 @@ module Services
     class Pricepoints < Services::Base
       get '/' do
         process_request do
-          pricepoints = Pricepoint.all
+          pricepoints = paginate(Pricepoint).all
           respond_with(pricepoints.map do |pricepoint|
             PricepointSerializer.new(pricepoint)
           end)

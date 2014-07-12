@@ -5,7 +5,7 @@ module Services
     class Currencies < Services::Base
       get '/' do
         process_request do
-          currencies = Currency.all
+          currencies = paginate(Currency).all
           respond_with(currencies.map do |currency|
             CurrencySerializer.new(currency)
           end)

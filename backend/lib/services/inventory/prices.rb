@@ -5,7 +5,7 @@ module Services
     class Prices < Services::Base
       get '/' do
         process_request do
-          prices = Price.all
+          prices = paginate(Price).all
           respond_with(prices.map do |price|
             PriceSerializer.new(price)
           end)

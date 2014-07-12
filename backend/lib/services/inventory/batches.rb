@@ -6,8 +6,8 @@ module Services
       get '/:id/coupons' do
         process_request do
           check_id!
-          coupons = Coupon.joins(:batch)
-            .where(batches: { id: id }).readonly(true)
+          coupons = paginate(Coupon.joins(:batch)
+            .where(batches: { id: id }).readonly(true)).all
           respond_with(coupons.map do |coupon|
             CouponSerializer.new(coupon)
           end)

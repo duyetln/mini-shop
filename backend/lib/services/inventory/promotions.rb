@@ -5,7 +5,7 @@ module Services
     class Promotions < Services::Base
       get '/' do
         process_request do
-          promotions = Promotion.all
+          promotions = paginate(Promotion).all
           respond_with(promotions.map do |promotion|
             PromotionSerializer.new(promotion)
           end)
@@ -54,8 +54,8 @@ module Services
       get '/:id/batches' do
         process_request do
           check_id!
-          batches = Batch.joins(:promotion)
-            .where(promotions: { id: id }).readonly(true)
+          batches = paginate(Batch.joins(:promotion)
+            .where(promotions: { id: id }).readonly(true)).all
           respond_with(batches.map do |batch|
             BatchSerializer.new(batch)
           end)
