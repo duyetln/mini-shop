@@ -27,11 +27,27 @@ describe BackendClient::Promotion do
   end
 
   describe '#batches' do
-    it 'returns association collection' do
-      expect_get("/#{model.id}/batches", {}, collection(batch_payload))
-      expect(
-        model.batches.map(&:class).uniq
-      ).to contain_exactly(BackendClient::Batch)
+    context 'not paginated' do
+      it 'returns batches' do
+        expect_get("/#{model.id}/batches", {}, collection(batch_payload))
+        expect(
+          model.batches.map(&:class).uniq
+        ).to contain_exactly(BackendClient::Batch)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated batches' do
+        expect_get("/#{model.id}/batches", { params: params }, collection(batch_payload))
+        expect(
+          model.batches(params).map(&:class).uniq
+        ).to contain_exactly(BackendClient::Batch)
+      end
     end
   end
 

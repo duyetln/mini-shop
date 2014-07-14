@@ -16,9 +16,9 @@ module BackendClient
       end
     end
 
-    def batches
+    def batches(pagination = {})
       self.class.parse(
-        self.class.resource["/#{id}/batches"].get
+        self.class.resource["/#{id}/batches"].get params: pagination.slice(:page, :size, :padn)
       ).map do |hash|
         Batch.instantiate(hash)
       end

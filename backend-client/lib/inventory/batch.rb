@@ -6,9 +6,9 @@ module BackendClient
     include DefaultActivate
     include DefaultDelete
 
-    def coupons
+    def coupons(pagination = {})
       self.class.parse(
-        self.class.resource["/#{id}/coupons"].get
+        self.class.resource["/#{id}/coupons"].get params: pagination.slice(:page, :size, :padn)
       ).map do |hash|
         Coupon.instantiate(hash)
       end

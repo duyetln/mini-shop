@@ -8,15 +8,27 @@ describe BackendClient::Batch do
   include_examples 'default delete'
 
   describe '#coupons' do
-    let(:association) { :coupons }
-    let(:association_class) { BackendClient::Coupon }
-    let(:association_payload) { coupon_payload }
+    context 'not paginated' do
+      it 'returns coupons' do
+        expect_get("/#{model.id}/coupons", {}, collection(coupon_payload))
+        expect(
+          model.coupons.map(&:class).uniq
+        ).to contain_exactly(BackendClient::Coupon)
+      end
+    end
 
-    it 'returns association collection' do
-      expect_get("/#{model.id}/#{association}", {}, collection(association_payload))
-      expect(
-        model.send(association).map(&:class).uniq
-      ).to contain_exactly(association_class)
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated coupons' do
+        expect_get("/#{model.id}/coupons", { params: params }, collection(coupon_payload))
+        expect(
+          model.coupons(params).map(&:class).uniq
+        ).to contain_exactly(BackendClient::Coupon)
+      end
     end
   end
 

@@ -1,7 +1,9 @@
 module BackendClient
   module DefaultAll
-    def all
-      parse(resource.get).map do |hash|
+    def all(pagination = {})
+      parse(
+        resource.get params: pagination.slice(:page, :size, :padn)
+      ).map do |hash|
         instantiate(hash)
       end.compact
     end
