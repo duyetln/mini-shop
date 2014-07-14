@@ -10,12 +10,34 @@ describe Services::Inventory::Currencies do
       Currency.where(code: 'USD').first_or_create!
     end
 
-    it 'returns all currencies' do
-      send_request
-      expect_status(200)
-      expect_response(Currency.all.map do |currency|
-        CurrencySerializer.new(currency)
-      end.to_json)
+    context 'not paginated' do
+      it 'returns all currencies' do
+        send_request
+        expect_status(200)
+        expect_response(Currency.all.map do |currency|
+          CurrencySerializer.new(currency)
+        end.to_json)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated currencies' do
+        send_request
+        expect_status(200)
+        expect_response(
+          Currency.page(page,
+            size: size,
+            padn: padn
+          ).all.map do |currency|
+            CurrencySerializer.new(currency)
+          end.to_json
+        )
+      end
     end
   end
 

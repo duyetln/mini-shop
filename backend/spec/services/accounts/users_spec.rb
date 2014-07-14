@@ -17,12 +17,34 @@ describe Services::Accounts::Users do
       user.save!
     end
 
-    it 'returns all users' do
-      send_request
-      expect_status(200)
-      expect_response(User.all.map do |user|
-        UserSerializer.new(user)
-      end.to_json)
+    context 'not paginated' do
+      it 'returns all users' do
+        send_request
+        expect_status(200)
+        expect_response(User.all.map do |user|
+          UserSerializer.new(user)
+        end.to_json)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated users' do
+        send_request
+        expect_status(200)
+        expect_response(
+          User.page(page,
+            size: size,
+            padn: padn
+          ).all.map do |user|
+              UserSerializer.new(user)
+          end.to_json
+        )
+      end
     end
   end
 

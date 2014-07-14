@@ -10,12 +10,34 @@ describe Services::Inventory::Bundles do
       FactoryGirl.create :bundle
     end
 
-    it 'returns all bundles' do
-      send_request
-      expect_status(200)
-      expect_response(Bundle.all.map do |item|
-        BundleSerializer.new(item)
-      end.to_json)
+    context 'not paginated' do
+      it 'returns all bundles' do
+        send_request
+        expect_status(200)
+        expect_response(Bundle.all.map do |item|
+          BundleSerializer.new(item)
+        end.to_json)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated bundles' do
+        send_request
+        expect_status(200)
+        expect_response(
+          Bundle.page(page,
+            size: size,
+            padn: padn
+          ).all.map do |item|
+              BundleSerializer.new(item)
+          end.to_json
+        )
+      end
     end
   end
 

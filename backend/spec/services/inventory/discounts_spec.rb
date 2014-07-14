@@ -10,12 +10,34 @@ describe Services::Inventory::Discounts do
       FactoryGirl.create :discount
     end
 
-    it 'returns all discounts' do
-      send_request
-      expect_status(200)
-      expect_response(Discount.all.map do |discount|
-        DiscountSerializer.new(discount)
-      end.to_json)
+    context 'not paginated' do
+      it 'returns all discounts' do
+        send_request
+        expect_status(200)
+        expect_response(Discount.all.map do |discount|
+          DiscountSerializer.new(discount)
+        end.to_json)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated discounts' do
+        send_request
+        expect_status(200)
+        expect_response(
+          Discount.page(page,
+            size: size,
+            padn: padn
+          ).all.map do |discount|
+            DiscountSerializer.new(discount)
+          end.to_json
+        )
+      end
     end
   end
 

@@ -12,12 +12,34 @@ describe Services::Inventory::Batches do
       let(:batch) { FactoryGirl.create :batch, :coupons }
       let(:id) { batch.id }
 
-      it 'returns all coupons' do
-        send_request
-        expect_status(200)
-        expect_response(batch.coupons.map do |coupon|
-          CouponSerializer.new(coupon)
-        end.to_json)
+      context 'not paginated' do
+        it 'returns all coupons' do
+          send_request
+          expect_status(200)
+          expect_response(batch.coupons.map do |coupon|
+            CouponSerializer.new(coupon)
+          end.to_json)
+        end
+      end
+
+      context 'paginated' do
+        let(:page) { 1 }
+        let(:size) { qty }
+        let(:padn) { rand_num }
+        let(:params) { { page: page, size: size, padn: padn } }
+
+        it 'returns all batches' do
+          send_request
+          expect_status(200)
+          expect_response(
+            batch.coupons.page(page,
+              size: size,
+              padn: padn
+            ).all.map do |coupon|
+              CouponSerializer.new(coupon)
+            end.to_json
+          )
+        end
       end
     end
   end

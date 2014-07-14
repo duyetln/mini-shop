@@ -10,12 +10,34 @@ describe Services::Inventory::Pricepoints do
       FactoryGirl.create :pricepoint
     end
 
-    it 'returns all pricepoints' do
-      send_request
-      expect_status(200)
-      expect_response(Pricepoint.all.map do |pricepoint|
-        PricepointSerializer.new(pricepoint)
-      end.to_json)
+    context 'not paginated' do
+      it 'returns all pricepoints' do
+        send_request
+        expect_status(200)
+        expect_response(Pricepoint.all.map do |pricepoint|
+          PricepointSerializer.new(pricepoint)
+        end.to_json)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated pricepoints' do
+        send_request
+        expect_status(200)
+        expect_response(
+          Pricepoint.page(page,
+            size: size,
+            padn: padn
+          ).all.map do |pricepoint|
+            PricepointSerializer.new(pricepoint)
+          end.to_json
+        )
+      end
     end
   end
 

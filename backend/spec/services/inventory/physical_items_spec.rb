@@ -10,12 +10,34 @@ describe Services::Inventory::PhysicalItems do
       FactoryGirl.create :physical_item
     end
 
-    it 'returns all physical items' do
-      send_request
-      expect_status(200)
-      expect_response(PhysicalItem.all.map do |item|
-        PhysicalItemSerializer.new(item)
-      end.to_json)
+    context 'not paginated' do
+      it 'returns all physical items' do
+        send_request
+        expect_status(200)
+        expect_response(PhysicalItem.all.map do |item|
+          PhysicalItemSerializer.new(item)
+        end.to_json)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated physical items' do
+        send_request
+        expect_status(200)
+        expect_response(
+          PhysicalItem.page(page,
+            size: size,
+            padn: padn
+          ).all.map do |item|
+            PhysicalItemSerializer.new(item)
+          end.to_json
+        )
+      end
     end
   end
 

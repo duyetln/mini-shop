@@ -10,12 +10,34 @@ describe Services::Inventory::StoreItems do
       FactoryGirl.create :store_item
     end
 
-    it 'returns all store items' do
-      send_request
-      expect_status(200)
-      expect_response(StoreItem.all.map do |item|
-        StoreItemSerializer.new(item)
-      end.to_json)
+    context 'not paginated' do
+      it 'returns all store items' do
+        send_request
+        expect_status(200)
+        expect_response(StoreItem.all.map do |item|
+          StoreItemSerializer.new(item)
+        end.to_json)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated store items' do
+        send_request
+        expect_status(200)
+        expect_response(
+          StoreItem.page(page,
+            size: size,
+            padn: padn
+          ).all.map do |item|
+            StoreItemSerializer.new(item)
+          end.to_json
+        )
+      end
     end
   end
 

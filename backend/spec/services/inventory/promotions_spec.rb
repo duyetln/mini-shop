@@ -10,12 +10,34 @@ describe Services::Inventory::Promotions do
       FactoryGirl.create :promotion
     end
 
-    it 'returns all promotions' do
-      send_request
-      expect_status(200)
-      expect_response(Promotion.all.map do |promotion|
-        PromotionSerializer.new(promotion)
-      end.to_json)
+    context 'not paginated' do
+      it 'returns all promotions' do
+        send_request
+        expect_status(200)
+        expect_response(Promotion.all.map do |promotion|
+          PromotionSerializer.new(promotion)
+        end.to_json)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated promotions' do
+        send_request
+        expect_status(200)
+        expect_response(
+          Promotion.page(page,
+            size: size,
+            padn: padn
+          ).all.map do |promotion|
+            PromotionSerializer.new(promotion)
+          end.to_json
+        )
+      end
     end
   end
 
@@ -207,12 +229,34 @@ describe Services::Inventory::Promotions do
       let(:promotion) { FactoryGirl.create :promotion, :coupons }
       let(:id) { promotion.id }
 
-      it 'returns all promotions' do
-        send_request
-        expect_status(200)
-        expect_response(promotion.batches.map do |batch|
-          BatchSerializer.new(batch)
-        end.to_json)
+      context 'not paginated' do
+        it 'returns all batches' do
+          send_request
+          expect_status(200)
+          expect_response(promotion.batches.map do |batch|
+            BatchSerializer.new(batch)
+          end.to_json)
+        end
+      end
+
+      context 'paginated' do
+        let(:page) { 1 }
+        let(:size) { qty }
+        let(:padn) { rand_num }
+        let(:params) { { page: page, size: size, padn: padn } }
+
+        it 'returns all batches' do
+          send_request
+          expect_status(200)
+          expect_response(
+            promotion.batches.page(page,
+              size: size,
+              padn: padn
+            ).all.map do |batch|
+              BatchSerializer.new(batch)
+            end.to_json
+          )
+        end
       end
     end
   end

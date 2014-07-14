@@ -10,12 +10,34 @@ describe Services::Inventory::DigitalItems do
       FactoryGirl.create :digital_item
     end
 
-    it 'returns all digital items' do
-      send_request
-      expect_status(200)
-      expect_response(DigitalItem.all.map do |item|
-        DigitalItemSerializer.new(item)
-      end.to_json)
+    context 'not paginated' do
+      it 'returns all digital items' do
+        send_request
+        expect_status(200)
+        expect_response(DigitalItem.all.map do |item|
+          DigitalItemSerializer.new(item)
+        end.to_json)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated digital items' do
+        send_request
+        expect_status(200)
+        expect_response(
+          DigitalItem.page(page,
+            size: size,
+            padn: padn
+          ).all.map do |item|
+            DigitalItemSerializer.new(item)
+          end.to_json
+        )
+      end
     end
   end
 

@@ -10,12 +10,34 @@ describe Services::Inventory::Prices do
       FactoryGirl.create :price
     end
 
-    it 'returns all prices' do
-      send_request
-      expect_status(200)
-      expect_response(Price.all.map do |price|
-        PriceSerializer.new(price)
-      end.to_json)
+    context 'not paginated' do
+      it 'returns all prices' do
+        send_request
+        expect_status(200)
+        expect_response(Price.all.map do |price|
+          PriceSerializer.new(price)
+        end.to_json)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:params) { { page: page, size: size, padn: padn } }
+
+      it 'returns paginated prices' do
+        send_request
+        expect_status(200)
+        expect_response(
+          Price.page(page,
+            size: size,
+            padn: padn
+          ).all.map do |price|
+            PriceSerializer.new(price)
+          end.to_json
+        )
+      end
     end
   end
 
