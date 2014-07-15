@@ -16,6 +16,6 @@ module SlimHelpers
   end
 
   def number_with_currency(amount, currency)
-    "#{'-' if amount < 0}#{currency.sign}#{sprintf('%.2f', amount.abs)}"
+    "#{'-' if amount < 0}#{currency.sign}#{format('%.2f', amount.abs)}"
   end
 end

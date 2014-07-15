@@ -30,7 +30,7 @@ namespace :db do
 
     desc 'Load database schema'
     task :load => :boot do
-      load 'db/schema.rb' if File.exists?('db/schema.rb')
+      load 'db/schema.rb' if File.exist?('db/schema.rb')
     end
   end
 end

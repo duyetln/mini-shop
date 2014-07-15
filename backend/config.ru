@@ -1,7 +1,5 @@
 require './boot'
 
-use Rack::Parser, parsers: { 'application/json' => proc { |data| Yajl::Parser.parse data } }
-
 map '/svc' do
   run Rack::URLMap.new(
     '/users' => Services::Accounts::Users,

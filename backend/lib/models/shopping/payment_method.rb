@@ -3,7 +3,7 @@ class PaymentMethod < ActiveRecord::Base
 
   belongs_to :user, inverse_of: :payment_methods
   belongs_to :currency
-  has_many   :transactions, inverse_of: :payment_method
+  has_many :transactions, inverse_of: :payment_method
 
   validates :name,     presence: true
   validates :balance,  presence: true

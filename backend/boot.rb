@@ -1,70 +1,37 @@
-module Application
-  class << self
-    attr_writer :env
+env = ENV['RACK_ENV'] || 'development'
 
-    def env
-      @env ||= 'development'
-    end
+# load dependencies
+Bundler.require :default, env.to_sym
 
-    def root=(path)
-      @root = File.expand_path(path)
-    end
+# initialize application
+Application = Hashie::Mash.new
 
-    def root
-      @root ||= File.expand_path('.')
-    end
+# env
+Application.env = env
 
-    def config
-      @config ||= Hashie::Mash.new
-    end
+# root
+Application.root = File.expand_path File.dirname(__FILE__)
 
-    def load_config!
-      I18n.enforce_available_locales = false
-      config.currency_rates = YAML.load_file('config/currency_rates.yml')
-    end
+# connect db
+ActiveRecord::Base.establish_connection(
+  YAML.load_file("#{Application.root}/config/database.yml")[Application.env]
+)
 
-    def load_path!(*paths)
-      paths.each do |path|
-        $LOAD_PATH.unshift File.expand_path(path)
-      end
-    end
+# load paths
+$LOAD_PATH.unshift Application.root
+$LOAD_PATH.unshift Application.root + '/lib'
 
-    def load_bundle!
-      Bundler.require :default, env.to_sym
-    end
+# config
+I18n.enforce_available_locales = false
+Application.config!.currency_rates = YAML.load_file("#{Application.root}/config/currency_rates.yml")
 
-    def load_models!
-      load_files! 'lib/models/**/*.rb'
-    end
-
-    def load_services!
-      load_files! 'lib/services/**/*.rb'
-    end
-
-    def load_lib!
-      load_files! 'lib/*.rb'
-    end
-
-    def load_files!(*paths)
-      Dir[*paths].each do |file|
-        require file
-      end
-    end
-
-    def connect_db!
-      require 'active_record'
-      ActiveRecord::Base.establish_connection(YAML.load_file('config/database.yml')[env])
-    end
+# load files
+[
+  'lib/*.rb',
+  'lib/models/**/*.rb',
+  'lib/services/**/*.rb'
+].each do |path|
+  Dir["#{Application.root}/#{path}"].each do |file|
+    require file
   end
 end
-
-Application.env = ENV['RACK_ENV']
-Application.root = File.dirname(__FILE__)
-Application.load_path! Application.root, 'lib'
-Application.load_bundle!
-Application.connect_db!
-
-Application.load_lib!
-Application.load_models!
-Application.load_services!
-Application.load_config!

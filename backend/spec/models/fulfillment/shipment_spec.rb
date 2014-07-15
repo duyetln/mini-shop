@@ -18,7 +18,7 @@ describe Shipment do
   it { should validate_presence_of(:order) }
   it { should validate_presence_of(:shipping_address) }
 
-  it { should ensure_inclusion_of(:item_type).in_array(%w{ PhysicalItem }) }
+  it { should ensure_inclusion_of(:item_type).in_array(%w(PhysicalItem)) }
 
   describe '.for_user' do
     before :each do

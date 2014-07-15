@@ -11,7 +11,7 @@ class StoreItem < ActiveRecord::Base
   include Priceable
 
   validates :name, presence: true
-  validates :item_type, inclusion: { in: %w{ Bundle DigitalItem PhysicalItem } }
+  validates :item_type, inclusion: { in: %w(Bundle DigitalItem PhysicalItem) }
 
   delegate :fulfill!, to: :item
   delegate :reverse!, to: :item

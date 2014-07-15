@@ -1,5 +1,5 @@
 class OnlineFulfillment < Fulfillment
-  validates :item_type, inclusion: { in: %w{ DigitalItem } }
+  validates :item_type, inclusion: { in: %w(DigitalItem) }
 
   protected
 

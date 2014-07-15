@@ -16,5 +16,9 @@ module Services
       disable :raise_errors
       disable :dump_errors
     end
+
+    use Rack::Parser, parsers: {
+      'application/json' => proc { |data| Yajl::Parser.parse data }
+    }
   end
 end

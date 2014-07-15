@@ -14,7 +14,7 @@ class Order < ActiveRecord::Base
   belongs_to :purchase, inverse_of: :orders
   belongs_to :currency
   belongs_to :refund, class_name: 'Transaction'
-  has_many   :fulfillments, inverse_of: :order
+  has_many :fulfillments, inverse_of: :order
 
   validates :purchase, presence: true
   validates :currency, presence: true
@@ -22,9 +22,9 @@ class Order < ActiveRecord::Base
 
   validates :purchase_id, uniqueness: { scope: [:item_type, :item_id, :deleted] }, unless: :deleted?
   validates :uuid, uniqueness: true
-  validates :item_type, inclusion: { in: %w{ Coupon Bundle DigitalItem PhysicalItem } }
+  validates :item_type, inclusion: { in: %w(Coupon Bundle DigitalItem PhysicalItem) }
 
-  validate  :pending_purchase
+  validate :pending_purchase
 
   after_initialize :initialize_values
   before_save :update_amount_and_tax

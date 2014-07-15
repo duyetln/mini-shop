@@ -23,7 +23,7 @@ describe StoreItem do
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:item) }
-  it { should ensure_inclusion_of(:item_type).in_array(%w{ Bundle DigitalItem PhysicalItem }) }
+  it { should ensure_inclusion_of(:item_type).in_array(%w(Bundle DigitalItem PhysicalItem)) }
 
   let(:item) { model.item }
 

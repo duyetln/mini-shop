@@ -31,8 +31,8 @@ describe Services::Inventory::Promotions do
         expect_status(200)
         expect_response(
           Promotion.page(page,
-            size: size,
-            padn: padn
+                         size: size,
+                         padn: padn
           ).all.map do |promotion|
             PromotionSerializer.new(promotion)
           end.to_json
@@ -250,8 +250,8 @@ describe Services::Inventory::Promotions do
           expect_status(200)
           expect_response(
             promotion.batches.page(page,
-              size: size,
-              padn: padn
+                                   size: size,
+                                   padn: padn
             ).all.map do |batch|
               BatchSerializer.new(batch)
             end.to_json

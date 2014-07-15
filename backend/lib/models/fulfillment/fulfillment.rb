@@ -17,7 +17,7 @@ class Fulfillment < ActiveRecord::Base
   validates :order, presence: true
   validates :order_id, uniqueness: { scope: [:item_type, :item_id] }
 
-  validates :item_type, inclusion: { in: %w{ PhysicalItem DigitalItem } }
+  validates :item_type, inclusion: { in: %w(PhysicalItem DigitalItem) }
 
   def fulfillable?
     unmarked?

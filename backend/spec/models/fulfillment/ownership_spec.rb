@@ -18,7 +18,7 @@ describe Ownership do
   it { should validate_presence_of(:user) }
   it { should validate_presence_of(:order) }
 
-  it { should ensure_inclusion_of(:item_type).in_array(%w{ DigitalItem }) }
+  it { should ensure_inclusion_of(:item_type).in_array(%w(DigitalItem)) }
 
   describe '.for_user' do
     before :each do

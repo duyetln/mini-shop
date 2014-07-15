@@ -31,8 +31,8 @@ describe Services::Inventory::PhysicalItems do
         expect_status(200)
         expect_response(
           PhysicalItem.page(page,
-            size: size,
-            padn: padn
+                            size: size,
+                            padn: padn
           ).all.map do |item|
             PhysicalItemSerializer.new(item)
           end.to_json

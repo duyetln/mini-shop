@@ -31,8 +31,8 @@ describe Services::Inventory::Discounts do
         expect_status(200)
         expect_response(
           Discount.page(page,
-            size: size,
-            padn: padn
+                        size: size,
+                        padn: padn
           ).all.map do |discount|
             DiscountSerializer.new(discount)
           end.to_json

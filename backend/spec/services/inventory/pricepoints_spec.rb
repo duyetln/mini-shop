@@ -31,8 +31,8 @@ describe Services::Inventory::Pricepoints do
         expect_status(200)
         expect_response(
           Pricepoint.page(page,
-            size: size,
-            padn: padn
+                          size: size,
+                          padn: padn
           ).all.map do |pricepoint|
             PricepointSerializer.new(pricepoint)
           end.to_json

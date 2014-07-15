@@ -23,7 +23,7 @@ describe Order do
   it { should validate_presence_of(:currency) }
   it { should validate_presence_of(:amount) }
 
-  it { should ensure_inclusion_of(:item_type).in_array(%w{ Coupon Bundle DigitalItem PhysicalItem }) }
+  it { should ensure_inclusion_of(:item_type).in_array(%w(Coupon Bundle DigitalItem PhysicalItem)) }
 
   describe '.for_user' do
     before :each do
@@ -239,7 +239,7 @@ describe Order do
           )
         end
 
-        include_examples'sets tax and tax rate'
+        include_examples 'sets tax and tax rate'
       end
 
       context 'currency id unchanged' do

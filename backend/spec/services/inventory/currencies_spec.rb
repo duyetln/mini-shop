@@ -31,8 +31,8 @@ describe Services::Inventory::Currencies do
         expect_status(200)
         expect_response(
           Currency.page(page,
-            size: size,
-            padn: padn
+                        size: size,
+                        padn: padn
           ).all.map do |currency|
             CurrencySerializer.new(currency)
           end.to_json

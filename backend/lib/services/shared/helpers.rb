@@ -4,8 +4,8 @@ module Services
 
     def paginate(scope)
       scope.page(params[:page],
-        size: params[:size],
-        padn: params[:padn]
+                 size: params[:size],
+                 padn: params[:padn]
       )
     end
 

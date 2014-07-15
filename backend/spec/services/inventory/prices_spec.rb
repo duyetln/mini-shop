@@ -31,8 +31,8 @@ describe Services::Inventory::Prices do
         expect_status(200)
         expect_response(
           Price.page(page,
-            size: size,
-            padn: padn
+                     size: size,
+                     padn: padn
           ).all.map do |price|
             PriceSerializer.new(price)
           end.to_json

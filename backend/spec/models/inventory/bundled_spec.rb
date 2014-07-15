@@ -12,5 +12,5 @@ describe Bundled do
 
   it { should validate_presence_of(:bundle) }
 
-  it { should ensure_inclusion_of(:item_type).in_array(%w{ DigitalItem PhysicalItem }) }
+  it { should ensure_inclusion_of(:item_type).in_array(%w(DigitalItem PhysicalItem)) }
 end

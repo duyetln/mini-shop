@@ -31,10 +31,10 @@ describe Services::Inventory::Bundles do
         expect_status(200)
         expect_response(
           Bundle.page(page,
-            size: size,
-            padn: padn
+                      size: size,
+                      padn: padn
           ).all.map do |item|
-              BundleSerializer.new(item)
+            BundleSerializer.new(item)
           end.to_json
         )
       end

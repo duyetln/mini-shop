@@ -16,7 +16,7 @@ class Promotion < ActiveRecord::Base
   has_many :batches, inverse_of: :promotion
 
   validates :name, presence: true
-  validates :item_type, inclusion: { in: %w{ Bundle DigitalItem PhysicalItem } }
+  validates :item_type, inclusion: { in: %w(Bundle DigitalItem PhysicalItem) }
   delegate :fulfill!, to: :item
   delegate :reverse!, to: :item
   delegate :available?, to: :item

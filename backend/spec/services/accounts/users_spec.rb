@@ -38,10 +38,10 @@ describe Services::Accounts::Users do
         expect_status(200)
         expect_response(
           User.page(page,
-            size: size,
-            padn: padn
+                    size: size,
+                    padn: padn
           ).all.map do |user|
-              UserSerializer.new(user)
+            UserSerializer.new(user)
           end.to_json
         )
       end

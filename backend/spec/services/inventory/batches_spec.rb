@@ -33,8 +33,8 @@ describe Services::Inventory::Batches do
           expect_status(200)
           expect_response(
             batch.coupons.page(page,
-              size: size,
-              padn: padn
+                               size: size,
+                               padn: padn
             ).all.map do |coupon|
               CouponSerializer.new(coupon)
             end.to_json

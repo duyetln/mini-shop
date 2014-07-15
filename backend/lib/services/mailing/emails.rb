@@ -15,11 +15,7 @@ module Services
       protected
 
       def email_types
-        [
-          'PurchaseReceiptEmail',
-          'AccountActivationEmail',
-          'PurchaseStatusEmail'
-        ]
+        %w(PurchaseReceiptEmail AccountActivationEmail PurchaseStatusEmail)
       end
     end
   end

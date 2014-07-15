@@ -31,8 +31,8 @@ describe Services::Inventory::DigitalItems do
         expect_status(200)
         expect_response(
           DigitalItem.page(page,
-            size: size,
-            padn: padn
+                           size: size,
+                           padn: padn
           ).all.map do |item|
             DigitalItemSerializer.new(item)
           end.to_json

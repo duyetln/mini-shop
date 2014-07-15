@@ -40,17 +40,17 @@ free_pp.pricepoint_prices.create!(currency_id: gbp.id, amount: 0.0)
 
 sc2_standard_pp.pricepoint_prices.create!(currency_id: usd.id, amount: 59.99)
 sc2_standard_pp.pricepoint_prices.create!(currency_id: eur.id, amount: 44.27)
-sc2_standard_pp.pricepoint_prices.create!(currency_id: krw.id, amount: 63907.35)
+sc2_standard_pp.pricepoint_prices.create!(currency_id: krw.id, amount: 63_907.35)
 sc2_standard_pp.pricepoint_prices.create!(currency_id: gbp.id, amount: 35.83)
 
 deluxe_ed_pp.pricepoint_prices.create!(currency_id: usd.id, amount: 79.99)
 deluxe_ed_pp.pricepoint_prices.create!(currency_id: eur.id, amount: 59.03)
-deluxe_ed_pp.pricepoint_prices.create!(currency_id: krw.id, amount: 85213.35)
+deluxe_ed_pp.pricepoint_prices.create!(currency_id: krw.id, amount: 85_213.35)
 deluxe_ed_pp.pricepoint_prices.create!(currency_id: gbp.id, amount: 47.78)
 
 collector_ed_pp.pricepoint_prices.create!(currency_id: usd.id, amount: 99.99)
 collector_ed_pp.pricepoint_prices.create!(currency_id: eur.id, amount: 73.80)
-collector_ed_pp.pricepoint_prices.create!(currency_id: krw.id, amount: 106530.00)
+collector_ed_pp.pricepoint_prices.create!(currency_id: krw.id, amount: 106_530.00)
 collector_ed_pp.pricepoint_prices.create!(currency_id: gbp.id, amount: 59.72)
 
 deluxe_ed_promo_price = Price.create!(name: 'SC2 Deluxe Promotion Price', pricepoint_id: deluxe_ed_pp.id, discount_id: half_discount.id)

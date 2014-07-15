@@ -1,5 +1,5 @@
 class ShippingFulfillment < Fulfillment
-  validates :item_type, inclusion: { in: %w{ PhysicalItem } }
+  validates :item_type, inclusion: { in: %w(PhysicalItem) }
 
   protected
 

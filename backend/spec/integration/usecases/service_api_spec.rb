@@ -49,10 +49,10 @@ describe 'service api' do
     before :each do
       expect do
         post '/',
-           type: 'AccountActivationEmail',
-           payload: {
-             user_id: user.id
-           }
+             type: 'AccountActivationEmail',
+             payload: {
+               user_id: user.id
+             }
       end.to change { Mail::TestMailer.deliveries.count }.by(1)
     end
 
@@ -483,10 +483,10 @@ describe 'service api' do
     before :each do
       expect do
         post '/',
-           type: 'PurchaseReceiptEmail',
-           payload: {
-             purchase_id: purchase.id
-           }
+             type: 'PurchaseReceiptEmail',
+             payload: {
+               purchase_id: purchase.id
+             }
       end.to change { Mail::TestMailer.deliveries.count }.by(1)
     end
 
@@ -556,10 +556,10 @@ describe 'service api' do
     before :each do
       expect do
         post '/',
-           type: 'PurchaseStatusEmail',
-           payload: {
-             purchase_id: purchase.id
-           }
+             type: 'PurchaseStatusEmail',
+             payload: {
+               purchase_id: purchase.id
+             }
       end.to change { Mail::TestMailer.deliveries.count }.by(1)
     end
 

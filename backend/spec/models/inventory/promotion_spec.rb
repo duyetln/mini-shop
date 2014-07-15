@@ -19,7 +19,7 @@ describe Promotion do
   it { should have_many(:batches).inverse_of(:promotion) }
 
   it { should validate_presence_of(:name) }
-  it { should ensure_inclusion_of(:item_type).in_array(%w{ Bundle DigitalItem PhysicalItem }) }
+  it { should ensure_inclusion_of(:item_type).in_array(%w(Bundle DigitalItem PhysicalItem)) }
 
   describe '#activable?' do
     it 'equals item being active and itself being inactive' do

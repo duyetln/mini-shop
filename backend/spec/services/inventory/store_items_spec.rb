@@ -31,8 +31,8 @@ describe Services::Inventory::StoreItems do
         expect_status(200)
         expect_response(
           StoreItem.page(page,
-            size: size,
-            padn: padn
+                         size: size,
+                         padn: padn
           ).all.map do |item|
             StoreItemSerializer.new(item)
           end.to_json
