@@ -11,6 +11,7 @@ module Services
 
     configure do
       set :default_content, :json
+      enable :logging
       disable :show_exceptions
       disable :raise_errors
       disable :dump_errors
