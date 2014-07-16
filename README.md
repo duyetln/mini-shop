@@ -39,3 +39,5 @@ Here are the goals set for this project:
     - Remove endpoints to retrieve a user's addresses or payment methods.
     - Add endpoints to retrieve a user's transactions and redeemed coupons, to update a batch, to generate coupons for a batch, to return all users, and to retrieve a specific inventory item.
     - Add client for backend service endpoints.
+  * 0.5.0
+    - Add pagination support for a few endpoints.
