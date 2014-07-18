@@ -23,5 +23,6 @@ RSpec.configure do |config|
 
   config.before :suite do
     BackendClient::ServiceResource.host = 'host'
+    BackendClient::ServiceResource.proxy = 'proxy'
   end
 end

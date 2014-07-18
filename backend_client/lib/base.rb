@@ -62,10 +62,10 @@ module BackendClient
   module ServiceResource
     class << self
       attr_accessor :host
-    end
 
-    def proxy=(proxy)
-      RestClient.proxy = proxy
+      def proxy=(proxy)
+        RestClient.proxy = proxy
+      end
     end
 
     def params(hash = {})
