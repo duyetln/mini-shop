@@ -29,6 +29,6 @@ module Admin
     config.autoload_paths += Dir[Rails.root.join('lib', '{**/}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '{**/}')]
 
-    config.eager_load_paths = Dir[Rails.root.join('lib', '{**/}')]
+    config.eager_load_paths += Dir[Rails.root.join('lib', '{**/}')]
   end
 end
