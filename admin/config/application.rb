@@ -26,6 +26,7 @@ module Admin
 
     # Initialize load paths
     config.autoload_paths << Rails.root.to_path
+    config.autoload_paths += Dir[Rails.root.join('app', 'lib', '{**/}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '{**/}')]
   end
 end

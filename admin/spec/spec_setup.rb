@@ -25,7 +25,5 @@ RSpec.configure do |config|
   config.color = true
   config.tty = true
 
-  config.include ServiceResourcePayloads
-  config.include SpecHelper
   config.infer_spec_type_from_file_location!
 end
