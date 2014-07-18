@@ -1,0 +1,1 @@
+In the real world, this client would be packaged into a gem.
