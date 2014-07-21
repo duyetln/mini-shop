@@ -56,7 +56,7 @@ shared_examples 'default update' do
   describe '#update!' do
     let(:model) { described_class.new }
 
-    context 'attributes empty' do
+    context 'slices empty' do
       it 'does nothing' do
         expect(model.update!).to be_nil
       end
@@ -66,15 +66,18 @@ shared_examples 'default update' do
       end
     end
 
-    context 'attributes present' do
+    context 'slices present' do
+      let(:slices) { [:key1, :key3] }
+
       before :each do
         model.id = :id
-        model.key = :value
+        model.key1 = :value1
+        model.key2 = :value2
       end
 
       it 'updates model' do
-        expect_put("/#{model.id}", model.to_params)
-        expect { model.update! }.to change { model.attributes }
+        expect_put("/#{model.id}", model.to_params(*slices))
+        expect { model.update!(*slices) }.to change { model.attributes }
       end
     end
   end

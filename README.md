@@ -41,3 +41,5 @@ Here are the goals set for this project:
     - Add client for backend service endpoints.
   * 0.5.0
     - Add pagination support for a few endpoints.
+  * 0.5.1
+    - Require explicit update parameter whitelisting for backend client.
