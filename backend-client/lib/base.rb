@@ -28,10 +28,11 @@ module BackendClient
   end
 
   module DefaultUpdate
-    def update!
-      if attributes.present?
+    def update!(*slices)
+      params = to_params(*slices)
+      if params.values.all?(&:present?)
         self.class.parse(
-          self.class.resource["/#{id}"].put(to_params)
+          self.class.resource["/#{id}"].put(params)
         ) do |hash|
           load!(hash)
         end
@@ -116,8 +117,8 @@ module BackendClient
       end
     end
 
-    def to_params
-      self.class.params(attributes)
+    def to_params(*slices)
+      self.class.params(attributes.symbolize_keys.slice(*slices.map(&:to_sym)))
     end
 
     def load!(hash = {})
