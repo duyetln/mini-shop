@@ -8,7 +8,6 @@ gem 'activerecord', '3.2.18', require: 'active_record'
 gem 'yajl-ruby', '~> 1.2', require: ['yajl', 'yajl/json_gem']
 gem 'rack-parser', require: 'rack/parser'
 gem 'hashie', '~> 2.1.1'
-gem 'sinatra-respond_to'
 gem 'sinatra-contrib'
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'slim'

@@ -33,14 +33,10 @@ module Services
       fail ::Services::Errors::ServerError, ex.message
     end
 
-    def respond_with(body)
-      yield body if block_given?
-      respond_to do |format|
-        format.js { body.to_json }
-        format.json { body.to_json }
-        format.xml { 'XML Representation Not Supported' }
-        format.html { 'HTML Representation Not Supported' }
-      end
+    def respond_with(payload)
+      yield payload if block_given?
+      content_type 'application/json'
+      body payload.to_json
     end
   end
 end
