@@ -39,7 +39,7 @@ module Services
         process_request do
           bundle = Bundle.find(id)
           bundle.add_or_update(
-            bundled_params[:item_type].classify.constantize.find(bundled_params[:item_id]),
+            constantize!(bundled_params[:item_type]).find(bundled_params[:item_id]),
             bundled_params[:qty].to_i,
             false
           ) || unprocessable!

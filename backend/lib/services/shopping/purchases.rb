@@ -24,7 +24,7 @@ module Services
         process_request do
           purchase = Purchase.find(id)
           purchase.add_or_update(
-            order_params[:item_type].classify.constantize.find(order_params[:item_id]),
+            constantize!(order_params[:item_type]).find(order_params[:item_id]),
             BigDecimal.new(order_params[:amount]),
             Currency.find(order_params[:currency_id]),
             order_params[:qty].to_i

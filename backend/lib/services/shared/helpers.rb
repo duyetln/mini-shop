@@ -13,6 +13,14 @@ module Services
       params[:id]
     end
 
+    def constantize!(string)
+      begin
+        string.classify.constantize
+      rescue NameError => ex
+        bad_request! "Invalid type #{ex.missing_name}"
+      end
+    end
+
     def process_request
       yield
     rescue ::Services::Errors::Base
@@ -21,10 +29,6 @@ module Services
       fail ::Services::Errors::NotFound, ex.message
     rescue ActiveRecord::RecordInvalid => ex
       fail ::Services::Errors::BadRequest, ex.message
-    rescue NameError => ex
-      fail ::Services::Errors::BadRequest, (
-        ex.missing_name ? "Unrecoginzed type #{ex.missing_name}" : ex.message
-      )
     rescue => ex
       fail ::Services::Errors::ServerError, ex.message
     end

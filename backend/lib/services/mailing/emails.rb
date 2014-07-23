@@ -6,7 +6,7 @@ module Services
       post '/' do
         process_request do
           bad_request! unless email_types.include?(params[:type])
-          email = params[:type].constantize.new(params[:payload])
+          email = constantize!(params[:type]).new(params[:payload])
           email.deliver!
           respond_with(to: email.to, date: email.date)
         end
