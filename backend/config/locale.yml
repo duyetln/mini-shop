@@ -1,0 +1,34 @@
+en:
+  errors:
+    # The default format to use in full error messages.
+    format: '%{attribute} %{message}'
+
+    # The values :model, :attribute and :value are always available for interpolation
+    # The value :count is available when applicable. Can be used for pluralization.
+    messages:
+      inclusion: 'must have permitted value'
+      exclusion: 'must not have prohibited value'
+      invalid: 'must be valid'
+      confirmation: 'must match %{attribute}'
+      accepted: 'must be accepted'
+      empty: 'must be present'
+      blank: 'must be present'
+      present: 'must be blank'
+      too_long: 'must be maximum %{count} character(s)'
+      too_short: 'must be minimum %{count} character(s)'
+      wrong_length: 'must be exactly %{count} character(s)'
+      not_a_number: 'must be a number'
+      not_an_integer: 'must be an integer'
+      greater_than: 'must be greater than %{count}'
+      greater_than_or_equal_to: 'must be greater than or equal to %{count}'
+      equal_to: 'must be equal to %{count}'
+      less_than: 'must be less than %{count}'
+      less_than_or_equal_to: 'must be less than or equal to %{count}'
+      other_than: 'must be other than %{count}'
+      odd: 'must be odd'
+      even: 'must be even'
+      taken: 'must be unique'
+  activerecord:
+    errors:
+      messages:
+        record_invalid: '%{errors}'

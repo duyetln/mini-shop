@@ -14,16 +14,17 @@ Application.root = File.expand_path File.dirname(__FILE__)
 
 # connect db
 ActiveRecord::Base.establish_connection(
-  YAML.load_file("#{Application.root}/config/database.yml")[Application.env]
+  YAML.load_file(File.join(Application.root, 'config', 'database.yml'))[Application.env]
 )
 
 # load paths
-$LOAD_PATH.unshift Application.root
-$LOAD_PATH.unshift Application.root + '/lib'
+$LOAD_PATH.unshift           Application.root
+$LOAD_PATH.unshift File.join(Application.root, 'lib')
 
 # config
-I18n.enforce_available_locales = false
-Application.config!.currency_rates = YAML.load_file("#{Application.root}/config/currency_rates.yml")
+I18n.load_path << File.join(Application.root, 'config', 'locale.yml')
+I18n.default_locale = :en
+Application.config!.currency_rates = YAML.load_file(File.join(Application.root, 'config', 'currency_rates.yml'))
 
 # load files
 [
