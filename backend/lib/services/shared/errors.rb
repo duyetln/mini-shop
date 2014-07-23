@@ -2,35 +2,37 @@ module Services
   module Errors
     extend ActiveSupport::Concern
 
-    class Base < StandardError; end
-    class BadRequest < Base; end
-    class Unauthorized < Base; end
-    class Forbidden < Base; end
-    class NotFound < Base; end
-    class Unprocessable < Base; end
-    class TooManyRequests < Base; end
-    class ServerError < Base; end
-    class Unavailable < Base; end
-
     included do
       {
-        BadRequest => 400,
-        Unauthorized => 401,
-        Forbidden => 403,
-        NotFound => 404,
-        Unprocessable => 422,
-        TooManyRequests => 429,
-        ServerError => 500,
-        Unavailable => 503
+        :bad_request        => 400,
+        :unauthorized       => 401,
+        :forbidden          => 403,
+        :not_found          => 404,
+        :unprocessable      => 422,
+        :too_many_requests  => 429,
+        :server_error       => 500,
+        :unavailable        => 503
       }.each do |type, code|
-        error type do
-          status code
-          respond_with message: env['sinatra.error'].message
+        define_method "#{type}!" do |message = type.to_s.humanize|
+          content_type 'application/json'
+          halt code, { message: message }.to_json
         end
+      end
 
-        define_method "#{type.name.demodulize.underscore}!" do |message = nil|
-          fail type, message
-        end
+      error ActiveRecord::UnknownAttributeError do
+        bad_request! env['sinatra.error'].message.capitalize
+      end
+
+      error ActiveRecord::RecordNotFound do
+        not_found! 'Resource requested not found'
+      end
+
+      error ActiveRecord::RecordInvalid do
+        bad_request! env['sinatra.error'].message.capitalize
+      end
+
+      error StandardError do
+        server_error!
       end
     end
   end

@@ -162,7 +162,7 @@ describe Services::Accounts::Users do
 
   describe 'put /:uuid/confirm/:actv_code' do
     let(:method) { :put }
-    let(:path) { "/#{uuid}/confirm/#{actv_code}" }
+    let!(:path) { "/#{uuid}/confirm/#{actv_code}" }
 
     context 'invalid uuid' do
       let(:uuid) { rand_str }

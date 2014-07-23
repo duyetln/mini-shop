@@ -4,38 +4,30 @@ module Services
   module Inventory
     class Pricepoints < Services::Base
       get '/' do
-        process_request do
-          pricepoints = paginate(Pricepoint).all
-          respond_with(pricepoints.map do |pricepoint|
-            PricepointSerializer.new(pricepoint)
-          end)
-        end
+        pricepoints = paginate(Pricepoint).all
+        respond_with(pricepoints.map do |pricepoint|
+          PricepointSerializer.new(pricepoint)
+        end)
       end
 
       post '/' do
-        process_request do
-          pricepoint = Pricepoint.new(params[:pricepoint])
-          pricepoint.save!
-          respond_with(PricepointSerializer.new(pricepoint))
-        end
+        pricepoint = Pricepoint.new(params[:pricepoint])
+        pricepoint.save!
+        respond_with(PricepointSerializer.new(pricepoint))
       end
 
       put '/:id' do
-        process_request do
-          pricepoint = Pricepoint.find(id)
-          pricepoint.update_attributes!(params[:pricepoint])
-          respond_with(PricepointSerializer.new(pricepoint))
-        end
+        pricepoint = Pricepoint.find(id)
+        pricepoint.update_attributes!(params[:pricepoint])
+        respond_with(PricepointSerializer.new(pricepoint))
       end
 
       post '/:id/pricepoint_prices' do
-        process_request do
-          pricepoint = Pricepoint.find(id)
-          pricepoint
-            .pricepoint_prices
-            .create!(params[:pricepoint_price])
-          respond_with(PricepointSerializer.new(pricepoint))
-        end
+        pricepoint = Pricepoint.find(id)
+        pricepoint
+          .pricepoint_prices
+          .create!(params[:pricepoint_price])
+        respond_with(PricepointSerializer.new(pricepoint))
       end
     end
   end
