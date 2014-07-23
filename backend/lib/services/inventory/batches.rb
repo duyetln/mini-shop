@@ -26,13 +26,13 @@ module Services
 
       put '/:id/activate' do
         batch = Batch.find(id)
-        batch.activate! || unprocessable!
+        batch.activate! || unprocessable!('Unable to activate batch')
         respond_with(BatchSerializer.new(batch))
       end
 
       delete '/:id' do
         batch = Batch.find(id)
-        batch.delete! || unprocessable!
+        batch.delete! || unprocessable!('Unable to delete batch')
         respond_with(BatchSerializer.new(batch))
       end
 

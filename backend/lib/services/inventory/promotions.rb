@@ -29,13 +29,13 @@ module Services
 
       put '/:id/activate' do
         promotion = Promotion.find(id)
-        promotion.activate! || unprocessable!
+        promotion.activate! || unprocessable!('Unable to activate promotion')
         respond_with(PromotionSerializer.new(promotion))
       end
 
       delete '/:id' do
         promotion = Promotion.find(id)
-        promotion.delete! || unprocessable!
+        promotion.delete! || unprocessable!('Unable to delete promotion')
         respond_with(PromotionSerializer.new(promotion))
       end
 

@@ -29,13 +29,13 @@ module Services
 
       put '/:id/activate' do
         physical_item = PhysicalItem.find(id)
-        physical_item.activate! || unprocessable!
+        physical_item.activate! || unprocessable!('Unable to activate physical item')
         respond_with(PhysicalItemSerializer.new(physical_item))
       end
 
       delete '/:id' do
         physical_item = PhysicalItem.find(id)
-        physical_item.delete! || unprocessable!
+        physical_item.delete! || unprocessable!('Unable to delete physical item')
         respond_with(PhysicalItemSerializer.new(physical_item))
       end
     end

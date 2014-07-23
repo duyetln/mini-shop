@@ -31,7 +31,7 @@ module Services
         user = User.authenticate!(
           user_params[:email],
           user_params[:password]
-        ) || unauthorized!
+        ) || unauthorized!('Invalid email or password')
         respond_with(UserSerializer.new(user))
       end
 

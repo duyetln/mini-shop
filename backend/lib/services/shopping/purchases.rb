@@ -11,7 +11,7 @@ module Services
       put '/:id' do
         purchase = Purchase.find(id)
         purchase.committed? &&
-          unprocessable! ||
+          unprocessable!('Unable to update purchase') ||
           purchase.update_attributes!(purchase_params)
         respond_with(PurchaseSerializer.new(purchase))
       end
@@ -23,14 +23,14 @@ module Services
           BigDecimal.new(order_params[:amount]),
           Currency.find(order_params[:currency_id]),
           order_params[:qty].to_i
-        ) || unprocessable!
+        ) || unprocessable!('Unable to add or update order')
         respond_with(PurchaseSerializer.new(purchase))
       end
 
       delete '/:id/orders/:order_id' do
         purchase = Purchase.find(id)
         order = purchase.orders.find(params[:order_id])
-        purchase.remove(order) || unprocessable!
+        purchase.remove(order) || unprocessable!('Unable to remove order')
         respond_with(PurchaseSerializer.new(purchase))
       end
 
@@ -44,14 +44,14 @@ module Services
 
       put '/:id/return' do
         purchase = Purchase.find(id)
-        purchase.reverse! || unprocessable!
+        purchase.reverse! || unprocessable!('Unable to return purchase')
         respond_with(PurchaseSerializer.new(purchase))
       end
 
       put '/:id/orders/:order_id/return' do
         purchase = Purchase.find(id)
         order = purchase.orders.find(params[:order_id])
-        purchase.reverse!(order) || unprocessable!
+        purchase.reverse!(order) || unprocessable!('Unable to return order')
         respond_with(PurchaseSerializer.new(purchase))
       end
 
