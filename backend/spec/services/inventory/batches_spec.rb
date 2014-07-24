@@ -2,6 +2,24 @@ require 'services/spec_setup'
 require 'spec/services/shared/errors'
 
 describe Services::Inventory::Batches do
+  describe 'get /:id' do
+    let(:method) { :get }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:batch) { FactoryGirl.create :batch }
+      let(:id) { batch.id }
+
+      it 'returns the batch' do
+        send_request
+        expect_status(200)
+        expect_response(BatchSerializer.new(batch).to_json)
+      end
+    end
+  end
+
   describe 'get /:id/coupons' do
     let(:method) { :get }
     let(:path) { "/#{id}/coupons" }

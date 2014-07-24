@@ -3,6 +3,7 @@ require 'spec/base'
 
 describe BackendClient::Batch do
   include_examples 'backend client'
+  include_examples 'default find'
   include_examples 'default update'
   include_examples 'default activate'
   include_examples 'default delete'

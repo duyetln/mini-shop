@@ -3,6 +3,11 @@ require 'services/base'
 module Services
   module Inventory
     class Batches < Services::Base
+      get '/:id' do
+        batch = Batch.find(id)
+        respond_with(BatchSerializer.new(batch))
+      end
+
       get '/:id/coupons' do
         check_id!
         coupons = paginate(Coupon.joins(:batch)

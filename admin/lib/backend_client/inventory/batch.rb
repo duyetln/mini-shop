@@ -2,6 +2,7 @@ require 'lib/backend_client/base'
 
 module BackendClient
   class Batch < Base
+    extend DefaultFind
     include DefaultUpdate
     include DefaultActivate
     include DefaultDelete

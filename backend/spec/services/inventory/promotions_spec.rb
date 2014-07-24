@@ -51,7 +51,7 @@ describe Services::Inventory::Promotions do
       let(:promotion) { FactoryGirl.create :promotion }
       let(:id) { promotion.id }
 
-      it 'returns the user' do
+      it 'returns the batch' do
         send_request
         expect_status(200)
         expect_response(PromotionSerializer.new(promotion).to_json)
