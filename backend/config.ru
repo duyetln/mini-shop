@@ -16,7 +16,6 @@ map '/svc' do
     '/promotions' => Services::Inventory::Promotions,
     '/store_items' => Services::Inventory::StoreItems,
     '/emails' => Services::Mailing::Emails,
-    '/addresses' => Services::Shopping::Addresses,
     '/payment_methods' => Services::Shopping::PaymentMethods,
     '/purchases' => Services::Shopping::Purchases
   )
