@@ -40,10 +40,10 @@ describe BackendClient::Purchase do
     end
   end
 
-  describe '#create_order' do
+  describe '#add_or_update_order' do
     context 'params emtpy' do
       it 'does nothing' do
-        expect(model.create_order({})).to be_nil
+        expect(model.add_or_update_order({})).to be_nil
       end
     end
 
@@ -52,7 +52,7 @@ describe BackendClient::Purchase do
         expect_post("/#{model.id}/orders", BackendClient::Order.params(params))
         expect do
           expect(
-            model.create_order(params)
+            model.add_or_update_order(params)
           ).to be_instance_of(BackendClient::Order)
         end.to change { model.attributes }
       end

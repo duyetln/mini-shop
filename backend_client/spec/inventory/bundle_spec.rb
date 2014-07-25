@@ -20,10 +20,10 @@ describe BackendClient::Bundle do
     end
   end
 
-  describe '.create_bundled' do
+  describe '.add_or_update_bundled' do
     context 'params emtpy' do
       it 'does nothing' do
-        expect(model.create_bundled({})).to be_nil
+        expect(model.add_or_update_bundled({})).to be_nil
       end
     end
 
@@ -32,7 +32,7 @@ describe BackendClient::Bundle do
         expect_post("/#{model.id}/bundleds", BackendClient::Bundled.params(params))
         expect do
           expect(
-            model.create_bundled(params)
+            model.add_or_update_bundled(params)
           ).to be_instance_of(BackendClient::Bundled)
         end.to change { model.attributes }
       end

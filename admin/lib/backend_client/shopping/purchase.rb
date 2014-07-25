@@ -15,7 +15,7 @@ module BackendClient
       end
     end
 
-    def create_order(order = {})
+    def add_or_update_order(order = {})
       if order.present?
         self.class.parse(
           self.class.resource["/#{id}/orders"].post Order.params(order)

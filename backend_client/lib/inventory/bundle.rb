@@ -17,7 +17,7 @@ module BackendClient
       end
     end
 
-    def create_bundled(bundled = {})
+    def add_or_update_bundled(bundled = {})
       if bundled.present?
         self.class.parse(
           self.class.resource["/#{id}/bundleds"].post Bundled.params(bundled)
