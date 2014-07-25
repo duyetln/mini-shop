@@ -10,6 +10,11 @@ module Services
         end)
       end
 
+      get '/:id' do
+        pricepoint = Pricepoint.find(id)
+        respond_with(PricepointSerializer.new(pricepoint))
+      end
+
       post '/' do
         pricepoint = Pricepoint.new(params[:pricepoint])
         pricepoint.save!

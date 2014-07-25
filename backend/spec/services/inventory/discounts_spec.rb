@@ -41,6 +41,24 @@ describe Services::Inventory::Discounts do
     end
   end
 
+  describe 'get /:id' do
+    let(:method) { :get }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:discount) { FactoryGirl.create :discount }
+      let(:id) { discount.id }
+
+      it 'returns the discount' do
+        send_request
+        expect_status(200)
+        expect_response(DiscountSerializer.new(discount).to_json)
+      end
+    end
+  end
+
   describe 'post /' do
     let(:method) { :post }
     let(:path) { '/' }

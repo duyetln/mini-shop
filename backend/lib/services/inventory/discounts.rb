@@ -10,6 +10,11 @@ module Services
         end)
       end
 
+      get '/:id' do
+        discount = Discount.find(id)
+        respond_with(DiscountSerializer.new(discount))
+      end
+
       post '/' do
         discount = Discount.new(params[:discount])
         discount.save!

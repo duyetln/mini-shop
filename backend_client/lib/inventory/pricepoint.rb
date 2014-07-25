@@ -3,6 +3,7 @@ require 'lib/base'
 module BackendClient
   class Pricepoint < Base
     extend DefaultAll
+    extend DefaultFind
     extend DefaultCreate
     include DefaultUpdate
 

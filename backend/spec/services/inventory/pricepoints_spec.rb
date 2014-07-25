@@ -41,6 +41,24 @@ describe Services::Inventory::Pricepoints do
     end
   end
 
+  describe 'get /:id' do
+    let(:method) { :get }
+    let(:path) { "/#{id}" }
+
+    include_examples 'invalid id'
+
+    context 'valid id' do
+      let(:pricepoint) { FactoryGirl.create :pricepoint }
+      let(:id) { pricepoint.id }
+
+      it 'returns the pricepoint' do
+        send_request
+        expect_status(200)
+        expect_response(PricepointSerializer.new(pricepoint).to_json)
+      end
+    end
+  end
+
   describe 'post /' do
     let(:method) { :post }
     let(:path) { '/' }

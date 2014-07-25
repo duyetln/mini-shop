@@ -3,6 +3,7 @@ require 'lib/base'
 module BackendClient
   class Discount < Base
     extend DefaultAll
+    extend DefaultFind
     extend DefaultCreate
     include DefaultUpdate
 
