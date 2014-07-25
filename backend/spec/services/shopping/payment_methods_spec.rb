@@ -5,10 +5,8 @@ describe Services::Shopping::PaymentMethods do
   describe 'put /:id' do
     let(:method) { :put }
     let(:path) { "/#{id}" }
-    let(:user) { FactoryGirl.create(:user).reload }
-    let(:payment_method) { FactoryGirl.create(:payment_method, user: user) }
+    let(:payment_method) { FactoryGirl.create :payment_method }
     let(:id) { payment_method.id }
-    let(:params) { { payment_method: payment_method.attributes } }
 
     include_examples 'invalid id'
 
@@ -20,8 +18,10 @@ describe Services::Shopping::PaymentMethods do
       end
 
       context 'valid parameters' do
+        let(:params) { { payment_method: { balance: rand_num } } }
+
         it 'updates the payment method' do
-          send_request
+          expect { send_request }.to change { payment_method.reload.attributes }
           expect_status(200)
           expect_response(PaymentMethodSerializer.new(payment_method).to_json)
         end

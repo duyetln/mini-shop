@@ -3,6 +3,7 @@ require 'spec/base'
 
 describe BackendClient::Pricepoint do
   include_examples 'backend client'
+  include_examples 'default all'
   include_examples 'default create'
   include_examples 'default update'
 

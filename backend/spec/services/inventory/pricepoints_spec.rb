@@ -89,7 +89,7 @@ describe Services::Inventory::Pricepoints do
       context 'valid parameters' do
         let(:params) { { pricepoint: { name: rand_str } } }
 
-        it 'updates the existing pricepoint' do
+        it 'updates the pricepoint' do
           expect { send_request }.to change { pricepoint.reload.attributes }
           expect_status(200)
           expect_response(PricepointSerializer.new(pricepoint).to_json)
