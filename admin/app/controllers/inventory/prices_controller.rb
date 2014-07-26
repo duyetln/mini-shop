@@ -1,20 +1,26 @@
 module Inventory
   class PricesController < ApplicationController
     def index
-      @prices = BackendClient::Price.all(pagination)
+      @prices = resource_class.all(pagination)
       render nothing: true
     end
 
     def create
-      @price = BackendClient::Price.create(params.require(:price).permit(:name, :pricepoint_id, :discount_id))
+      @price = resource_class.create(
+        scoped_params(:price, :name, :pricepoint_id, :discount_id)
+      )
       render nothing: true
     end
 
     def update
-      @price = BackendClient::Price.find(params.require(:id))
-      @price.merge!(params.require(:price).permit(:name, :pricepoint_id, :discount_id))
-      @price.update!(:name, :pricepoint_id, :discount_id)
+      @price = update_resource(:price, :name, :pricepoint_id, :discount_id)
       render nothing: true
+    end
+
+    private
+
+    def set_resource_class
+      @resource_class = BackendClient::Price
     end
   end
 end

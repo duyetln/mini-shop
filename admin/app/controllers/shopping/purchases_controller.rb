@@ -1,14 +1,20 @@
 module Shopping
   class PurchasesController < ApplicationController
     def show
-      @purchase = BackendClient::Purchase.find(params.require(:id))
+      @purchase = resource
       render nothing: true
     end
 
     def return
-      @purchase = BackendClient::Purchase.find(params.require(:id))
+      @purchase = resource
       @purchase.return!
       render nothing: true
+    end
+
+    private
+
+    def set_resource_class
+      @resource_class = BackendClient::Purchase
     end
   end
 end

@@ -1,20 +1,26 @@
 module Inventory
   class DiscountsController < ApplicationController
     def index
-      @discounts = BackendClient::Discount.all(pagination)
+      @discounts = resource_class.all(pagination)
       render nothing: true
     end
 
     def create
-      @discount = BackendClient::Discount.create(params.require(:discount).permit(:name, :rate, :start_at, :end_at))
+      @discount = resource_class.create(
+        scoped_params(:discount, :name, :rate, :start_at, :end_at)
+      )
       render nothing: true
     end
 
     def update
-      @discount = BackendClient::Discount.find(params.require(:id))
-      @discount.merge!(params.require(:discount).permit(:name, :rate, :start_at, :end_at))
-      @discount.update!(:name, :rate, :start_at, :end_at)
+      @discount = update_resource(:discount, :name, :rate, :start_at, :end_at)
       render nothing: true
+    end
+
+    private
+
+    def set_resource_class
+      @resource_class = BackendClient::Discount
     end
   end
 end
