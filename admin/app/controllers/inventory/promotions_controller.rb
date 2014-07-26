@@ -14,6 +14,9 @@ module Inventory
 
     def show
       @promotion = resource
+      @batches   = @promotion.batches(pagination)
+      @item      = @promotion.item
+      @price     = @promotion.price
       render nothing: true
     end
 

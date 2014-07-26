@@ -1,7 +1,8 @@
 module Inventory
   class BatchesController < ApplicationController
     def show
-      @batch = resource
+      @batch   = resource
+      @coupons = @batch.coupons(pagination)
       render nothing: true
     end
 

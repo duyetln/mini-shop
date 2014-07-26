@@ -14,6 +14,8 @@ module Inventory
 
     def show
       @store_item = resource
+      @item       = @store_item.item
+      @price      = @store_item.price
       render nothing: true
     end
 

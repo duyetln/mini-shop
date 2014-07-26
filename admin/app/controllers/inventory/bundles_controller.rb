@@ -19,7 +19,8 @@ module Inventory
     end
 
     def show
-      @bundle = resource
+      @bundle   = resource
+      @bundleds = @bundle.bundleds
       render nothing: true
     end
 
