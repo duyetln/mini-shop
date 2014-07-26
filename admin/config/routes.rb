@@ -1,56 +1,45 @@
 Rails.application.routes.draw do
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
+  root 'application#index'
 
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  namespace :accounts do
+    resources :users, only: [:index, :show]
+  end
 
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
+  namespace :inventory do
+    resources :currencies, only: [:index, :create]
+    resources :pricepoints, only: [:index, :create, :update]
+    resources :discounts, only: [:index, :create, :update]
+    resources :prices, only: [:index, :create, :update]
 
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
+    [:physical_items, :digital_items].each do |items|
+      resources items, only: [:index, :show, :create, :update, :destroy] do
+        put :activate, on: :member
+      end
+    end
 
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
+    resources :bundles, only: [:index, :show, :create, :update, :destroy] do
+      put :activate, on: :member
+      resources :bundleds, only: :destroy
+    end
 
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
+    resources :store_items, only: [:index, :show, :create, :update, :destroy]
+    resources :promotions, only: [:index, :show, :create, :update, :destroy] do
+      put :activate, on: :member
+      post :batches, on: :member
+    end
 
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
+    resources :batches, only: [:show, :update, :destroy] do
+      put :activate, on: :member
+      post :coupons, on: :member
+    end
+  end
 
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+  namespace :shopping do
+    resources :purchases, only: :show do
+      put :return, on: :member
+      resources :orders, only: [] do
+        put :return, on: :member
+      end
+    end
+  end
 end
