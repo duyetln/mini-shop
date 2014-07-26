@@ -33,7 +33,6 @@ gem 'slim-rails'
 gem 'pry-rails'
 gem 'dalli'
 gem 'rest-client'
-gem 'mutations'
 
 group :test do
   gem 'timecop'
