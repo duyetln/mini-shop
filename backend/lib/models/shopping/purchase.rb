@@ -29,7 +29,7 @@ class Purchase < ActiveRecord::Base
   after_save :reload
 
   def add_or_update(item, amount, currency, qty = 1)
-    if pending?
+    if changeable?
       aorder = orders.add_or_update(item, qty: qty, acc: false) do |order|
         order.amount = amount
         order.currency = currency
@@ -40,12 +40,16 @@ class Purchase < ActiveRecord::Base
   end
 
   def remove(item)
-    if pending?
+    if changeable?
       rorder = orders.retrieve(item) do |order|
         order.delete!
       end
       reload && rorder
     end
+  end
+
+  def changeable?
+    pending?
   end
 
   [:amount, :tax, :total].each do |method|

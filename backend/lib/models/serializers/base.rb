@@ -28,3 +28,15 @@ class DynamicSerializer < SimpleDelegator
     __setobj__("#{resource.class.name.demodulize}Serializer".constantize.new(resource, options))
   end
 end
+
+module ChangeableSerializer
+  extend ActiveSupport::Concern
+
+  included do
+    attributes :changeable
+  end
+
+  def changeable
+    object.changeable?
+  end
+end

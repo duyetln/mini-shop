@@ -57,6 +57,7 @@ end
 
 class BundleSerializer < ResourceSerializer
   include ItemResourceSerializer
+  include ChangeableSerializer
   has_many :bundleds, serializer: 'BundledSerializer'
 end
 

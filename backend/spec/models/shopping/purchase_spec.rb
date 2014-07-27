@@ -79,7 +79,13 @@ describe Purchase do
   describe '#add_or_update' do
     let(:currency) { FactoryGirl.build :eur }
 
-    context 'pending' do
+    before :each do
+      expect(model).to receive(:changeable?).and_return(changeable)
+    end
+
+    context 'changeable' do
+      let(:changeable) { true }
+
       before :each do
         expect(orders).to receive(:add_or_update).with(
           item,
@@ -100,9 +106,10 @@ describe Purchase do
       end
     end
 
-    context 'committed' do
+    context 'not changeable' do
+      let(:changeable) { false }
+
       it 'does not add or update item' do
-        model.commit!
         expect(orders).to_not receive(:add_or_update)
         expect(model).to_not receive(:reload)
         model.add_or_update(item, amount, currency, qty)
@@ -253,6 +260,12 @@ describe Purchase do
   describe '#paid?' do
     it 'checks the presence of #payment' do
       expect(model.paid?).to eq(model.payment.present?)
+    end
+  end
+
+  describe '#changeable?' do
+    it 'equals itself being pending' do
+      expect(model.changeable?).to eq(model.pending?)
     end
   end
 

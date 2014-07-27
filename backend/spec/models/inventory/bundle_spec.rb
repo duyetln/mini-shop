@@ -24,14 +24,21 @@ describe Bundle do
     end
   end
 
+  describe '#changeable?' do
+    it 'equals itself being inactive and kept' do
+      expect(model.changeable?).to eq(model.inactive? && model.kept?)
+    end
+  end
+
   describe '#add_or_update' do
     let(:acc) { [true, false].sample }
 
-    context 'inactive and kept' do
-      before :each do
-        expect(model).to be_kept
-        expect(model).to be_inactive
-      end
+    before :each do
+      expect(model).to receive(:changeable?).and_return(changeable)
+    end
+
+    context 'changeable' do
+      let(:changeable) { true }
 
       it 'adds or updates the item' do
         expect(bundleds).to receive(:add_or_update).with(item, qty: qty, acc: acc)
@@ -40,25 +47,8 @@ describe Bundle do
       end
     end
 
-    context 'activated' do
-      before :each do
-        expect do
-          item.activate!
-          model.activate!
-        end.to change { model.active? }.to(true)
-      end
-
-      it 'does not add or update the item' do
-        expect(bundleds).to_not receive(:add_or_update)
-        expect(model).to_not receive(:reload)
-        model.add_or_update(item, qty, acc)
-      end
-    end
-
-    context 'deleted' do
-      before :each do
-        expect { model.delete! }.to change { model.deleted? }.to(true)
-      end
+    context 'not changeable' do
+      let(:changeable) { false }
 
       it 'does not add or update the item' do
         expect(bundleds).to_not receive(:add_or_update)

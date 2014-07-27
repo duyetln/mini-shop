@@ -8,19 +8,23 @@ class Bundle < ActiveRecord::Base
   after_save :reload
 
   def add_or_update(item, qty = 1, acc = false)
-    if inactive? && kept?
+    if changeable?
       abundled = bundleds.add_or_update(item, qty: qty, acc: acc)
       reload && abundled
     end
   end
 
   def remove(item)
-    if inactive? && kept?
+    if changeable?
       rbundled = bundleds.retrieve(item) do |bundled|
         bundled.destroy
       end
       reload && rbundled
     end
+  end
+
+  def changeable?
+    inactive? && kept?
   end
 
   def items
