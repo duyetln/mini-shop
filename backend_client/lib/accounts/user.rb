@@ -39,14 +39,30 @@ module BackendClient
     end
 
     def self.authenticate(email, password)
-      parse(resource['/authenticate'].post params(email: email, password: password)) do |hash|
-        instantiate(hash)
+      catch_error RestClient::Unauthorized, RestClient::ResourceNotFound do
+        fail BackendClient::Errors::Unauthorized.new(
+          "Unable to authenticate #{humanized_name}",
+          'Email or password is invalid'
+        )
+      end
+      handle_error do
+        parse(resource['/authenticate'].post params(email: email, password: password)) do |hash|
+          instantiate(hash)
+        end
       end
     end
 
     def self.confirm(uuid, actv_code)
-      parse(resource["/#{uuid}/confirm/#{actv_code}"].put({})) do |hash|
-        instantiate(hash)
+      catch_error RestClient::ResourceNotFound do
+        fail BackendClient::Errors::NotFound.new(
+          "Unable to confirm #{humanized_name}",
+          'Activation code is invalid'
+        )
+      end
+      handle_error do
+        parse(resource["/#{uuid}/confirm/#{actv_code}"].put({})) do |hash|
+          instantiate(hash)
+        end
       end
     end
   end

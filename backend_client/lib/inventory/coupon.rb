@@ -9,8 +9,16 @@ module BackendClient
     end
 
     def self.find_by_code(code)
-      parse(resource["/#{code}"].get) do |hash|
-        instantiate(hash)
+      catch_error RestClient::ResourceNotFound do
+        fail BackendClient::Errors::NotFound.new(
+          "Unable to find #{humanized_name}",
+          'Code is invalid'
+        )
+      end
+      handle_error do
+        parse(resource["/#{code}"].get) do |hash|
+          instantiate(hash)
+        end
       end
     end
 
