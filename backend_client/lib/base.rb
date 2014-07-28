@@ -3,14 +3,24 @@ Dir['lib/concerns/*.rb'].each { |f| require f }
 module BackendClient
   class Base < Hashie::Mash
     include ServiceResource
+    include Errors::Handlers
 
     alias_method :attributes, :to_hash
+    delegate :humanized_name, to: :class
+
+    class << self
+      include Errors::Handlers
+    end
 
     def ==(other)
       super ||
         other.instance_of?(self.class) &&
         id.present? &&
         other.id == id
+    end
+
+    def self.humanized_name
+      name.demodulize.humanize.downcase
     end
 
     def self.concretize(hash = {})
