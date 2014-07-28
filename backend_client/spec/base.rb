@@ -2,8 +2,7 @@ shared_examples 'default all' do
   describe '.all' do
     context 'not paginated' do
       it 'returns resource collection' do
-        expect_resource
-        expect(doubled_resource).to receive(:get).and_return(collection(resource_payload))
+        expect_get(nil, {}, collection(resource_payload))
         expect(described_class.all).to contain_exactly(an_instance_of(described_class))
       end
     end
@@ -15,8 +14,7 @@ shared_examples 'default all' do
       let(:params) { { page: page, size: size, padn: padn } }
 
       it 'returns paginated resource collection' do
-        expect_resource
-        expect(doubled_resource).to receive(:get).with(params: params).and_return(collection(resource_payload))
+        expect_get(nil, { params: params }, collection(resource_payload))
         expect(described_class.all(params)).to contain_exactly(an_instance_of(described_class))
       end
     end
@@ -33,8 +31,7 @@ shared_examples 'default create' do
 
     context 'params present' do
       it 'creates new resource' do
-        expect_resource
-        expect(doubled_resource).to receive(:post).with(described_class.params(params)).and_return(resource_payload)
+        expect_post(nil, described_class.params(params), resource_payload)
         expect(described_class.create(params)).to be_instance_of(described_class)
       end
     end
