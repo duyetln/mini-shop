@@ -2,7 +2,7 @@ require 'lib/base'
 
 module BackendClient
   class Purchase < Base
-    extend DefaultFind
+    include DefaultFind
     include DefaultUpdate
 
     def self.instantiate(hash = {})

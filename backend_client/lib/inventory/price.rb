@@ -2,9 +2,9 @@ require 'lib/base'
 
 module BackendClient
   class Price < Base
-    extend DefaultAll
-    extend DefaultFind
-    extend DefaultCreate
+    include DefaultAll
+    include DefaultFind
+    include DefaultCreate
     include DefaultUpdate
 
     def self.instantiate(hash = {})

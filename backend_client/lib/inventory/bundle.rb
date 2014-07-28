@@ -2,9 +2,9 @@ require 'lib/base'
 
 module BackendClient
   class Bundle < Base
-    extend DefaultAll
-    extend DefaultFind
-    extend DefaultCreate
+    include DefaultAll
+    include DefaultFind
+    include DefaultCreate
     include DefaultUpdate
     include DefaultActivate
     include DefaultDelete

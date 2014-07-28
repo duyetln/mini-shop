@@ -2,7 +2,7 @@ require 'lib/base'
 
 module BackendClient
   class Currency < Base
-    extend DefaultAll
-    extend DefaultCreate
+    include DefaultAll
+    include DefaultCreate
   end
 end

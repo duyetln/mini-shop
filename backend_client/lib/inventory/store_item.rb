@@ -2,9 +2,9 @@ require 'lib/base'
 
 module BackendClient
   class StoreItem < Base
-    extend DefaultAll
-    extend DefaultFind
-    extend DefaultCreate
+    include DefaultAll
+    include DefaultFind
+    include DefaultCreate
     include DefaultUpdate
     include DefaultDelete
 

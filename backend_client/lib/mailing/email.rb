@@ -1,6 +1,6 @@
 module BackendClient
   class Email
-    extend ServiceResource
+    include ServiceResource
 
     def self.send_email(type, payload = {})
       if payload.present?

@@ -2,9 +2,9 @@ require 'lib/base'
 
 module BackendClient
   class User < Base
-    extend DefaultAll
-    extend DefaultFind
-    extend DefaultCreate
+    include DefaultAll
+    include DefaultFind
+    include DefaultCreate
     include DefaultUpdate
 
     [:ownerships, :shipments, :coupons, :transactions, :orders, :purchases].each do |association|
