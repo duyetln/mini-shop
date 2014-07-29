@@ -48,13 +48,24 @@ describe BackendClient::Purchase do
     end
 
     context 'params present' do
-      it 'creates order' do
-        expect_post("/#{model.id}/orders", BackendClient::Order.params(params))
-        expect do
-          expect(
+      context 'no error' do
+        it 'creates order' do
+          expect_post("/#{model.id}/orders", BackendClient::Order.params(params))
+          expect do
+            expect(
+              model.add_or_update_order(params)
+            ).to be_instance_of(BackendClient::Order)
+          end.to change { model.attributes }
+        end
+      end
+
+      context 'RestClient::UnprocessableEntity error' do
+        it 'raises error' do
+          expect_post("/#{model.id}/orders", BackendClient::Order.params(params), RestClient::UnprocessableEntity)
+          expect do
             model.add_or_update_order(params)
-          ).to be_instance_of(BackendClient::Order)
-        end.to change { model.attributes }
+          end.to raise_error(BackendClient::Errors::Unprocessable)
+        end
       end
     end
   end
@@ -62,40 +73,89 @@ describe BackendClient::Purchase do
   describe '#delete_order' do
     let(:order_id) { rand_str }
 
-    it 'deletes order' do
-      expect_delete("/#{model.id}/orders/#{order_id}")
-      expect do
-        expect(
+    context 'no error' do
+      it 'deletes order' do
+        expect_delete("/#{model.id}/orders/#{order_id}")
+        expect do
+          expect(
+            model.delete_order(order_id)
+          ).to eq(model.orders.count)
+        end.to change { model.attributes }
+      end
+    end
+
+    context 'RestClient::UnprocessableEntity error' do
+      it 'raises custom error' do
+        expect_delete("/#{model.id}/orders/#{order_id}", {}, RestClient::UnprocessableEntity)
+        expect do
           model.delete_order(order_id)
-        ).to eq(model.orders.count)
-      end.to change { model.attributes }
+        end.to raise_error(BackendClient::Errors::Unprocessable)
+      end
     end
   end
 
   describe '#submit!' do
-    it 'submits purchase' do
-      expect_put("/#{model.id}/submit")
-      expect { model.submit! }.to change { model.attributes }
+    context 'no error' do
+      it 'submits purchase' do
+        expect_put("/#{model.id}/submit")
+        expect { model.submit! }.to change { model.attributes }
+      end
+    end
+
+    context 'RestClient::BadRequest error' do
+      it 'raises custom error' do
+        expect_put("/#{model.id}/submit", {}, RestClient::BadRequest)
+        expect { model.submit! }.to raise_error(BackendClient::Errors::BadRequest)
+      end
     end
   end
 
   describe '#return!' do
-    it 'returns purchase' do
-      expect_put("/#{model.id}/return")
-      expect { model.return! }.to change { model.attributes }
+    context 'no error' do
+      it 'returns purchase' do
+        expect_put("/#{model.id}/return")
+        expect { model.return! }.to change { model.attributes }
+      end
+    end
+
+    context 'RestClient::UnprocessableEntity error' do
+      it 'raises custom error' do
+        expect_put("/#{model.id}/return", {}, RestClient::UnprocessableEntity)
+        expect { model.return! }.to raise_error(BackendClient::Errors::Unprocessable)
+      end
     end
   end
 
   describe '#return_order' do
     let(:order_id) { instantiated_model.orders.sample.id }
 
-    it 'returns order' do
-      expect_put("/#{model.id}/orders/#{order_id}/return")
-      expect do
-        expect(
+    context 'no error' do
+      it 'returns order' do
+        expect_put("/#{model.id}/orders/#{order_id}/return")
+        expect do
+          expect(
+            model.return_order(order_id)
+          ).to be_instance_of(BackendClient::Order)
+        end.to change { model.attributes }
+      end
+    end
+
+    context 'RestClient::ResourceNotFound error' do
+      it 'raises custom error' do
+        expect_put("/#{model.id}/orders/#{order_id}/return", {}, RestClient::ResourceNotFound)
+        expect do
           model.return_order(order_id)
-        ).to be_instance_of(BackendClient::Order)
-      end.to change { model.attributes }
+        end.to raise_error(BackendClient::Errors::NotFound)
+      end
+    end
+
+    context 'RestClient::UnprocessableEntity error' do
+      it 'raises custom error' do
+        expect_put("/#{model.id}/orders/#{order_id}/return", {}, RestClient::UnprocessableEntity)
+        expect do
+          model.return_order(order_id)
+        end.to raise_error(BackendClient::Errors::Unprocessable)
+      end
     end
   end
 end

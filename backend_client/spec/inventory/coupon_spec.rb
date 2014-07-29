@@ -17,11 +17,22 @@ describe BackendClient::Coupon do
   describe '.find_by_code' do
     let(:code) { rand_str }
 
-    it 'finds coupon with code' do
-      expect_get("/#{code}")
-      expect(
-        described_class.find_by_code(code)
-      ).to be_instance_of(described_class)
+    context 'no error' do
+      it 'finds coupon with code' do
+        expect_get("/#{code}")
+        expect(
+          described_class.find_by_code(code)
+        ).to be_instance_of(described_class)
+      end
+    end
+
+    context 'RestClient::ResourceNotFound error' do
+      it 'raises custom error' do
+        expect_get("/#{code}", {}, RestClient::ResourceNotFound)
+        expect do
+          described_class.find_by_code(code)
+        end.to raise_error(BackendClient::Errors::NotFound)
+      end
     end
   end
 

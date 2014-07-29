@@ -28,13 +28,24 @@ describe BackendClient::Bundle do
     end
 
     context 'params present' do
-      it 'creates bundled' do
-        expect_post("/#{model.id}/bundleds", BackendClient::Bundled.params(params))
-        expect do
-          expect(
+      context 'no error' do
+        it 'creates bundled' do
+          expect_post("/#{model.id}/bundleds", BackendClient::Bundled.params(params))
+          expect do
+            expect(
+              model.add_or_update_bundled(params)
+            ).to be_instance_of(BackendClient::Bundled)
+          end.to change { model.attributes }
+        end
+      end
+
+      context 'RestClient::UnprocessableEntity error' do
+        it 'raises custom error' do
+          expect_post("/#{model.id}/bundleds", BackendClient::Bundled.params(params), RestClient::UnprocessableEntity)
+          expect do
             model.add_or_update_bundled(params)
-          ).to be_instance_of(BackendClient::Bundled)
-        end.to change { model.attributes }
+          end.to raise_error(BackendClient::Errors::Unprocessable)
+        end
       end
     end
   end
@@ -42,11 +53,22 @@ describe BackendClient::Bundle do
   describe '.delete_bundled' do
     let(:bundled_id) { rand_str }
 
-    it 'deletes bundled' do
-      expect_delete("/#{model.id}/bundleds/#{bundled_id}")
-      expect do
-        expect(model.delete_bundled(bundled_id)).to eq(model.bundleds.count)
-      end.to change { model.attributes }
+    context 'no error' do
+      it 'deletes bundled' do
+        expect_delete("/#{model.id}/bundleds/#{bundled_id}")
+        expect do
+          expect(model.delete_bundled(bundled_id)).to eq(model.bundleds.count)
+        end.to change { model.attributes }
+      end
+    end
+
+    context 'RestClient::UnprocessableEntity error' do
+      it 'raises custom error' do
+        expect_delete("/#{model.id}/bundleds/#{bundled_id}", {}, RestClient::UnprocessableEntity)
+        expect do
+          model.delete_bundled(bundled_id)
+        end.to raise_error(BackendClient::Errors::Unprocessable)
+      end
     end
   end
 end

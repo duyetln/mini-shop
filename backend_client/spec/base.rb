@@ -30,9 +30,18 @@ shared_examples 'default create' do
     end
 
     context 'params present' do
-      it 'creates new resource' do
-        expect_post(nil, described_class.params(params), resource_payload)
-        expect(described_class.create(params)).to be_instance_of(described_class)
+      context 'no error' do
+        it 'creates new resource' do
+          expect_post(nil, described_class.params(params), resource_payload)
+          expect(described_class.create(params)).to be_instance_of(described_class)
+        end
+      end
+
+      context 'RestClient::BadRequest error' do
+        it 'raises custom error' do
+          expect_post(nil, described_class.params(params), RestClient::BadRequest)
+          expect { described_class.create(params) }.to raise_error(BackendClient::Errors::BadRequest)
+        end
       end
     end
   end
@@ -42,9 +51,18 @@ shared_examples 'default find' do
   describe '.find' do
     let(:id) { rand_str }
 
-    it 'finds resource' do
-      expect_get("/#{id}")
-      expect(described_class.find(id)).to be_instance_of(described_class)
+    context 'no error' do
+      it 'finds resource' do
+        expect_get("/#{id}")
+        expect(described_class.find(id)).to be_instance_of(described_class)
+      end
+    end
+
+    context 'RestClient::ResourceNotFound error' do
+      it 'raises custome error' do
+        expect_get("/#{id}", {}, RestClient::ResourceNotFound)
+        expect { described_class.find(id) }.to raise_error(BackendClient::Errors::NotFound)
+      end
     end
   end
 end
@@ -72,9 +90,18 @@ shared_examples 'default update' do
         model.key2 = :value2
       end
 
-      it 'updates model' do
-        expect_put("/#{model.id}", model.to_params(*slices))
-        expect { model.update!(*slices) }.to change { model.attributes }
+      context 'no error' do
+        it 'updates model' do
+          expect_put("/#{model.id}", model.to_params(*slices))
+          expect { model.update!(*slices) }.to change { model.attributes }
+        end
+      end
+
+      context 'RestClient::BadRequest error' do
+        it 'raises custome error' do
+          expect_put("/#{model.id}", model.to_params(*slices), RestClient::BadRequest)
+          expect { model.update!(*slices) }.to raise_error(BackendClient::Errors::BadRequest)
+        end
       end
     end
   end
@@ -82,18 +109,36 @@ end
 
 shared_examples 'default activate' do
   describe '#activate!' do
-    it 'updates model' do
-      expect_put("/#{model.id}/activate")
-      expect { model.activate! }.to change { model.attributes }
+    context 'no error' do
+      it 'updates model' do
+        expect_put("/#{model.id}/activate")
+        expect { model.activate! }.to change { model.attributes }
+      end
+    end
+
+    context 'RestClient::UnprocessableEntity error' do
+      it 'raises custom error' do
+        expect_put("/#{model.id}/activate", {}, RestClient::UnprocessableEntity)
+        expect { model.activate! }.to raise_error(BackendClient::Errors::Unprocessable)
+      end
     end
   end
 end
 
 shared_examples 'default delete' do
   describe '#delete!' do
-    it 'updates model' do
-      expect_delete("/#{model.id}")
-      expect { model.delete! }.to change { model.attributes }
+    context 'no error' do
+      it 'updates model' do
+        expect_delete("/#{model.id}")
+        expect { model.delete! }.to change { model.attributes }
+      end
+    end
+
+    context 'RestClient::UnprocessableEntity error' do
+      it 'raises custom error' do
+        expect_delete("/#{model.id}", {}, RestClient::UnprocessableEntity)
+        expect { model.delete! }.to raise_error(BackendClient::Errors::Unprocessable)
+      end
     end
   end
 end

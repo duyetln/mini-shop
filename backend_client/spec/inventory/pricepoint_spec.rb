@@ -26,13 +26,24 @@ describe BackendClient::Pricepoint do
     end
 
     context 'params present' do
-      it 'creates pricepoint price' do
-        expect_post("/#{model.id}/pricepoint_prices", BackendClient::PricepointPrice.params(params))
-        expect do
-          expect(
+      context 'no error' do
+        it 'creates pricepoint price' do
+          expect_post("/#{model.id}/pricepoint_prices", BackendClient::PricepointPrice.params(params))
+          expect do
+            expect(
+              model.create_pricepoint_price(params)
+            ).to be_instance_of(BackendClient::PricepointPrice)
+          end.to change { model.attributes }
+        end
+      end
+
+      context 'RestClient::BadRequest error' do
+        it 'raises custom error' do
+          expect_post("/#{model.id}/pricepoint_prices", BackendClient::PricepointPrice.params(params), RestClient::BadRequest)
+          expect do
             model.create_pricepoint_price(params)
-          ).to be_instance_of(BackendClient::PricepointPrice)
-        end.to change { model.attributes }
+          end.to raise_error(BackendClient::Errors::BadRequest)
+        end
       end
     end
   end

@@ -28,11 +28,31 @@ describe BackendClient::User do
     let(:email) { rand_str }
     let(:password) { rand_str }
 
-    it 'authenticates with email and password' do
-      expect_post('/authenticate', described_class.params(email: email, password: password))
-      expect(
-        described_class.authenticate(email, password)
-      ).to be_instance_of(described_class)
+    context 'no error' do
+      it 'authenticates with email and password' do
+        expect_post('/authenticate', described_class.params(email: email, password: password))
+        expect(
+          described_class.authenticate(email, password)
+        ).to be_instance_of(described_class)
+      end
+    end
+
+    context 'RestClient::Unauthorized error' do
+      it 'raises custom error' do
+        expect_post('/authenticate', described_class.params(email: email, password: password), RestClient::Unauthorized)
+        expect do
+          described_class.authenticate(email, password)
+        end.to raise_error(BackendClient::Errors::Unauthorized)
+      end
+    end
+
+    context 'RestClient::ResourceNotFound error' do
+      it 'raises custom error' do
+        expect_post('/authenticate', described_class.params(email: email, password: password), RestClient::ResourceNotFound)
+        expect do
+          described_class.authenticate(email, password)
+        end.to raise_error(BackendClient::Errors::Unauthorized)
+      end
     end
   end
 
@@ -40,11 +60,22 @@ describe BackendClient::User do
     let(:uuid) { rand_str }
     let(:actv_code) { rand_str }
 
-    it 'confirms with uuid and actv code' do
-      expect_put("/#{uuid}/confirm/#{actv_code}")
-      expect(
-        described_class.confirm(uuid, actv_code)
-      ).to be_instance_of(described_class)
+    context 'no error' do
+      it 'confirms with uuid and actv code' do
+        expect_put("/#{uuid}/confirm/#{actv_code}")
+        expect(
+          described_class.confirm(uuid, actv_code)
+        ).to be_instance_of(described_class)
+      end
+    end
+
+    context 'RestClient::ResourceNotFound error' do
+      it 'raises custom error' do
+        expect_put("/#{uuid}/confirm/#{actv_code}", {}, RestClient::ResourceNotFound)
+        expect do
+          described_class.confirm(uuid, actv_code)
+        end.to raise_error(BackendClient::Errors::NotFound)
+      end
     end
   end
 
