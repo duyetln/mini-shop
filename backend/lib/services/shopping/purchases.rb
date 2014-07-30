@@ -11,7 +11,9 @@ module Services
       put '/:id' do
         purchase = Purchase.find(id)
         purchase.committed? &&
-          unprocessable!('Unable to update purchase') ||
+          unprocessable!(
+            message: 'Unable to update purchase',
+            meta: 'The purchase is not modifiable currently') ||
           purchase.update_attributes!(purchase_params)
         respond_with(PurchaseSerializer.new(purchase))
       end
@@ -23,14 +25,18 @@ module Services
           BigDecimal.new(order_params[:amount]),
           Currency.find(order_params[:currency_id]),
           order_params[:qty].to_i
-        ) || unprocessable!('Unable to add or update order')
+        ) || unprocessable!(
+          message: 'Unable to add or update order',
+          meta: 'The purchase is not modifiable currently')
         respond_with(PurchaseSerializer.new(purchase))
       end
 
       delete '/:id/orders/:order_id' do
         purchase = Purchase.find(id)
         order = purchase.orders.find(params[:order_id])
-        purchase.remove(order) || unprocessable!('Unable to remove order')
+        purchase.remove(order) || unprocessable!(
+          message: 'Unable to remove order',
+          meta: 'The purchase is not modifiable currently')
         respond_with(PurchaseSerializer.new(purchase))
       end
 
@@ -44,14 +50,18 @@ module Services
 
       put '/:id/return' do
         purchase = Purchase.find(id)
-        purchase.reverse! || unprocessable!('Unable to return purchase')
+        purchase.reverse! || unprocessable!(
+          message: 'Unable to return purchase',
+          meta: 'The purchase is not submitted or not returnable')
         respond_with(PurchaseSerializer.new(purchase))
       end
 
       put '/:id/orders/:order_id/return' do
         purchase = Purchase.find(id)
         order = purchase.orders.find(params[:order_id])
-        purchase.reverse!(order) || unprocessable!('Unable to return order')
+        purchase.reverse!(order) || unprocessable!(
+          message: 'Unable to return order',
+          meta: 'The purchase is not submitted or not returnable')
         respond_with(PurchaseSerializer.new(purchase))
       end
 

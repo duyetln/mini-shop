@@ -5,7 +5,7 @@ module Services
     class Coupons < Services::Base
       get '/:code' do
         coupon = Coupon.find_by_code!(params[:code])
-        not_found! if coupon.deleted?
+        not_found!(meta: 'Coupon is deleted') if coupon.deleted?
         respond_with(CouponSerializer.new(coupon))
       end
     end

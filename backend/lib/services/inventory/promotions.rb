@@ -29,13 +29,19 @@ module Services
 
       put '/:id/activate' do
         promotion = Promotion.find(id)
-        promotion.activate! || unprocessable!('Unable to activate promotion')
+        promotion.activate! || unprocessable!(
+          message: 'Unable to activate promotion',
+          meta: 'The promotion is not activable or not ready for activation'
+        )
         respond_with(PromotionSerializer.new(promotion))
       end
 
       delete '/:id' do
         promotion = Promotion.find(id)
-        promotion.delete! || unprocessable!('Unable to delete promotion')
+        promotion.delete! || unprocessable!(
+          message: 'Unable to delete promotion',
+          meta: 'The promotion is not deletable or not allowed for deletion'
+        )
         respond_with(PromotionSerializer.new(promotion))
       end
 
@@ -69,7 +75,7 @@ module Services
       protected
 
       def check_id!
-        Promotion.exists?(id) || not_found!
+        Promotion.exists?(id) || not_found!(meta: 'Promotion id is not valid')
       end
     end
   end

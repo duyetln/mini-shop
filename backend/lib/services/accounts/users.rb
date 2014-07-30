@@ -31,7 +31,7 @@ module Services
         user = User.authenticate!(
           user_params[:email],
           user_params[:password]
-        ) || unauthorized!('Invalid email or password')
+        ) || unauthorized!(meta: 'Email or password is not valid')
         respond_with(UserSerializer.new(user))
       end
 
@@ -109,7 +109,7 @@ module Services
       protected
 
       def check_id!
-        User.exists?(id) || not_found!
+        User.exists?(id) || not_found!(meta: 'User id is not valid')
       end
 
       def user_params

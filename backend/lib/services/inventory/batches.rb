@@ -31,20 +31,26 @@ module Services
 
       put '/:id/activate' do
         batch = Batch.find(id)
-        batch.activate! || unprocessable!('Unable to activate batch')
+        batch.activate! || unprocessable!(
+          message: 'Unable to activate batch',
+          meta: 'The batch is not activable or not ready for activation'
+        )
         respond_with(BatchSerializer.new(batch))
       end
 
       delete '/:id' do
         batch = Batch.find(id)
-        batch.delete! || unprocessable!('Unable to delete batch')
+        batch.delete! || unprocessable!(
+          message: 'Unable to delete batch',
+          meta: 'The batch is not deletable or not allowed for deletion'
+        )
         respond_with(BatchSerializer.new(batch))
       end
 
       protected
 
       def check_id!
-        Batch.exists?(id) || not_found!
+        Batch.exists?(id) || not_found!(meta: 'Batch id is not valid')
       end
     end
   end

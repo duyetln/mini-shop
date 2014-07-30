@@ -33,26 +33,38 @@ module Services
           constantize!(bundled_params[:item_type]).find(bundled_params[:item_id]),
           bundled_params[:qty].to_i,
           false
-        ) || unprocessable!('Unable to add or update item')
+        ) || unprocessable!(
+          message: 'Unable to add or update item',
+          meta: 'The bundle is not modifiable currently'
+        )
         respond_with(BundleSerializer.new(bundle))
       end
 
       delete '/:id/bundleds/:bundled_id' do
         bundle = Bundle.find(id)
         bundled = bundle.bundleds.find(params[:bundled_id])
-        bundle.remove(bundled) || unprocessable!('Unable to remove item')
+        bundle.remove(bundled) || unprocessable!(
+          message: 'Unable to remove item',
+          meta: 'The bundle is not modifiable currently'
+        )
         respond_with(BundleSerializer.new(bundle))
       end
 
       put '/:id/activate' do
         bundle = Bundle.find(id)
-        bundle.activate! || unprocessable!('Unable to activate bundle')
+        bundle.activate! || unprocessable!(
+          message: 'Unable to activate bundle',
+          meta: 'The bundle is not activable or not ready for activation'
+        )
         respond_with(BundleSerializer.new(bundle))
       end
 
       delete '/:id' do
         bundle = Bundle.find(id)
-        bundle.delete! || unprocessable!('Unable to delete bundle')
+        bundle.delete! || unprocessable!(
+          message: 'Unable to delete bundle',
+          meta: 'The bundle is not deletable or not allowed for deletion'
+        )
         respond_with(BundleSerializer.new(bundle))
       end
 

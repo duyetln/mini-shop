@@ -29,13 +29,19 @@ module Services
 
       put '/:id/activate' do
         digital_item = DigitalItem.find(id)
-        digital_item.activate! || unprocessable!('Unable to activate digital item')
+        digital_item.activate! || unprocessable!(
+          message: 'Unable to activate digital item',
+          meta: 'The digital item is not ready for activation'
+        )
         respond_with(DigitalItemSerializer.new(digital_item))
       end
 
       delete '/:id' do
         digital_item = DigitalItem.find(id)
-        digital_item.delete! || unprocessable!('Unable to delete digital item')
+        digital_item.delete! || unprocessable!(
+          message: 'Unable to delete digital item',
+          meta: 'The digital item is not deletable or not allowed for deletion'
+        )
         respond_with(DigitalItemSerializer.new(digital_item))
       end
     end

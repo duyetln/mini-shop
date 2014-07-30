@@ -17,7 +17,7 @@ module Services
       begin
         string.classify.constantize
       rescue NameError => ex
-        bad_request! "Invalid type #{ex.missing_name}"
+        bad_request! meta: "Type #{ex.missing_name} is not valid"
       end
     end
 
