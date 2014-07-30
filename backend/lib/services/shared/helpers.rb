@@ -3,9 +3,17 @@ module Services
     protected
 
     def paginate(scope)
-      scope.page(params[:page],
-                 size: params[:size],
-                 padn: params[:padn]
+      scope.order(
+        "id #{(
+          {
+            'desc' => :desc,
+            'asc'  => :asc
+          }[params[:sort].to_s.downcase] || :asc
+        )}"
+      ).page(
+        params[:page],
+        size: params[:size],
+        padn: params[:padn]
       )
     end
 
