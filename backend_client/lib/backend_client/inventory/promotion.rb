@@ -1,5 +1,7 @@
 module BackendClient
-  class Promotion < APIModel
+  class Promotion
+    include APIResource
+    include APIModel
     include DefaultAll
     include DefaultFind
     include DefaultCreate

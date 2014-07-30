@@ -1,16 +1,13 @@
 require 'backend_client/concerns/errors'
 require 'backend_client/concerns/method_access'
-
-require 'backend_client/api_resource'
-require 'backend_client/api_model'
-
+require 'backend_client/concerns/api_resource'
+require 'backend_client/concerns/api_model'
 require 'backend_client/concerns/all'
 require 'backend_client/concerns/find'
 require 'backend_client/concerns/create'
 require 'backend_client/concerns/update'
 require 'backend_client/concerns/activate'
 require 'backend_client/concerns/delete'
-
 
 require 'backend_client/fulfillment/ownership'
 require 'backend_client/fulfillment/shipment'

@@ -1,5 +1,7 @@
 module BackendClient
-  class Bundle < APIModel
+  class Bundle
+    include APIResource
+    include APIModel
     include DefaultAll
     include DefaultFind
     include DefaultCreate

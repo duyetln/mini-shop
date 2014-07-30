@@ -1,5 +1,7 @@
 module BackendClient
-  class Batch < APIModel
+  class Batch
+    include APIResource
+    include APIModel
     include DefaultFind
     include DefaultUpdate
     include DefaultActivate

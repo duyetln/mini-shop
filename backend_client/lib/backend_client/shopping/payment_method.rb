@@ -1,5 +1,6 @@
 module BackendClient
-  class PaymentMethod < APIModel
+  class PaymentMethod
+    include APIModel
     include DefaultUpdate
 
     def self.build_attributes(hash = {})

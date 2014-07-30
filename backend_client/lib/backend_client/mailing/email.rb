@@ -1,5 +1,7 @@
 module BackendClient
-  class Email < APIResource
+  class Email
+    include APIResource
+
     def self.send_email(type, payload = {})
       if payload.present?
         response = Hashie::Mash.new(post payload: { type: type, payload: payload })

@@ -1,5 +1,7 @@
 module BackendClient
-  class PhysicalItem < APIModel
+  class PhysicalItem
+    include APIResource
+    include APIModel
     include DefaultAll
     include DefaultFind
     include DefaultCreate

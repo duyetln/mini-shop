@@ -1,4 +1,5 @@
 module BackendClient
-  class Status < APIModel
+  class Status
+    include APIModel
   end
 end

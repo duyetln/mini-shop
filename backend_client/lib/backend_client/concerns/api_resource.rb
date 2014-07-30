@@ -1,8 +1,9 @@
 module BackendClient
-  class APIResource
+  module APIResource
+    extend ActiveSupport::Concern
     include Errors
 
-    class << self
+    module ClassMethods
       def params(hash = {})
         { namespace.to_sym => hash }
       end

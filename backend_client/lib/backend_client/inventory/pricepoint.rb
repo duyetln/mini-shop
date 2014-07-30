@@ -1,5 +1,7 @@
 module BackendClient
-  class Pricepoint < APIModel
+  class Pricepoint
+    include APIResource
+    include APIModel
     include DefaultAll
     include DefaultFind
     include DefaultCreate

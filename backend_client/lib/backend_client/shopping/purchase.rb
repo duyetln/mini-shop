@@ -1,5 +1,7 @@
 module BackendClient
-  class Purchase < APIModel
+  class Purchase
+    include APIResource
+    include APIModel
     include DefaultFind
     include DefaultUpdate
 

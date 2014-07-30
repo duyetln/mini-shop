@@ -1,5 +1,7 @@
 module BackendClient
-  class PricepointPrice < APIModel
+  class PricepointPrice
+    include APIResource
+    include APIModel
     include DefaultUpdate
 
     def self.build_attributes(hash = {})

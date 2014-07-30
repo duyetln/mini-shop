@@ -1,5 +1,7 @@
 module BackendClient
-  class Order < APIModel
+  class Order
+    include APIModel
+
     def self.build_attributes(hash = {})
       super do |order|
         order.item = APIModel.instantiate(order.item)

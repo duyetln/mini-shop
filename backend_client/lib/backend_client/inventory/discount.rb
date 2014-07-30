@@ -1,5 +1,7 @@
 module BackendClient
-  class Discount < APIModel
+  class Discount
+    include APIResource
+    include APIModel
     include DefaultAll
     include DefaultFind
     include DefaultCreate

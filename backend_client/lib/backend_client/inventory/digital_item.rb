@@ -1,5 +1,7 @@
 module BackendClient
-  class DigitalItem < APIModel
+  class DigitalItem
+    include APIResource
+    include APIModel
     include DefaultAll
     include DefaultFind
     include DefaultCreate

@@ -1,5 +1,7 @@
 module BackendClient
-  class Currency < APIModel
+  class Currency
+    include APIResource
+    include APIModel
     include DefaultAll
     include DefaultCreate
   end

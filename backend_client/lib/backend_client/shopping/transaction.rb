@@ -1,5 +1,7 @@
 module BackendClient
-  class Transaction < APIModel
+  class Transaction
+    include APIModel
+
     def self.build_attributes(hash = {})
       super do |transaction|
         transaction.amount = BigDecimal.new(transaction.amount)

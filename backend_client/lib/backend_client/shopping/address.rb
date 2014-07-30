@@ -1,4 +1,5 @@
 module BackendClient
-  class Address < APIModel
+  class Address
+    include APIModel
   end
 end
