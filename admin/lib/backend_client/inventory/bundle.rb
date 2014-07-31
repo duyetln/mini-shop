@@ -1,40 +1,41 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class Bundle < Base
-    extend DefaultAll
-    extend DefaultFind
-    extend DefaultCreate
+  class Bundle
+    include APIResource
+    include APIModel
+    include DefaultAll
+    include DefaultFind
+    include DefaultCreate
     include DefaultUpdate
     include DefaultActivate
     include DefaultDelete
 
-    def self.instantiate(hash = {})
+    def self.build_attributes(hash = {})
       super do |bundle|
         bundle.bundleds.map! do |bundled|
-          Bundled.instantiate(bundled)
+          Bundled.new(bundled)
         end
       end
     end
 
     def add_or_update_bundled(bundled = {})
       if bundled.present?
-        self.class.parse(
-          self.class.resource["/#{id}/bundleds"].post Bundled.params(bundled)
-        ) do |hash|
-          load!(hash)
-          bundleds.last
-        end
+        load!(
+          self.class.post(
+            path: "/#{id}/bundleds",
+            payload: Bundled.params(bundled)
+          )
+        )
+        bundleds.last
       end
     end
 
     def delete_bundled(bundled_id)
-      self.class.parse(
-        self.class.resource["/#{id}/bundleds/#{bundled_id}"].delete
-      ) do |hash|
-        load!(hash)
-        bundleds.count
-      end
+      load!(
+        self.class.delete(
+          path: "/#{id}/bundleds/#{bundled_id}"
+        )
+      )
+      bundleds.count
     end
   end
 end

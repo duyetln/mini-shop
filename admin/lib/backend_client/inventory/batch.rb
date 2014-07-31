@@ -1,26 +1,28 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class Batch < Base
-    extend DefaultFind
+  class Batch
+    include APIResource
+    include APIModel
+    include DefaultFind
     include DefaultUpdate
     include DefaultActivate
     include DefaultDelete
 
     def coupons(pagination = {})
-      self.class.parse(
-        self.class.resource["/#{id}/coupons"].get params: pagination.slice(:page, :size, :padn)
+      self.class.get(
+        path: "/#{id}/coupons",
+        payload: pagination.slice(:page, :size, :padn, :sort)
       ).map do |hash|
-        Coupon.instantiate(hash)
+        Coupon.new(hash)
       end
     end
 
     def create_coupons(qty)
-      self.class.parse(
-        self.class.resource["/#{id}/coupons/generate"].post qty: qty
-      ) do |hash|
-        load!(hash)
-      end
+      load!(
+        self.class.post(
+          path: "/#{id}/coupons/generate",
+          payload: { qty: qty }
+        )
+      )
     end
   end
 end

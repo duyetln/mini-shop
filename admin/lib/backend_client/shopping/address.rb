@@ -1,6 +1,5 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class Address < Base
+  class Address
+    include APIModel
   end
 end

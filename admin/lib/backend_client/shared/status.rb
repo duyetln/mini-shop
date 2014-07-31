@@ -1,6 +1,5 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class Status < Base
+  class Status
+    include APIModel
   end
 end

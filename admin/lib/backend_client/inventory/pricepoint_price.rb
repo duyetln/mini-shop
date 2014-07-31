@@ -1,12 +1,12 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class PricepointPrice < Base
+  class PricepointPrice
+    include APIResource
+    include APIModel
     include DefaultUpdate
 
-    def self.instantiate(hash = {})
+    def self.build_attributes(hash = {})
       super do |pricepoint_price|
-        pricepoint_price.currency = Currency.instantiate(pricepoint_price.currency)
+        pricepoint_price.currency = Currency.new(pricepoint_price.currency)
         pricepoint_price.amount = BigDecimal.new(pricepoint_price.amount)
       end
     end

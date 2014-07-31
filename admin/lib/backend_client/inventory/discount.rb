@@ -1,13 +1,13 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class Discount < Base
-    extend DefaultAll
-    extend DefaultFind
-    extend DefaultCreate
+  class Discount
+    include APIResource
+    include APIModel
+    include DefaultAll
+    include DefaultFind
+    include DefaultCreate
     include DefaultUpdate
 
-    def self.instantiate(hash = {})
+    def self.build_attributes(hash = {})
       super do |discount|
         discount.rate = BigDecimal.new(discount.rate)
         discount.start_at = DateTime.parse(discount.start_at) if discount.start_at.present?

@@ -1,10 +1,10 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class Ownership < Base
-    def self.instantiate(hash = {})
+  class Ownership
+    include APIModel
+
+    def self.build_attributes(hash = {})
       super do |ownership|
-        ownership.item = Base.concretize(ownership.item)
+        ownership.item = APIModel.instantiate(ownership.item)
       end
     end
   end

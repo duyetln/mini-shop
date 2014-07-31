@@ -1,16 +1,16 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class Price < Base
-    extend DefaultAll
-    extend DefaultFind
-    extend DefaultCreate
+  class Price
+    include APIResource
+    include APIModel
+    include DefaultAll
+    include DefaultFind
+    include DefaultCreate
     include DefaultUpdate
 
-    def self.instantiate(hash = {})
+    def self.build_attributes(hash = {})
       super do |price|
-        price.pricepoint = Pricepoint.instantiate(price.pricepoint)
-        price.discount = Discount.instantiate(price.discount)
+        price.pricepoint = Pricepoint.new(price.pricepoint)
+        price.discount = Discount.new(price.discount)
       end
     end
   end

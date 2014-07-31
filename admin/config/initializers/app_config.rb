@@ -8,10 +8,9 @@ Rails.application.config.filter_parameters += [:password]
 Rails.application.config.session_store :cookie_store, key: '_admin_session'
 
 # load dependencies not inferable by autoload or eager loading
-Dir[Rails.root.join('lib', '{**/}*rb')].each do |file|
-  require file
-end
+require Rails.root.join('lib', 'backend_client')
+
 
 app_config = YAML.load_file(Rails.root.join('config', 'app_config.yml')).with_indifferent_access
-BackendClient::ServiceResource.host = app_config[:backend_client][:host]
-BackendClient::ServiceResource.proxy = app_config[:backend_client][:proxy]
+BackendClient.url = app_config[:backend_client][:url]
+BackendClient.proxy = app_config[:backend_client][:proxy]

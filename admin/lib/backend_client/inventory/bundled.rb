@@ -1,10 +1,10 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class Bundled < Base
-    def self.instantiate(hash = {})
+  class Bundled
+    include APIModel
+
+    def self.build_attributes(hash = {})
       super do |bundled|
-        bundled.item = Base.concretize(bundled.item)
+        bundled.item = APIModel.instantiate(bundled.item)
       end
     end
   end

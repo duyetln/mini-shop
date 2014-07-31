@@ -1,10 +1,10 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class PhysicalItem < Base
-    extend DefaultAll
-    extend DefaultFind
-    extend DefaultCreate
+  class PhysicalItem
+    include APIResource
+    include APIModel
+    include DefaultAll
+    include DefaultFind
+    include DefaultCreate
     include DefaultUpdate
     include DefaultActivate
     include DefaultDelete

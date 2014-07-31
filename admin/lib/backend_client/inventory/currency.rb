@@ -1,8 +1,8 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class Currency < Base
-    extend DefaultAll
-    extend DefaultCreate
+  class Currency
+    include APIResource
+    include APIModel
+    include DefaultAll
+    include DefaultCreate
   end
 end

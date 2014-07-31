@@ -1,28 +1,29 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class Pricepoint < Base
-    extend DefaultAll
-    extend DefaultFind
-    extend DefaultCreate
+  class Pricepoint
+    include APIResource
+    include APIModel
+    include DefaultAll
+    include DefaultFind
+    include DefaultCreate
     include DefaultUpdate
 
-    def self.instantiate(hash = {})
+    def self.build_attributes(hash = {})
       super do |pricepoint|
         pricepoint.pricepoint_prices.map! do |pricepoint_price|
-          PricepointPrice.instantiate(pricepoint_price)
+          PricepointPrice.new(pricepoint_price)
         end
       end
     end
 
     def create_pricepoint_price(pricepoint_price = {})
       if pricepoint_price.present?
-        self.class.parse(
-          self.class.resource["/#{id}/pricepoint_prices"].post PricepointPrice.params(pricepoint_price)
-        ) do |hash|
-          load!(hash)
-          pricepoint_prices.last
-        end
+        load!(
+          self.class.post(
+            path: "/#{id}/pricepoint_prices",
+            payload: PricepointPrice.params(pricepoint_price)
+          )
+        )
+        pricepoint_prices.last
       end
     end
   end

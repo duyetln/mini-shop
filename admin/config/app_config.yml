@@ -1,4 +1,4 @@
 ---
 backend_client:
-  host: localhost:8003
+  url: localhost:8003
   proxy:

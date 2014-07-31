@@ -1,19 +1,19 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class User < Base
-    extend DefaultAll
-    extend DefaultFind
-    extend DefaultCreate
+  class User
+    include APIResource
+    include APIModel
+    include DefaultAll
+    include DefaultFind
+    include DefaultCreate
     include DefaultUpdate
 
     [:ownerships, :shipments, :coupons, :transactions, :orders, :purchases].each do |association|
       define_method "#{association}" do
         klass = BackendClient.const_get(association.to_s.classify)
-        self.class.parse(
-          self.class.resource["/#{id}/#{association}"].get
+        self.class.get(
+          path: "/#{id}/#{association}"
         ).map do |hash|
-          klass.instantiate(hash)
+          klass.new(hash)
         end
       end
     end
@@ -22,32 +22,29 @@ module BackendClient
       define_method "create_#{association}" do |object = {}|
         if object.present?
           klass = BackendClient.const_get(association.to_s.classify)
-          self.class.parse(
-            self.class.resource["/#{id}/#{association.to_s.pluralize}"].post klass.params(object)
-          ) do |hash|
-            klass.instantiate(hash)
-          end
+          klass.new(
+            self.class.post(
+              path: "/#{id}/#{association.to_s.pluralize}",
+              payload: klass.params(object)
+            )
+          )
         end
       end
     end
 
-    def self.instantiate(hash = {})
+    def self.build_attributes(hash = {})
       super do |user|
-        user.addresses.map! { |address| Address.instantiate(address) }
-        user.payment_methods.map! { |payment_method| PaymentMethod.instantiate(payment_method) }
+        user.addresses.map! { |address| Address.new(address) }
+        user.payment_methods.map! { |payment_method| PaymentMethod.new(payment_method) }
       end
     end
 
     def self.authenticate(email, password)
-      parse(resource['/authenticate'].post params(email: email, password: password)) do |hash|
-        instantiate(hash)
-      end
+      new(post(path: '/authenticate', payload: params(email: email, password: password)))
     end
 
     def self.confirm(uuid, actv_code)
-      parse(resource["/#{uuid}/confirm/#{actv_code}"].put({})) do |hash|
-        instantiate(hash)
-      end
+      new(put path: "/#{uuid}/confirm/#{actv_code}")
     end
   end
 end

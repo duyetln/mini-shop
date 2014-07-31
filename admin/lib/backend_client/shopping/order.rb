@@ -1,16 +1,16 @@
-require 'lib/backend_client/base'
-
 module BackendClient
-  class Order < Base
-    def self.instantiate(hash = {})
+  class Order
+    include APIModel
+
+    def self.build_attributes(hash = {})
       super do |order|
-        order.item = Base.concretize(order.item)
+        order.item = APIModel.instantiate(order.item)
         order.amount = BigDecimal.new(order.amount)
         order.tax = BigDecimal.new(order.tax)
         order.tax_rate = BigDecimal.new(order.tax_rate)
         order.total = BigDecimal.new(order.total)
-        order.refund = Transaction.instantiate(order.refund)
-        order.statuses.map! { |status| Status.instantiate(status) }
+        order.refund = Transaction.new(order.refund)
+        order.statuses.map! { |status| Status.new(status) }
       end
     end
   end
