@@ -1,8 +1,8 @@
 require 'spec_setup'
-require 'spec/base'
 
 describe BackendClient::Bundle do
-  include_examples 'backend client'
+  include_examples 'api resource'
+  include_examples 'api model'
   include_examples 'default all'
   include_examples 'default find'
   include_examples 'default create'
@@ -10,12 +10,10 @@ describe BackendClient::Bundle do
   include_examples 'default activate'
   include_examples 'default delete'
 
-  describe '.instantiate' do
-    let(:model) { instantiated_model }
-
+  describe '.initialize' do
     it 'sets bundleds correctly' do
       expect(
-        model.bundleds.map(&:class).uniq
+        full_model.bundleds.map(&:class).uniq
       ).to contain_exactly(BackendClient::Bundled)
     end
   end
@@ -23,29 +21,18 @@ describe BackendClient::Bundle do
   describe '.add_or_update_bundled' do
     context 'params emtpy' do
       it 'does nothing' do
-        expect(model.add_or_update_bundled({})).to be_nil
+        expect(bare_model.add_or_update_bundled({})).to be_nil
       end
     end
 
     context 'params present' do
-      context 'no error' do
-        it 'creates bundled' do
-          expect_post("/#{model.id}/bundleds", BackendClient::Bundled.params(params))
-          expect do
-            expect(
-              model.add_or_update_bundled(params)
-            ).to be_instance_of(BackendClient::Bundled)
-          end.to change { model.attributes }
-        end
-      end
-
-      context 'RestClient::UnprocessableEntity error' do
-        it 'raises custom error' do
-          expect_post("/#{model.id}/bundleds", BackendClient::Bundled.params(params), RestClient::UnprocessableEntity)
-          expect do
-            model.add_or_update_bundled(params)
-          end.to raise_error(BackendClient::Errors::Unprocessable)
-        end
+      it 'creates bundled' do
+        expect_http_action(:post, { path: "/#{bare_model.id}/bundleds", payload: BackendClient::Bundled.params(params) })
+        expect do
+          expect(
+            bare_model.add_or_update_bundled(params)
+          ).to be_instance_of(BackendClient::Bundled)
+        end.to change { bare_model.send(:attributes) }
       end
     end
   end
@@ -53,22 +40,11 @@ describe BackendClient::Bundle do
   describe '.delete_bundled' do
     let(:bundled_id) { rand_str }
 
-    context 'no error' do
-      it 'deletes bundled' do
-        expect_delete("/#{model.id}/bundleds/#{bundled_id}")
-        expect do
-          expect(model.delete_bundled(bundled_id)).to eq(model.bundleds.count)
-        end.to change { model.attributes }
-      end
-    end
-
-    context 'RestClient::UnprocessableEntity error' do
-      it 'raises custom error' do
-        expect_delete("/#{model.id}/bundleds/#{bundled_id}", {}, RestClient::UnprocessableEntity)
-        expect do
-          model.delete_bundled(bundled_id)
-        end.to raise_error(BackendClient::Errors::Unprocessable)
-      end
+    it 'deletes bundled' do
+      expect_http_action(:delete, { path: "/#{bare_model.id}/bundleds/#{bundled_id}" })
+      expect do
+        expect(bare_model.delete_bundled(bundled_id)).to eq(bare_model.bundleds.count)
+      end.to change { bare_model.send(:attributes) }
     end
   end
 end

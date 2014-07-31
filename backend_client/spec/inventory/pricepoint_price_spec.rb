@@ -1,22 +1,20 @@
 require 'spec_setup'
-require 'spec/base'
 
 describe BackendClient::PricepointPrice do
-  include_examples 'backend client'
+  include_examples 'api resource'
+  include_examples 'api model'
   include_examples 'default update'
 
-  describe '.instantiate' do
-    let(:model) { instantiated_model }
-
+  describe '.initialize' do
     it 'sets currency correctly' do
       expect(
-        model.currency
+        full_model.currency
       ).to be_instance_of(BackendClient::Currency)
     end
 
     it 'sets amount correctly' do
       expect(
-        model.amount
+        full_model.amount
       ).to be_instance_of(BigDecimal)
     end
   end

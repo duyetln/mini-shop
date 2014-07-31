@@ -1,24 +1,22 @@
 require 'spec_setup'
-require 'spec/base'
 
 describe BackendClient::Price do
-  include_examples 'backend client'
+  include_examples 'api resource'
+  include_examples 'api model'
   include_examples 'default find'
   include_examples 'default create'
   include_examples 'default update'
 
-  describe '.instantiate' do
-    let(:model) { instantiated_model }
-
+  describe '.initialize' do
     it 'sets pricepoint correctly' do
       expect(
-        model.pricepoint
+        full_model.pricepoint
       ).to be_instance_of(BackendClient::Pricepoint)
     end
 
     it 'sets discount correctly' do
       expect(
-        model.discount
+        full_model.discount
       ).to be_instance_of(BackendClient::Discount)
     end
   end

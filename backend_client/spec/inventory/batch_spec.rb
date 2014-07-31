@@ -1,8 +1,8 @@
 require 'spec_setup'
-require 'spec/base'
 
 describe BackendClient::Batch do
-  include_examples 'backend client'
+  include_examples 'api resource'
+  include_examples 'api model'
   include_examples 'default find'
   include_examples 'default update'
   include_examples 'default activate'
@@ -11,9 +11,9 @@ describe BackendClient::Batch do
   describe '#coupons' do
     context 'not paginated' do
       it 'returns coupons' do
-        expect_get("/#{model.id}/coupons", {}, collection(coupon_payload))
+        expect_http_action(:get, { path: "/#{bare_model.id}/coupons", payload: {} }, [parse(coupon_payload)])
         expect(
-          model.coupons.map(&:class).uniq
+          bare_model.coupons.map(&:class).uniq
         ).to contain_exactly(BackendClient::Coupon)
       end
     end
@@ -22,12 +22,13 @@ describe BackendClient::Batch do
       let(:page) { 1 }
       let(:size) { qty }
       let(:padn) { rand_num }
-      let(:params) { { page: page, size: size, padn: padn } }
+      let(:sort) { :asc }
+      let(:params) { { page: page, size: size, padn: padn, sort: sort } }
 
       it 'returns paginated coupons' do
-        expect_get("/#{model.id}/coupons", { params: params }, collection(coupon_payload))
+        expect_http_action(:get, { path: "/#{bare_model.id}/coupons", payload: params }, [parse(coupon_payload)])
         expect(
-          model.coupons(params).map(&:class).uniq
+          bare_model.coupons(params).map(&:class).uniq
         ).to contain_exactly(BackendClient::Coupon)
       end
     end
@@ -35,8 +36,8 @@ describe BackendClient::Batch do
 
   describe '.create_coupons' do
     it 'creates coupons' do
-      expect_post("/#{model.id}/coupons/generate", qty: qty)
-      expect { model.create_coupons(qty) }.to change { model.attributes }
+      expect_http_action(:post, { path: "/#{bare_model.id}/coupons/generate", payload: { qty: qty } })
+      expect { bare_model.create_coupons(qty) }.to change { bare_model.send(:attributes) }
     end
   end
 end

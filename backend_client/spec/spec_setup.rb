@@ -9,6 +9,7 @@ end
 
 require './boot'
 Dir['spec/support/**/*.rb'].each { |f| require f }
+Dir['spec/concerns/**/*.rb'].each { |f| require f }
 
 RSpec.configure do |config|
   config.include SpecHelpers::Common
@@ -17,12 +18,8 @@ RSpec.configure do |config|
   config.tty = true
   config.order = 'random'
 
-  # if config.files_to_run.one?
-  #   config.default_formatter = 'doc'
-  # end
-
   config.before :suite do
-    BackendClient::ServiceResource.host = 'host'
-    BackendClient::ServiceResource.proxy = 'proxy'
+    BackendClient.url = 'host'
+    BackendClient.proxy = 'proxy'
   end
 end

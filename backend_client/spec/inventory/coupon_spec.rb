@@ -1,48 +1,28 @@
 require 'spec_setup'
-require 'spec/base'
 
 describe BackendClient::Coupon do
-  include_examples 'backend client'
+  include_examples 'api resource'
+  include_examples 'api model'
+  include_examples 'default find'
 
-  describe '.instantiate' do
-    let(:model) { instantiated_model }
-
-    it 'sets bundleds correctly' do
+  describe '.initialize' do
+    it 'sets used_at correctly' do
       expect(
-        model.used_at
+        full_model.used_at
       ).to be_instance_of(DateTime)
     end
   end
 
-  describe '.find_by_code' do
-    let(:code) { rand_str }
-
-    context 'no error' do
-      it 'finds coupon with code' do
-        expect_get("/#{code}")
-        expect(
-          described_class.find_by_code(code)
-        ).to be_instance_of(described_class)
-      end
-    end
-
-    context 'RestClient::ResourceNotFound error' do
-      it 'raises custom error' do
-        expect_get("/#{code}", {}, RestClient::ResourceNotFound)
-        expect do
-          described_class.find_by_code(code)
-        end.to raise_error(BackendClient::Errors::NotFound)
-      end
-    end
-  end
-
   describe '.promotion' do
-    let(:promotion) { BackendClient::Promotion.new }
-    let(:model) { described_class.new promotion_id: rand_str }
+    let(:promotion) { BackendClient::Promotion.new parse(promotion_payload) }
+
+    before :each do
+      bare_model.promotion_id = rand_str
+    end
 
     it 'returns promotion' do
-      expect(BackendClient::Promotion).to receive(:find).with(model.promotion_id).and_return(promotion)
-      expect(model.promotion).to eq(promotion)
+      expect(BackendClient::Promotion).to receive(:find).with(bare_model.promotion_id).and_return(promotion)
+      expect(bare_model.promotion).to eq(promotion)
     end
   end
 end

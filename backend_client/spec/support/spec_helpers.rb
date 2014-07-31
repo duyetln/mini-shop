@@ -12,10 +12,6 @@ module SpecHelpers
     def parse(json)
       Yajl::Parser.parse(json, symbolize_keys: true)
     end
-
-    def collection(json)
-      [parse(json)].to_json
-    end
   end
 end
 
@@ -28,41 +24,31 @@ module SpecHelpers
 
       included do
         let(:namespace) { described_class.name.demodulize.underscore }
-        let(:doubled_resource) { double(RestClient::Resource) }
-        let(:resource_payload) { send("#{namespace}_payload".to_sym) }
+        let(:request) { double(RestClient::Resource) }
         let(:params) { { key1: rand_str, key2: rand_num } }
+        let(:headers) { { key3: rand_str, key4: rand_num } }
 
-        let(:model) { described_class.new id: rand_str }
-        let(:instantiated_model) { described_class.instantiate(parse(resource_payload)) }
-      end
 
-      def backend_client_class(klass)
-        BackendClient.const_get(klass)
-      end
-
-      def expect_action(action, path, params, payload)
-        expect(described_class).to receive(:resource).and_return(doubled_resource)
-        if path.present?
-          expect(doubled_resource).to receive(:[]).with(path).and_return(doubled_resource)
+        let :bare_model do
+          model = described_class.new
+          model.id = rand_str
+          model
         end
+
+        let :full_model do
+          described_class.new parsed_payload
+        end
+
+        let(:crude_payload) { send("#{namespace}_payload".to_sym) }
+        let(:parsed_payload) { parse(crude_payload) }
+      end
+
+      def expect_http_action(action, params = {}, result = parsed_payload)
+        expect(described_class).to respond_to(action)
         match_expectation = receive(action)
-        if params.present?
-          match_expectation = match_expectation.with(params)
-        end
-        if payload.present?
-          if payload.instance_of?(Class) && payload < Exception || payload.class < Exception
-            match_expectation = match_expectation.and_raise(payload)
-          else
-            match_expectation = match_expectation.and_return(payload)
-          end
-        end
-        expect(doubled_resource).to match_expectation
-      end
-
-      [:get, :put, :post, :delete].each do |action|
-        define_method "expect_#{action}" do |path, params = {}, payload = resource_payload|
-          expect_action(action, path, params, payload)
-        end
+        match_expectation = match_expectation.with(params) if params.present?
+        match_expectation = match_expectation.and_return(result) if result.present?
+        expect(described_class).to match_expectation
       end
     end
 

@@ -1,8 +1,8 @@
 require 'spec_setup'
-require 'spec/base'
 
 describe BackendClient::PhysicalItem do
-  include_examples 'backend client'
+  include_examples 'api resource'
+  include_examples 'api model'
   include_examples 'default all'
   include_examples 'default find'
   include_examples 'default create'

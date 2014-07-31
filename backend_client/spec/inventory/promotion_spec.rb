@@ -1,8 +1,8 @@
 require 'spec_setup'
-require 'spec/base'
 
 describe BackendClient::Promotion do
-  include_examples 'backend client'
+  include_examples 'api resource'
+  include_examples 'api model'
   include_examples 'default all'
   include_examples 'default find'
   include_examples 'default create'
@@ -10,18 +10,16 @@ describe BackendClient::Promotion do
   include_examples 'default activate'
   include_examples 'default delete'
 
-  describe '.instantiate' do
-    let(:model) { instantiated_model }
-
+  describe '.initialize' do
     it 'sets item correctly' do
-      expect(model.item).to be_instance_of(
-        BackendClient.const_get(model.item.resource_type.classify)
+      expect(full_model.item).to be_instance_of(
+        BackendClient.const_get(full_model.item.resource_type.classify)
       )
     end
 
     it 'sets price correctly' do
       expect(
-        model.price
+        full_model.price
       ).to be_instance_of(BackendClient::Price)
     end
   end
@@ -29,9 +27,9 @@ describe BackendClient::Promotion do
   describe '#batches' do
     context 'not paginated' do
       it 'returns batches' do
-        expect_get("/#{model.id}/batches", {}, collection(batch_payload))
+        expect_http_action(:get, { path: "/#{bare_model.id}/batches", payload: {} }, [parse(batch_payload)])
         expect(
-          model.batches.map(&:class).uniq
+          bare_model.batches.map(&:class).uniq
         ).to contain_exactly(BackendClient::Batch)
       end
     end
@@ -40,12 +38,13 @@ describe BackendClient::Promotion do
       let(:page) { 1 }
       let(:size) { qty }
       let(:padn) { rand_num }
-      let(:params) { { page: page, size: size, padn: padn } }
+      let(:sort) { :asc }
+      let(:params) { { page: page, size: size, padn: padn, sort: sort } }
 
       it 'returns paginated batches' do
-        expect_get("/#{model.id}/batches", { params: params }, collection(batch_payload))
+        expect_http_action(:get, { path: "/#{bare_model.id}/batches", payload: params }, [parse(batch_payload)])
         expect(
-          model.batches(params).map(&:class).uniq
+          bare_model.batches(params).map(&:class).uniq
         ).to contain_exactly(BackendClient::Batch)
       end
     end
@@ -56,8 +55,8 @@ describe BackendClient::Promotion do
     let(:size) { qty }
 
     it 'creates batch' do
-      expect_post("/#{model.id}/batches", BackendClient::Batch.params(name: name, size: size))
-      expect { model.create_batch(name, size) }.to change { model.attributes }
+      expect_http_action(:post, { path: "/#{bare_model.id}/batches", payload: BackendClient::Batch.params(name: name, size: size) })
+      expect { bare_model.create_batch(name, size) }.to change { bare_model.send(:attributes) }
     end
   end
 
@@ -65,8 +64,8 @@ describe BackendClient::Promotion do
     let(:size) { qty }
 
     it 'creates batches' do
-      expect_post("/#{model.id}/batches/generate", { qty: qty }.merge(BackendClient::Batch.params(size: size)))
-      expect { model.create_batches(qty, size) }.to change { model.attributes }
+      expect_http_action(:post, { path: "/#{bare_model.id}/batches/generate", payload: { qty: qty }.merge(BackendClient::Batch.params(size: size)) })
+      expect { bare_model.create_batches(qty, size) }.to change { bare_model.send(:attributes) }
     end
   end
 end

@@ -1,25 +1,23 @@
 require 'spec_setup'
-require 'spec/base'
 
 describe BackendClient::User do
-  include_examples 'backend client'
+  include_examples 'api resource'
+  include_examples 'api model'
   include_examples 'default all'
   include_examples 'default find'
   include_examples 'default create'
   include_examples 'default update'
 
-  describe '.instantiate' do
-    let(:model) { instantiated_model }
-
+  describe '#initialize' do
     it 'sets addresses correctly' do
       expect(
-        model.addresses.map(&:class).uniq
+        full_model.addresses.map(&:class).uniq
       ).to contain_exactly(BackendClient::Address)
     end
 
     it 'sets payment_methods correctly' do
       expect(
-        model.payment_methods.map(&:class).uniq
+        full_model.payment_methods.map(&:class).uniq
       ).to contain_exactly(BackendClient::PaymentMethod)
     end
   end
@@ -28,31 +26,11 @@ describe BackendClient::User do
     let(:email) { rand_str }
     let(:password) { rand_str }
 
-    context 'no error' do
-      it 'authenticates with email and password' do
-        expect_post('/authenticate', described_class.params(email: email, password: password))
-        expect(
-          described_class.authenticate(email, password)
-        ).to be_instance_of(described_class)
-      end
-    end
-
-    context 'RestClient::Unauthorized error' do
-      it 'raises custom error' do
-        expect_post('/authenticate', described_class.params(email: email, password: password), RestClient::Unauthorized)
-        expect do
-          described_class.authenticate(email, password)
-        end.to raise_error(BackendClient::Errors::Unauthorized)
-      end
-    end
-
-    context 'RestClient::ResourceNotFound error' do
-      it 'raises custom error' do
-        expect_post('/authenticate', described_class.params(email: email, password: password), RestClient::ResourceNotFound)
-        expect do
-          described_class.authenticate(email, password)
-        end.to raise_error(BackendClient::Errors::Unauthorized)
-      end
+    it 'authenticates with email and password' do
+      expect_http_action(:post, { path: '/authenticate', payload: described_class.params(email: email, password: password) })
+      expect(
+        described_class.authenticate(email, password)
+      ).to be_instance_of(described_class)
     end
   end
 
@@ -60,30 +38,19 @@ describe BackendClient::User do
     let(:uuid) { rand_str }
     let(:actv_code) { rand_str }
 
-    context 'no error' do
-      it 'confirms with uuid and actv code' do
-        expect_put("/#{uuid}/confirm/#{actv_code}")
-        expect(
-          described_class.confirm(uuid, actv_code)
-        ).to be_instance_of(described_class)
-      end
-    end
-
-    context 'RestClient::ResourceNotFound error' do
-      it 'raises custom error' do
-        expect_put("/#{uuid}/confirm/#{actv_code}", {}, RestClient::ResourceNotFound)
-        expect do
-          described_class.confirm(uuid, actv_code)
-        end.to raise_error(BackendClient::Errors::NotFound)
-      end
+    it 'confirms with uuid and actv code' do
+      expect_http_action(:put, { path: "/#{uuid}/confirm/#{actv_code}" })
+      expect(
+        described_class.confirm(uuid, actv_code)
+      ).to be_instance_of(described_class)
     end
   end
 
   shared_examples 'association retreiving' do
     it 'returns association collection' do
-      expect_get("/#{model.id}/#{association}", {}, collection(association_payload))
+      expect_http_action(:get, { path: "/#{bare_model.id}/#{association}" }, [parse(association_payload)])
       expect(
-        model.send(association).map(&:class).uniq
+        bare_model.send(association).map(&:class).uniq
       ).to contain_exactly(association_class)
     end
   end
@@ -139,19 +106,22 @@ describe BackendClient::User do
   shared_examples 'association creation' do
     context 'params emtpy' do
       it 'does nothing' do
-        expect(model.send("create_#{association}".to_sym, {})).to be_nil
+        expect(bare_model.send("create_#{association}".to_sym, {})).to be_nil
       end
     end
 
     context 'params present' do
       it 'creates association' do
-        expect_post(
-          "/#{model.id}/#{association.to_s.pluralize}",
-          association_class.params(params),
-          association_payload
+        expect_http_action(
+          :post,
+          {
+            path: "/#{bare_model.id}/#{association.to_s.pluralize}",
+            payload: association_class.params(params)
+          },
+          parse(association_payload)
         )
         expect(
-          model.send("create_#{association}".to_sym, params)
+          bare_model.send("create_#{association}".to_sym, params)
         ).to be_instance_of(association_class)
       end
     end
