@@ -7,7 +7,7 @@ module BackendClient
       payload = Yajl::Parser.parse(
         restclient_error.http_body,
         symbolize_keys: true
-      ) rescue {}
+      )
       @code = restclient_error.http_code
       @meta = payload[:meta]
       super(payload[:message])
