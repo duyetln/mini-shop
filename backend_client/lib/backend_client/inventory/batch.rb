@@ -10,7 +10,7 @@ module BackendClient
     def coupons(pagination = {})
       self.class.get(
         path: "/#{id}/coupons",
-        payload: pagination.slice(:page, :size, :padn)
+        payload: pagination.slice(:page, :size, :padn, :sort)
       ).map do |hash|
         Coupon.new(hash)
       end

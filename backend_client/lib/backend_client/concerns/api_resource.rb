@@ -4,10 +4,6 @@ module BackendClient
     include Errors
 
     module ClassMethods
-      def params(hash = {})
-        { namespace.to_sym => hash }
-      end
-
       def get(path: nil, payload: {}, headers: {})
         handle_error { parse(resource(path).get headers.merge(params: payload)) }
       end
@@ -21,17 +17,13 @@ module BackendClient
       end
 
       def delete(path: nil, payload: {}, headers: {})
-        handle_error { parse(resource(path).post headers.merge(params: payload)) }
+        handle_error { parse(resource(path).delete headers.merge(params: payload)) }
       end
 
       protected
 
-      def namespace
-        name.demodulize.underscore
-      end
-
       def resource(path = nil)
-        resource = RestClient::Resource.new("#{BackendClient.url}/svc/#{namespace.pluralize}")
+        resource = RestClient::Resource.new("#{BackendClient.url}/svc/#{name.demodulize.underscore.pluralize}")
         resource = resource[path] if path.present?
         resource
       end

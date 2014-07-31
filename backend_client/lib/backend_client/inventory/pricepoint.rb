@@ -18,7 +18,7 @@ module BackendClient
     def create_pricepoint_price(pricepoint_price = {})
       if pricepoint_price.present?
         load!(
-          post(
+          self.class.post(
             path: "/#{id}/pricepoint_prices",
             payload: PricepointPrice.params(pricepoint_price)
           )

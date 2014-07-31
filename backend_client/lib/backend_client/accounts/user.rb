@@ -22,12 +22,12 @@ module BackendClient
       define_method "create_#{association}" do |object = {}|
         if object.present?
           klass = BackendClient.const_get(association.to_s.classify)
-          self.class.post(
-            path: "/#{id}/#{association.to_s.pluralize}",
-            payload: klass.params(object)
-          ) do |hash|
-            klass.new(hash)
-          end
+          klass.new(
+            self.class.post(
+              path: "/#{id}/#{association.to_s.pluralize}",
+              payload: klass.params(object)
+            )
+          )
         end
       end
     end

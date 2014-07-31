@@ -3,6 +3,14 @@ module BackendClient
     extend ActiveSupport::Concern
     include MethodAccess
 
+    class << self
+      def instantiate(hash = {})
+        if hash.present?
+          BackendClient.const_get(hash[:resource_type]).new(hash)
+        end
+      end
+    end
+
     def ==(other)
       super ||
         other.instance_of?(self.class) &&
@@ -26,6 +34,10 @@ module BackendClient
     end
 
     module ClassMethods
+      def params(hash = {})
+        { name.demodulize.underscore.to_sym => hash }
+      end
+
       def humanized_name
         name.demodulize.humanize.downcase
       end
@@ -39,12 +51,6 @@ module BackendClient
           object
         else
           {}
-        end
-      end
-
-      def instantiate(hash = {})
-        if hash.present?
-          BackendClient.const_get(hash[:resource_type]).new(hash)
         end
       end
     end

@@ -5,7 +5,7 @@ module BackendClient
     module ClassMethods
       def all(pagination = {})
         get(
-          payload: pagination.slice(:page, :size, :padn)
+          payload: pagination.slice(:page, :size, :padn, :sort)
         ).map do |hash|
           new(hash)
         end

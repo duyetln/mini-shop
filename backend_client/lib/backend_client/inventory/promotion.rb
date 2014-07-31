@@ -19,7 +19,7 @@ module BackendClient
     def batches(pagination = {})
       self.class.get(
         path: "/#{id}/batches",
-        payload: pagination.slice(:page, :size, :padn)
+        payload: pagination.slice(:page, :size, :padn, :sort)
       ).map do |hash|
         Batch.new(hash)
       end

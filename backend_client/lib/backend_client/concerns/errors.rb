@@ -7,7 +7,7 @@ module BackendClient
       payload = Yajl::Parser.parse(
         restclient_error.http_body,
         symbolize_keys: true
-      )
+      ) rescue {}
       @code = restclient_error.http_code
       @meta = payload[:meta]
       super(payload[:message])
@@ -45,7 +45,7 @@ module BackendClient
         when  500       then raise BackendClient::ServerError.new(e)
         when  503       then raise BackendClient::Unavailable.new(e)
         when (500..599) then raise BackendClient::BackendError.new(e)
-        else                 raise BackednClient::APIError.new(e)
+        else                 raise BackendClient::APIError.new(e)
         end
       rescue RestClient::Exception => e
         raise BackendClient::RequestError, e.message

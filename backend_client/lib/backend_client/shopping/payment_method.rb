@@ -1,5 +1,6 @@
 module BackendClient
   class PaymentMethod
+    include APIResource
     include APIModel
     include DefaultUpdate
 
