@@ -8,6 +8,21 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :set_resource_class
 
+  rescue_from BackendClient::APIError do |error|
+    flash[:error] = error.meta.present? ?
+      {
+        primary: error.message,
+        secondary: error.meta
+      } :
+      error.message
+    redirect_to :back
+  end
+
+  rescue_from BackendClient::RequestError do |error|
+    flash[:error] = 'Something unexpected occurred while sending the request. Please contact techincal support'
+    redirect_to :back
+  end
+
   def index
     render nothing: true
   end
