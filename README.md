@@ -43,3 +43,8 @@ Here are the goals set for this project:
     - Add pagination support for a few endpoints.
   * 0.5.1
     - Require explicit update parameter whitelisting for backend client.
+  * 0.6.0
+    - Rework and drastically improve backend client.
+    - Add endpoints to retreive specific batch, pricepoint, and discount by id.
+    - Remove endpoint to retreive user's addresses.
+    - Add nicer error messages to both backend and client.
