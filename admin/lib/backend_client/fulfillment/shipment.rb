@@ -5,7 +5,7 @@ module BackendClient
     def self.build_attributes(hash = {})
       super do |shipment|
         shipment.item = APIModel.instantiate(shipment.item)
-        shipment.shipping_address = Address.new(shipment.shipping_address)
+        shipment.shipping_address = Address.instantiate(shipment.shipping_address)
       end
     end
   end

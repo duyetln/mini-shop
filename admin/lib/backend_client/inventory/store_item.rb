@@ -11,7 +11,7 @@ module BackendClient
     def self.build_attributes(hash = {})
       super do |store_item|
         store_item.item = APIModel.instantiate(store_item.item)
-        store_item.price = Price.new(store_item.price)
+        store_item.price = Price.instantiate(store_item.price)
       end
     end
   end

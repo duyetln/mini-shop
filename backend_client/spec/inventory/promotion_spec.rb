@@ -55,8 +55,10 @@ describe BackendClient::Promotion do
     let(:size) { qty }
 
     it 'creates batch' do
-      expect_http_action(:post, { path: "/#{bare_model.id}/batches", payload: BackendClient::Batch.params(name: name, size: size) })
-      expect { bare_model.create_batch(name, size) }.to change { bare_model.send(:attributes) }
+      expect_http_action(:post, { path: "/#{bare_model.id}/batches", payload: BackendClient::Batch.params(name: name, size: size) }, parse(batch_payload))
+      expect do
+        expect(bare_model.create_batch(name, size)).to be_an_instance_of(BackendClient::Batch)
+      end.to_not change { bare_model.send(:attributes) }
     end
   end
 
@@ -64,8 +66,10 @@ describe BackendClient::Promotion do
     let(:size) { qty }
 
     it 'creates batches' do
-      expect_http_action(:post, { path: "/#{bare_model.id}/batches/generate", payload: { qty: qty }.merge(BackendClient::Batch.params(size: size)) })
-      expect { bare_model.create_batches(qty, size) }.to change { bare_model.send(:attributes) }
+      expect_http_action(:post, { path: "/#{bare_model.id}/batches/generate", payload: { qty: qty }.merge(BackendClient::Batch.params(size: size)) }, [parse(batch_payload)])
+      expect do
+        expect(bare_model.create_batches(qty, size)).to contain_exactly(an_instance_of(BackendClient::Batch))
+      end.to_not change { bare_model.send(:attributes) }
     end
   end
 end

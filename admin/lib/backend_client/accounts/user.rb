@@ -13,16 +13,16 @@ module BackendClient
         self.class.get(
           path: "/#{id}/#{association}"
         ).map do |hash|
-          klass.new(hash)
+          klass.instantiate(hash)
         end
       end
     end
 
-    [:purchase, :address, :payment_method].each do |association|
+    [:address, :payment_method].each do |association|
       define_method "create_#{association}" do |object = {}|
         if object.present?
           klass = BackendClient.const_get(association.to_s.classify)
-          klass.new(
+          load!(
             self.class.post(
               path: "/#{id}/#{association.to_s.pluralize}",
               payload: klass.params(object)
@@ -32,10 +32,21 @@ module BackendClient
       end
     end
 
+    def create_purchase(purchase = {})
+      if purchase.present?
+        Purchase.instantiate(
+          self.class.post(
+            path: "/#{id}/purchases",
+            payload: Purchase.params(purchase)
+          )
+        )
+      end
+    end
+
     def self.build_attributes(hash = {})
       super do |user|
-        user.addresses.map! { |address| Address.new(address) }
-        user.payment_methods.map! { |payment_method| PaymentMethod.new(payment_method) }
+        user.addresses.map! { |address| Address.instantiate(address) }
+        user.payment_methods.map! { |payment_method| PaymentMethod.instantiate(payment_method) }
       end
     end
 

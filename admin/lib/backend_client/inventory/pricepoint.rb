@@ -10,7 +10,7 @@ module BackendClient
     def self.build_attributes(hash = {})
       super do |pricepoint|
         pricepoint.pricepoint_prices.map! do |pricepoint_price|
-          PricepointPrice.new(pricepoint_price)
+          PricepointPrice.instantiate(pricepoint_price)
         end
       end
     end

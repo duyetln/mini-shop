@@ -12,7 +12,7 @@ module BackendClient
         path: "/#{id}/coupons",
         payload: pagination.slice(:page, :size, :padn, :sort)
       ).map do |hash|
-        Coupon.new(hash)
+        Coupon.instantiate(hash)
       end
     end
 

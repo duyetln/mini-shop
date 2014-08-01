@@ -12,7 +12,7 @@ module BackendClient
     def self.build_attributes(hash = {})
       super do |bundle|
         bundle.bundleds.map! do |bundled|
-          Bundled.new(bundled)
+          Bundled.instantiate(bundled)
         end
       end
     end

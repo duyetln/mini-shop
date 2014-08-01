@@ -118,11 +118,19 @@ describe BackendClient::User do
             path: "/#{bare_model.id}/#{association.to_s.pluralize}",
             payload: association_class.params(params)
           },
-          parse(association_payload)
+          parse(result_payload)
         )
-        expect(
-          bare_model.send("create_#{association}".to_sym, params)
-        ).to be_instance_of(association_class)
+        change_expectation = expect do
+          expect(
+            bare_model.send("create_#{association}".to_sym, params)
+          ).to be_instance_of(result_class)
+        end
+
+        if changed
+          change_expectation.to change { bare_model.send(:attributes) }
+        else
+          change_expectation.to_not change { bare_model.send(:attributes) }
+        end
       end
     end
   end
@@ -130,7 +138,9 @@ describe BackendClient::User do
   describe '#create_purchase' do
     let(:association) { :purchase }
     let(:association_class) { BackendClient::Purchase }
-    let(:association_payload) { purchase_payload }
+    let(:result_payload) { purchase_payload }
+    let(:result_class) { association_class }
+    let(:changed) { false }
 
     include_examples 'association creation'
   end
@@ -138,7 +148,9 @@ describe BackendClient::User do
   describe '#create_address' do
     let(:association) { :address }
     let(:association_class) { BackendClient::Address }
-    let(:association_payload) { address_payload }
+    let(:result_payload) { user_payload }
+    let(:result_class) { described_class }
+    let(:changed) { true }
 
     include_examples 'association creation'
   end
@@ -146,7 +158,9 @@ describe BackendClient::User do
   describe '#create_payment_method' do
     let(:association) { :payment_method }
     let(:association_class) { BackendClient::PaymentMethod }
-    let(:association_payload) { payment_method_payload }
+    let(:result_payload) { user_payload }
+    let(:result_class) { described_class }
+    let(:changed) { true }
 
     include_examples 'association creation'
   end

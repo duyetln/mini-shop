@@ -7,11 +7,11 @@ module BackendClient
 
     def self.build_attributes(hash = {})
       super do |purchase|
-        purchase.payment_method = PaymentMethod.new(purchase.payment_method)
-        purchase.billing_address = Address.new(purchase.billing_address)
-        purchase.shipping_address = Address.new(purchase.shipping_address)
-        purchase.payment = Transaction.new(purchase.payment)
-        purchase.orders.map! { |order| Order.new(order) }
+        purchase.payment_method = PaymentMethod.instantiate(purchase.payment_method)
+        purchase.billing_address = Address.instantiate(purchase.billing_address)
+        purchase.shipping_address = Address.instantiate(purchase.shipping_address)
+        purchase.payment = Transaction.instantiate(purchase.payment)
+        purchase.orders.map! { |order| Order.instantiate(order) }
       end
     end
 

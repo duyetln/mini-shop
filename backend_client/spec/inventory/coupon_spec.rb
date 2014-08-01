@@ -14,7 +14,7 @@ describe BackendClient::Coupon do
   end
 
   describe '.promotion' do
-    let(:promotion) { BackendClient::Promotion.new parse(promotion_payload) }
+    let(:promotion) { BackendClient::Promotion.instantiate parse(promotion_payload) }
 
     before :each do
       bare_model.promotion_id = rand_str

@@ -5,9 +5,7 @@ module BackendClient
 
     class << self
       def instantiate(hash = {})
-        if hash.present?
-          BackendClient.const_get(hash[:resource_type]).new(hash)
-        end
+        BackendClient.const_get(hash[:resource_type]).instantiate(hash)
       end
     end
 
@@ -40,6 +38,12 @@ module BackendClient
 
       def humanized_name
         name.demodulize.humanize.downcase
+      end
+
+      def instantiate(hash = {})
+        if hash.present?
+          new(hash)
+        end
       end
 
       def build_attributes(hash = {})

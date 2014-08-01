@@ -9,8 +9,8 @@ module BackendClient
 
     def self.build_attributes(hash = {})
       super do |price|
-        price.pricepoint = Pricepoint.new(price.pricepoint)
-        price.discount = Discount.new(price.discount)
+        price.pricepoint = Pricepoint.instantiate(price.pricepoint)
+        price.discount = Discount.instantiate(price.discount)
       end
     end
   end
