@@ -2,3 +2,9 @@ desc 'Start a pry session'
 task :pry do
   system('bundle exec pry -I. -r ./boot')
 end
+
+desc 'Update backend client in admin'
+task :update do
+  system('rm -rf ../admin/lib/backend_client/*; rm -rf ../admin/lib/backend_client.rb')
+  system('cp -R ./lib/ ../admin/lib/')
+end
