@@ -24,6 +24,10 @@ class ApplicationController < ActionController::Base
   end
 
   def index
-    render nothing: true
+  end
+
+  private
+
+  def set_resource_class
   end
 end
