@@ -2,7 +2,6 @@ module Accounts
   class UsersController < ApplicationController
     def index
       @users = resource_class.all(pagination)
-      render nothing: true
     end
 
     def show

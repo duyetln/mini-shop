@@ -1,0 +1,39 @@
+h1.page-header
+  | Users
+
+div.table-responsive
+  table.users.table.table-condensed.table-hover
+    thead
+      tr
+        td
+          strong ID
+        td
+          strong First Name
+        td
+          strong Last Name
+        td
+          strong Email
+        td
+          strong Confirmed
+        td
+          strong Signed Up On
+        td
+          strong Actions
+      tbody
+        - @users.each do |user|
+          tr class="#{user.confirmed? ? 'success' : 'danger'}"
+            td =       user.id
+            td =       user.first_name
+            td =       user.last_name
+            td =       user.email
+            td = yesno(user.confirmed?)
+            td =       user.created_at.to_formatted_s(:long)
+            td
+              span.btn-group
+                = link_to 'View', accounts_user_path(user.id), class: 'btn btn-primary'
+      tfoot
+        tr
+          td colspan=7
+            = paginate :accounts_users_path, @prev_page, @next_page
+
+
