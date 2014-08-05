@@ -15,6 +15,7 @@ describe PaymentMethod do
   it { should have_many(:transactions).inverse_of(:payment_method) }
 
   it { should validate_presence_of(:name) }
+  it { should validate_uniqueness_of(:name) }
   it { should validate_presence_of(:balance) }
   it { should validate_presence_of(:currency) }
   it { should validate_presence_of(:user) }

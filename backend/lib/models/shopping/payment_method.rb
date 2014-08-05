@@ -6,6 +6,7 @@ class PaymentMethod < ActiveRecord::Base
   has_many :transactions, inverse_of: :payment_method
 
   validates :name,     presence: true
+  validates :name,     uniqueness: true
   validates :balance,  presence: true
   validates :currency, presence: true
   validates :user,     presence: true
