@@ -6,6 +6,7 @@ module BackendClient
       super do |order|
         order.item = APIModel.instantiate(order.item)
         order.amount = BigDecimal.new(order.amount)
+        order.currency = Currency.instantiate(order.currency)
         order.tax = BigDecimal.new(order.tax)
         order.tax_rate = BigDecimal.new(order.tax_rate)
         order.total = BigDecimal.new(order.total)

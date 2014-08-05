@@ -8,7 +8,7 @@ module PaginationHelper
     @page = @page >= 1 && @page || 1
     @size = @size >= 1 && @size || nil
     @padn = @padn >= 1 && @padn || nil
-    @sort = ([ 'asc', 'desc' ].include?(@sort) && @sort || 'desc').downcase
+    @sort = (['asc', 'desc'].include?(@sort) && @sort || 'desc').downcase
 
     @next_page = @page + 1
     @prev_page = @page > 1 && (@page - 1) || nil

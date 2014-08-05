@@ -7,17 +7,20 @@ end
 
 class PaymentMethodSerializer < ResourceSerializer
   attributes :user_id, :name, :balance, :currency_id
+  has_one :currency, serializer: 'CurrencySerializer'
 end
 
 class TransactionSerializer < ResourceSerializer
   include CommittableSerializer
   attributes :user_id, :uuid, :payment_method_id, :billing_address_id, :amount, :currency_id
+  has_one :currency, serializer: 'CurrencySerializer'
 end
 
 class OrderSerializer < ResourceSerializer
   include ItemCombinableSerializer
   include DeletableSerializer
   attributes :uuid, :purchase_id, :currency_id, :amount, :tax, :tax_rate, :total, :qty, :refund_id, :status_id
+  has_one :currency, serializer: 'CurrencySerializer'
   has_one :refund, serializer: 'TransactionSerializer'
   has_many :statuses, serializer: 'StatusSerializer'
 

@@ -5,11 +5,21 @@ describe BackendClient::Transaction do
 
   describe '.initialize' do
     it 'sets amount correctly' do
-      expect(full_model.amount).to be_instance_of(BigDecimal)
+      expect(
+        full_model.amount
+      ).to be_instance_of(BigDecimal)
     end
 
     it 'sets committed_at correctly' do
-      expect(full_model.committed_at).to be_instance_of(DateTime)
+      expect(
+        full_model.committed_at
+      ).to be_instance_of(DateTime)
+    end
+
+    it 'sets currency correctly' do
+      expect(
+        full_model.currency
+      ).to be_instance_of(BackendClient::Currency)
     end
   end
 end

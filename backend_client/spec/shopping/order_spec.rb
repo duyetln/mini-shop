@@ -16,6 +16,12 @@ describe BackendClient::Order do
       ).to be_instance_of(BigDecimal)
     end
 
+    it 'sets currency correctly' do
+      expect(
+        full_model.currency
+      ).to be_instance_of(BackendClient::Currency)
+    end
+
     it 'sets tax correctly' do
       expect(
         full_model.tax
