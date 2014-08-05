@@ -38,10 +38,18 @@ end
 
 class PurchaseSerializer < ResourceSerializer
   include ChangeableSerializer
-  attributes :user_id, :payment_method_id, :billing_address_id, :shipping_address_id, :payment_id, :committed, :committed_at, :amount, :tax, :total
+  attributes :user_id, :payment_method_id, :billing_address_id, :shipping_address_id, :payment_id, :committed, :committed_at, :amount, :tax, :total, :paid, :free
   has_one :payment_method, serializer: 'PaymentMethodSerializer'
   has_one :billing_address, serializer: 'AddressSerializer'
   has_one :shipping_address, serializer: 'AddressSerializer'
   has_one :payment, serializer: 'TransactionSerializer'
   has_many :orders, serializer: 'OrderSerializer'
+
+  def paid
+    object.paid?
+  end
+
+  def free
+    object.free?
+  end
 end
