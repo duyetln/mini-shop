@@ -12,6 +12,10 @@ module BackendClient
         purchase.shipping_address = Address.instantiate(purchase.shipping_address)
         purchase.payment = Transaction.instantiate(purchase.payment)
         purchase.orders.map! { |order| Order.instantiate(order) }
+        purchase.amount = BigDecimal.new(purchase.amount)
+        purchase.tax = BigDecimal.new(purchase.tax)
+        purchase.total = BigDecimal.new(purchase.total)
+        purchase.committed_at = DateTime.parse(purchase.committed_at) if purchase.committed_at.present?
       end
     end
 

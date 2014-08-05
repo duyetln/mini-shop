@@ -36,6 +36,30 @@ describe BackendClient::Purchase do
         full_model.orders.map(&:class).uniq
       ).to contain_exactly(BackendClient::Order)
     end
+
+    it 'sets amount correctly' do
+      expect(
+        full_model.amount
+      ).to be_instance_of(BigDecimal)
+    end
+
+    it 'sets tax correctly' do
+      expect(
+        full_model.tax
+      ).to be_instance_of(BigDecimal)
+    end
+
+    it 'sets total correctly' do
+      expect(
+        full_model.total
+      ).to be_instance_of(BigDecimal)
+    end
+
+    it 'sets committed_at correctly' do
+      expect(
+        full_model.committed_at
+      ).to be_instance_of(DateTime)
+    end
   end
 
   describe '#add_or_update_order' do
