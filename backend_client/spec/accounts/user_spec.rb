@@ -20,6 +20,12 @@ describe BackendClient::User do
         full_model.payment_methods.map(&:class).uniq
       ).to contain_exactly(BackendClient::PaymentMethod)
     end
+
+    it 'sets birthdate correctly' do
+      expect(
+        full_model.birthdate
+      ).to be_instance_of(DateTime)
+    end
   end
 
   describe '.authenticate' do

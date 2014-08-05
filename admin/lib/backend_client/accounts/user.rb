@@ -45,6 +45,7 @@ module BackendClient
 
     def self.build_attributes(hash = {})
       super do |user|
+        user.birthdate = DateTime.parse(user.birthdate)
         user.addresses.map! { |address| Address.instantiate(address) }
         user.payment_methods.map! { |payment_method| PaymentMethod.instantiate(payment_method) }
       end
