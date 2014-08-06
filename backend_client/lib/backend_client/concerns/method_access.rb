@@ -7,6 +7,7 @@ module BackendClient
       delegate :key?, to: :attributes
       delegate :[], to: :attributes
       delegate :[]=, to: :attributes
+      delegate :merge!, to: :attributes
 
       protected :key?
     end
