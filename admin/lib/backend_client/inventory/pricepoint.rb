@@ -26,5 +26,9 @@ module BackendClient
         pricepoint_prices.last
       end
     end
+
+    def amount(currency)
+      pricepoint_prices.find { |price| price.currency.code == currency.code }.try(:amount)
+    end
   end
 end

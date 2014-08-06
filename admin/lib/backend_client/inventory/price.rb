@@ -13,5 +13,10 @@ module BackendClient
         price.discount = Discount.instantiate(price.discount)
       end
     end
+
+    def amount(currency)
+      zero = BigDecimal.new('0.0')
+      (pricepoint.amount(currency) || zero) * (1 - (discount.try(:current_rate) || zero))
+    end
   end
 end

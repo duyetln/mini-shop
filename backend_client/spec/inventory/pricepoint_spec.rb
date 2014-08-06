@@ -34,4 +34,13 @@ describe BackendClient::Pricepoint do
       end
     end
   end
+
+  describe '#amount' do
+    let(:currency) { BackendClient::Currency.instantiate(parse(currency_payload)) }
+
+    it 'returns amount correctly' do
+      expected_amount = full_model.pricepoint_prices.find { |price| price.currency.code == currency.code }.try(:amount)
+      expect(full_model.amount(currency)).to eq(expected_amount)
+    end
+  end
 end
