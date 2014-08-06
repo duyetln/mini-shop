@@ -10,27 +10,30 @@ class Discount < ActiveRecord::Base
   attr_accessible :name, :rate, :start_at, :end_at
 
   def rate_at(dt = DateTime.now)
-    zero_rate = BigDecimal.new('0.0')
+    active_at?(dt) ? rate : BigDecimal.new('0.0')
+  end
+
+  def active_at?(dt = DateTime.now)
     start_set = start_at.present?
     end_set   = end_at.present?
 
-    case
-    when  start_set &&  end_set
-      start_at <= dt && dt <= end_at ? rate : zero_rate
-    when  start_set && !end_set
-      start_at <= dt ? rate : zero_rate
-    when !start_set &&  end_set then
-      dt <= end_at ? rate : zero_rate
-    when !start_set && !end_set
-      rate
-    end
+    ( start_set &&  end_set && start_at <= dt && dt <= end_at) ||
+    ( start_set && !end_set && start_at <= dt) ||
+    (!start_set &&  end_set && dt <= end_at) ||
+    (!start_set && !end_set)
   end
 
   def discounted?(dt = DateTime.now)
     rate_at(dt) > 0.0
   end
 
-  alias_method :current_rate, :rate_at
+  def current_rate
+    rate_at(DateTime.now)
+  end
+
+  def current_active?
+    active_at?(DateTime.now)
+  end
 
   protected
 

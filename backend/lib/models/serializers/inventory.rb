@@ -16,10 +16,14 @@ class PricepointSerializer < ResourceSerializer
 end
 
 class DiscountSerializer < ResourceSerializer
-  attributes :name, :rate, :start_at, :end_at, :discounted
+  attributes :name, :rate, :start_at, :end_at, :discounted, :current_rate, :current_active
 
   def discounted
     object.discounted?
+  end
+
+  def current_active
+    object.current_active?
   end
 end
 

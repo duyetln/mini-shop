@@ -26,5 +26,11 @@ describe BackendClient::Discount do
         full_model.end_at
       ).to be_instance_of(DateTime)
     end
+
+    it 'sets current_rate correctly' do
+      expect(
+        full_model.current_rate
+      ).to be_instance_of(BigDecimal)
+    end
   end
 end
