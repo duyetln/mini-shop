@@ -1,0 +1,165 @@
+h1.page-header
+  = @user.first_name + ' ' + @user.last_name
+
+div.user
+  div.row
+    div.attributes.col-md-4
+      table.table.table-condensed
+        thead
+          tr
+            td colspan=2
+              strong User Information
+        tbody
+          tr
+            td
+              strong ID
+            td
+              = @user.id
+          tr
+            td
+              strong Email
+            td
+              = @user.email
+          tr
+            td
+              strong Birthdate
+            td
+              = @user.birthdate.to_date.to_formatted_s(:long)
+          tr
+            td
+              strong Confirmed
+            td class="#{@user.confirmed? ? 'text-success' : 'text-danger'}"
+              = yesno(@user.confirmed?)
+        tfoo
+          tr
+            td colspan=2
+              button.btn.btn-default
+                | Send Activation Email
+    div.addresses.col-md-4
+      table.table.table-condensed
+        thead
+          tr
+            td
+              strong Addresses
+        tbody
+          - @user.addresses.each do |address|
+            tr
+              td
+                p = [address.line1, address.line2, address.line3].compact.join(', ')
+                p = address.city
+                - region_postal_code = [address.region, address.postal_code].compact.join(', ')
+                - if region_postal_code.present?
+                  p = region_postal_code
+                p = address.country
+    div.payment-methods.col-md-4
+      table.table.table-condensed
+        thead
+          tr
+            td colspan=2
+              strong Payment Methods
+        tbody
+          - @user.payment_methods.each do |payment_method|
+            tr
+              td
+                = payment_method.name
+              td
+                = number_to_currency(payment_method.balance, unit: payment_method.currency.sign.html_safe)
+  div.row
+    div.purchases.col-md-6
+      table.table.table-condensed
+        thead
+          tr
+            td colspan=5
+              strong Purchases
+          tr
+            td
+              strong ID
+            td
+              strong Total
+            td
+              strong Committed
+            td
+              strong Committed At
+            td
+              strong Actions
+        tbody
+          - @purchases.each do |purchase|
+            tr class="#{purchase.committed? ? 'success' : 'danger'}"
+              td
+                = purchase.id
+              td
+                = number_to_currency(purchase.total, unit: (purchase.payment_method.try(:currency).try(:sign) || '&#36;').html_safe)
+              td
+                = yesno(purchase.committed?)
+              td
+                = purchase.committed_at.present? ? purchase.committed_at.to_formatted_s(:long) : 'N/A'
+              td
+                span.btn-group
+                  = link_to 'View', shopping_purchase_path(purchase.id), class: 'btn btn-primary'
+    div.coupons.col-md-6
+      table.table.table-condensed
+        thead
+          tr
+            td colspan=3
+              strong Coupons
+          tr
+            td
+              strong Code
+            td
+              strong Title
+            td
+              strong Description
+        tbody
+          - @coupons.each do |coupon|
+            tr
+              td
+                = coupon.code
+              td
+                = coupon.title
+              td
+                = coupon.description
+  div.row
+    div.ownerships.col-md-6
+      table.table.table-condensed
+        thead
+          tr
+            td colspan=2
+              strong Ownerships
+          tr
+            td
+              strong Item
+            td
+              strong Qty
+        tbody
+          - @ownerships.each do |ownership|
+            tr
+              td
+                = ownership.item.title
+              td
+                = ownership.qty
+    div.shipments.col-md-6
+      table.table.table-condensed
+        thead
+          tr
+            td colspan=3
+              strong Shipments
+          tr
+            td
+              strong Item
+            td
+              strong Qty
+            td
+              strong Shipping Address
+        tbody
+          - @shipments.each do |shipment|
+            tr
+              td
+                = shipment.item.title
+              td
+                = shipment.qty
+              td
+                - address = shipment.shipping_address
+                = [address.line1, address.line2, address.line3, address.city, address.region, address.postal_code, address.country].compact.join(', ')
+
+
+

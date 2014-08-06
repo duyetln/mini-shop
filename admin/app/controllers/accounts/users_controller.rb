@@ -8,10 +8,8 @@ module Accounts
       @user         = resource
       @purchases    = @user.purchases
       @coupons      = @user.coupons
-      @transactions = @user.transactions
       @ownerships   = @user.ownerships
       @shipments    = @user.shipments
-      render nothing: true
     end
 
     private
