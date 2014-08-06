@@ -1,7 +1,8 @@
 module Inventory
   class PricepointsController < ApplicationController
     def index
-      @pricepoints = resource_class.all(pagination)
+      @pricepoints = BackendClient::Pricepoint.all(pagination)
+      @currencies = BackendClient::Currency.all
       render nothing: true
     end
 

@@ -1,10 +1,5 @@
 module Inventory
   class CurrenciesController < ApplicationController
-    def index
-      @currencies = resource_class.all(pagination)
-      render nothing: true
-    end
-
     def create
       scoped_params(:currencies).each do |currency|
         resource_class.create(
