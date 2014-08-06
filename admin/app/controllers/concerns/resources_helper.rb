@@ -1,7 +1,7 @@
 module ResourcesHelper
   def update_resource(scope, *keys)
     resource = self.resource
-    resource.merge!(params.require(:scope).permit(*keys))
+    resource.merge!(params.require(scope).permit(*keys))
     resource.update!(*keys)
     resource
   end

@@ -1,12 +1,10 @@
 module Inventory
   class CurrenciesController < ApplicationController
     def create
-      scoped_params(:currencies).each do |currency|
-        resource_class.create(
-          currency.permit(:code, :sign)
-        )
-      end
-      render nothing: true
+      @currency =  resource_class.create(
+        scoped_params(:currency, :code, :sign)
+      )
+      redirect_to :back
     end
 
     private
