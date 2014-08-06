@@ -1,0 +1,26 @@
+h1.page-header
+  | Pricepoints
+
+div.row
+  table.pricepoints.table.table-condensed.table-hover
+    thead
+      tr
+        td
+          strong Name
+        - @currencies.each do |currency|
+          td
+            strong == "#{currency.sign} #{currency.code}"
+      tbody
+        - @pricepoints.each do |pricepoint|
+          tr
+            td
+              = pricepoint.name
+            - @currencies.each do |currency|
+              td
+                = pricepoint.amount(currency)
+
+      tfoot
+        tr
+          - colspan = @currencies.count + 1
+          td colspan="#{colspan}"
+            = paginate :inventory_pricepoints_path, @prev_page, @next_page

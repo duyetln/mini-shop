@@ -3,7 +3,6 @@ module Inventory
     def index
       @pricepoints = BackendClient::Pricepoint.all(pagination)
       @currencies = BackendClient::Currency.all
-      render nothing: true
     end
 
     def create

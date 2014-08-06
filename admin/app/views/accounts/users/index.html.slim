@@ -1,7 +1,7 @@
 h1.page-header
   | Users
 
-div.table-responsive
+div
   table.users.table.table-condensed.table-hover
     thead
       tr
@@ -35,5 +35,3 @@ div.table-responsive
         tr
           td colspan=7
             = paginate :accounts_users_path, @prev_page, @next_page
-
-
