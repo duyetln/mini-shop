@@ -25,4 +25,19 @@ html
                 i.fa.fa-shopping-cart.fa-fw
                 | Shopping
         div.col-md-10.col-md-offset-2.content.table-responsive
-          = yield
+          - if flash[:error].present?
+            div.panel.panel-danger
+              - heading = body = nil
+              - if flash[:error].is_a?(Hash)
+                - heading = flash[:error]['primary']
+                - body = flash[:error]['secondary']
+              - elsif flash[:error].is_a?(String)
+                - heading = 'Error'
+                - body = flash[:error]
+              div.panel-heading
+                h3.panel-title
+                  = heading
+              div.panel-body
+                = body
+          div
+            = yield
