@@ -10,17 +10,46 @@ div.row
         - @currencies.each do |currency|
           td
             strong == "#{currency.sign} #{currency.code}"
+        td
+          strong Actions
       tbody
         - @pricepoints.each do |pricepoint|
           tr
-            td
-              = pricepoint.name
-            - @currencies.each do |currency|
+            = form_tag inventory_pricepoint_path(pricepoint.id), method: :put do
               td
-                = pricepoint.amount(currency)
+                = text_field_tag 'pricepoint[name]', pricepoint.name
+              - @currencies.each do |currency|
+                - pricepoint_price = pricepoint.pricepoint_prices.find { |pp| pp.currency.code == currency.code }
+                = hidden_field_tag "pricepoint_prices[#{currency.code}][id]", pricepoint_price.try(:id)
+                = hidden_field_tag "pricepoint_prices[#{currency.code}][currency_id]", currency.id
+                td
+                  = text_field_tag "pricepoint_prices[#{currency.code}][amount]", pricepoint.amount(currency)
+              td
+                = submit_tag 'Update', class: 'btn btn-default'
 
       tfoot
+        - if @pricepoints.present?
+          tr
+            = form_tag inventory_pricepoints_path do
+              td
+                = text_field_tag 'pricepoint[name]', nil, placeholder: 'New name'
+              - @currencies.each do |currency|
+                = hidden_field_tag "pricepoint_prices[#{currency.code}][currency_id]", currency.id
+                td
+                  = text_field_tag "pricepoint_prices[#{currency.code}][amount]", nil, placeholder: 'Amount'
+              td
+                = submit_tag 'Add', class: 'btn btn-default'
         tr
-          - colspan = @currencies.count + 1
+          - if @pricepoints.present?
+            = form_tag inventory_currencies_path do
+              td
+                = text_field_tag 'currency[code]', nil, placeholder: 'New currency code'
+              td
+                = text_field_tag 'currency[sign]', nil,   placeholder: 'New currency sign'
+              td
+                = submit_tag 'Create', class: 'btn btn-default'
+          - colspan = @currencies.count + 2 - (@pricepoints.present? ? 3 : 0)
           td colspan="#{colspan}"
             = paginate :inventory_pricepoints_path, @prev_page, @next_page
+
+

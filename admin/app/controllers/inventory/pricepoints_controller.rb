@@ -10,27 +10,33 @@ module Inventory
         scoped_params(:pricepoint, :name)
       )
 
-      scoped_params(:pricepoint_prices).each do |pricepoint_price|
+      scoped_params(:pricepoint_prices).keys.each do |key|
+        value = scoped_params(:pricepoint_prices).require(key)
         @pricepoint.create_pricepoint_price(
-          pricepoint_price.permit(:amount, :currency_id)
+          value.permit(:amount, :currency_id)
         )
       end
-      render nothing: true
+      redirect_to :back
     end
 
     def update
       @pricepoint = update_resource(:pricepoint, :name)
-      scoped_params(:pricepoint_prices).each do |pp_params|
+      scoped_params(:pricepoint_prices).keys.each do |key|
+        value = scoped_params(:pricepoint_prices).require(key)
         pricepoint_price = @pricepoint.pricepoint_prices.find do |pp|
-          pp.id == pp_params.require(:id).to_i
+          pp.id == value.permit(:id)[:id].to_i
         end
 
         if pricepoint_price.present?
-          pricepoint_price.merge!(pp_params.permit(:amount))
-          pircepoint_price.update!(:amount)
+          pricepoint_price.merge!(value.permit(:amount))
+          pricepoint_price.update!(:amount)
+        else
+          @pricepoint.create_pricepoint_price(
+            value.permit(:amount, :currency_id)
+          )
         end
       end
-      render nothing: true
+      redirect_to :back
     end
 
     private
