@@ -5,7 +5,7 @@ class Currency < ActiveRecord::Base
   validates :code, presence: true
   validates :code, uniqueness: true
 
-  before_save :upcase_code
+  before_validation :upcase_code
 
   def self.exchange(amount, src_curr, dst_curr)
     amount   = BigDecimal.new(amount.to_s)
@@ -21,6 +21,6 @@ class Currency < ActiveRecord::Base
   protected
 
   def upcase_code
-    code.upcase!
+    (code || '').upcase!
   end
 end
