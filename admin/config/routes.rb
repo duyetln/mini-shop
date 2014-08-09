@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     resources :prices, only: [:index, :create, :update]
 
     [:physical_items, :digital_items].each do |items|
-      resources items, only: [:index, :show, :create, :update, :destroy] do
+      resources items, only: [:index, :create, :update, :destroy] do
         put :activate, on: :member
       end
     end
