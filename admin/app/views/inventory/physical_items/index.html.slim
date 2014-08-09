@@ -1,0 +1,63 @@
+h1.page-header
+  | Physical Items
+
+div.row
+  table.physical-items.table.table-condensed.table-hover
+    thead
+      tr
+        td
+          strong ID
+        td
+          strong Title
+        td
+          strong Description
+        td
+          strong Qty
+        td
+          strong Available
+        td
+          strong Active
+        td colspan=2
+          strong Actions
+      tbody
+        - @physical_items.each do |physical_item|
+          tr class="#{physical_item.active? ? 'success' : 'danger'}"
+            = form_tag inventory_physical_item_path(physical_item.id), method: :put do
+              td
+                = physical_item.id
+              td
+                = text_field_tag 'physical_item[title]', physical_item.title
+              td
+                = text_field_tag 'physical_item[description]', physical_item.description
+              td
+                = text_field_tag 'physical_item[qty]', physical_item.qty
+              td
+                = yesno(physical_item.available?)
+              td
+                = yesno(physical_item.active?)
+              td
+                = submit_tag 'Update', class: 'btn btn-default'
+            td
+              = button_to 'Activate', activate_inventory_physical_item_path(physical_item.id), method: :put, disabled: !physical_item.activable?, class: 'btn btn-success'
+              = button_to 'Delete', inventory_physical_item_path(physical_item.id), method: :delete, disabled: !physical_item.deletable?, class: 'btn btn-danger'
+
+      tfoot
+        tr
+          = form_tag inventory_physical_items_path do
+            td
+              |
+            td
+              = text_field_tag 'physical_item[title]', nil, placeholder: 'New title'
+            td
+              = text_field_tag 'physical_item[description]', nil, placeholder: 'New description'
+            td
+              = text_field_tag 'physical_item[qty]', nil, placeholder: 'New qty'
+            td
+              |
+            td
+              |
+            td
+              = submit_tag 'Add', class: 'btn btn-default'
+        tr
+          td colspan=8
+            = paginate :inventory_physical_items_path, @prev_page, @next_page
