@@ -3,6 +3,8 @@ module BackendClient
     extend ActiveSupport::Concern
     include MethodAccess
 
+    delegate :as_json, to: :attributes
+
     class << self
       def instantiate(hash = {})
         BackendClient.const_get(hash[:resource_type]).instantiate(hash)

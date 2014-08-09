@@ -12,8 +12,6 @@ module BackendClient
       protected :key?
     end
 
-    protected
-
     def attributes
       @attributes ||= {}
     end
