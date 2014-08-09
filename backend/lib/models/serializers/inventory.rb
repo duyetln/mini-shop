@@ -33,18 +33,6 @@ class PriceSerializer < ResourceSerializer
   has_one :discount, serializer: 'DiscountSerializer'
 end
 
-module ItemResourceSerializer
-  extend ActiveSupport::Concern
-
-  included do
-    attributes :title, :description, :active, :deleted, :available
-  end
-
-  def available
-    object.available?
-  end
-end
-
 class PhysicalItemSerializer < ResourceSerializer
   include ItemResourceSerializer
   include QuantifiableSerializer

@@ -73,6 +73,14 @@ module ItemResourceSerializer
   include ActivableSerializer
   include DeletableSerializer
   include DisplayableSerializer
+
+  included do
+    attributes :available
+  end
+
+  def available
+    object.available?
+  end
 end
 
 module ItemCombinableSerializer
