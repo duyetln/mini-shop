@@ -15,3 +15,6 @@ coupon = Coupon.joins(batch: :promotion).where(promotions: { id: promotion.id },
 
 purchase.add_or_update(store_item.item, store_item.amount(currency) * 2, currency, 2)
 purchase.add_or_update(coupon, promotion.amount(currency) * 1, currency, 1)
+purchase.commit!
+purchase.pay!
+purchase.fulfill!

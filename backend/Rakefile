@@ -86,3 +86,30 @@ task :pry do
   EOF
   )
 end
+
+namespace :serializers do
+  desc 'List all serialized payloads'
+  task :list do
+    ENV['RACK_ENV'] = 'test'
+    Rake::Task['boot'].invoke
+    require 'db/seeds'
+    puts 'Keys'
+    ResourceSerializer.descendants.each do |klass|
+      resource = klass.name.gsub('Serializer','')
+      serializer = klass.new(resource.constantize.last)
+      puts resource
+      puts serializer.as_json.keys.inspect
+      puts
+    end
+
+    puts 'Payloads'
+    ResourceSerializer.descendants.each do |klass|
+      resource = klass.name.gsub('Serializer','')
+      serializer = klass.new(resource.constantize.last)
+      puts resource
+      puts serializer.to_json.inspect
+      puts
+    end
+
+  end
+end
