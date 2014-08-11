@@ -1,0 +1,41 @@
+h1.page-header
+  | Store Items
+
+div.row
+  table.store-items.table.table-condensed.table-hover
+    thead
+      tr
+        td
+          strong ID
+        td
+          strong Name
+        td
+          strong Item
+        td
+          strong Available
+        td
+          strong Active
+        td
+          strong Actions
+      tbody
+        - @store_items.each do |store_item|
+          tr class="#{store_item.active? ? 'success' : 'danger'}"
+            td
+              = store_item.id
+            td
+              = store_item.name
+            td
+              = store_item.title
+            td
+              = yesno(store_item.available?)
+            td
+              = yesno(store_item.active?)
+            td
+              = link_to 'View', inventory_store_item_path(store_item.id), class: 'btn btn-primary'
+            td
+              = button_to 'Delete', inventory_store_item_path(store_item.id), method: :delete, disabled: !store_item.deletable?, class: 'btn btn-danger'
+
+      tfoot
+        tr
+          td colspan=6
+            = paginate :inventory_store_items_path, @prev_page, @next_page

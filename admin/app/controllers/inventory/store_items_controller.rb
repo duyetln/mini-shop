@@ -2,7 +2,6 @@ module Inventory
   class StoreItemsController < ApplicationController
     def index
       @store_items = resource_class.all(pagination)
-      render nothing: true
     end
 
     def create
@@ -27,7 +26,7 @@ module Inventory
     def destroy
       @store_item = resource
       @store_item.delete!
-      render nothing: true
+      redirect_to :back
     end
 
     private
