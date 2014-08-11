@@ -75,18 +75,50 @@ class PromotionSerializer < ResourceSerializer
   include ActivableSerializer
   include ItemableSerializer
   include PriceableSerializer
-  attributes :name
+  attributes :name, :available, :batch_count, :coupon_count, :used_coupon_count
+
+  def available
+    object.available?
+  end
+
+  def batch_count
+    object.batches.count
+  end
+
+  def coupon_count
+    object.batches.map { |x| x.coupons.count }.reduce(&:+)
+  end
+
+  def used_coupon_count
+    object.batches.map { |x| x.coupons.used.count }.reduce(&:+)
+  end
 end
 
 class BatchSerializer < ResourceSerializer
   include DeletableSerializer
   include ActivableSerializer
-  attributes :name
+  attributes :name, :coupon_count, :used_coupon_count
+
+  def coupon_count
+    object.coupons.count
+  end
+
+  def used_coupon_count
+    object.coupons.used.count
+  end
 end
 
 class CouponSerializer < ResourceSerializer
   include DisplayableSerializer
-  attributes :promotion_id, :batch_id, :code, :used, :used_by, :used_at
+  attributes :promotion_id, :batch_id, :code, :used, :used_by, :used_at, :active, :available
+
+  def available
+    object.available?
+  end
+
+  def active
+    object.active?
+  end
 
   def promotion_id
     object.promotion.id
