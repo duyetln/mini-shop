@@ -20,10 +20,6 @@ html
               = link_to root_path anchor: 'inventory' do
                 i.fa.fa-truck.fa-fw
                 | Inventory
-            li
-              = link_to root_path anchor: 'shopping' do
-                i.fa.fa-shopping-cart.fa-fw
-                | Shopping
         div.col-md-10.col-md-offset-2.content.table-responsive
           - if flash[:error].present?
             div.panel.panel-danger
