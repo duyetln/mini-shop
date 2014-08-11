@@ -1,0 +1,66 @@
+h1.page-header
+  | Promotions
+
+div.row
+  table.promotions.table.table-condensed.table-hover
+    thead
+      tr
+        td
+          strong ID
+        td
+          strong Name
+        td
+          strong Title
+        td
+          strong Description
+        td
+          strong Item
+        td
+          strong Price
+        td
+          strong Batch Count
+        td
+          strong Coupon Count
+        td
+          strong Used Coupon Count
+        td
+          strong Available
+        td
+          strong Active
+        td colspan=2
+          strong Actions
+      tbody
+        - @promotions.each do |promotion|
+          tr class="#{promotion.active? ? 'success' : 'danger'}"
+            td
+              = promotion.id
+            td
+              = promotion.name
+            td
+              = promotion.title
+            td
+              = promotion.description
+            td
+              = promotion.item.title
+            td
+              = promotion.price.name
+            td
+              = promotion.batch_count
+            td
+              = promotion.coupon_count
+            td
+              = promotion.used_coupon_count
+            td
+              = yesno(promotion.available?)
+            td
+              = yesno(promotion.active?)
+            td
+              = link_to 'View', inventory_promotion_path(promotion.id), class: 'btn btn-primary'
+            td
+              = button_to 'Activate', activate_inventory_promotion_path(promotion.id), method: :put, disabled: !promotion.activable?, class: 'btn btn-success'
+              = button_to 'Delete', inventory_promotion_path(promotion.id), method: :delete, disabled: !promotion.deletable?, class: 'btn btn-danger'
+
+      tfoot
+        tr
+          td colspan=11
+            = paginate :inventory_promotions_path, @prev_page, @next_page

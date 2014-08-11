@@ -2,7 +2,6 @@ module Inventory
   class PromotionsController < ApplicationController
     def index
       @promotions = resource_class.all(pagination)
-      render nothing: true
     end
 
     def create
@@ -28,13 +27,13 @@ module Inventory
     def activate
       @promotion = resource
       @promotion.activate!
-      render nothing: true
+      redirect_to :back
     end
 
     def destroy
       @promotion = resource
       @promotion.delete!
-      render nothing: true
+      redirect_to :back
     end
 
     def batches
