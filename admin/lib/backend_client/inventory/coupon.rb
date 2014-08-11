@@ -4,6 +4,8 @@ module BackendClient
     include APIModel
     include DefaultFind
 
+    delegate :amount, to: :promotion
+
     def self.build_attributes(hash = {})
       super do |coupon|
         coupon.used_at = DateTime.parse(coupon.used_at) if coupon.used_at.present?

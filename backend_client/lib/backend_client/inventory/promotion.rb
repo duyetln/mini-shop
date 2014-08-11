@@ -9,6 +9,8 @@ module BackendClient
     include DefaultActivate
     include DefaultDelete
 
+    delegate :amount, to: :price
+
     def self.build_attributes(hash = {})
       super do |promotion|
         promotion.item = APIModel.instantiate(promotion.item)

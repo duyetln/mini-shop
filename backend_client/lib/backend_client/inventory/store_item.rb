@@ -8,6 +8,8 @@ module BackendClient
     include DefaultUpdate
     include DefaultDelete
 
+    delegate :amount, to: :price
+
     def self.build_attributes(hash = {})
       super do |store_item|
         store_item.item = APIModel.instantiate(store_item.item)
