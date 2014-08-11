@@ -2,7 +2,6 @@ module Inventory
   class BundlesController < ApplicationController
     def index
       @bundles = resource_class.all(pagination)
-      render nothing: true
     end
 
     def create
@@ -37,13 +36,13 @@ module Inventory
     def activate
       @bundle = resource
       @bundle.activate!
-      render nothing: true
+      redirect_to :back
     end
 
     def destroy
       @bundle = resource
       @bundle.delete!
-      render nothing: true
+      redirect_to :back
     end
 
     private

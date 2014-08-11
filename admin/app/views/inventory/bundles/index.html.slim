@@ -1,0 +1,46 @@
+h1.page-header
+  | Bundles
+
+div.row
+  table.bundles.table.table-condensed.table-hover
+    thead
+      tr
+        td
+          strong ID
+        td
+          strong Title
+        td
+          strong Description
+        td
+          strong Item Qty
+        td
+          strong Available
+        td
+          strong Active
+        td colspan=2
+          strong Actions
+      tbody
+        - @bundles.each do |bundle|
+          tr class="#{bundle.active? ? 'success' : 'danger'}"
+            td
+              = bundle.id
+            td
+              = bundle.title
+            td
+              = bundle.description
+            td
+              = bundle.bundleds.count
+            td
+              = yesno(bundle.available?)
+            td
+              = yesno(bundle.active?)
+            td
+              = link_to 'View', inventory_bundle_path(bundle.id), class: 'btn btn-primary'
+            td
+              = button_to 'Activate', activate_inventory_bundle_path(bundle.id), method: :put, disabled: !bundle.activable?, class: 'btn btn-success'
+              = button_to 'Delete', inventory_bundle_path(bundle.id), method: :delete, disabled: !bundle.deletable?, class: 'btn btn-danger'
+
+      tfoot
+        tr
+          td colspan=8
+            = paginate :inventory_bundles_path, @prev_page, @next_page
