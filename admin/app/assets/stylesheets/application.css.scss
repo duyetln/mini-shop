@@ -18,69 +18,9 @@
 @import "bootstrap";
 @import "font-awesome";
 
-/* modified based on bootstrap dashboard example */
-
 body {
-  padding-top: 70px;
+  padding-top: 50px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
   background-color: #fff;
-}
-
-.navbar-fixed-top {
-  border: 0;
-  border: none;
-}
-
-.navbar-brand {
-  padding: 20px;
-  font-size: 20px;
-}
-
-.sidebar {
-  position: fixed;
-  top: 50px;
-  bottom: 0;
-  left: 0;
-  z-index: 1000;
-  display: block;
-  padding: 20px 20px 20px 20px;
-  overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-  border: none;
-  background-color: #f8f8f8;
-  font-size: 18px;
-}
-
-.nav-sidebar {
-  margin-right: -20px;
-  margin-bottom: 20px;
-  margin-left: -20px;
-}
-
-.nav-sidebar > li > a {
-  padding: 15px 20px;
-}
-
-.nav-sidebar > li.active > a {
-  color: #fff;
-  background-color: #428bca;
-}
-
-.nav-sidebar > li > a:hover,
-.nav-sidebar > li > a:focus {
-  color: #fff;
-  background-color: #428bca;
-}
-
-.nav-sidebar > li > a > i {
- margin-right: 5px;
-}
-
-.content {
-  padding: 0px 20px 20px 20px;
-}
-
-.content .page-header {
-  margin-top: 0px;
 }

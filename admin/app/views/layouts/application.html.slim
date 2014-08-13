@@ -6,34 +6,30 @@ html
     = csrf_meta_tags
   body
     div.navbar.navbar-inverse.navbar-fixed-top role='navigation'
-      div.navbar-header
-        = link_to 'Mini Shop Admin', root_path, class: 'navbar-brand'
-    div.container-fluid
-      div.row
-        div.col-md-2.sidebar
-          ul.nav.nav-sidebar
-            li
-              = link_to root_path anchor: 'accounts' do
-                i.fa.fa-users.fa-fw
-                | Accounts
-            li
-              = link_to root_path anchor: 'inventory' do
-                i.fa.fa-truck.fa-fw
-                | Inventory
-        div.col-md-10.col-md-offset-2.content.table-responsive
-          - if flash[:error].present?
-            div.panel.panel-danger
-              - heading = body = nil
-              - if flash[:error].is_a?(Hash)
-                - heading = flash[:error]['primary']
-                - body = flash[:error]['secondary']
-              - elsif flash[:error].is_a?(String)
-                - heading = 'Error'
-                - body = flash[:error]
-              div.panel-heading
-                h3.panel-title
-                  = heading
-              div.panel-body
-                = body
-          div
-            = yield
+      div.container
+        div.navbar-header
+          = link_to 'Mini Shop Admin', root_path, class: 'navbar-brand'
+        ul.nav.navbar-nav.navbar-right
+          li
+            = link_to 'Accounts', root_path, anchor: 'accounts'
+          li
+            = link_to 'Inventory', root_path, anchor: 'inventory'
+
+    div.container
+      div.message
+        - if flash[:error].present?
+          div.panel.panel-danger
+            - heading = body = nil
+            - if flash[:error].is_a?(Hash)
+              - heading = flash[:error]['primary']
+              - body = flash[:error]['secondary']
+            - elsif flash[:error].is_a?(String)
+              - heading = 'Error'
+              - body = flash[:error]
+            div.panel-heading
+              h3.panel-title
+                = heading
+            div.panel-body
+              = body
+      div.content.table-responsive
+        = yield
