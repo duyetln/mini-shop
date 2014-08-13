@@ -48,3 +48,4 @@ Here are the goals set for this project:
     - Add endpoints to retreive specific batch, pricepoint, and discount by id.
     - Remove endpoint to retreive user's addresses.
     - Add nicer error messages to both backend and client.
+    - Add additional attributes to response payloads of a few resources.
