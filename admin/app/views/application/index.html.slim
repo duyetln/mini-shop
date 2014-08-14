@@ -1,26 +1,47 @@
-h1.page-header id='accounts'
-  | Accounts
-div
-  ul
-    li
-      = link_to 'Users', accounts_users_path
-h1.page-header id='inventory'
-  | Inventory
-div
-  ul
-    li
-      = link_to 'Pricepoints', inventory_pricepoints_path
-    li
-      = link_to 'Discounts', inventory_discounts_path
-    li
-      = link_to 'Prices', inventory_prices_path
-    li
-      = link_to 'Physical Items', inventory_physical_items_path
-    li
-      = link_to 'Digital Items', inventory_digital_items_path
-    li
-      = link_to 'Bundles', inventory_bundles_path
-    li
-      = link_to 'Store Items', inventory_store_items_path
-    li
-      = link_to 'Promotions', inventory_promotions_path
+div.row
+  div.col-md-3
+    div.panel.panel-default
+      div.panel-heading
+        h4
+          i.fa.fa-users.fa-fw
+          | Accounts
+      ul.list-group
+        li.list-group-item
+          = link_to 'Users', accounts_users_path
+  div.col-md-3
+    div.panel.panel-default
+      div.panel-heading
+        h4
+          i.fa.fa-money.fa-fw
+          | Prices
+      ul.list-group
+        li.list-group-item
+          = link_to 'Pricepoints', inventory_pricepoints_path
+        li.list-group-item
+          = link_to 'Discounts', inventory_discounts_path
+        li.list-group-item
+          = link_to 'Prices', inventory_prices_path
+  div.col-md-3
+    div.panel.panel-default
+      div.panel-heading
+        h4
+          i.fa.fa-truck.fa-fw
+          | Inventory
+      ul.list-group
+        li.list-group-item
+          = link_to 'Physical Items', inventory_physical_items_path
+        li.list-group-item
+          = link_to 'Digital Items', inventory_digital_items_path
+        li.list-group-item
+          = link_to 'Bundles', inventory_bundles_path
+  div.col-md-3
+    div.panel.panel-default
+      div.panel-heading
+        h4
+          i.fa.fa-shopping-cart.fa-fw
+          | Store & Promotions
+      ul.list-group
+        li.list-group-item
+          = link_to 'Store Items', inventory_store_items_path
+        li.list-group-item
+          = link_to 'Promotions', inventory_promotions_path
