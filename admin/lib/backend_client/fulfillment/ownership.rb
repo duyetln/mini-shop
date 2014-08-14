@@ -7,5 +7,13 @@ module BackendClient
         ownership.item = APIModel.instantiate(ownership.item)
       end
     end
+
+    def purchase
+      Purchase.find(purchase_id)
+    end
+
+    def order
+      purchase.orders.find { |order| order.id == order_id }
+    end
   end
 end

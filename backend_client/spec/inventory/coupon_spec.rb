@@ -13,7 +13,7 @@ describe BackendClient::Coupon do
     end
   end
 
-  describe '.promotion' do
+  describe '#promotion' do
     let(:promotion) { BackendClient::Promotion.instantiate parse(promotion_payload) }
 
     before :each do
