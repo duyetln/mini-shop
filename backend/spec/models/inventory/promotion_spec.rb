@@ -33,6 +33,19 @@ describe Promotion do
     end
   end
 
+  describe '#delete!' do
+    let(:model_args) { [:promotion, :coupons] }
+
+    before :each do
+      model.save!
+      expect(model.batches).to be_present
+    end
+
+    it 'deletes associated batches' do
+      expect { model.delete! }.to change { model.batches.all?(&:deleted?) }.to(true)
+    end
+  end
+
   describe '#create_batch' do
     let(:batch) { model.batches.last }
     let(:batch_size) { 2 }

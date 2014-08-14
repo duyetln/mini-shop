@@ -29,6 +29,13 @@ class Promotion < ActiveRecord::Base
     inactive? && super
   end
 
+  def delete!
+    if super
+      batches.each(&:delete!)
+    end
+    deleted?
+  end
+
   def create_batches(qty, batch_size = 0)
     batches = []
     qty.times do |index|
