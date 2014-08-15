@@ -6,10 +6,10 @@ module Accounts
 
     def show
       @user         = resource
-      @purchases    = @user.purchases
-      @coupons      = @user.coupons
-      @ownerships   = @user.ownerships
-      @shipments    = @user.shipments
+      @purchases    = @user.purchases.sort { |a,b| b.id <=> a.id }
+      @coupons      = @user.coupons.sort { |a,b| b.id <=> a.id }
+      @ownerships   = @user.ownerships.sort { |a,b| b.id <=> a.id }
+      @shipments    = @user.shipments.sort { |a,b| b.id <=> a.id }
     end
 
     private
