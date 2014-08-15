@@ -1,55 +1,46 @@
-h1.page-header
+h2.page-header
   | Pricepoints
 
 div.row
-  table.pricepoints.table.table-condensed.table-hover
-    thead
-      tr
-        td
-          strong Name
-        - @currencies.each do |currency|
-          td
-            strong == "#{currency.sign} #{currency.code}"
-        td
-          strong Actions
-      tbody
-        - @pricepoints.each do |pricepoint|
+  div.pricepoints.col-md-10
+    div.panel.panel-default
+      div.panel-heading
+        = paginate :inventory_pricepoints_path, @prev_page, @next_page
+      table.table.table-hover
+        thead
           tr
-            = form_tag inventory_pricepoint_path(pricepoint.id), method: :put do
+            td
+              |
+            - @pricepoints.each do |pricepoint|
               td
-                = text_field_tag 'pricepoint[name]', pricepoint.name
-              - @currencies.each do |currency|
-                - pricepoint_price = pricepoint.pricepoint_prices.find { |pp| pp.currency.code == currency.code }
-                = hidden_field_tag "pricepoint_prices[#{currency.code}][id]", pricepoint_price.try(:id)
-                = hidden_field_tag "pricepoint_prices[#{currency.code}][currency_id]", currency.id
+                label = pricepoint.name
+        tbody
+          - @currencies.each do |currency|
+            tr
+              td
+                label == "#{currency.sign} #{currency.code}"
+              - @pricepoints.each do |pricepoint|
                 td
-                  = text_field_tag "pricepoint_prices[#{currency.code}][amount]", pricepoint.amount(currency)
-              td
-                = submit_tag 'Update', class: 'btn btn-default'
-
-      tfoot
-        - if @pricepoints.present?
+                  = pricepoint.amount(currency)
+        tfoot
           tr
-            = form_tag inventory_pricepoints_path do
+            td
+              = link_to 'Create', new_inventory_pricepoint_path, class: 'btn btn-success'
+            - @pricepoints.each do |pricepoint|
               td
-                = text_field_tag 'pricepoint[name]', nil, placeholder: 'New name'
-              - @currencies.each do |currency|
-                = hidden_field_tag "pricepoint_prices[#{currency.code}][currency_id]", currency.id
-                td
-                  = text_field_tag "pricepoint_prices[#{currency.code}][amount]", nil, placeholder: 'Amount'
-              td
-                = submit_tag 'Add', class: 'btn btn-default'
-        tr
-          - if @pricepoints.present?
-            = form_tag inventory_currencies_path do
-              td
-                = text_field_tag 'currency[code]', nil, placeholder: 'New currency code'
-              td
-                = text_field_tag 'currency[sign]', nil,   placeholder: 'New currency sign'
-              td
-                = submit_tag 'Create', class: 'btn btn-default'
-          - colspan = @currencies.count + 2 - (@pricepoints.present? ? 3 : 0)
-          td colspan="#{colspan}"
-            = paginate :inventory_pricepoints_path, @prev_page, @next_page
+                = link_to 'Update', edit_inventory_pricepoint_path(pricepoint.id), class: 'btn btn-warning'
+      div.panel-footer
+        = paginate :inventory_pricepoints_path, @prev_page, @next_page
 
-
+  div.currency.col-md-2
+    div.panel.panel-default
+      div.panel-heading
+        h4 New Currency
+      div.panel-body
+        = form_for :currency, url: inventory_currencies_path, html: { role: 'form' } do |f|
+          div.form-group
+            = f.text_field :code, class: 'form-control', placeholder: 'New Code'
+          div.form-group
+            = f.text_field :sign, class: 'form-control', placeholder: 'New Sign'
+          div.form-group
+            = f.submit 'Create', class: 'btn btn-success'

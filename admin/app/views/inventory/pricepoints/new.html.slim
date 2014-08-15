@@ -1,0 +1,24 @@
+h2.page-header
+  | Create Pricepoint
+
+div.row
+  div.pricepoints.col-md-4
+    div.panel.panel-default
+      div.panel-heading
+        h4 New Pricepoint
+      div.panel-body
+        = form_for :pricepoint, url: inventory_pricepoints_path, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.form-group
+            label.control-label.col-md-4 Name
+            div.col-md-8
+              = f.text_field :name, class: 'form-control', placeholder: 'New Name'
+          - @currencies.each do |currency|
+            div.form-group
+              label.control-label.col-md-4 == "#{currency.sign} #{currency.code}"
+              div.col-md-8
+                = text_field_tag "pricepoint_prices[#{currency.code}][amount]", nil, placeholder: "#{currency.code} Amount", class: 'form-control'
+                = hidden_field_tag "pricepoint_prices[#{currency.code}][currency_id]", currency.id
+
+          div.form-group
+            div.col-md-offset-4.col-md-8
+              = f.submit 'Create', class: 'btn btn-success'
