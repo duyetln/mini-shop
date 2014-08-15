@@ -1,14 +1,13 @@
 doctype html
 html
   head
-    title Admin
+    title Mini Shop Admin
     = stylesheet_link_tag 'application', media: 'all'
     = csrf_meta_tags
   body
     div.navbar.navbar-inverse.navbar-fixed-top role='navigation'
       div.container
-        div.navbar-header
-          = link_to 'Mini Shop Admin', root_path, class: 'navbar-brand'
+        = link_to 'Home', root_path, class: 'btn btn-primary navbar-btn'
 
     div.container
       div.message
