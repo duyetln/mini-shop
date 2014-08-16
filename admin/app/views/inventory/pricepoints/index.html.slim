@@ -25,7 +25,7 @@ div.row
         tfoot
           tr
             td
-              = link_to 'Create', new_inventory_pricepoint_path, class: 'btn btn-success'
+              |
             - @pricepoints.each do |pricepoint|
               td
                 = link_to 'Update', edit_inventory_pricepoint_path(pricepoint.id), class: 'btn btn-warning'
@@ -33,6 +33,20 @@ div.row
         = paginate :inventory_pricepoints_path, @prev_page, @next_page
 
   div.currency.col-md-2
+    div.panel.panel-default
+      div.panel-heading
+        h4 New Pricepoint
+      div.panel-body
+        = form_for :pricepoint, url: inventory_pricepoints_path, html: { role: 'form' } do |f|
+          div.form-group
+            = f.text_field :name, class: 'form-control', placeholder: 'New Name'
+          - @currencies.each do |currency|
+            div.form-group
+              = text_field_tag "pricepoint_prices[#{currency.code}][amount]", nil, placeholder: "#{currency.sign} #{currency.code} Amount".html_safe, class: 'form-control'
+              = hidden_field_tag "pricepoint_prices[#{currency.code}][currency_id]", currency.id
+
+          div.form-group
+            = f.submit 'Create', class: 'btn btn-success'
     div.panel.panel-default
       div.panel-heading
         h4 New Currency

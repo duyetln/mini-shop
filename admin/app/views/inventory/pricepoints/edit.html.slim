@@ -2,7 +2,7 @@ h2.page-header
   = @pricepoint.name
 
 div.row
-  div.pricepoints.col-md-4
+  div.pricepoints.col-md-3
     div.panel.panel-default
       div.panel-heading
         h4 Edit Pricepoint
@@ -11,7 +11,7 @@ div.row
           div.form-group
             label.control-label.col-md-4 Name
             div.col-md-8
-              = f.text_field :name, class: 'form-control', placeholder: 'New Name'
+              = f.text_field :name, class: 'form-control', placeholder: 'Name'
           - @currencies.each do |currency|
             div.form-group
               label.control-label.col-md-4 == "#{currency.sign} #{currency.code}"
