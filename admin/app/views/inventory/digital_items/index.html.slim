@@ -1,57 +1,58 @@
-h1.page-header
+h2.page-header
   | Digital Items
 
 div.row
-  table.digital-items.table.table-condensed.table-hover
-    thead
-      tr
-        td
-          strong ID
-        td
-          strong Title
-        td
-          strong Description
-        td
-          strong Available
-        td
-          strong Active
-        td colspan=2
-          strong Actions
-      tbody
-        - @digital_items.each do |digital_item|
-          tr class="#{digital_item.active? ? 'success' : 'danger'}"
-            = form_tag inventory_digital_item_path(digital_item.id), method: :put do
+  div.col-md-10
+    div.panel.panel-default
+      div.panel-heading
+        = paginate :inventory_digital_items_path, @prev_page, @next_page
+      table.table.table-hover.table-condensed
+        thead
+          tr
+            td
+              label ID
+            td
+              label Title
+            td
+              label Description
+            td
+              label Available
+            td
+              label Active
+        tbody
+          - @digital_items.each do |digital_item|
+            tr class="#{digital_item.active? ? 'success' : 'danger'}"
               td
                 = digital_item.id
               td
-                = text_field_tag 'digital_item[title]', digital_item.title
+                = digital_item.title
               td
-                = text_field_tag 'digital_item[description]', digital_item.description
+                = digital_item.description
               td
                 = yesno(digital_item.available?)
               td
                 = yesno(digital_item.active?)
               td
-                = submit_tag 'Update', class: 'btn btn-default'
-            td
-              = button_to 'Activate', activate_inventory_digital_item_path(digital_item.id), method: :put, disabled: !digital_item.activable?, class: 'btn btn-success'
-              = button_to 'Delete', inventory_digital_item_path(digital_item.id), method: :delete, disabled: !digital_item.deletable?, class: 'btn btn-danger'
+                = link_to edit_inventory_digital_item_path(digital_item.id), class: 'btn btn-warning', title: 'Edit' do
+                  i.fa.fa-pencil
+              td
+                = button_to activate_inventory_digital_item_path(digital_item.id), method: :put, disabled: !digital_item.activable?, class: 'btn btn-warning', title: 'Activate' do
+                  i.fa.fa-check
+              td
+                = button_to inventory_digital_item_path(digital_item.id), method: :delete, disabled: !digital_item.deletable?, class: 'btn btn-danger', title: 'Delete' do
+                  i.fa.fa-trash-o
+      div.panel-footer
+        = paginate :inventory_digital_items_path, @prev_page, @next_page
 
-      tfoot
-        tr
-          = form_tag inventory_digital_items_path do
-            td
-              |
-            td
-              = text_field_tag 'digital_item[title]', nil, placeholder: 'New title'
-            td
-              = text_field_tag 'digital_item[description]', nil, placeholder: 'New description'
-            td
-              |
-            td
-              |
-            td
-              = submit_tag 'Add', class: 'btn btn-default'
-        tr
-          td colspan=7
-            = paginate :inventory_digital_items_path, @prev_page, @next_page
+  div.currency.col-md-2
+    div.panel.panel-default
+      div.panel-heading
+        h4 New Item
+      div.panel-body
+        = form_for :digital_item, url: inventory_digital_items_path, html: { role: 'form' } do |f|
+          div.form-group
+            = f.text_field :title, class: 'form-control', placeholder: 'New Title'
+          div.form-group
+            = f.text_field :description, class: 'form-control', placeholder: 'New Description'
+          div.form-group
+            = f.submit 'Create', class: 'btn btn-success'

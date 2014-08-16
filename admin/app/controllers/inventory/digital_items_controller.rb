@@ -11,6 +11,10 @@ module Inventory
       redirect_to :back
     end
 
+    def edit
+      @digital_item = resource
+    end
+
     def update
       @digital_item = update_resource(:digital_item, :title, :description)
       redirect_to :back
