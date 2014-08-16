@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     end
 
     resources :store_items, except: [:new]
-    resources :promotions, only: [:index, :show, :create, :update, :destroy] do
+    resources :promotions, except: [:new] do
       put :activate, on: :member
       post :batches, on: :member
     end

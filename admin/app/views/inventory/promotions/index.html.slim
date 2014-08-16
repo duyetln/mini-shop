@@ -1,66 +1,65 @@
-h1.page-header
+h2.page-header
   | Promotions
 
 div.row
-  table.promotions.table.table-condensed.table-hover
-    thead
-      tr
-        td
-          strong ID
-        td
-          strong Name
-        td
-          strong Title
-        td
-          strong Description
-        td
-          strong Item
-        td
-          strong Price
-        td
-          strong Batch Count
-        td
-          strong Coupon Count
-        td
-          strong Used Coupon Count
-        td
-          strong Available
-        td
-          strong Active
-        td colspan=2
-          strong Actions
-      tbody
-        - @promotions.each do |promotion|
-          tr class="#{promotion.active? ? 'success' : 'danger'}"
+  div.col-md-10
+    div.panel.panel-default
+      div.panel-heading
+        = paginate :inventory_promotions_path, @prev_page, @next_page
+      table.table.table-hover.table-condensed
+        thead
+          tr
             td
-              = promotion.id
+              label ID
             td
-              = promotion.name
+              label Title
             td
-              = promotion.title
+              label Item
             td
-              = promotion.description
+              label Price
             td
-              = promotion.item.title
+              label Available
             td
-              = promotion.price.name
-            td
-              = promotion.batch_count
-            td
-              = promotion.coupon_count
-            td
-              = promotion.used_coupon_count
-            td
-              = yesno(promotion.available?)
-            td
-              = yesno(promotion.active?)
-            td
-              = link_to 'View', inventory_promotion_path(promotion.id), class: 'btn btn-primary'
-            td
-              = button_to 'Activate', activate_inventory_promotion_path(promotion.id), method: :put, disabled: !promotion.activable?, class: 'btn btn-success'
-              = button_to 'Delete', inventory_promotion_path(promotion.id), method: :delete, disabled: !promotion.deletable?, class: 'btn btn-danger'
+              label Active
+        tbody
+          - @promotions.each do |promotion|
+            tr class="#{promotion.active? ? 'success' : 'danger'}"
+              td
+                = promotion.id
+              td
+                = promotion.title
+              td
+                = promotion.item.title
+              td
+                = promotion.price.name
+              td
+                = yesno(promotion.available?)
+              td
+                = yesno(promotion.active?)
+              td
+                = link_to inventory_promotion_path(promotion.id), class: 'btn btn-primary', title: 'View' do
+                  i.fa.fa-eye
+              td
+                = link_to edit_inventory_promotion_path(promotion.id), class: 'btn btn-warning', title: 'Edit' do
+                  i.fa.fa-pencil
+              td
+                = button_to activate_inventory_promotion_path(promotion.id), method: :put, disabled: !promotion.activable?, class: 'btn btn-warning', title: 'Activate' do
+                  i.fa.fa-check
+              td
+                = button_to inventory_promotion_path(promotion.id), method: :delete, disabled: !promotion.deletable?, class: 'btn btn-danger', title: 'Delete' do
+                  i.fa.fa-trash-o
+      div.panel-footer
+        = paginate :inventory_promotions_path, @prev_page, @next_page
 
-      tfoot
-        tr
-          td colspan=11
-            = paginate :inventory_promotions_path, @prev_page, @next_page
+  div.currency.col-md-2
+    div.panel.panel-default
+      div.panel-heading
+        h4 New Item
+      div.panel-body
+        = form_for :promotion, url: inventory_promotions_path, html: { role: 'form' } do |f|
+          div.form-group
+            = f.text_field :title, class: 'form-control', placeholder: 'New Title'
+          div.form-group
+            = f.text_field :description, class: 'form-control', placeholder: 'New Description'
+          div.form-group
+            = f.submit 'Create', class: 'btn btn-success disabled'

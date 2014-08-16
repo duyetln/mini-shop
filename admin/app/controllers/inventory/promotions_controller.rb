@@ -19,6 +19,11 @@ module Inventory
       render nothing: true
     end
 
+    def edit
+      @promotion = resource
+      render nothing: true
+    end
+
     def update
       @promotion = update_resource(:promotion, :name, :title, :description, :price_id)
       render nothing: true
