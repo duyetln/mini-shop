@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :bundles, only: [:index, :show, :create, :update, :destroy] do
+    resources :bundles, except: [:new] do
       put :activate, on: :member
       resources :bundleds, only: :destroy
     end

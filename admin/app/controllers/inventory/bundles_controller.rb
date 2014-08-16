@@ -23,6 +23,11 @@ module Inventory
       render nothing: true
     end
 
+    def edit
+      @bundle = resource
+      render nothing: true
+    end
+
     def update
       @bundle = update_resource(:bundle, :title, :description)
       scoped_params(:bundleds).each do |bundled|
