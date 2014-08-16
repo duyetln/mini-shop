@@ -1,57 +1,61 @@
-h1.page-header
+h2.page-header
   | Discounts
 
 div.row
-  table.discounts.table.table-condensed.table-hover
-    thead
-      tr
-        td
-          strong Name
-        td
-          strong Rate
-        td
-          strong Current Rate
-        td
-          strong Current Active
-        td
-          strong Start At
-        td
-          strong End At
-        td
-          strong Actions
-      tbody
-        - @discounts.each do |discount|
+  div.pricepoints.col-md-10
+    div.panel.panel-default
+      div.panel-heading
+        = paginate :inventory_discounts_path, @prev_page, @next_page
+      table.table.table-hover
+        thead
           tr
-            = form_tag inventory_discount_path(discount.id), method: :put do
+            td
+              label Name
+            td
+              label Rate
+            td
+              label Current Rate
+            td
+              label Current Active
+            td
+              label Start At
+            td
+              label End At
+            td
+              |
+        tbody
+          - @discounts.each do |discount|
+            tr class="#{discount.current_active? ? 'success' : 'danger'}"
               td
-                = text_field_tag 'discount[name]', discount.name
+                = discount.name
               td
-                = text_field_tag 'discount[rate]', discount.rate
+                = discount.rate
               td
                 = discount.current_rate
               td
-                = yesno(discount.current_active)
+                = yesno(discount.current_active?)
               td
-                = text_field_tag 'discount[start_at]', discount.start_at.present? && discount.start_at.strftime('%m/%d/%Y %H:%M') || nil, placeholder: '2014/11/25 17:30'
+                = discount.start_at.present? && discount.start_at.strftime('%m/%d/%Y %H:%M') || nil
               td
-                = text_field_tag 'discount[end_at]', discount.end_at.present? && discount.end_at.strftime('%m/%d/%Y %H:%M') || nil, placeholder: '2014/11/25 17:30'
+                = discount.end_at.present? && discount.end_at.strftime('%m/%d/%Y %H:%M') || nil
               td
-                = submit_tag 'Update', class: 'btn btn-default'
+                = link_to 'Update', edit_inventory_discount_path(discount.id), class: 'btn btn-warning'
+      div.panel-footer
+        = paginate :inventory_discounts_path, @prev_page, @next_page
 
-      tfoot
-        tr
-          - if @discounts.present?
-            = form_tag inventory_discounts_path do
-              td
-                = text_field_tag 'discount[name]', nil, placeholder: 'New name'
-              td
-                = text_field_tag 'discount[rate]', nil, placeholder: 'New rate'
-              td
-                = text_field_tag 'discount[start_at]', nil, placeholder: '2014/11/25 17:30'
-              td
-                = text_field_tag 'discount[end_at]', nil, placeholder: '2014/11/25 17:30'
-              td
-                = submit_tag 'Add', class: 'btn btn-default'
-          - colspan = @discounts.present? ? 2 : 7
-          td colspan="#{colspan}"
-            = paginate :inventory_discounts_path, @prev_page, @next_page
+  div.currency.col-md-2
+    div.panel.panel-default
+      div.panel-heading
+        h4 New Discount
+      div.panel-body
+        = form_for :discount, url: inventory_discounts_path, html: { role: 'form' } do |f|
+          div.form-group
+            = f.text_field :name, class: 'form-control', placeholder: 'New Name'
+          div.form-group
+            = f.text_field :rate, class: 'form-control', placeholder: 'New Rate'
+          div.form-group
+            = f.text_field :start_at, class: 'form-control', placeholder: '2013/01/25 17:30'
+          div.form-group
+            = f.text_field :end_at, class: 'form-control', placeholder: '2014/11/06 02:45'
+          div.form-group
+            = f.submit 'Create', class: 'btn btn-success'

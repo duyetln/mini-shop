@@ -8,6 +8,11 @@ module Inventory
       @discount = resource_class.create(
         scoped_params(:discount, :name, :rate, :start_at, :end_at)
       )
+      redirect_to :back
+    end
+
+    def edit
+      @discount = resource
     end
 
     def update

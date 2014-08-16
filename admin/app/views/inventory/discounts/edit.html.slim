@@ -1,0 +1,29 @@
+h2.page-header
+  = @discount.name
+
+div.row
+  div.pricepoints.col-md-3
+    div.panel.panel-default
+      div.panel-heading
+        h4 Edit Discount
+      div.panel-body
+        = form_for :discount, url: inventory_discount_path(@discount.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.form-group
+            label.control-label.col-md-4 Name
+            div.col-md-8
+              = f.text_field :name, class: 'form-control', placeholder: 'Name'
+          div.form-group
+            label.control-label.col-md-4 Rate
+            div.col-md-8
+              = f.text_field :rate, class: 'form-control', placeholder: 'Rate'
+          div.form-group
+            label.control-label.col-md-4 Start At
+            div.col-md-8
+              = f.text_field :start_at, value: @discount.start_at.present? && @discount.start_at.strftime('%m/%d/%Y %H:%M') || nil, class: 'form-control', placeholder: '2013/01/25 17:30'
+          div.form-group
+            label.control-label.col-md-4 End At
+            div.col-md-8
+              = f.text_field :end_at, value: @discount.end_at.present? && @discount.end_at.strftime('%m/%d/%Y %H:%M') || nil, class: 'form-control', placeholder: '2014/11/06 02:45'
+          div.form-group
+            div.col-md-offset-4.col-md-8
+              = f.submit 'Update', class: 'btn btn-warning'
