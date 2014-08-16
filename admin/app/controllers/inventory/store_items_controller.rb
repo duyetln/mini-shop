@@ -18,6 +18,11 @@ module Inventory
       render nothing: true
     end
 
+    def edit
+      @store_item = resource
+      render nothing: true
+    end
+
     def update
       @store_item = update_resource(:store_item, :name, :price_id)
       render nothing: true

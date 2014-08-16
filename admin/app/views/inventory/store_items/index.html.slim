@@ -1,41 +1,60 @@
-h1.page-header
+h2.page-header
   | Store Items
 
 div.row
-  table.store-items.table.table-condensed.table-hover
-    thead
-      tr
-        td
-          strong ID
-        td
-          strong Name
-        td
-          strong Item
-        td
-          strong Available
-        td
-          strong Active
-        td
-          strong Actions
-      tbody
-        - @store_items.each do |store_item|
-          tr class="#{store_item.active? ? 'success' : 'danger'}"
+  div.col-md-10
+    div.panel.panel-default
+      div.panel-heading
+        = paginate :inventory_store_items_path, @prev_page, @next_page
+      table.table.table-hover.table-condensed
+        thead
+          tr
             td
-              = store_item.id
+              label ID
             td
-              = store_item.name
+              label Name
             td
-              = store_item.title
+              label Item
             td
-              = yesno(store_item.available?)
+              label Price
             td
-              = yesno(store_item.active?)
+              label Available
             td
-              = link_to 'View', inventory_store_item_path(store_item.id), class: 'btn btn-primary'
-            td
-              = button_to 'Delete', inventory_store_item_path(store_item.id), method: :delete, disabled: !store_item.deletable?, class: 'btn btn-danger'
+              label Active
+        tbody
+          - @store_items.each do |store_item|
+            tr class="#{store_item.active? ? 'success' : 'danger'}"
+              td
+                = store_item.id
+              td
+                = store_item.name
+              td
+                = store_item.item.title
+              td
+                = store_item.price.name
+              td
+                = yesno(store_item.available?)
+              td
+                = yesno(store_item.active?)
+              td
+                = link_to inventory_store_item_path(store_item.id), class: 'btn btn-primary', title: 'View' do
+                  i.fa.fa-eye
+              td
+                = link_to edit_inventory_store_item_path(store_item.id), class: 'btn btn-warning', title: 'Edit' do
+                  i.fa.fa-pencil
+              td
+                = button_to inventory_store_item_path(store_item.id), method: :delete, disabled: !store_item.deletable?, class: 'btn btn-danger', title: 'Delete' do
+                  i.fa.fa-trash-o
+      div.panel-footer
+        = paginate :inventory_store_items_path, @prev_page, @next_page
 
-      tfoot
-        tr
-          td colspan=6
-            = paginate :inventory_store_items_path, @prev_page, @next_page
+  div.currency.col-md-2
+    div.panel.panel-default
+      div.panel-heading
+        h4 New Item
+      div.panel-body
+        = form_for :store_item, url: inventory_store_items_path, html: { role: 'form' } do |f|
+          div.form-group
+            = f.text_field :name, class: 'form-control', placeholder: 'New Name'
+          div.form-group
+            = f.submit 'Create', class: 'btn btn-success disabled'
