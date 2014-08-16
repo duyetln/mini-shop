@@ -74,7 +74,8 @@ describe 'service api' do
       expect do
         post '/',
              currency: {
-               code: 'USD'
+               code: 'USD',
+               sign: '&#36;'
              }
       end.to change { Currency.count }.by(1)
       expect_status(200)
@@ -85,7 +86,8 @@ describe 'service api' do
       expect do
         post '/',
              currency: {
-               code: 'EUR'
+               code: 'EUR',
+               sign: '&#128;'
              }
       end.to change { Currency.count }.by(1)
       expect_status(200)
@@ -96,7 +98,8 @@ describe 'service api' do
       expect do
         post '/',
              currency: {
-               code: 'GBP'
+               code: 'GBP',
+               sign: '&#163;'
              }
       end.to change { Currency.count }.by(1)
       expect_status(200)

@@ -22,6 +22,7 @@ describe Currency do
   it { should validate_uniqueness_of(:code) }
   it { should ensure_length_of(:code).is_equal_to(3) }
   it { should validate_presence_of(:code) }
+  it { should validate_presence_of(:sign) }
 
   it 'upcases code after saving' do
     expect(model.code).to match(/\A[A-Z]+\Z/)

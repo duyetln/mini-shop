@@ -4,6 +4,7 @@ class Currency < ActiveRecord::Base
   validates :code, length: { is: 3 }
   validates :code, presence: true
   validates :code, uniqueness: true
+  validates :sign, presence: true
 
   before_validation :upcase_code
 

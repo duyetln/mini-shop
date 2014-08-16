@@ -7,7 +7,7 @@ describe Services::Inventory::Currencies do
     let(:path) { '/' }
 
     before :each do
-      Currency.where(code: 'USD').first_or_create!
+      Currency.where(code: 'USD', sign: '&#36;').first_or_create!
     end
 
     context 'not paginated' do
@@ -56,7 +56,7 @@ describe Services::Inventory::Currencies do
     end
 
     context 'valid parameters' do
-      let(:params) { { currency: { code: 'USD' } } }
+      let(:params) { { currency: { code: 'USD', sign: '&#36;' } } }
 
       it 'creates new currency' do
         expect { send_request }.to change { Currency.count }.by(1)
