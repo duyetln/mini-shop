@@ -11,6 +11,10 @@ module Inventory
       redirect_to :back
     end
 
+    def edit
+      @physical_item = resource
+    end
+
     def update
       @physical_item = update_resource(:physical_item, :title, :description, :qty)
       redirect_to :back
