@@ -2,11 +2,11 @@ h2.page-header
   | Pricepoints
 
 div.row
-  div.pricepoints.col-md-10
+  div.col-md-10
     div.panel.panel-default
       div.panel-heading
         = paginate :inventory_pricepoints_path, @prev_page, @next_page
-      table.table.table-hover
+      table.table.table-hover.table-condensed
         thead
           tr
             td
@@ -28,7 +28,8 @@ div.row
               |
             - @pricepoints.each do |pricepoint|
               td
-                = link_to 'Update', edit_inventory_pricepoint_path(pricepoint.id), class: 'btn btn-warning'
+                = link_to edit_inventory_pricepoint_path(pricepoint.id), class: 'btn btn-warning', title: 'Edit' do
+                  i.fa.fa-pencil
       div.panel-footer
         = paginate :inventory_pricepoints_path, @prev_page, @next_page
 

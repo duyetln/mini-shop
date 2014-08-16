@@ -2,11 +2,11 @@ h2.page-header
   | Discounts
 
 div.row
-  div.pricepoints.col-md-10
+  div.col-md-10
     div.panel.panel-default
       div.panel-heading
         = paginate :inventory_discounts_path, @prev_page, @next_page
-      table.table.table-hover
+      table.table.table-hover.table-condensed
         thead
           tr
             td
@@ -21,8 +21,6 @@ div.row
               label Start At
             td
               label End At
-            td
-              |
         tbody
           - @discounts.each do |discount|
             tr class="#{discount.current_active? ? 'success' : 'danger'}"
@@ -39,7 +37,8 @@ div.row
               td
                 = discount.end_at.present? && discount.end_at.strftime('%m/%d/%Y %H:%M') || nil
               td
-                = link_to 'Update', edit_inventory_discount_path(discount.id), class: 'btn btn-warning'
+                = link_to edit_inventory_discount_path(discount.id), class: 'btn btn-warning', title: 'Edit' do
+                  i.fa.fa-pencil
       div.panel-footer
         = paginate :inventory_discounts_path, @prev_page, @next_page
 

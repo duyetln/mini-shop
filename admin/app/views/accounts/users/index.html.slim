@@ -1,45 +1,41 @@
 h2.page-header
   | Users
 
-div.users
-  div.panel.panel-default
-    div.panel-heading
-      = paginate :accounts_users_path, @prev_page, @next_page
-    table.table.table-hover
-      thead
-        tr
-          td
-            strong ID
-          td
-            strong First Name
-          td
-            strong Last Name
-          td
-            strong Email
-          td
-            strong Confirmed
-          td
-            strong Addresses
-          td
-            strong Payment Methods
-          td
-            strong Signed Up On
-          td
-            strong Actions
-        tbody
-          - @users.each do |user|
-            tr class="#{user.confirmed? ? 'success' : 'danger'}"
-              td =       user.id
-              td =       user.first_name
-              td =       user.last_name
-              td =       user.email
-              td = yesno(user.confirmed?)
-              td =       user.addresses.count
-              td =       user.payment_methods.count
-              td =       user.created_at.to_formatted_s(:long)
-              td
-                span.btn-group
-                  = link_to 'View', accounts_user_path(user.id), class: 'btn btn-primary'
-    div.panel-footer
-      = paginate :accounts_users_path, @prev_page, @next_page
+div.panel.panel-default
+  div.panel-heading
+    = paginate :accounts_users_path, @prev_page, @next_page
+  table.table.table-hover.table-condensed
+    thead
+      tr
+        td
+          label ID
+        td
+          label First Name
+        td
+          label Last Name
+        td
+          label Email
+        td
+          label Confirmed
+        td
+          label Addresses
+        td
+          label Payment Methods
+        td
+          label Signed Up On
+      tbody
+        - @users.each do |user|
+          tr class="#{user.confirmed? ? 'success' : 'danger'}"
+            td =       user.id
+            td =       user.first_name
+            td =       user.last_name
+            td =       user.email
+            td = yesno(user.confirmed?)
+            td =       user.addresses.count
+            td =       user.payment_methods.count
+            td =       user.created_at.to_formatted_s(:long)
+            td = link_to accounts_user_path(user.id), class: 'btn btn-primary', title: 'View' do
+              i.fa.fa-eye
+  div.panel-footer
+    = paginate :accounts_users_path, @prev_page, @next_page
 
