@@ -18,6 +18,10 @@ module BackendClient
         other.id == id
     end
 
+    def eql?(other)
+      self.==(other)
+    end
+
     def initialize(hash = {})
       @attributes = self.class.build_attributes(hash)
     end

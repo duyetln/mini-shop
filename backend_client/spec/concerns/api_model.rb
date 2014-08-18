@@ -39,4 +39,13 @@ shared_examples 'api model' do
       end
     end
   end
+
+  describe '#eql?' do
+    let(:obj1) { described_class.new parsed_payload.merge(id: rand_str) }
+    let(:obj2) { described_class.new parsed_payload.merge(id: rand_str) }
+
+    it 'delegates to #==' do
+      expect(obj1.eql?(obj2)).to eq(obj1 == obj2)
+    end
+  end
 end
