@@ -45,6 +45,12 @@ div.row
               td
                 = button_to inventory_physical_item_path(physical_item.id), method: :delete, disabled: !physical_item.deletable?, class: 'btn btn-danger', title: 'Delete' do
                   i.fa.fa-trash-o
+              td
+                = form_tag settings_clipboard_path do
+                  = hidden_field_tag 'resource_type', physical_item.resource_type
+                  = hidden_field_tag 'resource_id', physical_item.resource_id
+                  = button_tag class: 'btn btn-default', title: 'Save item to clipboard', name: nil
+                    i.fa.fa-clipboard
       div.panel-footer
         = paginate :inventory_physical_items_path, @prev_page, @next_page
 

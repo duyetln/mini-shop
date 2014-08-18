@@ -39,6 +39,12 @@ div.row
               td
                 = link_to edit_inventory_discount_path(discount.id), class: 'btn btn-warning', title: 'Edit' do
                   i.fa.fa-pencil
+              td
+                = form_tag settings_clipboard_path do
+                  = hidden_field_tag 'resource_type', discount.resource_type
+                  = hidden_field_tag 'resource_id', discount.resource_id
+                  = button_tag class: 'btn btn-default', title: 'Save item to clipboard', name: nil
+                    i.fa.fa-clipboard
       div.panel-footer
         = paginate :inventory_discounts_path, @prev_page, @next_page
 
