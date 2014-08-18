@@ -104,4 +104,6 @@ div.panel.panel-default
                       = check_box_tag 'bundles[]', bundle.id
       div.row
         div.col-md-offset-4.col-md-4.text-center
-          = submit_tag 'Erase from Clipboard', class: 'btn btn-danger', name: nil
+          = button_tag class: 'btn btn-danger', name: nil
+            i.fa.fa-eraser
+            |  Erase from Clipboard
