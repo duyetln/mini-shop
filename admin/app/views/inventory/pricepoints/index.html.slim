@@ -11,22 +11,17 @@ div.row
           tr
             td
               |
-            - @pricepoints.each do |pricepoint|
-              td
-                label = pricepoint.name
-        tbody
-          - @currencies.each do |currency|
-            tr
+            - @currencies.each do |currency|
               td
                 label == "#{currency.sign} #{currency.code}"
-              - @pricepoints.each do |pricepoint|
+        tbody
+          - @pricepoints.each do |pricepoint|
+            tr
+              td
+                label = pricepoint.name
+              - @currencies.each do |currency|
                 td
                   = pricepoint.amount(currency)
-        tfoot
-          tr
-            td
-              |
-            - @pricepoints.each do |pricepoint|
               td
                 = link_to edit_inventory_pricepoint_path(pricepoint.id), class: 'btn btn-warning', title: 'Edit' do
                   i.fa.fa-pencil
@@ -47,7 +42,7 @@ div.row
               = hidden_field_tag "pricepoint_prices[#{currency.code}][currency_id]", currency.id
 
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success'
+            = f.submit 'Create', class: 'btn btn-success', name: nil
     div.panel.panel-default
       div.panel-heading
         h4 New Currency
@@ -58,4 +53,4 @@ div.row
           div.form-group
             = f.text_field :sign, class: 'form-control', placeholder: 'New Sign'
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success'
+            = f.submit 'Create', class: 'btn btn-success', name: nil

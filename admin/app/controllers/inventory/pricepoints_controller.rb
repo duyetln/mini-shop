@@ -29,7 +29,7 @@ module Inventory
       scoped_params(:pricepoint_prices).keys.each do |key|
         value = scoped_params(:pricepoint_prices).require(key)
         pricepoint_price = @pricepoint.pricepoint_prices.find do |pp|
-          pp.id == value.permit(:id)[:id].to_i
+          pp.id == value.require(:id).to_i
         end
 
         if pricepoint_price.present?

@@ -26,4 +26,4 @@ div.row
               = f.text_field :end_at, value: @discount.end_at.present? && @discount.end_at.strftime('%m/%d/%Y %H:%M') || nil, class: 'form-control', placeholder: '11/06/2014 02:45'
           div.form-group
             div.col-md-offset-4.col-md-8
-              = f.submit 'Update', class: 'btn btn-warning'
+              = f.submit 'Update', class: 'btn btn-warning', name: nil
