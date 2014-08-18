@@ -1,0 +1,107 @@
+h2.page-header
+  | Clipboard
+
+div.panel.panel-default
+  div.panel-body
+    = form_tag settings_clipboard_path, method: :delete do
+      div.row
+        div.col-md-4
+          div.panel.panel-default
+            div.panel-heading
+              h4 Pricepoints
+            table.table.table-hover.table-condensed
+              thead
+                tr
+                  td
+                    label Name
+              tbody
+                - @pricepoints.each do |pricepoint|
+                  tr
+                    td
+                      = pricepoint.name
+                    td
+                      = check_box_tag 'pricepoints[]', pricepoint.id
+        div.col-md-4
+          div.panel.panel-default
+            div.panel-heading
+              h4 Discounts
+            table.table.table-hover.table-condensed
+              thead
+                tr
+                  td
+                    label Name
+              tbody
+                - @discounts.each do |discount|
+                  tr
+                    td
+                      = discount.name
+                    td
+                      = check_box_tag 'discounts[]', discount.id
+        div.col-md-4
+          div.panel.panel-default
+            div.panel-heading
+              h4 Prices
+            table.table.table-hover.table-condensed
+              thead
+                tr
+                  td
+                    label Name
+              tbody
+                - @prices.each do |price|
+                  tr
+                    td
+                      = price.name
+                    td
+                      = check_box_tag 'prices[]', price.id
+      div.row
+        div.col-md-4
+          div.panel.panel-default
+            div.panel-heading
+              h4 Physical Items
+            table.table.table-hover.table-condensed
+              thead
+                tr
+                  td
+                    label Name
+              tbody
+                - @physical_items.each do |physical_item|
+                  tr
+                    td
+                      = physical_item.title
+                    td
+                      = check_box_tag 'physical_items[]', physical_item.id
+        div.col-md-4
+          div.panel.panel-default
+            div.panel-heading
+              h4 Digital Items
+            table.table.table-hover.table-condensed
+              thead
+                tr
+                  td
+                    label Name
+              tbody
+                - @digital_items.each do |digital_item|
+                  tr
+                    td
+                      = digital_item.title
+                    td
+                      = check_box_tag 'digital_items[]', digital_item.id
+        div.col-md-4
+          div.panel.panel-default
+            div.panel-heading
+              h4 Bundles
+            table.table.table-hover.table-condensed
+              thead
+                tr
+                  td
+                    label Name
+              tbody
+                - @bundles.each do |bundle|
+                  tr
+                    td
+                      = bundle.title
+                    td
+                      = check_box_tag 'bundles[]', bundle.id
+      div.row
+        div.col-md-offset-4.col-md-4.text-center
+          = submit_tag 'Erase from Clipboard', class: 'btn btn-danger', name: nil
