@@ -2,19 +2,24 @@ module Inventory
   class PricesController < ApplicationController
     def index
       @prices = resource_class.all(pagination)
-      render nothing: true
+      @pricepoints = clipboard_pricepoints
+      @discounts = clipboard_discounts
     end
 
     def create
       @price = resource_class.create(
         scoped_params(:price, :name, :pricepoint_id, :discount_id)
       )
-      render nothing: true
+      redirect_to :back
+    end
+
+    def edit
+      @price = resource
     end
 
     def update
       @price = update_resource(:price, :name, :pricepoint_id, :discount_id)
-      render nothing: true
+      redirect_to :back
     end
 
     private
