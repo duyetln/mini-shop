@@ -15,6 +15,8 @@ module Inventory
 
     def edit
       @price = resource
+      @pricepoints = clipboard_pricepoints
+      @discounts = clipboard_discounts
     end
 
     def update
