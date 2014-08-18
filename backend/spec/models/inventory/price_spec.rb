@@ -5,6 +5,7 @@ describe Price do
   it { should belong_to(:discount) }
 
   it { should validate_presence_of(:pricepoint) }
+  it { should validate_presence_of(:discount) }
   it { should validate_presence_of(:name) }
   it { should validate_uniqueness_of(:name) }
 

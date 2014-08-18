@@ -74,7 +74,8 @@ describe Services::Inventory::Prices do
         {
           price: FactoryGirl.build(
             :price,
-            pricepoint: FactoryGirl.create(:pricepoint)
+            pricepoint: FactoryGirl.create(:pricepoint),
+            discount: FactoryGirl.create(:discount)
           ).attributes
         }
       end

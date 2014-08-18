@@ -3,6 +3,7 @@ class Price < ActiveRecord::Base
   belongs_to :discount
 
   validates :pricepoint, presence: true
+  validates :discount, presence: true
   validates :name, presence: true
   validates :name, uniqueness: true
 
