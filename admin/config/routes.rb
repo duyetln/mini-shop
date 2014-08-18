@@ -42,4 +42,10 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  namespace :settings do
+    get :clipboard, controller: :clipboard, action: :index
+    post :clipboard, controller: :clipboard, action: :create
+    delete :clipboard, controller: :clipboard, action: :destroy
+  end
 end
