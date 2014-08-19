@@ -2,6 +2,8 @@ module Inventory
   class BundlesController < ApplicationController
     def index
       @bundles = resource_class.all(pagination)
+      @physical_items = clipboard_physical_items
+      @digital_items = clipboard_digital_items
     end
 
     def create
@@ -9,12 +11,12 @@ module Inventory
         scoped_params(:bundle, :title, :description)
       )
 
-      scoped_params(:bundleds).each do |bundled|
+      scoped_params(:bundleds).select { |bundled| !!bundled[:selected] }.each do |bundled|
         @bundle.add_or_update_bundled(
           bundled.permit(:item_type, :item_id, :qty)
         )
       end
-      render nothing: true
+      redirect_to :back
     end
 
     def show

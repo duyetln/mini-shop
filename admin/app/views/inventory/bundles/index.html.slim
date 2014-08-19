@@ -2,7 +2,7 @@ h2.page-header
   | Bundles
 
 div.row
-  div.col-md-10
+  div.col-md-9
     div.panel.panel-default
       div.panel-heading
         = paginate :inventory_bundles_path, @prev_page, @next_page
@@ -40,9 +40,6 @@ div.row
                 = link_to inventory_bundle_path(bundle.id), class: 'btn btn-primary', title: 'View' do
                   i.fa.fa-eye
               td
-                = link_to edit_inventory_bundle_path(bundle.id), class: 'btn btn-warning', title: 'Edit' do
-                  i.fa.fa-pencil
-              td
                 = button_to activate_inventory_bundle_path(bundle.id), method: :put, disabled: !bundle.activable?, class: 'btn btn-warning', title: 'Activate' do
                   i.fa.fa-check
               td
@@ -57,15 +54,23 @@ div.row
       div.panel-footer
         = paginate :inventory_bundles_path, @prev_page, @next_page
 
-  div.currency.col-md-2
+  div.currency.col-md-3
     div.panel.panel-default
       div.panel-heading
         h4 New Item
       div.panel-body
-        = form_for :bundle, url: inventory_bundles_path, html: { role: 'form' } do |f|
+        = form_for :bundle, url: inventory_bundles_path, html: { role: 'form'} do |f|
           div.form-group
             = f.text_field :title, class: 'form-control', placeholder: 'New Title'
           div.form-group
             = f.text_field :description, class: 'form-control', placeholder: 'New Description'
+          - (@physical_items + @digital_items).each do |item|
+            div.checkbox
+              label.control-label
+                = check_box_tag 'bundleds[][selected]'
+                = item.title
+              = hidden_field_tag 'bundleds[][item_type]', item.resource_type
+              = hidden_field_tag 'bundleds[][item_id]', item.resource_id
+              = text_field_tag 'bundleds[][qty]', nil, placeholder: 'Amount', class: 'form-control'
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success disabled', name: nil
+            = f.submit 'Create', class: 'btn btn-success', name: nil
