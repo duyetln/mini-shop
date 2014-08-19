@@ -10,8 +10,7 @@ module Inventory
         scoped_params(:pricepoint, :name)
       )
 
-      scoped_params(:pricepoint_prices).keys.each do |key|
-        value = scoped_params(:pricepoint_prices).require(key)
+      scoped_params(:pricepoint_prices).each do |value|
         @pricepoint.create_pricepoint_price(
           value.permit(:amount, :currency_id)
         )
@@ -26,8 +25,7 @@ module Inventory
 
     def update
       @pricepoint = update_resource(:pricepoint, :name)
-      scoped_params(:pricepoint_prices).keys.each do |key|
-        value = scoped_params(:pricepoint_prices).require(key)
+      scoped_params(:pricepoint_prices).each do |value|
         pricepoint_price = @pricepoint.pricepoint_prices.find do |pp|
           pp.id == value.require(:id).to_i
         end

@@ -16,10 +16,10 @@ div.row
             div.form-group
               label.control-label.col-md-4 == "#{currency.sign} #{currency.code}"
               div.col-md-8
-                = text_field_tag "pricepoint_prices[#{currency.code}][amount]", @pricepoint.amount(currency), placeholder: "#{currency.code} Amount", class: 'form-control'
+                = text_field_tag 'pricepoint_prices[][amount]', @pricepoint.amount(currency), placeholder: "#{currency.code} Amount", class: 'form-control'
                 - pricepoint_price = @pricepoint.pricepoint_prices.find { |pp| pp.currency.code == currency.code }
-                = hidden_field_tag "pricepoint_prices[#{currency.code}][id]", pricepoint_price.try(:id)
-                = hidden_field_tag "pricepoint_prices[#{currency.code}][currency_id]", currency.id
+                = hidden_field_tag 'pricepoint_prices[][id]', pricepoint_price.try(:id)
+                = hidden_field_tag 'pricepoint_prices[][currency_id]', currency.id
 
           div.form-group
             div.col-md-offset-4.col-md-8

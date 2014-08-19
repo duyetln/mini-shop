@@ -44,8 +44,8 @@ div.row
             = f.text_field :name, class: 'form-control', placeholder: 'New Name'
           - @currencies.each do |currency|
             div.form-group
-              = text_field_tag "pricepoint_prices[#{currency.code}][amount]", nil, placeholder: "#{currency.sign} #{currency.code} Amount".html_safe, class: 'form-control'
-              = hidden_field_tag "pricepoint_prices[#{currency.code}][currency_id]", currency.id
+              = text_field_tag 'pricepoint_prices[][amount]', nil, placeholder: "#{currency.sign} #{currency.code} Amount".html_safe, class: 'form-control'
+              = hidden_field_tag 'pricepoint_prices[][currency_id]', currency.id
 
           div.form-group
             = f.submit 'Create', class: 'btn btn-success', name: nil
