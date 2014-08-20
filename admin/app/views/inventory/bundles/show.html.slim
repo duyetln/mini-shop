@@ -1,0 +1,82 @@
+h2.page-header
+ = @bundle.title
+
+div.row
+  div.col-md-6
+    div.panel.panel-default
+      div.panel-heading
+        h4 Bundle Information
+      table.table.table-condensed
+        tbody
+          tr
+            td
+              label Title
+            td
+              = @bundle.title
+          tr
+            td
+              label Description
+            td
+              = @bundle.description
+    div.panel.panel-default
+      div.panel-heading
+        h4 Items
+      table.table.table-condensed
+        thead
+          tr
+            td
+              label Title
+            td
+              label Description
+            td
+              label Qty
+        tbody
+          - @bundle.bundleds.each do |bundled|
+            tr
+              td
+                = bundled.item.title
+              td
+                = bundled.item.description
+              td
+                = bundled.qty
+              td
+                = button_to inventory_bundle_bundled_path(@bundle.id, bundled.id), method: :delete, disabled: !@bundle.changeable?, class: 'btn btn-danger', title: 'Delete' do
+                  i.fa.fa-trash-o
+  div.col-md-6
+    div.panel.panel-default
+      div.panel-heading
+        h4 Edit Bundle
+      div.panel-body
+        = form_for :bundle, url: inventory_bundle_path(@bundle.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.form-group
+            label.control-label.col-md-2 Title
+            div.col-md-9
+              = f.text_field :title, class: 'form-control', placeholder: 'New Title'
+          div.form-group
+            label.control-label.col-md-2 Description
+            div.col-md-9
+              = f.text_field :description, class: 'form-control', placeholder: 'New Description'
+          - if @bundle.changeable?
+            - @bundle.bundleds.each do |bundled|
+              div.form-group
+                div.col-md-2
+                  = text_field_tag 'bundleds[][qty]', bundled.qty, placeholder: 'Amount', class: 'form-control'
+                  = hidden_field_tag 'bundleds[][selected]', true
+                  = hidden_field_tag 'bundleds[][item_type]', bundled.item.resource_type
+                  = hidden_field_tag 'bundleds[][item_id]', bundled.item.resource_id
+                label.col-md-9
+                  = bundled.item.title
+            - (@physical_items + @digital_items).each do |item|
+              div.form-group
+                div.col-md-2
+                  = text_field_tag 'bundleds[][qty]', nil, placeholder: 'Amount', class: 'form-control'
+                div.col-md-9
+                  div.checkbox
+                    label.control-label
+                      = check_box_tag 'bundleds[][selected]'
+                      = item.title
+                    = hidden_field_tag 'bundleds[][item_type]', item.resource_type
+                    = hidden_field_tag 'bundleds[][item_id]', item.resource_id
+          div.form-group
+            div.col-md-offset-2.col-md-9
+              = f.submit 'Update', class: 'btn btn-warning', name: nil

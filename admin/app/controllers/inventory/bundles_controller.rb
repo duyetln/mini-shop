@@ -11,33 +11,32 @@ module Inventory
         scoped_params(:bundle, :title, :description)
       )
 
-      scoped_params(:bundleds).select { |bundled| !!bundled[:selected] }.each do |bundled|
-        @bundle.add_or_update_bundled(
-          bundled.permit(:item_type, :item_id, :qty)
-        )
+      if params[:bundleds].present?
+        scoped_params(:bundleds).select { |bundled| !!bundled[:selected] }.each do |bundled|
+          @bundle.add_or_update_bundled(
+            bundled.permit(:item_type, :item_id, :qty)
+          )
+        end
       end
       redirect_to :back
     end
 
     def show
-      @bundle   = resource
-      @bundleds = @bundle.bundleds
-      render nothing: true
-    end
-
-    def edit
       @bundle = resource
-      render nothing: true
+      @physical_items = clipboard_physical_items
+      @digital_items = clipboard_digital_items
     end
 
     def update
       @bundle = update_resource(:bundle, :title, :description)
-      scoped_params(:bundleds).each do |bundled|
-        @bundle.add_or_update_bundled(
-          bundled.permit(:qty)
-        )
+      if params[:bundleds].present? && @bundle.changeable?
+        scoped_params(:bundleds).select { |bundled| !!bundled[:selected] }.each do |bundled|
+          @bundle.add_or_update_bundled(
+            bundled.permit(:item_type, :item_id, :qty)
+          )
+        end
       end
-      render nothing: true
+      redirect_to :back
     end
 
     def activate

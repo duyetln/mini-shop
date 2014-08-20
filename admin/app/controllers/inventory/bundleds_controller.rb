@@ -3,7 +3,7 @@ module Inventory
     def destroy
       @bundle = BackendClient::Bundle.find(scoped_params(:bundle_id))
       @bundle.delete_bundled(id)
-      render nothing: true
+      redirect_to :back
     end
   end
 end
