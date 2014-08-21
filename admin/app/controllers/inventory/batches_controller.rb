@@ -3,24 +3,23 @@ module Inventory
     def show
       @batch   = resource
       @coupons = @batch.coupons(pagination)
-      render nothing: true
     end
 
     def update
       @batch = update_resource(:batch, :name)
-      render nothing: true
+      redirect_to :back
     end
 
     def activate
       @batch = resource
       @batch.activate!
-      render nothing: true
+      redirect_to :back
     end
 
     def destroy
       @batch = resource
       @batch.delete!
-      render nothing: true
+      redirect_to :back
     end
 
     def coupons
@@ -28,7 +27,7 @@ module Inventory
       @batch.create_coupons(
         scoped_params(:qty)
       )
-      render nothing: true
+      redirect_to :back
     end
 
     private

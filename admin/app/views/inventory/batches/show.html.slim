@@ -1,0 +1,96 @@
+h2.page-header
+  = @batch.name
+
+div.row
+  div.col-md-6
+    div.panel.panel-default
+      div.panel-heading
+        h4 Batch Information
+      table.table.table-condensed
+        tbody
+          tr
+            td
+              label ID
+            td
+              = @batch.id
+          tr
+            td
+              label Name
+            td
+              = @batch.name
+          tr
+            td
+              label Coupons
+            td
+              = "#{@batch.used_coupon_count}/#{@batch.coupon_count}"
+  div.col-md-2
+    div.panel.panel-default
+      div.panel-heading
+        h4 Controls
+      table.table.table-condensed
+        tr
+          td
+            = button_to activate_inventory_batch_path(@batch.id), method: :put, disabled: !@batch.activable?, class: 'btn btn-warning', title: 'Activate' do
+                i.fa.fa-check
+                | Activate
+        tr
+          td
+            = button_to inventory_batch_path(@batch.id), method: :delete, disabled: !@batch.deletable?, class: 'btn btn-danger', title: 'Delete' do
+                i.fa.fa-trash-o
+                | Delete
+  div.col-md-4
+    div.panel.panel-default
+      div.panel-heading
+        h4 Edit Batch
+      div.panel-body
+        = form_for :batch, url: inventory_batch_path(@batch.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.form-group
+            label.control-label.col-md-4 Name
+            div.col-md-8
+              = f.text_field :name, class: 'form-control', placeholder: 'Name'
+          div.form-group
+            div.col-md-offset-4.col-md-8
+              = f.submit 'Update', class: 'btn btn-warning', name: nil
+div.row
+  div.col-md-8
+    div.panel.panel-default
+      div.panel-heading
+        = paginate :inventory_batch_path, @prev_page, @next_page, id: @batch.id
+      table.table.table-condensed
+        thead
+          tr
+            td
+              label ID
+            td
+              label Code
+            td
+              label Used
+            td
+              label Used At
+            td
+              label User
+        tbody
+          - @coupons.each do |coupon|
+            tr class="#{coupon.used? ? 'success' : '' }"
+              td
+                = coupon.id
+              td
+                = coupon.code
+              td
+                = yesno(coupon.used?)
+              td
+                = coupon.used? ? coupon.used_at.to_formatted_s(:long) : 'N/A'
+              td
+                = coupon.used? ? coupon.used_by : 'N/A'
+      div.panel-footer
+        = paginate :inventory_batch_path, @prev_page, @next_page, id: @batch.id
+  div.col-md-4
+    div.panel.panel-default
+      div.panel-heading
+        h4 New Coupons
+      div.panel-body
+        = form_tag coupons_inventory_batch_path(@batch.id), role: 'form' do
+          div.form-group
+            = text_field_tag :qty, nil, class: 'form-control', placeholder: 'Qty'
+          div.form-group
+            = submit_tag 'Create', class: 'btn btn-success ', name: nil
