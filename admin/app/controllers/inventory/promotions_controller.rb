@@ -2,13 +2,19 @@ module Inventory
   class PromotionsController < ApplicationController
     def index
       @promotions = resource_class.all(pagination)
+      @bundles = clipboard_bundles
+      @physical_items = clipboard_physical_items
+      @digital_items = clipboard_digital_items
+      @prices = clipboard_prices
     end
 
     def create
       @promotion = resource_class.create(
-        scoped_params(:promotion, :name, :title, :description, :item_type, :item_id, :price_id)
+        scoped_params(:promotion, :name, :title, :description, :price_id).merge(
+          scoped_params(:items).find { |item| !!item[:selected] }.permit(:item_type, :item_id)
+        )
       )
-      render nothing: true
+      redirect_to :back
     end
 
     def show
