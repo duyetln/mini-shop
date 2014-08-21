@@ -5,7 +5,7 @@ Rails.application.config.action_dispatch.cookies_serializer = :json
 Rails.application.config.filter_parameters += [:password]
 
 # session store
-Rails.application.config.session_store :cache_store, key: '_admin_session'
+Rails.application.config.session_store :cache_store, key: '_admin_session', expire_after: 1.hour
 
 # load dependencies not inferable by autoload or eager loading
 require Rails.root.join('lib', 'backend_client')

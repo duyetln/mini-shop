@@ -24,8 +24,8 @@ html
           div.panel.panel-danger
             - heading = body = nil
             - if flash[:error].is_a?(Hash)
-              - heading = flash[:error]['primary']
-              - body = flash[:error]['secondary']
+              - heading = flash[:error][:primary]
+              - body = flash[:error][:secondary]
             - elsif flash[:error].is_a?(String)
               - heading = 'Error'
               - body = flash[:error]
