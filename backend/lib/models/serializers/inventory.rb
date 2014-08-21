@@ -86,11 +86,11 @@ class PromotionSerializer < ResourceSerializer
   end
 
   def coupon_count
-    object.batches.map { |x| x.coupons.count }.reduce(&:+)
+    object.batches.map { |x| x.coupons.count }.reduce(0, &:+)
   end
 
   def used_coupon_count
-    object.batches.map { |x| x.coupons.used.count }.reduce(&:+)
+    object.batches.map { |x| x.coupons.used.count }.reduce(0, &:+)
   end
 end
 
