@@ -57,4 +57,20 @@ div.row
           div.form-group
             = f.text_field :name, class: 'form-control', placeholder: 'New Name'
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success disabled', name: nil
+            = f.select :price_id, @prices.collect { |price| [price.name, price.id] }, { prompt: 'Choose Price' }, { disabled: @prices.blank?, class: 'form-control' }
+          - if @prices.blank?
+            div.alert.alert-danger
+              | Please save a few prices to clipboard to activate the select form
+          - items = @bundles + @physical_items + @digital_items
+          - items.each do |item|
+            div.radio
+              label.control-label
+                = radio_button_tag 'items[][selected]', true, false
+                = item.title
+              = hidden_field_tag 'items[][item_type]', item.resource_type
+              = hidden_field_tag 'items[][item_id]', item.resource_id
+          - if items.blank?
+            div.alert.alert-danger
+              | Please save a few items to clipboard to activate the select form
+          div.form-group
+            = f.submit 'Create', class: 'btn btn-success ', name: nil, disabled: items.blank?
