@@ -20,19 +20,12 @@ module Inventory
     def show
       @promotion = resource
       @batches   = @promotion.batches(pagination)
-      @item      = @promotion.item
-      @price     = @promotion.price
-      render nothing: true
-    end
-
-    def edit
-      @promotion = resource
-      render nothing: true
+      @prices    = clipboard_prices
     end
 
     def update
       @promotion = update_resource(:promotion, :name, :title, :description, :price_id)
-      render nothing: true
+      redirect_to :back
     end
 
     def activate
@@ -53,7 +46,7 @@ module Inventory
         scoped_params(:qty),
         scoped_params(:batch).require(:size)
       )
-      render nothing: true
+      redirect_to :back
     end
 
     private

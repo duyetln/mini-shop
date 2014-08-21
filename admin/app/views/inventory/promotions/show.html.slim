@@ -1,0 +1,136 @@
+h2.page-header
+  = @promotion.name
+
+div.row
+  div.col-md-6
+    div.panel.panel-default
+      div.panel-heading
+        h4 Promotion Information
+      table.table.table-condensed
+        tbody
+          tr
+            td
+              label ID
+            td
+              = @promotion.id
+          tr
+            td
+              label Name
+            td
+              = @promotion.name
+          tr
+            td
+              label Title
+            td
+              = @promotion.title
+          tr
+            td
+              label Description
+            td
+              = @promotion.description
+          tr
+            td
+              label Item
+            td
+              = @promotion.item.title
+          tr
+            td
+              label Price
+            td
+              = @promotion.price.name
+          tr
+            td
+              label Batches
+            td
+              = @promotion.batch_count
+          tr
+            td
+              label Coupons
+            td
+              = "#{@promotion.used_coupon_count}/#{@promotion.coupon_count}"
+  div.col-md-2
+    div.panel.panel-default
+      div.panel-heading
+        h4 Controls
+      table.table.table-condensed
+        tr
+          td
+            = button_to activate_inventory_promotion_path(@promotion.id), method: :put, disabled: !@promotion.activable?, class: 'btn btn-warning', title: 'Activate' do
+                i.fa.fa-check
+                | Activate
+        tr
+          td
+            = button_to inventory_promotion_path(@promotion.id), method: :delete, disabled: !@promotion.deletable?, class: 'btn btn-danger', title: 'Delete' do
+                i.fa.fa-trash-o
+                | Delete
+  div.col-md-4
+    div.panel.panel-default
+      div.panel-heading
+        h4 Edit Promotion
+      div.panel-body
+        = form_for :promotion, url: inventory_promotion_path(@promotion.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.form-group
+            label.control-label.col-md-4 Name
+            div.col-md-8
+              = f.text_field :name, class: 'form-control', placeholder: 'Name'
+          div.form-group
+            label.control-label.col-md-4 Title
+            div.col-md-8
+              = f.text_field :title, class: 'form-control', placeholder: 'Title'
+          div.form-group
+            label.control-label.col-md-4 Description
+            div.col-md-8
+              = f.text_field :description, class: 'form-control', placeholder: 'Description'
+          div.form-group
+            label.control-label.col-md-4 Price
+            div.col-md-8
+              = f.select :price_id, ([@promotion.price] + @prices).uniq(&:id).collect { |price| [price.name, price.id] }, { }, { disabled: @prices.blank?, class: 'form-control' }
+          div.form-group
+            div.col-md-offset-4.col-md-8
+              = f.submit 'Update', class: 'btn btn-warning', name: nil
+div.row
+  div.col-md-8
+    div.panel.panel-default
+      div.panel-heading
+        = paginate :inventory_promotion_path, @prev_page, @next_page, id: @promotion.id
+      table.table.table-condensed
+        thead
+          tr
+            td
+              label ID
+            td
+              label Name
+            td
+              label Coupons
+        tbody
+          - @batches.each do |batch|
+            tr
+              td
+                = batch.id
+              td
+                = batch.name
+              td
+                = "#{batch.used_coupon_count}/#{batch.coupon_count}"
+              td
+                = link_to inventory_batch_path(batch.id), class: 'btn btn-primary', title: 'View' do
+                  i.fa.fa-eye
+              td
+                = button_to activate_inventory_batch_path(batch.id), method: :put, disabled: !batch.activable?, class: 'btn btn-warning', title: 'Activate' do
+                  i.fa.fa-check
+              td
+                = button_to inventory_batch_path(batch.id), method: :delete, disabled: !batch.deletable?, class: 'btn btn-danger', title: 'Delete' do
+                  i.fa.fa-trash-o
+      div.panel-footer
+        = paginate :inventory_promotion_path, @prev_page, @next_page, id: @promotion.id
+  div.col-md-4
+    div.panel.panel-default
+      div.panel-heading
+        h4 New Batches
+      div.panel-body
+        = form_for :batch, url: batches_inventory_promotion_path(@promotion.id), html: { role: 'form' } do |f|
+          div.form-group
+            = text_field_tag :qty, nil, class: 'form-control', placeholder: 'Qty'
+          div.form-group
+            = f.text_field :size, class: 'form-control', placeholder: 'Batch Size'
+          div.form-group
+            = f.submit 'Create', class: 'btn btn-success ', name: nil

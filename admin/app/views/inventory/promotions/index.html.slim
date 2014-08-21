@@ -40,9 +40,6 @@ div.row
                 = link_to inventory_promotion_path(promotion.id), class: 'btn btn-primary', title: 'View' do
                   i.fa.fa-eye
               td
-                = link_to edit_inventory_promotion_path(promotion.id), class: 'btn btn-warning', title: 'Edit' do
-                  i.fa.fa-pencil
-              td
                 = button_to activate_inventory_promotion_path(promotion.id), method: :put, disabled: !promotion.activable?, class: 'btn btn-warning', title: 'Activate' do
                   i.fa.fa-check
               td
