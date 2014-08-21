@@ -17,21 +17,14 @@ module Inventory
       redirect_to :back
     end
 
-    def show
-      @store_item = resource
-      @item       = @store_item.item
-      @price      = @store_item.price
-      render nothing: true
-    end
-
     def edit
       @store_item = resource
-      render nothing: true
+      @prices = clipboard_prices
     end
 
     def update
       @store_item = update_resource(:store_item, :name, :price_id)
-      render nothing: true
+      redirect_to :back
     end
 
     def destroy

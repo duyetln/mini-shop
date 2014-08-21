@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       resources :bundleds, only: :destroy
     end
 
-    resources :store_items, except: [:new]
+    resources :store_items, except: [:new, :show]
     resources :promotions, except: [:new] do
       put :activate, on: :member
       post :batches, on: :member

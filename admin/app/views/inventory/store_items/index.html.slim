@@ -2,7 +2,7 @@ h2.page-header
   | Store Items
 
 div.row
-  div.col-md-10
+  div.col-md-9
     div.panel.panel-default
       div.panel-heading
         = paginate :inventory_store_items_path, @prev_page, @next_page
@@ -37,9 +37,6 @@ div.row
               td
                 = yesno(store_item.active?)
               td
-                = link_to inventory_store_item_path(store_item.id), class: 'btn btn-primary', title: 'View' do
-                  i.fa.fa-eye
-              td
                 = link_to edit_inventory_store_item_path(store_item.id), class: 'btn btn-warning', title: 'Edit' do
                   i.fa.fa-pencil
               td
@@ -48,7 +45,7 @@ div.row
       div.panel-footer
         = paginate :inventory_store_items_path, @prev_page, @next_page
 
-  div.currency.col-md-2
+  div.currency.col-md-3
     div.panel.panel-default
       div.panel-heading
         h4 New Item
