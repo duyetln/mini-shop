@@ -2,10 +2,28 @@ h2.page-header
   = @pricepoint.name
 
 div.row
-  div.col-md-3
+  div.col-md-4
     div.panel.panel-default
       div.panel-heading
-        h4 Edit Pricepoint
+        h4 ID #{@pricepoint.id}
+      table.table
+        tbody
+          tr
+            td.text-right
+              label Name
+            td
+              = @pricepoint.name
+          - @currencies.each do |currency|
+            tr
+              td.text-right
+                label
+                  == "#{currency.sign} #{currency.code}"
+              td
+                = @pricepoint.amount(currency)
+  div.col-md-4
+    div.panel.panel-default
+      div.panel-heading
+        h4 Edit
       div.panel-body
         = form_for :pricepoint, url: inventory_pricepoint_path(@pricepoint.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
           div.form-group

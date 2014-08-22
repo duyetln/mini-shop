@@ -2,40 +2,8 @@ h2.page-header
   | Pricepoints
 
 div.row
-  div.col-md-10
-    div.panel.panel-default
-      div.panel-heading
-        = paginate :inventory_pricepoints_path, @prev_page, @next_page
-      table.table.table-hover.table-condensed
-        thead
-          tr
-            td
-              |
-            - @currencies.each do |currency|
-              td
-                label == "#{currency.sign} #{currency.code}"
-        tbody
-          - @pricepoints.each do |pricepoint|
-            tr
-              td
-                label = pricepoint.name
-              - @currencies.each do |currency|
-                td
-                  = pricepoint.amount(currency)
-              td
-                = link_to edit_inventory_pricepoint_path(pricepoint.id), class: 'btn btn-warning', title: 'Edit' do
-                  i.fa.fa-pencil
-              td
-                = form_tag settings_clipboard_path do
-                  = hidden_field_tag 'resource_type', pricepoint.resource_type
-                  = hidden_field_tag 'resource_id', pricepoint.resource_id
-                  = button_tag class: 'btn btn-default', title: 'Save item to clipboard', name: nil
-                    i.fa.fa-clipboard
-      div.panel-footer
-        = paginate :inventory_pricepoints_path, @prev_page, @next_page
-
-  div.currency.col-md-2
-    div.panel.panel-default
+  div.col-md-2
+    div.panel.panel-success
       div.panel-heading
         h4 New Pricepoint
       div.panel-body
@@ -46,17 +14,14 @@ div.row
             div.form-group
               = text_field_tag 'pricepoint_prices[][amount]', nil, placeholder: "#{currency.sign} #{currency.code} Amount".html_safe, class: 'form-control'
               = hidden_field_tag 'pricepoint_prices[][currency_id]', currency.id
+          div.form-group
+            = f.submit 'Create', class: 'btn btn-success', name: nil
+  - @pricepoints.shift(5).each do |pricepoint|
+    div.col-md-2
+      = render partial: 'panel', locals: { pricepoint: pricepoint }
 
-          div.form-group
-            = f.submit 'Create', class: 'btn btn-success', name: nil
-    div.panel.panel-default
-      div.panel-heading
-        h4 New Currency
-      div.panel-body
-        = form_for :currency, url: inventory_currencies_path, html: { role: 'form' } do |f|
-          div.form-group
-            = f.text_field :code, class: 'form-control', placeholder: 'New Code'
-          div.form-group
-            = f.text_field :sign, class: 'form-control', placeholder: 'New Sign'
-          div.form-group
-            = f.submit 'Create', class: 'btn btn-success', name: nil
+- while @pricepoints.present? do
+  div.row
+    - @pricepoints.shift(6).each do |pricepoint|
+      div.col-md-2
+        = render partial: 'panel', locals: { pricepoint: pricepoint }
