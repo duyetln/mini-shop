@@ -1,0 +1,25 @@
+h2.page-header
+  | Currencies
+
+div.row
+  div.col-md-2
+    div.panel.panel-success
+      div.panel-heading
+        h4 New Currency
+      div.panel-body
+        = form_for :currency, url: inventory_currencies_path, html: { role: 'form' } do |f|
+          div.form-group
+            = f.text_field :code, class: 'form-control', placeholder: 'New Code'
+          div.form-group
+            = f.text_field :sign, class: 'form-control', placeholder: 'New Sign'
+          div.form-group
+            = f.submit 'Create', class: 'btn btn-success', name: nil
+  - @currencies.shift(5).each do |currency|
+    div.col-md-2
+      = render partial: 'panel', locals: { currency: currency }
+
+- while @currencies.present?
+  div.row
+    - @currencies.shift(6).each do |currency|
+      div.col-md-2
+        = render partial: 'panel', locals: { currency: currency }

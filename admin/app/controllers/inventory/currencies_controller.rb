@@ -1,5 +1,9 @@
 module Inventory
   class CurrenciesController < ApplicationController
+    def index
+      @currencies = BackendClient::Currency.all(pagination)
+    end
+
     def create
       @currency =  resource_class.create(
         scoped_params(:currency, :code, :sign)

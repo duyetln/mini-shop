@@ -14,6 +14,8 @@ div.row
       div.panel-heading.text-center
         i.fa.fa-money.fa-fw.fa-5x title='Price Management'
       div.list-group
+        = link_to inventory_currencies_path, class: 'list-group-item' do
+          h4.text-primary Currencies
         = link_to inventory_pricepoints_path, class: 'list-group-item' do
           h4.text-primary Pricepoints
         = link_to inventory_discounts_path, class: 'list-group-item' do
