@@ -1,0 +1,16 @@
+div.panel.panel-default
+  div.panel-heading
+    h4 ID #{discount.id}
+  ul.list-group
+    li.list-group-item title='Discount Name'
+      label.height-50 = discount.name
+    li.list-group-item title='Discount Rate'
+      = discount.rate
+    li.list-group-item title='Discount Start At'
+      = discount.start_at.present? && discount.start_at.strftime('%m/%d/%Y %H:%M') || 'N/A'
+    li.list-group-item title='Discount End At'
+      = discount.end_at.present? && discount.end_at.strftime('%m/%d/%Y %H:%M') || 'N/A'
+    li.list-group-item.text-center
+      = link_to inventory_discount_path(discount.id), class: 'btn btn-primary' do
+        i.fa.fa-eye
+        |  View

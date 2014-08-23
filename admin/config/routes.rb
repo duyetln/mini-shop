@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   namespace :inventory do
     resources :currencies, only: [:index, :create]
     resources :pricepoints, except: [:edit, :new, :destroy]
-    resources :discounts, except: [:show, :new, :destroy]
+    resources :discounts, except: [:edit, :new, :destroy]
     resources :prices, except: [:show, :new, :destroy]
 
     [:physical_items, :digital_items].each do |items|
