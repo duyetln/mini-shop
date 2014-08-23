@@ -1,0 +1,14 @@
+div.panel.panel-default
+  div.panel-heading
+    h4 ID #{price.id}
+  ul.list-group
+    li.list-group-item title='Price Name'
+      label.height-50 = price.name
+    li.list-group-item title='Price Pricepoint Name'
+      div.height-50= price.pricepoint.name
+    li.list-group-item title='Price Discount Name'
+      div.height-50 = price.discount.name
+    li.list-group-item.text-center
+      = link_to inventory_price_path(price.id), class: 'btn btn-primary' do
+        i.fa.fa-eye
+        |  View

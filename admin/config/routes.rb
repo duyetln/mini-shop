@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     resources :currencies, only: [:index, :create]
     resources :pricepoints, except: [:edit, :new, :destroy]
     resources :discounts, except: [:edit, :new, :destroy]
-    resources :prices, except: [:show, :new, :destroy]
+    resources :prices, except: [:edit, :new, :destroy]
 
     [:physical_items, :digital_items].each do |items|
       resources items, except: [:show, :new] do

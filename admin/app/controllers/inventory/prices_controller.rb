@@ -2,8 +2,14 @@ module Inventory
   class PricesController < ApplicationController
     def index
       @prices = resource_class.all(pagination)
-      @pricepoints = clipboard_pricepoints
-      @discounts = clipboard_discounts
+      @pricepoints = BackendClient::Pricepoint.all(sort: :desc)
+      @discounts = BackendClient::Discount.all(sort: :desc)
+    end
+
+    def show
+      @price = resource
+      @pricepoints = BackendClient::Pricepoint.all(sort: :desc)
+      @discounts = BackendClient::Discount.all(sort: :desc)
     end
 
     def create
@@ -11,12 +17,6 @@ module Inventory
         scoped_params(:price, :name, :pricepoint_id, :discount_id)
       )
       redirect_to :back
-    end
-
-    def edit
-      @price = resource
-      @pricepoints = clipboard_pricepoints
-      @discounts = clipboard_discounts
     end
 
     def update

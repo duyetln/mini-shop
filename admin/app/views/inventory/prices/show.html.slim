@@ -1,0 +1,46 @@
+h2.page-header
+  = @price.name
+
+div.row
+  div.col-md-4
+    div.panel.panel-default
+      div.panel-heading
+        h4 ID #{@price.id}
+      table.table
+        tbody
+          tr
+            td.text-right
+              label Name
+            td
+              = @price.name
+          tr
+            td.text-right
+              label Pricepoint
+            td
+              = @price.pricepoint.name
+          tr
+            td.text-right
+              label Pricepoint
+            td
+              = @price.discount.name
+  div.col-md-4
+    div.panel.panel-default
+      div.panel-heading
+        h4 Edit
+      div.panel-body
+        = form_for :price, url: inventory_price_path(@price.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.form-group
+            label.control-label.col-md-4 Name
+            div.col-md-8
+              = f.text_field :name, class: 'form-control', placeholder: 'Name'
+          div.form-group
+            label.control-label.col-md-4 Pricepoint
+            div.col-md-8
+              = f.select :pricepoint_id, ([@price.pricepoint] + @pricepoints).uniq(&:id).collect { |pricepoint| [pricepoint.name, pricepoint.id] }, { }, { class: 'form-control' }
+          div.form-group
+            label.control-label.col-md-4 Discount
+            div.col-md-8
+              = f.select :discount_id, ([@price.discount] + @discounts).uniq(&:id).collect { |discount| [discount.name, discount.id] }, { }, { class: 'form-control' }
+          div.form-group
+            div.col-md-offset-4.col-md-8
+              = f.submit 'Update', class: 'btn btn-warning', name: nil

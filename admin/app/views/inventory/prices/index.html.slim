@@ -2,46 +2,8 @@ h2.page-header
   | Prices
 
 div.row
-  div.col-md-9
-    div.panel.panel-default
-      div.panel-heading
-        = paginate :inventory_prices_path, @prev_page, @next_page
-      table.table.table-hover.table-condensed
-        thead
-          tr
-            td
-              label ID
-            td
-              label Name
-            td
-              label Pricepoint
-            td
-              label Discount
-        tbody
-          - @prices.each do |price|
-            tr
-              td
-                = price.id
-              td
-                = price.name
-              td
-                = price.pricepoint.name
-              td
-                = price.discount.name
-              td
-                = link_to edit_inventory_price_path(price.id), class: 'btn btn-warning', title: 'Edit' do
-                  i.fa.fa-pencil
-              td
-                = form_tag settings_clipboard_path do
-                  = hidden_field_tag 'resource_type', price.resource_type
-                  = hidden_field_tag 'resource_id', price.resource_id
-                  = button_tag class: 'btn btn-default', title: 'Save item to clipboard', name: nil
-                    i.fa.fa-clipboard
-      div.panel-footer
-        = paginate :inventory_prices_path, @prev_page, @next_page
-
-  div.currency.col-md-3
-    div.panel.panel-default
+  div.col-md-2
+    div.panel.panel-success
       div.panel-heading
         h4 New Price
       div.panel-body
@@ -50,13 +12,16 @@ div.row
             = f.text_field :name, class: 'form-control', placeholder: 'New Name'
           div.form-group
             = f.select :pricepoint_id, @pricepoints.collect { |pricepoint| [pricepoint.name, pricepoint.id] }, { prompt: 'Choose Pricepoint' }, { disabled: @pricepoints.blank?, class: 'form-control' }
-          - if @pricepoints.blank?
-            div.alert.alert-danger
-              | Please save a few pricepoints to clipboard to activate the select form
           div.form-group
             = f.select :discount_id, @discounts.collect { |discount| [discount.name, discount.id] }, { prompt: 'Choose Discount' }, { disabled: @discounts.blank?, class: 'form-control' }
-          - if @discounts.blank?
-            div.alert.alert-danger
-              | Please save a few discounts to clipboard to activate the select form
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success', name: nil, disabled: @pricepoints.blank? || @discounts.blank?
+            = f.submit 'Create', class: 'btn btn-success', name: nil
+  - @prices.shift(5).each do |price|
+    div.col-md-2
+      = render partial: 'panel', locals: { price: price }
+
+- while @prices.present? do
+  div.row
+    - @prices.shift(6).each do |price|
+      div.col-md-2
+        = render partial: 'panel', locals: { price: price }
