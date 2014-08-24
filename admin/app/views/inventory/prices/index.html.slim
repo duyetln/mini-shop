@@ -15,7 +15,9 @@ div.row
           div.form-group
             = f.select :discount_id, @discounts.collect { |discount| [discount.name, discount.id] }, { prompt: 'Choose Discount' }, { disabled: @discounts.blank?, class: 'form-control' }
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success', name: nil
+            = button_tag class: 'btn btn-success', name: nil do
+              i.fa.fa-plus
+              |  Create
   - @prices.shift(5).each do |price|
     div.col-md-2
       = render partial: 'panel', locals: { price: price }

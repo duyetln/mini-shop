@@ -43,4 +43,6 @@ div.row
               = f.select :discount_id, ([@price.discount] + @discounts).uniq(&:id).collect { |discount| [discount.name, discount.id] }, { }, { class: 'form-control' }
           div.form-group
             div.col-md-offset-4.col-md-8
-              = f.submit 'Update', class: 'btn btn-warning', name: nil
+              = button_tag class: 'btn btn-warning', name: nil do
+                i.fa.fa-pencil
+                |  Update

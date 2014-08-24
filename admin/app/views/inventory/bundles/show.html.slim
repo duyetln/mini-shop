@@ -79,4 +79,6 @@ div.row
                     = hidden_field_tag 'bundleds[][item_id]', item.resource_id
           div.form-group
             div.col-md-offset-2.col-md-9
-              = f.submit 'Update', class: 'btn btn-warning', name: nil
+              = button_tag class: 'btn btn-warning', name: nil do
+                i.fa.fa-pencil
+                |  Update

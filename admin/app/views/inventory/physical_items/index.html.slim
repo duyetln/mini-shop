@@ -15,7 +15,9 @@ div.row
           div.form-group
             = f.text_field :qty, class: 'form-control', placeholder: 'New Qty'
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success', name: nil
+            = button_tag class: 'btn btn-success', name: nil do
+              i.fa.fa-plus
+              |  Create
 
   - @physical_items.shift(5).each do |physical_item|
     div.col-md-2

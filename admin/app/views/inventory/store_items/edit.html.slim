@@ -18,4 +18,6 @@ div.row
               = f.select :price_id, ([@store_item.price] + @prices).uniq(&:id).collect { |price| [price.name, price.id] }, { }, { disabled: @prices.blank?, class: 'form-control' }
           div.form-group
             div.col-md-offset-4.col-md-8
-              = f.submit 'Update', class: 'btn btn-warning', name: nil
+              = button_tag class: 'btn btn-warning', name: nil do
+                i.fa.fa-pencil
+                |  Update

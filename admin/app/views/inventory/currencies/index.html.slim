@@ -13,7 +13,9 @@ div.row
           div.form-group
             = f.text_field :sign, class: 'form-control', placeholder: 'New Sign'
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success', name: nil
+            = button_tag class: 'btn btn-success', name: nil do
+              i.fa.fa-plus
+              |  Create
   - @currencies.shift(5).each do |currency|
     div.col-md-2
       = render partial: 'panel', locals: { currency: currency }

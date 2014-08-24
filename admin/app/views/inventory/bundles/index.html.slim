@@ -73,4 +73,6 @@ div.row
               = hidden_field_tag 'bundleds[][item_id]', item.resource_id
               = text_field_tag 'bundleds[][qty]', nil, placeholder: 'Amount', class: 'form-control'
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success', name: nil
+            = button_tag class: 'btn btn-success', name: nil do
+              i.fa.fa-plus
+              |  Create

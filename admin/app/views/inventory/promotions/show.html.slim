@@ -87,7 +87,9 @@ div.row
               = f.select :price_id, ([@promotion.price] + @prices).uniq(&:id).collect { |price| [price.name, price.id] }, { }, { disabled: @prices.blank?, class: 'form-control' }
           div.form-group
             div.col-md-offset-4.col-md-8
-              = f.submit 'Update', class: 'btn btn-warning', name: nil
+              = button_tag class: 'btn btn-warning', name: nil do
+                i.fa.fa-pencil
+                |  Update
 div.row
   div.col-md-8
     div.panel.panel-default
@@ -133,4 +135,6 @@ div.row
           div.form-group
             = f.text_field :size, class: 'form-control', placeholder: 'Batch Size'
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success ', name: nil
+            = button_tag class: 'btn btn-success', name: nil do
+              i.fa.fa-plus
+              |  Create

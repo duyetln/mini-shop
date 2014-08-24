@@ -70,4 +70,6 @@ div.row
             div.alert.alert-danger
               | Please save a few items to clipboard to activate the select form
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success ', name: nil, disabled: items.blank?
+            = button_tag class: 'btn btn-success', name: nil, disabled: items.blank? do
+              i.fa.fa-plus
+              |  Create

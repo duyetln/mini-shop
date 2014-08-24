@@ -15,7 +15,9 @@ div.row
               = text_field_tag 'pricepoint_prices[][amount]', nil, placeholder: "#{currency.sign} #{currency.code} Amount".html_safe, class: 'form-control'
               = hidden_field_tag 'pricepoint_prices[][currency_id]', currency.id
           div.form-group
-            = f.submit 'Create', class: 'btn btn-success', name: nil
+            = button_tag class: 'btn btn-success', name: nil do
+              i.fa.fa-plus
+              |  Create
   - @pricepoints.shift(5).each do |pricepoint|
     div.col-md-2
       = render partial: 'panel', locals: { pricepoint: pricepoint }

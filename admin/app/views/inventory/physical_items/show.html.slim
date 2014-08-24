@@ -63,4 +63,6 @@ div.row
               = f.text_field :qty, class: 'form-control', placeholder: 'Qty'
           div.form-group
             div.col-md-offset-4.col-md-8
-              = f.submit 'Update', class: 'btn btn-warning', name: nil
+              = button_tag class: 'btn btn-warning', name: nil do
+                i.fa.fa-pencil
+                |  Update
