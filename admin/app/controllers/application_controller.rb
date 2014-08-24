@@ -10,12 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :set_resource_class
 
   rescue_from BackendClient::APIError do |error|
-    flash[:error] = error.meta.present? ?
-      {
-        primary: error.message,
-        secondary: error.meta
-      } :
-      error.message
+    flash[:error] = error.meta.present? ? error.meta : error.message
     redirect_to :back
   end
 
