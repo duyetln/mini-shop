@@ -4,15 +4,15 @@ module Inventory
       @physical_items = resource_class.all(pagination)
     end
 
+    def show
+      @physical_item = resource
+    end
+
     def create
       @physical_item = resource_class.create(
         scoped_params(:physical_item, :title, :description, :qty)
       )
       redirect_to :back
-    end
-
-    def edit
-      @physical_item = resource
     end
 
     def update

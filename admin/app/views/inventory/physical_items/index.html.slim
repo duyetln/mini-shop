@@ -2,60 +2,8 @@ h2.page-header
   | Physical Items
 
 div.row
-  div.col-md-10
-    div.panel.panel-default
-      div.panel-heading
-        = paginate :inventory_physical_items_path, @prev_page, @next_page
-      table.table.table-hover.table-condensed
-        thead
-          tr
-            td
-              label ID
-            td
-              label Title
-            td
-              label Description
-            td
-              label Qty
-            td
-              label Available
-            td
-              label Active
-        tbody
-          - @physical_items.each do |physical_item|
-            tr class="#{physical_item.active? ? 'success' : 'danger'}"
-              td
-                = physical_item.id
-              td
-                = physical_item.title
-              td
-                = physical_item.description
-              td
-                = physical_item.qty
-              td
-                = yesno(physical_item.available?)
-              td
-                = yesno(physical_item.active?)
-              td
-                = link_to edit_inventory_physical_item_path(physical_item.id), class: 'btn btn-warning', title: 'Edit' do
-                  i.fa.fa-pencil
-              td
-                = button_to activate_inventory_physical_item_path(physical_item.id), method: :put, disabled: !physical_item.activable?, class: 'btn btn-warning', title: 'Activate' do
-                  i.fa.fa-check
-              td
-                = button_to inventory_physical_item_path(physical_item.id), method: :delete, disabled: !physical_item.deletable?, class: 'btn btn-danger', title: 'Delete' do
-                  i.fa.fa-trash-o
-              td
-                = form_tag settings_clipboard_path do
-                  = hidden_field_tag 'resource_type', physical_item.resource_type
-                  = hidden_field_tag 'resource_id', physical_item.resource_id
-                  = button_tag class: 'btn btn-default', title: 'Save item to clipboard', name: nil
-                    i.fa.fa-clipboard
-      div.panel-footer
-        = paginate :inventory_physical_items_path, @prev_page, @next_page
-
-  div.currency.col-md-2
-    div.panel.panel-default
+  div.col-md-2
+    div.panel.panel-success
       div.panel-heading
         h4 New Item
       div.panel-body
@@ -68,3 +16,12 @@ div.row
             = f.text_field :qty, class: 'form-control', placeholder: 'New Qty'
           div.form-group
             = f.submit 'Create', class: 'btn btn-success', name: nil
+
+  - @physical_items.shift(5).each do |physical_item|
+    div.col-md-2
+      = render partial: 'panel', locals: { physical_item: physical_item }
+- while @physical_items.present? do
+  div.row
+    - @physical_items.shift(6).each do |physical_item|
+      div.col-md-2
+        = render partial: 'panel', locals: { physical_item: physical_item }
