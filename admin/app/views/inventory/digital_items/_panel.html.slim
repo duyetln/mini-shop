@@ -1,0 +1,12 @@
+div.panel.panel-default
+  div.panel-heading
+    h4 ID #{digital_item.id}
+  ul.list-group
+    li.list-group-item title='Physical Item Title'
+      label.height-50 = digital_item.title
+    li.list-group-item title='Physical Item Description'
+      div.height-50 = digital_item.description || 'N/A'
+    li.list-group-item.text-center
+      = link_to inventory_digital_item_path(digital_item.id), class: 'btn btn-primary' do
+        i.fa.fa-eye
+        |  View

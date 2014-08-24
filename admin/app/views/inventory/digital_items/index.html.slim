@@ -2,56 +2,8 @@ h2.page-header
   | Digital Items
 
 div.row
-  div.col-md-10
-    div.panel.panel-default
-      div.panel-heading
-        = paginate :inventory_digital_items_path, @prev_page, @next_page
-      table.table.table-hover.table-condensed
-        thead
-          tr
-            td
-              label ID
-            td
-              label Title
-            td
-              label Description
-            td
-              label Available
-            td
-              label Active
-        tbody
-          - @digital_items.each do |digital_item|
-            tr class="#{digital_item.active? ? 'success' : 'danger'}"
-              td
-                = digital_item.id
-              td
-                = digital_item.title
-              td
-                = digital_item.description
-              td
-                = yesno(digital_item.available?)
-              td
-                = yesno(digital_item.active?)
-              td
-                = link_to edit_inventory_digital_item_path(digital_item.id), class: 'btn btn-warning', title: 'Edit' do
-                  i.fa.fa-pencil
-              td
-                = button_to activate_inventory_digital_item_path(digital_item.id), method: :put, disabled: !digital_item.activable?, class: 'btn btn-warning', title: 'Activate' do
-                  i.fa.fa-check
-              td
-                = button_to inventory_digital_item_path(digital_item.id), method: :delete, disabled: !digital_item.deletable?, class: 'btn btn-danger', title: 'Delete' do
-                  i.fa.fa-trash-o
-              td
-                = form_tag settings_clipboard_path do
-                  = hidden_field_tag 'resource_type', digital_item.resource_type
-                  = hidden_field_tag 'resource_id', digital_item.resource_id
-                  = button_tag class: 'btn btn-default', title: 'Save item to clipboard', name: nil
-                    i.fa.fa-clipboard
-      div.panel-footer
-        = paginate :inventory_digital_items_path, @prev_page, @next_page
-
-  div.currency.col-md-2
-    div.panel.panel-default
+  div.col-md-2
+    div.panel.panel-success
       div.panel-heading
         h4 New Item
       div.panel-body
@@ -62,3 +14,12 @@ div.row
             = f.text_field :description, class: 'form-control', placeholder: 'New Description'
           div.form-group
             = f.submit 'Create', class: 'btn btn-success', name: nil
+
+  - @digital_items.shift(5).each do |digital_item|
+    div.col-md-2
+      = render partial: 'panel', locals: { digital_item: digital_item }
+- while @digital_items.present? do
+  div.row
+    - @digital_items.shift(6).each do |digital_item|
+      div.col-md-2
+        = render partial: 'panel', locals: { digital_item: digital_item }

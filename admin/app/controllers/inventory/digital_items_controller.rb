@@ -4,15 +4,15 @@ module Inventory
       @digital_items = resource_class.all(pagination)
     end
 
+    def show
+      @digital_item = resource
+    end
+
     def create
       @digital_item = resource_class.create(
         scoped_params(:digital_item, :title, :description)
       )
       redirect_to :back
-    end
-
-    def edit
-      @digital_item = resource
     end
 
     def update
