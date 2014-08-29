@@ -1,27 +1,96 @@
 h2.page-header
   | Digital Items
 
-div.row
-  div.col-md-2
-    div.panel.panel-success
-      div.panel-heading
-        h4 New Item
-      div.panel-body
-        = form_for :digital_item, url: inventory_digital_items_path, html: { role: 'form' } do |f|
-          div.form-group
-            = f.text_field :title, class: 'form-control', placeholder: 'New Title'
-          div.form-group
-            = f.text_field :description, class: 'form-control', placeholder: 'New Description'
-          div.form-group
-            = button_tag class: 'btn btn-success', name: nil do
-              i.fa.fa-plus
-              |  Create
-
-  - @digital_items.shift(5).each do |digital_item|
-    div.col-md-2
-      = render partial: 'panel', locals: { digital_item: digital_item }
-- while @digital_items.present? do
-  div.row
-    - @digital_items.shift(6).each do |digital_item|
-      div.col-md-2
-        = render partial: 'panel', locals: { digital_item: digital_item }
+div
+  div.panel.panel-default
+    div.panel-heading.clearfix
+      h4.pull-left Listings
+      div.pull-right.btn-group
+        button.btn.btn-success data-toggle='modal' data-target='#create-digital-item'
+          i.fa.fa-plus
+          |  Digital Item
+    table.table.table-hover.table-condensed
+      thead
+        tr
+          td
+            label ID
+          td
+            label Title
+          td
+            label Description
+          td
+            label Active
+          td
+            label Available
+      tbody
+        - @digital_items.each do |digital_item|
+          tr id="digital-item-#{digital_item.id}" class="#{digital_item.active? ? 'success' : 'danger' }"
+            td
+              label = digital_item.id
+            td
+              = digital_item.title
+            td
+              = digital_item.description
+            td
+              = yesno(digital_item.active?)
+            td
+              = yesno(digital_item.available?)
+            td
+              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-digital-item-#{digital_item.id}"
+                i.fa.fa-pencil
+            td
+              = button_to activate_inventory_digital_item_path(digital_item.id), method: :put, disabled: !digital_item.activable?, class: 'btn btn-warning' do
+                i.fa.fa-check
+            td
+              = button_to inventory_digital_item_path(digital_item.id), method: :delete, disabled: !digital_item.deletable?, class: 'btn btn-danger' do
+                i.fa.fa-trash-o
+div
+  div.modal id='create-digital-item' role='dialog'
+    div.modal-dialog.modal-sm
+      div.modal-content
+        = form_for :digital_item, url: inventory_digital_items_path, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header
+            button.close data-dismiss='modal'
+              i.fa.fa-times
+            h4.text-success New Digital Item
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 Title
+              div.col-md-8
+                = f.text_field :title, class: 'form-control', placeholder: 'Digital Item Title'
+            div.form-group
+              label.control-label.col-md-4 Description
+              div.col-md-8
+                = f.text_field :description, class: 'form-control', placeholder: 'Digital Item Description'
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                button.btn.btn-default data-dismiss='modal'
+                  | Cancel
+                = button_tag class: 'btn btn-success', name: nil do
+                  | Create
+  - @digital_items.each do |digital_item|
+    div.modal id="edit-digital-item-#{digital_item.id}" role='dialog'
+      div.modal-dialog.modal-sm
+        div.modal-content
+          = form_for :digital_item, url: inventory_digital_item_path(digital_item.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+            div.modal-header
+              button.close data-dismiss='modal'
+                i.fa.fa-times
+              h4.text-warning Edit Digital Item
+            div.modal-body
+              div.form-group
+                label.control-label.col-md-4 Title
+                div.col-md-8
+                  = f.text_field :title, class: 'form-control', value: digital_item.title, placeholder: 'Digital Item Title'
+              div.form-group
+                label.control-label.col-md-4 Description
+                div.col-md-8
+                  = f.text_field :description, class: 'form-control', value: digital_item.description, placeholder: 'Digital Item Description'
+            div.modal-footer
+              div.form-group
+                div.col-md-8.col-md-offset-4
+                  button.btn.btn-default data-dismiss='modal'
+                    | Cancel
+                  = button_tag class: 'btn btn-warning', name: nil do
+                    | Update
