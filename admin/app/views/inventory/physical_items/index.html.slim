@@ -1,29 +1,108 @@
 h2.page-header
   | Physical Items
 
-div.row
-  div.col-md-2
-    div.panel.panel-success
-      div.panel-heading
-        h4 New Item
-      div.panel-body
-        = form_for :physical_item, url: inventory_physical_items_path, html: { role: 'form' } do |f|
-          div.form-group
-            = f.text_field :title, class: 'form-control', placeholder: 'New Title'
-          div.form-group
-            = f.text_field :description, class: 'form-control', placeholder: 'New Description'
-          div.form-group
-            = f.text_field :qty, class: 'form-control', placeholder: 'New Qty'
-          div.form-group
-            = button_tag class: 'btn btn-success', name: nil do
-              i.fa.fa-plus
-              |  Create
-
-  - @physical_items.shift(5).each do |physical_item|
-    div.col-md-2
-      = render partial: 'panel', locals: { physical_item: physical_item }
-- while @physical_items.present? do
-  div.row
-    - @physical_items.shift(6).each do |physical_item|
-      div.col-md-2
-        = render partial: 'panel', locals: { physical_item: physical_item }
+div
+  div.panel.panel-default
+    div.panel-heading.clearfix
+      h4.pull-left Listings
+      div.pull-right.btn-group
+        button.btn.btn-success data-toggle='modal' data-target='#create-physical-item'
+          i.fa.fa-plus
+          |  Physical Item
+    table.table.table-hover.table-condensed
+      thead
+        tr
+          td
+            label ID
+          td
+            label Title
+          td
+            label Description
+          td
+            label Qty
+          td
+            label Active
+          td
+            label Available
+      tbody
+        - @physical_items.each do |physical_item|
+          tr id="physical-item-#{physical_item.id}" class="#{physical_item.active? ? 'success' : 'danger' }"
+            td
+              label = physical_item.id
+            td
+              = physical_item.title
+            td
+              = physical_item.description
+            td
+              = physical_item.qty
+            td
+              = yesno(physical_item.active?)
+            td
+              = yesno(physical_item.available?)
+            td
+              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-physical-item-#{physical_item.id}"
+                i.fa.fa-pencil
+            td
+              = button_to activate_inventory_physical_item_path(physical_item.id), method: :put, disabled: !physical_item.activable?, class: 'btn btn-warning' do
+                i.fa.fa-check
+            td
+              = button_to inventory_physical_item_path(physical_item.id), method: :delete, disabled: !physical_item.deletable?, class: 'btn btn-danger' do
+                i.fa.fa-trash-o
+div
+  div.modal id='create-physical-item' role='dialog'
+    div.modal-dialog.modal-sm
+      div.modal-content
+        = form_for :physical_item, url: inventory_physical_items_path, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header
+            button.close data-dismiss='modal'
+              i.fa.fa-times
+            h4.text-success New Physical Item
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 Title
+              div.col-md-8
+                = f.text_field :title, class: 'form-control', placeholder: 'Physical Item Title'
+            div.form-group
+              label.control-label.col-md-4 Description
+              div.col-md-8
+                = f.text_field :description, class: 'form-control', placeholder: 'Physical Item Description'
+            div.form-group
+              label.control-label.col-md-4 Qty
+              div.col-md-8
+                = f.text_field :qty, class: 'form-control', placeholder: '10'
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                button.btn.btn-default data-dismiss='modal'
+                  | Cancel
+                = button_tag class: 'btn btn-success', name: nil do
+                  | Create
+  - @physical_items.each do |physical_item|
+    div.modal id="edit-physical-item-#{physical_item.id}" role='dialog'
+      div.modal-dialog.modal-sm
+        div.modal-content
+          = form_for :physical_item, url: inventory_physical_item_path(physical_item.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+            div.modal-header
+              button.close data-dismiss='modal'
+                i.fa.fa-times
+              h4.text-warning Edit Physical Item
+            div.modal-body
+              div.form-group
+                label.control-label.col-md-4 Title
+                div.col-md-8
+                  = f.text_field :title, class: 'form-control', value: physical_item.title, placeholder: 'Physical Item Title'
+              div.form-group
+                label.control-label.col-md-4 Description
+                div.col-md-8
+                  = f.text_field :description, class: 'form-control', value: physical_item.description, placeholder: 'Physical Item Description'
+              div.form-group
+                label.control-label.col-md-4 Qty
+                div.col-md-8
+                  = f.text_field :qty, class: 'form-control', value: physical_item.qty, placeholder: '10'
+            div.modal-footer
+              div.form-group
+                div.col-md-8.col-md-offset-4
+                  button.btn.btn-default data-dismiss='modal'
+                    | Cancel
+                  = button_tag class: 'btn btn-warning', name: nil do
+                    | Update

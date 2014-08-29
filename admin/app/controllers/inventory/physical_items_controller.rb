@@ -4,10 +4,6 @@ module Inventory
       @physical_items = resource_class.all(sort: :desc)
     end
 
-    def show
-      @physical_item = resource
-    end
-
     def create
       @physical_item = resource_class.create(
         scoped_params(:physical_item, :title, :description, :qty)
