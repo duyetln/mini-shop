@@ -1,31 +1,114 @@
 h2.page-header
   | Discounts
 
-div.row
-  div.col-md-2
-    div.panel.panel-success
-      div.panel-heading
-        h4 New Discount
-      div.panel-body
-        = form_for :discount, url: inventory_discounts_path, html: { role: 'form' } do |f|
-          div.form-group
-            = f.text_field :name, class: 'form-control', placeholder: 'New Name'
-          div.form-group
-            = f.text_field :rate, class: 'form-control', placeholder: 'New Rate'
-          div.form-group
-            = f.text_field :start_at, class: 'form-control', placeholder: '01/25/2013 17:30'
-          div.form-group
-            = f.text_field :end_at, class: 'form-control', placeholder: '11/06/2014 02:45'
-          div.form-group
-            = button_tag class: 'btn btn-success', name: nil do
-              i.fa.fa-plus
-              |  Create
-
-  - @discounts.shift(5).each do |discount|
-    div.col-md-2
-      = render partial: 'panel', locals: { discount: discount }
-- while @discounts.present? do
-  div.row
-    - @discounts.shift(6).each do |discount|
-      div.col-md-2
-        = render partial: 'panel', locals: { discount: discount }
+div
+  div.panel.panel-default
+    div.panel-heading.clearfix
+      h4.pull-left Listings
+      div.pull-right.btn-group
+        button.btn.btn-success data-toggle='modal' data-target='#create-discount'
+          i.fa.fa-plus
+          |  Discount
+    table.table.table-hover.table-condensed
+      thead
+        tr
+          td
+            label ID
+          td
+            label Name
+          td
+            label Rate
+          td
+            label Current Rate
+          td
+            label Current Active
+          td
+            label Start At
+          td
+            label End At
+      tbody
+        - @discounts.each do |discount|
+          tr id="discount-#{discount.id}" class="#{discount.current_active? ? 'success' : 'danger' }"
+            td
+              label = discount.id
+            td
+              = discount.name
+            td
+              = discount.rate
+            td
+              = discount.current_rate
+            td
+              = yesno(discount.current_active?)
+            td
+              = discount.start_at.present? && discount.start_at.strftime('%m/%d/%Y %H:%M') || 'N/A'
+            td
+              = discount.end_at.present? && discount.end_at.strftime('%m/%d/%Y %H:%M') || 'N/A'
+            td
+              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-discount-#{discount.id}"
+                i.fa.fa-pencil
+div
+  div.modal id='create-discount' role='dialog'
+    div.modal-dialog.modal-sm
+      div.modal-content
+        = form_for :discount, url: inventory_discounts_path, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header
+            button.close data-dismiss='modal'
+              i.fa.fa-times
+            h4.text-success New Discount
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 Name
+              div.col-md-8
+                = f.text_field :name, class: 'form-control', placeholder: 'Discount Name'
+            div.form-group
+              label.control-label.col-md-4 Rate
+              div.col-md-8
+                = f.text_field :rate, class: 'form-control', placeholder: '0.0'
+            div.form-group
+              label.control-label.col-md-4 Start At
+              div.col-md-8
+                = f.text_field :start_at, class: 'form-control', placeholder: '01/25/2013 17:30'
+            div.form-group
+              label.control-label.col-md-4 End At
+              div.col-md-8
+                = f.text_field :end_at, class: 'form-control', placeholder: '11/06/2014 02:45'
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                button.btn.btn-default data-dismiss='modal'
+                  | Cancel
+                = button_tag class: 'btn btn-success', name: nil do
+                  | Create
+  - @discounts.each do |discount|
+    div.modal id="edit-discount-#{discount.id}" role='dialog'
+      div.modal-dialog.modal-sm
+        div.modal-content
+          = form_for :discount, url: inventory_discount_path(discount.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+            div.modal-header
+              button.close data-dismiss='modal'
+                i.fa.fa-times
+              h4.text-warning Edit Pricepoint
+            div.modal-body
+              div.form-group
+                label.control-label.col-md-4 Name
+                div.col-md-8
+                  = f.text_field :name, class: 'form-control', value: discount.name, placeholder: 'Discount Name'
+              div.form-group
+                label.control-label.col-md-4 Rate
+                div.col-md-8
+                  = f.text_field :rate, class: 'form-control', value: discount.rate, placeholder: '0.0'
+              div.form-group
+                label.control-label.col-md-4 Start At
+                div.col-md-8
+                  = f.text_field :start_at, class: 'form-control', value: discount.start_at.present? && discount.start_at.strftime('%m/%d/%Y %H:%M') || nil, placeholder: '01/25/2013 17:30'
+              div.form-group
+                label.control-label.col-md-4 End At
+                div.col-md-8
+                  = f.text_field :end_at, class: 'form-control', value: discount.end_at.present? && discount.end_at.strftime('%m/%d/%Y %H:%M') || nil, placeholder: '11/06/2014 02:45'
+            div.modal-footer
+              div.form-group
+                div.col-md-8.col-md-offset-4
+                  button.btn.btn-default data-dismiss='modal'
+                    | Cancel
+                  = button_tag class: 'btn btn-warning', name: nil do
+                    | Update

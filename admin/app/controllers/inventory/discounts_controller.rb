@@ -4,10 +4,6 @@ module Inventory
       @discounts = resource_class.all(pagination)
     end
 
-    def show
-      @discount = resource
-    end
-
     def create
       @discount = resource_class.create(
         scoped_params(:discount, :name, :rate, :start_at, :end_at)
