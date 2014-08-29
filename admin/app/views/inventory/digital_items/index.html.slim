@@ -46,7 +46,7 @@ div
                 i.fa.fa-trash-o
 div
   div.modal id='create-digital-item' role='dialog'
-    div.modal-dialog.modal-sm
+    div.modal-dialog
       div.modal-content
         = form_for :digital_item, url: inventory_digital_items_path, html: { role: 'form', class: 'form-horizontal' } do |f|
           div.modal-header
@@ -71,7 +71,7 @@ div
                   | Create
   - @digital_items.each do |digital_item|
     div.modal id="edit-digital-item-#{digital_item.id}" role='dialog'
-      div.modal-dialog.modal-sm
+      div.modal-dialog
         div.modal-content
           = form_for :digital_item, url: inventory_digital_item_path(digital_item.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
             div.modal-header

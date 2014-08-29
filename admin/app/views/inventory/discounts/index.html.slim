@@ -48,7 +48,7 @@ div
                 i.fa.fa-pencil
 div
   div.modal id='create-discount' role='dialog'
-    div.modal-dialog.modal-sm
+    div.modal-dialog
       div.modal-content
         = form_for :discount, url: inventory_discounts_path, html: { role: 'form', class: 'form-horizontal' } do |f|
           div.modal-header
@@ -81,7 +81,7 @@ div
                   | Create
   - @discounts.each do |discount|
     div.modal id="edit-discount-#{discount.id}" role='dialog'
-      div.modal-dialog.modal-sm
+      div.modal-dialog
         div.modal-content
           = form_for :discount, url: inventory_discount_path(discount.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
             div.modal-header

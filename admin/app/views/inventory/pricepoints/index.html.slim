@@ -37,7 +37,7 @@ div
                 i.fa.fa-pencil
 div
   div.modal id='create-currency' role='dialog'
-    div.modal-dialog.modal-sm
+    div.modal-dialog
       div.modal-content
         = form_for :currency, url: inventory_currencies_path, html: { role: 'form', class: 'form-horizontal' } do |f|
           div.modal-header
@@ -61,7 +61,7 @@ div
                 = button_tag class: 'btn btn-success', name: nil do
                   | Create
   div.modal id='create-pricepoint' role='dialog'
-    div.modal-dialog.modal-sm
+    div.modal-dialog
       div.modal-content
         = form_for :pricepoint, url: inventory_pricepoints_path, html: { role: 'form', class: 'form-horizontal' } do |f|
           div.modal-header
@@ -89,7 +89,7 @@ div
                   | Create
   - @pricepoints.each do |pricepoint|
     div.modal id="edit-pricepoint-#{pricepoint.id}" role='dialog'
-      div.modal-dialog.modal-sm
+      div.modal-dialog
         div.modal-content
           = form_for :pricepoint, url: inventory_pricepoint_path(pricepoint.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
             div.modal-header
