@@ -1,29 +1,119 @@
 h2.page-header
   | Pricepoints
 
-div.row
-  div.col-md-2
-    div.panel.panel-success
-      div.panel-heading
-        h4 New Pricepoint
-      div.panel-body
-        = form_for :pricepoint, url: inventory_pricepoints_path, html: { role: 'form' } do |f|
-          div.form-group
-            = f.text_field :name, class: 'form-control', placeholder: 'New Name'
+div
+  div.panel.panel-default
+    div.panel-heading.clearfix
+      h4.pull-left Listings
+      div.pull-right.btn-group
+        button.btn.btn-success data-toggle='modal' data-target='#create-pricepoint'
+          i.fa.fa-plus
+          |  Pricepoint
+        button.btn.btn-success data-toggle='modal' data-target='#create-currency'
+          i.fa.fa-plus
+          |  Currency
+    table.table.table-hover.table-condensed
+      thead
+        tr
+          td
+            label ID
+          td
+            label Name
           - @currencies.each do |currency|
+            td
+              label == "#{currency.sign} #{currency.code}"
+      tbody
+        - @pricepoints.each do |pricepoint|
+          tr id="pricepoint-#{pricepoint.id}"
+            td
+              label = pricepoint.id
+            td
+              = pricepoint.name
+            - @currencies.each do |currency|
+              td
+                = pricepoint.amount(currency)
+            td
+              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-pricepoint-#{pricepoint.id}"
+                i.fa.fa-pencil
+div
+  div.modal id='create-currency' role='dialog'
+    div.modal-dialog.modal-sm
+      div.modal-content
+        = form_for :currency, url: inventory_currencies_path, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header
+            button.close data-dismiss='modal'
+              i.fa.fa-times
+            h4.text-success New Currency
+          div.modal-body
             div.form-group
-              = text_field_tag 'pricepoint_prices[][amount]', nil, placeholder: "#{currency.sign} #{currency.code} Amount".html_safe, class: 'form-control'
-              = hidden_field_tag 'pricepoint_prices[][currency_id]', currency.id
-          div.form-group
-            = button_tag class: 'btn btn-success', name: nil do
-              i.fa.fa-plus
-              |  Create
-  - @pricepoints.shift(5).each do |pricepoint|
-    div.col-md-2
-      = render partial: 'panel', locals: { pricepoint: pricepoint }
-
-- while @pricepoints.present? do
-  div.row
-    - @pricepoints.shift(6).each do |pricepoint|
-      div.col-md-2
-        = render partial: 'panel', locals: { pricepoint: pricepoint }
+              label.control-label.col-md-4 Code
+              div.col-md-8
+                = f.text_field :code, class: 'form-control', placeholder: 'USD'
+            div.form-group
+              label.control-label.col-md-4 Sign
+              div.col-md-8
+                = f.text_field :sign, class: 'form-control', placeholder: '&#36;'
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                button.btn.btn-default data-dismiss='modal'
+                  | Cancel
+                = button_tag class: 'btn btn-success', name: nil do
+                  | Create
+  div.modal id='create-pricepoint' role='dialog'
+    div.modal-dialog.modal-sm
+      div.modal-content
+        = form_for :pricepoint, url: inventory_pricepoints_path, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header
+            button.close data-dismiss='modal'
+              i.fa.fa-times
+            h4.text-success New Pricepoint
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 Name
+              div.col-md-8
+                = f.text_field :name, class: 'form-control', placeholder: 'Pricepoint Name'
+            - @currencies.each do |currency|
+              div.form-group
+                label.control-label.col-md-4
+                  == "#{currency.sign} #{currency.code}"
+                div.col-md-8
+                  = text_field_tag 'pricepoint_prices[][amount]', nil, placeholder: '0.0', class: 'form-control'
+                  = hidden_field_tag 'pricepoint_prices[][currency_id]', currency.id
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                button.btn.btn-default data-dismiss='modal'
+                  | Cancel
+                = button_tag class: 'btn btn-success', name: nil do
+                  | Create
+  - @pricepoints.each do |pricepoint|
+    div.modal id="edit-pricepoint-#{pricepoint.id}" role='dialog'
+      div.modal-dialog.modal-sm
+        div.modal-content
+          = form_for :pricepoint, url: inventory_pricepoint_path(pricepoint.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+            div.modal-header
+              button.close data-dismiss='modal'
+                i.fa.fa-times
+              h4.text-warning Edit Pricepoint
+            div.modal-body
+              div.form-group
+                label.control-label.col-md-4 Name
+                div.col-md-8
+                  = f.text_field :name, class: 'form-control', value: pricepoint.name, placeholder: 'Pricepoint Name'
+              - @currencies.each do |currency|
+                div.form-group
+                  label.control-label.col-md-4
+                    == "#{currency.sign} #{currency.code}"
+                  div.col-md-8
+                    = text_field_tag 'pricepoint_prices[][amount]', pricepoint.amount(currency), placeholder: '0.0', class: 'form-control'
+                    - pricepoint_price = pricepoint.pricepoint_prices.find { |pp| pp.currency.code == currency.code }
+                    = hidden_field_tag 'pricepoint_prices[][id]', pricepoint_price.try(:id)
+                    = hidden_field_tag 'pricepoint_prices[][currency_id]', currency.id
+            div.modal-footer
+              div.form-group
+                div.col-md-8.col-md-offset-4
+                  button.btn.btn-default data-dismiss='modal'
+                    | Cancel
+                  = button_tag class: 'btn btn-warning', name: nil do
+                    | Update

@@ -5,11 +5,6 @@ module Inventory
       @currencies = BackendClient::Currency.all
     end
 
-    def show
-      @pricepoint = resource
-      @currencies = BackendClient::Currency.all
-    end
-
     def create
       @pricepoint = resource_class.create(
         scoped_params(:pricepoint, :name)
