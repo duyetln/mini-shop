@@ -6,12 +6,6 @@ module Inventory
       @discounts = BackendClient::Discount.all(sort: :desc)
     end
 
-    def show
-      @price = resource
-      @pricepoints = BackendClient::Pricepoint.all(sort: :desc)
-      @discounts = BackendClient::Discount.all(sort: :desc)
-    end
-
     def create
       @price = resource_class.create(
         scoped_params(:price, :name, :pricepoint_id, :discount_id)

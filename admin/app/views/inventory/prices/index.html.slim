@@ -1,29 +1,94 @@
 h2.page-header
   | Prices
 
-div.row
-  div.col-md-2
-    div.panel.panel-success
-      div.panel-heading
-        h4 New Price
-      div.panel-body
-        = form_for :price, url: inventory_prices_path, html: { role: 'form' } do |f|
-          div.form-group
-            = f.text_field :name, class: 'form-control', placeholder: 'New Name'
-          div.form-group
-            = f.select :pricepoint_id, @pricepoints.collect { |pricepoint| [pricepoint.name, pricepoint.id] }, { prompt: 'Choose Pricepoint' }, { disabled: @pricepoints.blank?, class: 'form-control' }
-          div.form-group
-            = f.select :discount_id, @discounts.collect { |discount| [discount.name, discount.id] }, { prompt: 'Choose Discount' }, { disabled: @discounts.blank?, class: 'form-control' }
-          div.form-group
-            = button_tag class: 'btn btn-success', name: nil do
-              i.fa.fa-plus
-              |  Create
-  - @prices.shift(5).each do |price|
-    div.col-md-2
-      = render partial: 'panel', locals: { price: price }
-
-- while @prices.present? do
-  div.row
-    - @prices.shift(6).each do |price|
-      div.col-md-2
-        = render partial: 'panel', locals: { price: price }
+div
+  div.panel.panel-default
+    div.panel-heading.clearfix
+      h4.pull-left Listings
+      div.pull-right.btn-group
+        button.btn.btn-success data-toggle='modal' data-target='#create-price'
+          i.fa.fa-plus
+          |  Price
+    table.table.table-hover.table-condensed
+      thead
+        tr
+          td
+            label ID
+          td
+            label Name
+          td
+            label Pricepoint Name
+          td
+            label Discount Name
+      tbody
+        - @prices.each do |price|
+          tr id="price-#{price.id}"
+            td
+              label = price.id
+            td
+              = price.name
+            td
+              = price.pricepoint.name
+            td
+              = price.discount.name
+            td
+              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-price-#{price.id}"
+                i.fa.fa-pencil
+div
+  div.modal id='create-price' role='dialog'
+    div.modal-dialog.modal-sm
+      div.modal-content
+        = form_for :price, url: inventory_prices_path, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header
+            button.close data-dismiss='modal'
+              i.fa.fa-times
+            h4.text-success New Price
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 Name
+              div.col-md-8
+                = f.text_field :name, class: 'form-control', placeholder: 'Price Name'
+            div.form-group
+              label.control-label.col-md-4 Pricepoint
+              div.col-md-8
+                = f.select :pricepoint_id, @pricepoints.collect { |pricepoint| [pricepoint.name, pricepoint.id] }, { prompt: 'Choose Pricepoint' }, { disabled: @pricepoints.blank?, class: 'form-control' }
+            div.form-group
+              label.control-label.col-md-4 Discount
+              div.col-md-8
+                = f.select :discount_id, @discounts.collect { |discount| [discount.name, discount.id] }, { prompt: 'Choose Discount' }, { disabled: @discounts.blank?, class: 'form-control' }
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                button.btn.btn-default data-dismiss='modal'
+                  | Cancel
+                = button_tag class: 'btn btn-success', name: nil do
+                  | Create
+  - @prices.each do |price|
+    div.modal id="edit-price-#{price.id}" role='dialog'
+      div.modal-dialog.modal-sm
+        div.modal-content
+          = form_for :price, url: inventory_price_path(price.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+            div.modal-header
+              button.close data-dismiss='modal'
+                i.fa.fa-times
+              h4.text-warning Edit Pricepoint
+            div.modal-body
+              div.form-group
+                label.control-label.col-md-4 Name
+                div.col-md-8
+                  = f.text_field :name, class: 'form-control', value: price.name, placeholder: 'Discount Name'
+              div.form-group
+                label.control-label.col-md-4 Pricepoint
+                div.col-md-8
+                  = f.select :pricepoint_id, @pricepoints.collect { |pricepoint| [pricepoint.name, pricepoint.id] }, { prompt: 'Choose Pricepoint', selected: price.pricepoint.id }, { disabled: @pricepoints.blank?, class: 'form-control' }
+              div.form-group
+                label.control-label.col-md-4 Discount
+                div.col-md-8
+                  = f.select :discount_id, @discounts.collect { |discount| [discount.name, discount.id] }, { prompt: 'Choose Discount', selected: price.discount.id }, { disabled: @discounts.blank?, class: 'form-control' }
+            div.modal-footer
+              div.form-group
+                div.col-md-8.col-md-offset-4
+                  button.btn.btn-default data-dismiss='modal'
+                    | Cancel
+                  = button_tag class: 'btn btn-warning', name: nil do
+                    | Update
