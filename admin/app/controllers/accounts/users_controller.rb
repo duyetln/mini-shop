@@ -1,7 +1,7 @@
 module Accounts
   class UsersController < ApplicationController
     def index
-      @users = resource_class.all(pagination)
+      @users = resource_class.all(sort: :desc)
     end
 
     def show

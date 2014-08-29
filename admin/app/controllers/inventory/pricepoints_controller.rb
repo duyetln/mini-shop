@@ -1,7 +1,7 @@
 module Inventory
   class PricepointsController < ApplicationController
     def index
-      @pricepoints = BackendClient::Pricepoint.all(pagination)
+      @pricepoints = BackendClient::Pricepoint.all(sort: :desc)
       @currencies = BackendClient::Currency.all
     end
 

@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  include PaginationHelper
   include ParamsHelper
   include ResourcesHelper
   include ClipboardHelper

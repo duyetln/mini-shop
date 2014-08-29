@@ -1,7 +1,7 @@
 module Inventory
   class DigitalItemsController < ApplicationController
     def index
-      @digital_items = resource_class.all(pagination)
+      @digital_items = resource_class.all(sort: :desc)
     end
 
     def show

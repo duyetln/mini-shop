@@ -1,7 +1,7 @@
 module Inventory
   class StoreItemsController < ApplicationController
     def index
-      @store_items = resource_class.all(pagination)
+      @store_items = resource_class.all(sort: :desc)
       @bundles = clipboard_bundles
       @physical_items = clipboard_physical_items
       @digital_items = clipboard_digital_items

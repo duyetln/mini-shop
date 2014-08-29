@@ -1,7 +1,7 @@
 module Inventory
   class PhysicalItemsController < ApplicationController
     def index
-      @physical_items = resource_class.all(pagination)
+      @physical_items = resource_class.all(sort: :desc)
     end
 
     def show

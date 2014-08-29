@@ -1,7 +1,7 @@
 module Inventory
   class PromotionsController < ApplicationController
     def index
-      @promotions = resource_class.all(pagination)
+      @promotions = resource_class.all(sort: :desc)
       @bundles = clipboard_bundles
       @physical_items = clipboard_physical_items
       @digital_items = clipboard_digital_items
@@ -19,7 +19,7 @@ module Inventory
 
     def show
       @promotion = resource
-      @batches   = @promotion.batches(pagination)
+      @batches   = @promotion.batches(sort: :desc)
       @prices    = clipboard_prices
     end
 

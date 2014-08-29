@@ -1,7 +1,7 @@
 module Inventory
   class DiscountsController < ApplicationController
     def index
-      @discounts = resource_class.all(pagination)
+      @discounts = resource_class.all(sort: :desc)
     end
 
     def create
