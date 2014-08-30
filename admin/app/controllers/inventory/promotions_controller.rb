@@ -2,16 +2,16 @@ module Inventory
   class PromotionsController < ApplicationController
     def index
       @promotions = resource_class.all(sort: :desc)
-      @bundles = clipboard_bundles
-      @physical_items = clipboard_physical_items
-      @digital_items = clipboard_digital_items
-      @prices = clipboard_prices
+      @physical_items = BackendClient::PhysicalItem.all(sort: :desc)
+      @digital_items = BackendClient::DigitalItem.all(sort: :desc)
+      @bundles = BackendClient::Bundle.all(sort: :desc)
+      @prices = BackendClient::Price.all(sort: :desc)
     end
 
     def create
       @promotion = resource_class.create(
         scoped_params(:promotion, :name, :title, :description, :price_id).merge(
-          scoped_params(:items).find { |item| !!item[:selected] }.permit(:item_type, :item_id)
+          Yajl::Parser.parse scoped_params(:promotion).require(:item)
         )
       )
       redirect_to :back
@@ -19,8 +19,8 @@ module Inventory
 
     def show
       @promotion = resource
-      @batches   = @promotion.batches(sort: :desc)
-      @prices    = clipboard_prices
+      @batches = @promotion.batches(sort: :desc)
+      @prices = BackendClient::Price.all(sort: :desc)
     end
 
     def update

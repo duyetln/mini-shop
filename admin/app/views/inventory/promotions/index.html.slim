@@ -1,82 +1,131 @@
 h2.page-header
   | Promotions
 
-div.row
-  div.col-md-9
-    div.panel.panel-default
-      div.panel-heading
-        = paginate :inventory_promotions_path, @prev_page, @next_page
-      table.table.table-hover.table-condensed
-        thead
-          tr
+div
+  div.panel.panel-default
+    div.panel-heading.clearfix
+      h4.pull-left Listings
+      div.pull-right.btn-group
+        button.btn.btn-success data-toggle='modal' data-target='#create-promotion'
+          i.fa.fa-plus
+          |  Promotion
+    table.table.table-hover.table-condensed
+      thead
+        tr
+          td
+            label ID
+          td
+            label Name
+          td
+            label Title
+          td
+            label Description
+          td
+            label Item
+          td
+            label Price
+          td
+            label Available
+          td
+            label Active
+      tbody
+        - @promotions.each do |promotion|
+          tr id="promotion-#{promotion.id}" class="#{promotion.active? ? 'success' : 'danger'}"
             td
-              label ID
+              = promotion.id
             td
-              label Title
+              = promotion.name
             td
-              label Item
+              = promotion.title
             td
-              label Price
+              = promotion.description
             td
-              label Available
+              = promotion.item.title
             td
-              label Active
-        tbody
-          - @promotions.each do |promotion|
-            tr class="#{promotion.active? ? 'success' : 'danger'}"
-              td
-                = promotion.id
-              td
-                = promotion.title
-              td
-                = promotion.item.title
-              td
-                = promotion.price.name
-              td
-                = yesno(promotion.available?)
-              td
-                = yesno(promotion.active?)
-              td
-                = link_to inventory_promotion_path(promotion.id), class: 'btn btn-primary', title: 'View' do
-                  i.fa.fa-eye
-              td
-                = button_to activate_inventory_promotion_path(promotion.id), method: :put, disabled: !promotion.activable?, class: 'btn btn-warning', title: 'Activate' do
-                  i.fa.fa-check
-              td
-                = button_to inventory_promotion_path(promotion.id), method: :delete, disabled: !promotion.deletable?, class: 'btn btn-danger', title: 'Delete' do
-                  i.fa.fa-trash-o
-      div.panel-footer
-        = paginate :inventory_promotions_path, @prev_page, @next_page
-
-  div.currency.col-md-3
-    div.panel.panel-default
-      div.panel-heading
-        h4 New Promotion
-      div.panel-body
-        = form_for :promotion, url: inventory_promotions_path, html: { role: 'form' } do |f|
-          div.form-group
-            = f.text_field :name, class: 'form-control', placeholder: 'New Name'
-          div.form-group
-            = f.text_field :title, class: 'form-control', placeholder: 'New Title'
-          div.form-group
-            = f.text_field :description, class: 'form-control', placeholder: 'New Description'
-          div.form-group
-            = f.select :price_id, @prices.collect { |price| [price.name, price.id] }, { prompt: 'Choose Price' }, { disabled: @prices.blank?, class: 'form-control' }
-          - if @prices.blank?
-            div.alert.alert-danger
-              | Please save a few prices to clipboard to activate the select form
-          - items = @bundles + @physical_items + @digital_items
-          - items.each do |item|
-            div.radio
-              label.control-label
-                = radio_button_tag 'items[][selected]', true, false
-                = item.title
-              = hidden_field_tag 'items[][item_type]', item.resource_type
-              = hidden_field_tag 'items[][item_id]', item.resource_id
-          - if items.blank?
-            div.alert.alert-danger
-              | Please save a few items to clipboard to activate the select form
-          div.form-group
-            = button_tag class: 'btn btn-success', name: nil, disabled: items.blank?  do
-              i.fa.fa-plus
-              |  Create
+              = promotion.price.name
+            td
+              = yesno(promotion.available?)
+            td
+              = yesno(promotion.active?)
+            td
+              = link_to inventory_promotion_path(promotion.id), class: 'btn btn-primary', title: 'View' do
+                i.fa.fa-eye
+            td
+              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-promotion-#{promotion.id}"
+                i.fa.fa-pencil
+            td
+              = button_to inventory_promotion_path(promotion.id), method: :delete, disabled: !promotion.deletable?, class: 'btn btn-danger' do
+                i.fa.fa-trash-o
+div
+  div.modal id='create-promotion' role='dialog'
+    div.modal-dialog
+      div.modal-content
+        = form_for :promotion, url: inventory_promotions_path, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header
+            button.close data-dismiss='modal'
+              i.fa.fa-times
+            h4.text-success New Promotion
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 Name
+              div.col-md-8
+                = f.text_field :name, class: 'form-control', placeholder: 'Promotion Name'
+            div.form-group
+              label.control-label.col-md-4 Title
+              div.col-md-8
+                = f.text_field :title, class: 'form-control', placeholder: 'Promotion Title'
+            div.form-group
+              label.control-label.col-md-4 Description
+              div.col-md-8
+                = f.text_field :description, class: 'form-control', placeholder: 'Promotion Description'
+            div.form-group
+              label.control-label.col-md-4 Item
+              div.col-md-8
+                - physical_items_select_options = @physical_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+                - digital_items_select_options = @digital_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+                - bundles_select_options = @bundles.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+                = f.select :item, grouped_options_for_select('Physical Items' => physical_items_select_options, 'Digital Items' => digital_items_select_options, 'Bundles' => bundles_select_options), { prompt: 'Choose Item' }, { disabled: (@physical_items + @digital_items + @bundles).blank?, class: 'form-control' }
+            div.form-group
+              label.control-label.col-md-4 Price
+              div.col-md-8
+                = f.select :price_id, @prices.collect { |price| [price.name, price.id] }, { prompt: 'Choose Price' }, { disabled: @prices.blank?, class: 'form-control' }
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                button.btn.btn-default data-dismiss='modal'
+                  | Cancel
+                = button_tag class: 'btn btn-success', name: nil do
+                  | Create
+  - @promotions.each do |promotion|
+    div.modal id="edit-promotion-#{promotion.id}" role='dialog'
+      div.modal-dialog
+        div.modal-content
+          = form_for :promotion, url: inventory_promotion_path(promotion.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+            div.modal-header
+              button.close data-dismiss='modal'
+                i.fa.fa-times
+              h4.text-warning Edit Promotion
+            div.modal-body
+              div.form-group
+                label.control-label.col-md-4 Name
+                div.col-md-8
+                  = f.text_field :name, class: 'form-control', value: promotion.name, placeholder: 'Promotion Name'
+              div.form-group
+                label.control-label.col-md-4 Title
+                div.col-md-8
+                  = f.text_field :title, class: 'form-control', value: promotion.title, placeholder: 'Promotion Title'
+              div.form-group
+                label.control-label.col-md-4 Description
+                div.col-md-8
+                  = f.text_field :description, class: 'form-control', value: promotion.description, placeholder: 'Promotion Description'
+              div.form-group
+                label.control-label.col-md-4 Price
+                div.col-md-8
+                  = f.select :price_id, ([promotion.price] + @prices).uniq(&:id).collect { |price| [price.name, price.id] }, { prompt: 'Choose Price', selected: promotion.price.id }, { disabled: @prices.blank?, class: 'form-control' }
+            div.modal-footer
+              div.form-group
+                div.col-md-8.col-md-offset-4
+                  button.btn.btn-default data-dismiss='modal'
+                    | Cancel
+                  = button_tag class: 'btn btn-warning', name: nil do
+                    | Update
