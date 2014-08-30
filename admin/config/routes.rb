@@ -1,3 +1,4 @@
+# index new create show edit update destroy
 Rails.application.routes.draw do
   root 'application#index'
 
@@ -12,7 +13,7 @@ Rails.application.routes.draw do
     resources :prices, only: [:index, :create, :update]
 
     [:physical_items, :digital_items].each do |items|
-      resources items, except: [:show, :edit, :new] do
+      resources items, except: [:new, :show, :edit] do
         put :activate, on: :member
       end
     end
@@ -22,7 +23,7 @@ Rails.application.routes.draw do
       resources :bundleds, only: :destroy
     end
 
-    resources :store_items, except: [:new, :show]
+    resources :store_items, except: [:new, :show, :edit]
     resources :promotions, except: [:new, :edit] do
       put :activate, on: :member
       post :batches, on: :member

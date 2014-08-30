@@ -1,75 +1,104 @@
 h2.page-header
   | Store Items
 
-div.row
-  div.col-md-9
-    div.panel.panel-default
-      div.panel-heading
-        = paginate :inventory_store_items_path, @prev_page, @next_page
-      table.table.table-hover.table-condensed
-        thead
-          tr
+div
+  div.panel.panel-default
+    div.panel-heading.clearfix
+      h4.pull-left Listings
+      div.pull-right.btn-group
+        button.btn.btn-success data-toggle='modal' data-target='#create-store-item'
+          i.fa.fa-plus
+          |  Store Item
+    table.table.table-hover.table-condensed
+      thead
+        tr
+          td
+            label ID
+          td
+            label Name
+          td
+            label Item
+          td
+            label Price
+          td
+            label Available
+          td
+            label Active
+      tbody
+        - @store_items.each do |store_item|
+          tr id="store-item-#{store_item.id}" class="#{store_item.active? ? 'success' : 'danger'}"
             td
-              label ID
+              = store_item.id
             td
-              label Name
+              = store_item.name
             td
-              label Item
+              = store_item.item.title
             td
-              label Price
+              = store_item.price.name
             td
-              label Available
+              = yesno(store_item.available?)
             td
-              label Active
-        tbody
-          - @store_items.each do |store_item|
-            tr class="#{store_item.active? ? 'success' : 'danger'}"
-              td
-                = store_item.id
-              td
-                = store_item.name
-              td
-                = store_item.item.title
-              td
-                = store_item.price.name
-              td
-                = yesno(store_item.available?)
-              td
-                = yesno(store_item.active?)
-              td
-                = link_to edit_inventory_store_item_path(store_item.id), class: 'btn btn-warning', title: 'Edit' do
-                  i.fa.fa-pencil
-              td
-                = button_to inventory_store_item_path(store_item.id), method: :delete, disabled: !store_item.deletable?, class: 'btn btn-danger', title: 'Delete' do
-                  i.fa.fa-trash-o
-      div.panel-footer
-        = paginate :inventory_store_items_path, @prev_page, @next_page
-
-  div.currency.col-md-3
-    div.panel.panel-default
-      div.panel-heading
-        h4 New Item
-      div.panel-body
-        = form_for :store_item, url: inventory_store_items_path, html: { role: 'form' } do |f|
-          div.form-group
-            = f.text_field :name, class: 'form-control', placeholder: 'New Name'
-          div.form-group
-            = f.select :price_id, @prices.collect { |price| [price.name, price.id] }, { prompt: 'Choose Price' }, { disabled: @prices.blank?, class: 'form-control' }
-          - if @prices.blank?
-            div.alert.alert-danger
-              | Please save a few prices to clipboard to activate the select form
-          - items = @bundles + @physical_items + @digital_items
-          - items.each do |item|
-            div.radio
-              label.control-label
-                = radio_button_tag 'items[][selected]', true, false
-                = item.title
-              = hidden_field_tag 'items[][item_type]', item.resource_type
-              = hidden_field_tag 'items[][item_id]', item.resource_id
-          - if items.blank?
-            div.alert.alert-danger
-              | Please save a few items to clipboard to activate the select form
-          div.form-group
-            = button_tag class: 'btn btn-success', name: nil, disabled: items.blank? do
-              i.fa.fa-plus
-              |  Create
+              = yesno(store_item.active?)
+            td
+              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-store-item-#{store_item.id}"
+                i.fa.fa-pencil
+            td
+              = button_to inventory_store_item_path(store_item.id), method: :delete, disabled: !store_item.deletable?, class: 'btn btn-danger' do
+                i.fa.fa-trash-o
+div
+  div.modal id='create-store-item' role='dialog'
+    div.modal-dialog
+      div.modal-content
+        = form_for :store_item, url: inventory_store_items_path, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header
+            button.close data-dismiss='modal'
+              i.fa.fa-times
+            h4.text-success New Store Item
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 Name
+              div.col-md-8
+                = f.text_field :name, class: 'form-control', placeholder: 'Store Item Name'
+            div.form-group
+              label.control-label.col-md-4 Item
+              div.col-md-8
+                - physical_items_select_options = @physical_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+                - digital_items_select_options = @digital_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+                - bundles_select_options = @bundles.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+                = f.select :item, grouped_options_for_select('Physical Items' => physical_items_select_options, 'Digital Items' => digital_items_select_options, 'Bundles' => bundles_select_options), { prompt: 'Choose Item' }, { disabled: (@physical_items + @digital_items + @bundles).blank?, class: 'form-control' }
+            div.form-group
+              label.control-label.col-md-4 Price
+              div.col-md-8
+                = f.select :price_id, @prices.collect { |price| [price.name, price.id] }, { prompt: 'Choose Price' }, { disabled: @prices.blank?, class: 'form-control' }
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                button.btn.btn-default data-dismiss='modal'
+                  | Cancel
+                = button_tag class: 'btn btn-success', name: nil do
+                  | Create
+  - @store_items.each do |store_item|
+    div.modal id="edit-store-item-#{store_item.id}" role='dialog'
+      div.modal-dialog
+        div.modal-content
+          = form_for :store_item, url: inventory_store_item_path(store_item.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+            div.modal-header
+              button.close data-dismiss='modal'
+                i.fa.fa-times
+              h4.text-warning Edit Store Item
+            div.modal-body
+              div.form-group
+                label.control-label.col-md-4 Name
+                div.col-md-8
+                  = f.text_field :name, class: 'form-control', value: store_item.name, placeholder: 'Store Item Name'
+              div.form-group
+                label.control-label.col-md-4 Price
+                div.col-md-8
+                  = f.select :price_id, ([store_item.price] + @prices).uniq(&:id).collect { |price| [price.name, price.id] }, { prompt: 'Choose Price', selected: store_item.price.id }, { disabled: @prices.blank?, class: 'form-control' }
+            div.modal-footer
+              div.form-group
+                div.col-md-8.col-md-offset-4
+                  button.btn.btn-default data-dismiss='modal'
+                    | Cancel
+                  = button_tag class: 'btn btn-warning', name: nil do
+                    | Update

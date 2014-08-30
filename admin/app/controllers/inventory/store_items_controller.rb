@@ -2,24 +2,19 @@ module Inventory
   class StoreItemsController < ApplicationController
     def index
       @store_items = resource_class.all(sort: :desc)
-      @bundles = clipboard_bundles
-      @physical_items = clipboard_physical_items
-      @digital_items = clipboard_digital_items
-      @prices = clipboard_prices
+      @physical_items = BackendClient::PhysicalItem.all(sort: :desc)
+      @digital_items = BackendClient::DigitalItem.all(sort: :desc)
+      @bundles = BackendClient::Bundle.all(sort: :desc)
+      @prices = BackendClient::Price.all(sort: :desc)
     end
 
     def create
       @store_item = resource_class.create(
         scoped_params(:store_item, :name, :price_id).merge(
-          scoped_params(:items).find { |item| !!item[:selected] }.permit(:item_type, :item_id)
+          Yajl::Parser.parse scoped_params(:store_item).require(:item)
         )
       )
       redirect_to :back
-    end
-
-    def edit
-      @store_item = resource
-      @prices = clipboard_prices
     end
 
     def update
