@@ -2,12 +2,30 @@ h2.page-header
   = @bundle.title
 
 div.row
-  div.col-md-6
+  div.col-md-5
     div.panel.panel-default
-      div.panel-heading
-        h4 Bundle Information
+      div.panel-heading.clearfix
+        h4.pull-left Information
+        div.pull-right.btn-toolbar
+          div.btn-group
+            button.btn.btn-warning data-toggle='modal' data-target="#edit-bundle-#{@bundle.id}"
+              i.fa.fa-pencil
+              |  Edit
+          div.btn-group
+            = button_to activate_inventory_bundle_path(@bundle.id), method: :put, disabled: !@bundle.activable?, class: 'btn btn-warning', title: 'Activate' do
+              i.fa.fa-check
+              |  Activate
+          div.btn-group
+            = button_to inventory_bundle_path(@bundle.id), method: :delete, disabled: !@bundle.deletable?, class: 'btn btn-danger', title: 'Delete' do
+              i.fa.fa-trash-o
+              |  Delete
       table.table.table-condensed
         tbody
+          tr
+            td
+              label ID
+            td
+              = @bundle.id
           tr
             td
               label Title
@@ -18,9 +36,15 @@ div.row
               label Description
             td
               = @bundle.description
+          tr
+            td
+              label Item Qty
+            td
+              = @bundle.bundleds.count
+  div.col-md-7
     div.panel.panel-default
-      div.panel-heading
-        h4 Items
+      div.panel-heading.clearfix
+        h4.pull-left Items
       table.table.table-condensed
         thead
           tr
@@ -30,9 +54,13 @@ div.row
               label Description
             td
               label Qty
+            td
+              label Available
+            td
+              label Active
         tbody
           - @bundle.bundleds.each do |bundled|
-            tr
+            tr class="#{bundled.item.active? ? 'success' : 'danger'}"
               td
                 = bundled.item.title
               td
@@ -40,45 +68,56 @@ div.row
               td
                 = bundled.qty
               td
+                = yesno(bundled.item.available?)
+              td
+                = yesno(bundled.item.active?)
+              td
                 = button_to inventory_bundle_bundled_path(@bundle.id, bundled.id), method: :delete, disabled: !@bundle.changeable?, class: 'btn btn-danger', title: 'Delete' do
                   i.fa.fa-trash-o
-  div.col-md-6
-    div.panel.panel-default
-      div.panel-heading
-        h4 Edit Bundle
-      div.panel-body
+div
+  div.modal id="edit-bundle-#{@bundle.id}" role='dialog'
+    div.modal-dialog
+      div.modal-content
         = form_for :bundle, url: inventory_bundle_path(@bundle.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
-          div.form-group
-            label.control-label.col-md-2 Title
-            div.col-md-9
-              = f.text_field :title, class: 'form-control', placeholder: 'New Title'
-          div.form-group
-            label.control-label.col-md-2 Description
-            div.col-md-9
-              = f.text_field :description, class: 'form-control', placeholder: 'New Description'
-          - if @bundle.changeable?
-            - @bundle.bundleds.each do |bundled|
-              div.form-group
-                div.col-md-2
-                  = text_field_tag 'bundleds[][qty]', bundled.qty, placeholder: 'Amount', class: 'form-control'
-                  = hidden_field_tag 'bundleds[][selected]', true
-                  = hidden_field_tag 'bundleds[][item_type]', bundled.item.resource_type
-                  = hidden_field_tag 'bundleds[][item_id]', bundled.item.resource_id
-                label.col-md-9
-                  = bundled.item.title
-            - (@physical_items + @digital_items).each do |item|
-              div.form-group
-                div.col-md-2
-                  = text_field_tag 'bundleds[][qty]', nil, placeholder: 'Amount', class: 'form-control'
-                div.col-md-9
-                  div.checkbox
-                    label.control-label
-                      = check_box_tag 'bundleds[][selected]'
-                      = item.title
-                    = hidden_field_tag 'bundleds[][item_type]', item.resource_type
-                    = hidden_field_tag 'bundleds[][item_id]', item.resource_id
-          div.form-group
-            div.col-md-offset-2.col-md-9
-              = button_tag class: 'btn btn-warning', name: nil do
-                i.fa.fa-pencil
-                |  Update
+          div.modal-header
+            button.close data-dismiss='modal'
+              i.fa.fa-times
+            h4.text-warning Edit Bundle
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 Title
+              div.col-md-8
+                = f.text_field :title, class: 'form-control', value: @bundle.title, placeholder: 'Bundle Title'
+            div.form-group
+              label.control-label.col-md-4 Description
+              div.col-md-8
+                = f.text_field :description, class: 'form-control', value: @bundle.description, placeholder: 'Bundle Description'
+            - if @bundle.changeable?
+              - @bundle.bundleds.each do |bundled|
+                div.form-group
+                  div.col-md-4
+                    div.row
+                      div.col-md-6.col-md-offset-6
+                        = text_field_tag 'bundleds[][qty]', bundled.qty, placeholder: '5', class: 'form-control'
+                  div.col-md-8
+                    strong = bundled.item.title
+                  = hidden_field_tag 'bundleds[][item]', { item_type: bundled.item.resource_type, item_id: bundled.item.resource_id }.to_json
+
+              - physical_items_select_options = @physical_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+              - digital_items_select_options = @digital_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+              - select_options = { 'Physical Items' => physical_items_select_options, 'Digital Items' => digital_items_select_options }
+              - 5.times do
+                div.form-group
+                  div.col-md-4
+                    div.row
+                      div.col-md-6.col-md-offset-6
+                        = text_field_tag 'bundleds[][qty]', nil, placeholder: '5', class: 'form-control'
+                  div.col-md-8
+                    = select_tag 'bundleds[][item]', grouped_options_for_select(select_options), { prompt: 'Choose Item', disabled: (@physical_items + @digital_items).blank?, class: 'form-control' }
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                button.btn.btn-default data-dismiss='modal'
+                  | Cancel
+                = button_tag class: 'btn btn-warning', name: nil do
+                  | Update

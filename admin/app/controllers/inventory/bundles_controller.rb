@@ -2,8 +2,8 @@ module Inventory
   class BundlesController < ApplicationController
     def index
       @bundles = resource_class.all(sort: :desc)
-      @physical_items = clipboard_physical_items
-      @digital_items = clipboard_digital_items
+      @physical_items = BackendClient::PhysicalItem.all(sort: :desc)
+      @digital_items = BackendClient::DigitalItem.all(sort: :desc)
     end
 
     def create
@@ -11,10 +11,12 @@ module Inventory
         scoped_params(:bundle, :title, :description)
       )
 
-      if params[:bundleds].present?
-        scoped_params(:bundleds).select { |bundled| !!bundled[:selected] }.each do |bundled|
+      scoped_params(:bundleds).map { |bundled| bundled.permit(:item, :qty) }.each do |bundled|
+        if bundled[:item].present? && bundled[:qty].present?
           @bundle.add_or_update_bundled(
-            bundled.permit(:item_type, :item_id, :qty)
+            bundled.permit(:qty).merge(
+              Yajl::Parser.parse bundled.require(:item)
+            )
           )
         end
       end
@@ -23,16 +25,19 @@ module Inventory
 
     def show
       @bundle = resource
-      @physical_items = clipboard_physical_items
-      @digital_items = clipboard_digital_items
+      @physical_items = BackendClient::PhysicalItem.all(sort: :desc)
+      @digital_items = BackendClient::DigitalItem.all(sort: :desc)
     end
 
     def update
       @bundle = update_resource(:bundle, :title, :description)
-      if params[:bundleds].present? && @bundle.changeable?
-        scoped_params(:bundleds).select { |bundled| !!bundled[:selected] }.each do |bundled|
+
+      scoped_params(:bundleds).map { |bundled| bundled.permit(:item, :qty) }.each do |bundled|
+        if bundled[:item].present? && bundled[:qty].present?
           @bundle.add_or_update_bundled(
-            bundled.permit(:item_type, :item_id, :qty)
+            bundled.permit(:qty).merge(
+              Yajl::Parser.parse bundled.require(:item)
+            )
           )
         end
       end

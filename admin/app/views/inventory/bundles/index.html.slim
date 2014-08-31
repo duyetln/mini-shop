@@ -1,78 +1,137 @@
 h2.page-header
   | Bundles
 
-div.row
-  div.col-md-9
-    div.panel.panel-default
-      div.panel-heading
-        = paginate :inventory_bundles_path, @prev_page, @next_page
-      table.table.table-hover.table-condensed
-        thead
-          tr
+div
+  div.panel.panel-default
+    div.panel-heading.clearfix
+      h4.pull-left Listings
+      div.pull-right.btn-toolbar
+        div.btn-group
+          button.btn.btn-success data-toggle='modal' data-target='#create-bundle'
+            i.fa.fa-plus
+            |  Bundle
+    table.table.table-hover.table-condensed
+      thead
+        tr
+          td
+            label ID
+          td
+            label Title
+          td
+            label Description
+          td
+            label Item Qty
+          td
+            label Available
+          td
+            label Active
+      tbody
+        - @bundles.each do |bundle|
+          tr id="bundle-#{bundle.id}" class="#{bundle.active? ? 'success' : 'danger'}"
             td
-              label ID
+              = bundle.id
             td
-              label Title
+              = bundle.title
             td
-              label Description
+              = bundle.description
             td
-              label Item Qty
+              = bundle.bundleds.count
             td
-              label Available
+              = yesno(bundle.available?)
             td
-              label Active
-        tbody
-          - @bundles.each do |bundle|
-            tr class="#{bundle.active? ? 'success' : 'danger'}"
-              td
-                = bundle.id
-              td
-                = bundle.title
-              td
-                = bundle.description
-              td
-                = bundle.bundleds.count
-              td
-                = yesno(bundle.available?)
-              td
-                = yesno(bundle.active?)
-              td
-                = link_to inventory_bundle_path(bundle.id), class: 'btn btn-primary', title: 'View' do
-                  i.fa.fa-eye
-              td
-                = button_to activate_inventory_bundle_path(bundle.id), method: :put, disabled: !bundle.activable?, class: 'btn btn-warning', title: 'Activate' do
-                  i.fa.fa-check
-              td
-                = button_to inventory_bundle_path(bundle.id), method: :delete, disabled: !bundle.deletable?, class: 'btn btn-danger', title: 'Delete' do
-                  i.fa.fa-trash-o
-              td
-                = form_tag settings_clipboard_path do
-                  = hidden_field_tag 'resource_type', bundle.resource_type
-                  = hidden_field_tag 'resource_id', bundle.resource_id
-                  = button_tag class: 'btn btn-default', title: 'Save item to clipboard', name: nil
-                    i.fa.fa-clipboard
-      div.panel-footer
-        = paginate :inventory_bundles_path, @prev_page, @next_page
+              = yesno(bundle.active?)
+            td
+              = link_to inventory_bundle_path(bundle.id), class: 'btn btn-primary', title: 'View' do
+                i.fa.fa-eye
+            td
+              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-bundle-#{bundle.id}"
+                i.fa.fa-pencil
+            td
+              = button_to activate_inventory_bundle_path(bundle.id), method: :put, disabled: !bundle.activable?, class: 'btn btn-warning', title: 'Activate' do
+                i.fa.fa-check
+            td
+              = button_to inventory_bundle_path(bundle.id), method: :delete, disabled: !bundle.deletable?, class: 'btn btn-danger' do
+                i.fa.fa-trash-o
+div
+  div.modal id='create-bundle' role='dialog'
+    div.modal-dialog
+      div.modal-content
+        = form_for :bundle, url: inventory_bundles_path, html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header
+            button.close data-dismiss='modal'
+              i.fa.fa-times
+            h4.text-success New Bundle
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 Title
+              div.col-md-8
+                = f.text_field :title, class: 'form-control', placeholder: 'Bundle Title'
+            div.form-group
+              label.control-label.col-md-4 Description
+              div.col-md-8
+                = f.text_field :description, class: 'form-control', placeholder: 'Bundle Description'
+            - physical_items_select_options = @physical_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+            - digital_items_select_options = @digital_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+            - select_options = { 'Physical Items' => physical_items_select_options, 'Digital Items' => digital_items_select_options }
+            - 5.times do
+              div.form-group
+                div.col-md-4
+                  div.row
+                    div.col-md-6.col-md-offset-6
+                     = text_field_tag 'bundleds[][qty]', nil, placeholder: '5', class: 'form-control'
+                div.col-md-8
+                  = select_tag 'bundleds[][item]', grouped_options_for_select(select_options), { prompt: 'Choose Item', disabled: (@physical_items + @digital_items).blank?, class: 'form-control' }
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                button.btn.btn-default data-dismiss='modal'
+                  | Cancel
+                = button_tag class: 'btn btn-success', name: nil do
+                  | Create
+  - @bundles.each do |bundle|
+    div.modal id="edit-bundle-#{bundle.id}" role='dialog'
+      div.modal-dialog
+        div.modal-content
+          = form_for :bundle, url: inventory_bundle_path(bundle.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
+            div.modal-header
+              button.close data-dismiss='modal'
+                i.fa.fa-times
+              h4.text-warning Edit Bundle
+            div.modal-body
+              div.form-group
+                label.control-label.col-md-4 Title
+                div.col-md-8
+                  = f.text_field :title, class: 'form-control', value: bundle.title, placeholder: 'Bundle Title'
+              div.form-group
+                label.control-label.col-md-4 Description
+                div.col-md-8
+                  = f.text_field :description, class: 'form-control', value: bundle.description, placeholder: 'Bundle Description'
+              - if bundle.changeable?
+                - bundle.bundleds.each do |bundled|
+                  div.form-group
+                    div.col-md-4
+                      div.row
+                        div.col-md-6.col-md-offset-6
+                          = text_field_tag 'bundleds[][qty]', bundled.qty, placeholder: '5', class: 'form-control'
+                    div.col-md-8
+                      strong = bundled.item.title
+                    = hidden_field_tag 'bundleds[][item]', { item_type: bundled.item.resource_type, item_id: bundled.item.resource_id }.to_json
 
-  div.currency.col-md-3
-    div.panel.panel-default
-      div.panel-heading
-        h4 New Item
-      div.panel-body
-        = form_for :bundle, url: inventory_bundles_path, html: { role: 'form'} do |f|
-          div.form-group
-            = f.text_field :title, class: 'form-control', placeholder: 'New Title'
-          div.form-group
-            = f.text_field :description, class: 'form-control', placeholder: 'New Description'
-          - (@physical_items + @digital_items).each do |item|
-            div.checkbox
-              label.control-label
-                = check_box_tag 'bundleds[][selected]'
-                = item.title
-              = hidden_field_tag 'bundleds[][item_type]', item.resource_type
-              = hidden_field_tag 'bundleds[][item_id]', item.resource_id
-              = text_field_tag 'bundleds[][qty]', nil, placeholder: 'Amount', class: 'form-control'
-          div.form-group
-            = button_tag class: 'btn btn-success', name: nil do
-              i.fa.fa-plus
-              |  Create
+                - physical_items_select_options = @physical_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+                - digital_items_select_options = @digital_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
+                - select_options = { 'Physical Items' => physical_items_select_options, 'Digital Items' => digital_items_select_options }
+                - 5.times do
+                  div.form-group
+                    div.col-md-4
+                      div.row
+                        div.col-md-6.col-md-offset-6
+                          = text_field_tag 'bundleds[][qty]', nil, placeholder: '5', class: 'form-control'
+                    div.col-md-8
+                      = select_tag 'bundleds[][item]', grouped_options_for_select(select_options), { prompt: 'Choose Item', disabled: (@physical_items + @digital_items).blank?, class: 'form-control' }
+            div.modal-footer
+              div.form-group
+                div.col-md-8.col-md-offset-4
+                  button.btn.btn-default data-dismiss='modal'
+                    | Cancel
+                  = button_tag class: 'btn btn-warning', name: nil do
+                    | Update
