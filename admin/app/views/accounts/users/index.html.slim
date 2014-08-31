@@ -2,8 +2,8 @@ h2.page-header
   | Users
 
 div.panel.panel-default
-  div.panel-heading
-    = paginate :accounts_users_path, @prev_page, @next_page
+  div.panel-heading.clearfix
+    h4.pull-left Listings
   table.table.table-hover.table-condensed
     thead
       tr
@@ -36,6 +36,4 @@ div.panel.panel-default
             td =       user.created_at.to_formatted_s(:long)
             td = link_to accounts_user_path(user.id), class: 'btn btn-primary', title: 'View' do
               i.fa.fa-eye
-  div.panel-footer
-    = paginate :accounts_users_path, @prev_page, @next_page
 
