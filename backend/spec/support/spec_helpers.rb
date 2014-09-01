@@ -64,6 +64,13 @@ module SpecHelpers
 
     included do
       let(:params) { {} }
+
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:sort) { [:asc, :desc].sample }
+      let(:pagination) { { page: page, size: size, padn: padn, sort: sort } }
+
       let(:response_status) { last_response.status }
       let(:response_body) { last_response.body }
       let :parsed_response do

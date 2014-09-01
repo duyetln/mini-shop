@@ -28,10 +28,7 @@ describe Services::Accounts::Users do
     end
 
     context 'paginated' do
-      let(:page) { 1 }
-      let(:size) { qty }
-      let(:padn) { rand_num }
-      let(:params) { { page: page, size: size, padn: padn } }
+      let(:params) { pagination }
 
       it 'returns paginated users' do
         send_request
