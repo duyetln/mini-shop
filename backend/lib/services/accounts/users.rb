@@ -42,7 +42,7 @@ module Services
 
       get '/:id/ownerships' do
         user = User.find(id)
-        ownerships = user.ownerships
+        ownerships = paginate(user.ownerships).all
         respond_with(ownerships.map do |ownership|
           OwnershipSerializer.new(ownership)
         end)
@@ -50,7 +50,7 @@ module Services
 
       get '/:id/shipments' do
         user = User.find(id)
-        shipments = user.shipments
+        shipments = paginate(user.shipments).all
         respond_with(shipments.map do |shipment|
           ShipmentSerializer.new(shipment)
         end)
@@ -58,7 +58,7 @@ module Services
 
       get '/:id/coupons' do
         user = User.find(id)
-        coupons = user.coupons
+        coupons = paginate(user.coupons).all
         respond_with(coupons.map do |coupon|
           CouponSerializer.new(coupon)
         end)
@@ -78,7 +78,7 @@ module Services
 
       get '/:id/transactions' do
         user = User.find(id)
-        transactions = user.transactions
+        transactions = paginate(user.transactions).all
         respond_with(transactions.map do |transaction|
           TransactionSerializer.new(transaction)
         end)
@@ -86,7 +86,7 @@ module Services
 
       get '/:id/purchases' do
         user = User.find(id)
-        purchases = user.purchases
+        purchases = paginate(user.purchases).all
         respond_with(purchases.map do |purchase|
           PurchaseSerializer.new(purchase)
         end)
