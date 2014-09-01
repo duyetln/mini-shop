@@ -11,3 +11,6 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 end
+
+require 'spec/services/shared/errors'
+require 'spec/services/shared/pagination'

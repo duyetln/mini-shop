@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Inventory::Pricepoints do
   describe 'get /' do
@@ -10,31 +9,11 @@ describe Services::Inventory::Pricepoints do
       FactoryGirl.create :pricepoint
     end
 
-    context 'not paginated' do
-      it 'returns all pricepoints' do
-        send_request
-        expect_status(200)
-        expect_response(Pricepoint.all.map do |pricepoint|
-          PricepointSerializer.new(pricepoint)
-        end.to_json)
-      end
-    end
+    context 'pagination' do
+      let(:scope) { Pricepoint }
+      let(:serializer) { PricepointSerializer }
 
-    context 'paginated' do
-      let(:params) { pagination }
-
-      it 'returns paginated pricepoints' do
-        send_request
-        expect_status(200)
-        expect_response(
-          Pricepoint.page(page,
-                          size: size,
-                          padn: padn
-          ).all.map do |pricepoint|
-            PricepointSerializer.new(pricepoint)
-          end.to_json
-        )
-      end
+      include_examples 'pagination'
     end
   end
 

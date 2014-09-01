@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Inventory::Bundles do
   describe 'get /' do
@@ -10,31 +9,11 @@ describe Services::Inventory::Bundles do
       FactoryGirl.create :bundle
     end
 
-    context 'not paginated' do
-      it 'returns all bundles' do
-        send_request
-        expect_status(200)
-        expect_response(Bundle.all.map do |item|
-          BundleSerializer.new(item)
-        end.to_json)
-      end
-    end
+    context 'pagination' do
+      let(:scope) { Bundle }
+      let(:serializer) { BundleSerializer }
 
-    context 'paginated' do
-      let(:params) { pagination }
-
-      it 'returns paginated bundles' do
-        send_request
-        expect_status(200)
-        expect_response(
-          Bundle.page(page,
-                      size: size,
-                      padn: padn
-          ).all.map do |item|
-            BundleSerializer.new(item)
-          end.to_json
-        )
-      end
+      include_examples 'pagination'
     end
   end
 

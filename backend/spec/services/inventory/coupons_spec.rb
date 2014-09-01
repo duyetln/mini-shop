@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Inventory::Coupons do
   describe 'get /:code' do

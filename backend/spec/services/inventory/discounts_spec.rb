@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Inventory::Discounts do
   describe 'get /' do
@@ -10,31 +9,11 @@ describe Services::Inventory::Discounts do
       FactoryGirl.create :discount
     end
 
-    context 'not paginated' do
-      it 'returns all discounts' do
-        send_request
-        expect_status(200)
-        expect_response(Discount.all.map do |discount|
-          DiscountSerializer.new(discount)
-        end.to_json)
-      end
-    end
+    context 'pagination' do
+      let(:scope) { Discount }
+      let(:serializer) { DiscountSerializer }
 
-    context 'paginated' do
-      let(:params) { pagination }
-
-      it 'returns paginated discounts' do
-        send_request
-        expect_status(200)
-        expect_response(
-          Discount.page(page,
-                        size: size,
-                        padn: padn
-          ).all.map do |discount|
-            DiscountSerializer.new(discount)
-          end.to_json
-        )
-      end
+      include_examples 'pagination'
     end
   end
 

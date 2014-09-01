@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Accounts::Users do
   let(:user) { FactoryGirl.create :user, password: password }
@@ -17,31 +16,11 @@ describe Services::Accounts::Users do
       user.save!
     end
 
-    context 'not paginated' do
-      it 'returns all users' do
-        send_request
-        expect_status(200)
-        expect_response(User.all.map do |user|
-          UserSerializer.new(user)
-        end.to_json)
-      end
-    end
+    context 'pagination' do
+      let(:scope) { User }
+      let(:serializer) { UserSerializer }
 
-    context 'paginated' do
-      let(:params) { pagination }
-
-      it 'returns paginated users' do
-        send_request
-        expect_status(200)
-        expect_response(
-          User.page(page,
-                    size: size,
-                    padn: padn
-          ).all.map do |user|
-            UserSerializer.new(user)
-          end.to_json
-        )
-      end
+      include_examples 'pagination'
     end
   end
 
@@ -217,35 +196,11 @@ describe Services::Accounts::Users do
         FactoryGirl.create :ownership, user: user
       end
 
-      context 'not paginated' do
-        it 'returns all user ownerships' do
-          send_request
-          expect_status(200)
-          expect_response(user.ownerships.map do |ownership|
-            OwnershipSerializer.new(ownership)
-          end.to_json)
-        end
-      end
+      context 'pagination' do
+        let(:scope) { user.ownerships }
+        let(:serializer) { OwnershipSerializer }
 
-      context 'paginated' do
-        let(:page) { 1 }
-        let(:size) { qty }
-        let(:padn) { rand_num }
-        let(:params) { { page: page, size: size, padn: padn } }
-
-        it 'returns paginated user ownerships' do
-          send_request
-          expect_status(200)
-          expect_response(
-            user.ownerships.page(
-              page,
-              size: size,
-              padn: padn
-            ).all.map do |ownership|
-              OwnershipSerializer.new(ownership)
-            end.to_json
-          )
-        end
+        include_examples 'pagination'
       end
     end
   end
@@ -261,35 +216,11 @@ describe Services::Accounts::Users do
         FactoryGirl.create :shipment, user: user
       end
 
-      context 'not paginated' do
-        it 'returns all user shipments' do
-          send_request
-          expect_status(200)
-          expect_response(user.shipments.map do |shipment|
-            ShipmentSerializer.new(shipment)
-          end.to_json)
-        end
-      end
+      context 'pagination' do
+        let(:scope) { user.shipments }
+        let(:serializer) { ShipmentSerializer }
 
-      context 'paginated' do
-        let(:page) { 1 }
-        let(:size) { qty }
-        let(:padn) { rand_num }
-        let(:params) { { page: page, size: size, padn: padn } }
-
-        it 'returns paginated user shipments' do
-          send_request
-          expect_status(200)
-          expect_response(
-            user.shipments.page(
-              page,
-              size: size,
-              padn: padn
-            ).all.map do |shipment|
-              ShipmentSerializer.new(shipment)
-            end.to_json
-          )
-        end
+        include_examples 'pagination'
       end
     end
   end
@@ -305,35 +236,11 @@ describe Services::Accounts::Users do
         FactoryGirl.create(:coupon).used_by!(user)
       end
 
-      context 'not paginated' do
-        it 'returns all user coupons' do
-          send_request
-          expect_status(200)
-          expect_response(user.coupons.map do |coupon|
-            CouponSerializer.new(coupon)
-          end.to_json)
-        end
-      end
+      context 'pagination' do
+        let(:scope) { user.coupons }
+        let(:serializer) { CouponSerializer }
 
-      context 'paginated' do
-        let(:page) { 1 }
-        let(:size) { qty }
-        let(:padn) { rand_num }
-        let(:params) { { page: page, size: size, padn: padn } }
-
-        it 'returns paginated user coupons' do
-          send_request
-          expect_status(200)
-          expect_response(
-            user.coupons.page(
-              page,
-              size: size,
-              padn: padn
-            ).all.map do |coupon|
-              CouponSerializer.new(coupon)
-            end.to_json
-          )
-        end
+        include_examples 'pagination'
       end
     end
   end
@@ -403,35 +310,11 @@ describe Services::Accounts::Users do
         FactoryGirl.create :transaction, user: user
       end
 
-      context 'not paginated' do
-        it 'returns all user transactions' do
-          send_request
-          expect_status(200)
-          expect_response(user.transactions.map do |transaction|
-            TransactionSerializer.new(transaction)
-          end.to_json)
-        end
-      end
+      context 'pagination' do
+        let(:scope) { user.transactions }
+        let(:serializer) { TransactionSerializer }
 
-      context 'paginated' do
-        let(:page) { 1 }
-        let(:size) { qty }
-        let(:padn) { rand_num }
-        let(:params) { { page: page, size: size, padn: padn } }
-
-        it 'returns paginated user transactions' do
-          send_request
-          expect_status(200)
-          expect_response(
-            user.transactions.page(
-              page,
-              size: size,
-              padn: padn
-            ).all.map do |transaction|
-              TransactionSerializer.new(transaction)
-            end.to_json
-          )
-        end
+        include_examples 'pagination'
       end
     end
   end
@@ -447,35 +330,11 @@ describe Services::Accounts::Users do
         FactoryGirl.create :purchase, user: user
       end
 
-      context 'not paginated' do
-        it 'returns all user purchases' do
-          send_request
-          expect_status(200)
-          expect_response(user.purchases.map do |purchase|
-            PurchaseSerializer.new(purchase)
-          end.to_json)
-        end
-      end
+      context 'pagination' do
+        let(:scope) { user.purchases }
+        let(:serializer) { PurchaseSerializer }
 
-      context 'paginated' do
-        let(:page) { 1 }
-        let(:size) { qty }
-        let(:padn) { rand_num }
-        let(:params) { { page: page, size: size, padn: padn } }
-
-        it 'returns paginated user purchases' do
-          send_request
-          expect_status(200)
-          expect_response(
-            user.purchases.page(
-              page,
-              size: size,
-              padn: padn
-            ).all.map do |purchase|
-              PurchaseSerializer.new(purchase)
-            end.to_json
-          )
-        end
+        include_examples 'pagination'
       end
     end
   end

@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Inventory::Batches do
   describe 'get /:id' do
@@ -30,34 +29,11 @@ describe Services::Inventory::Batches do
       let(:batch) { FactoryGirl.create :batch, :coupons }
       let(:id) { batch.id }
 
-      context 'not paginated' do
-        it 'returns all coupons' do
-          send_request
-          expect_status(200)
-          expect_response(batch.coupons.map do |coupon|
-            CouponSerializer.new(coupon)
-          end.to_json)
-        end
-      end
+      context 'pagination' do
+        let(:scope) { batch.coupons }
+        let(:serializer) { CouponSerializer }
 
-      context 'paginated' do
-        let(:page) { 1 }
-        let(:size) { qty }
-        let(:padn) { rand_num }
-        let(:params) { { page: page, size: size, padn: padn } }
-
-        it 'returns all batches' do
-          send_request
-          expect_status(200)
-          expect_response(
-            batch.coupons.page(page,
-                               size: size,
-                               padn: padn
-            ).all.map do |coupon|
-              CouponSerializer.new(coupon)
-            end.to_json
-          )
-        end
+        include_examples 'pagination'
       end
     end
   end

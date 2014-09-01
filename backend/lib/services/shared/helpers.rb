@@ -8,7 +8,7 @@ module Services
           {
             'desc' => :desc,
             'asc'  => :asc
-          }[params[:sort].to_s.downcase] || :asc
+          }[params[:sort].to_s.downcase] || :desc
         )}"
       ).page(
         params[:page],

@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Inventory::PhysicalItems do
   describe 'get /' do
@@ -10,31 +9,11 @@ describe Services::Inventory::PhysicalItems do
       FactoryGirl.create :physical_item
     end
 
-    context 'not paginated' do
-      it 'returns all physical items' do
-        send_request
-        expect_status(200)
-        expect_response(PhysicalItem.all.map do |item|
-          PhysicalItemSerializer.new(item)
-        end.to_json)
-      end
-    end
+    context 'pagination' do
+      let(:scope) { PhysicalItem }
+      let(:serializer) { PhysicalItemSerializer }
 
-    context 'paginated' do
-      let(:params) { pagination }
-
-      it 'returns paginated physical items' do
-        send_request
-        expect_status(200)
-        expect_response(
-          PhysicalItem.page(page,
-                            size: size,
-                            padn: padn
-          ).all.map do |item|
-            PhysicalItemSerializer.new(item)
-          end.to_json
-        )
-      end
+      include_examples 'pagination'
     end
   end
 

@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Inventory::Prices do
   describe 'get /' do
@@ -10,31 +9,11 @@ describe Services::Inventory::Prices do
       FactoryGirl.create :price
     end
 
-    context 'not paginated' do
-      it 'returns all prices' do
-        send_request
-        expect_status(200)
-        expect_response(Price.all.map do |price|
-          PriceSerializer.new(price)
-        end.to_json)
-      end
-    end
+    context 'pagination' do
+      let(:scope) { Price }
+      let(:serializer) { PriceSerializer }
 
-    context 'paginated' do
-      let(:params) { pagination }
-
-      it 'returns paginated prices' do
-        send_request
-        expect_status(200)
-        expect_response(
-          Price.page(page,
-                     size: size,
-                     padn: padn
-          ).all.map do |price|
-            PriceSerializer.new(price)
-          end.to_json
-        )
-      end
+      include_examples 'pagination'
     end
   end
 

@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Inventory::DigitalItems do
   describe 'get /' do
@@ -10,31 +9,11 @@ describe Services::Inventory::DigitalItems do
       FactoryGirl.create :digital_item
     end
 
-    context 'not paginated' do
-      it 'returns all digital items' do
-        send_request
-        expect_status(200)
-        expect_response(DigitalItem.all.map do |item|
-          DigitalItemSerializer.new(item)
-        end.to_json)
-      end
-    end
+    context 'pagination' do
+      let(:scope) { DigitalItem }
+      let(:serializer) { DigitalItemSerializer }
 
-    context 'paginated' do
-      let(:params) { pagination }
-
-      it 'returns paginated digital items' do
-        send_request
-        expect_status(200)
-        expect_response(
-          DigitalItem.page(page,
-                           size: size,
-                           padn: padn
-          ).all.map do |item|
-            DigitalItemSerializer.new(item)
-          end.to_json
-        )
-      end
+      include_examples 'pagination'
     end
   end
 

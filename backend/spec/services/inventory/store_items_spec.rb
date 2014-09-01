@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Inventory::StoreItems do
   describe 'get /' do
@@ -10,31 +9,11 @@ describe Services::Inventory::StoreItems do
       FactoryGirl.create :store_item
     end
 
-    context 'not paginated' do
-      it 'returns all store items' do
-        send_request
-        expect_status(200)
-        expect_response(StoreItem.all.map do |item|
-          StoreItemSerializer.new(item)
-        end.to_json)
-      end
-    end
+    context 'pagination' do
+      let(:scope) { StoreItem }
+      let(:serializer) { StoreItemSerializer }
 
-    context 'paginated' do
-      let(:params) { pagination }
-
-      it 'returns paginated store items' do
-        send_request
-        expect_status(200)
-        expect_response(
-          StoreItem.page(page,
-                         size: size,
-                         padn: padn
-          ).all.map do |item|
-            StoreItemSerializer.new(item)
-          end.to_json
-        )
-      end
+      include_examples 'pagination'
     end
   end
 

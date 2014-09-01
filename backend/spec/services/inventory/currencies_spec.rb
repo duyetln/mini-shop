@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Inventory::Currencies do
   describe 'get /' do
@@ -10,31 +9,11 @@ describe Services::Inventory::Currencies do
       Currency.where(code: 'USD', sign: '&#36;').first_or_create!
     end
 
-    context 'not paginated' do
-      it 'returns all currencies' do
-        send_request
-        expect_status(200)
-        expect_response(Currency.all.map do |currency|
-          CurrencySerializer.new(currency)
-        end.to_json)
-      end
-    end
+    context 'pagination' do
+      let(:scope) { Currency }
+      let(:serializer) { CurrencySerializer }
 
-    context 'paginated' do
-      let(:params) { pagination }
-
-      it 'returns paginated currencies' do
-        send_request
-        expect_status(200)
-        expect_response(
-          Currency.page(page,
-                        size: size,
-                        padn: padn
-          ).all.map do |currency|
-            CurrencySerializer.new(currency)
-          end.to_json
-        )
-      end
+      include_examples 'pagination'
     end
   end
 

@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Inventory::Promotions do
   describe 'get /' do
@@ -10,31 +9,11 @@ describe Services::Inventory::Promotions do
       FactoryGirl.create :promotion
     end
 
-    context 'not paginated' do
-      it 'returns all promotions' do
-        send_request
-        expect_status(200)
-        expect_response(Promotion.all.map do |promotion|
-          PromotionSerializer.new(promotion)
-        end.to_json)
-      end
-    end
+    context 'pagination' do
+      let(:scope) { Promotion }
+      let(:serializer) { PromotionSerializer }
 
-    context 'paginated' do
-      let(:params) { pagination }
-
-      it 'returns paginated promotions' do
-        send_request
-        expect_status(200)
-        expect_response(
-          Promotion.page(page,
-                         size: size,
-                         padn: padn
-          ).all.map do |promotion|
-            PromotionSerializer.new(promotion)
-          end.to_json
-        )
-      end
+      include_examples 'pagination'
     end
   end
 
@@ -226,34 +205,11 @@ describe Services::Inventory::Promotions do
       let(:promotion) { FactoryGirl.create :promotion, :coupons }
       let(:id) { promotion.id }
 
-      context 'not paginated' do
-        it 'returns all batches' do
-          send_request
-          expect_status(200)
-          expect_response(promotion.batches.map do |batch|
-            BatchSerializer.new(batch)
-          end.to_json)
-        end
-      end
+      context 'pagination' do
+        let(:scope) { promotion.batches }
+        let(:serializer) { BatchSerializer }
 
-      context 'paginated' do
-        let(:page) { 1 }
-        let(:size) { qty }
-        let(:padn) { rand_num }
-        let(:params) { { page: page, size: size, padn: padn } }
-
-        it 'returns all batches' do
-          send_request
-          expect_status(200)
-          expect_response(
-            promotion.batches.page(page,
-                                   size: size,
-                                   padn: padn
-            ).all.map do |batch|
-              BatchSerializer.new(batch)
-            end.to_json
-          )
-        end
+        include_examples 'pagination'
       end
     end
   end

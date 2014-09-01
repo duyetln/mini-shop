@@ -1,5 +1,4 @@
 require 'services/spec_setup'
-require 'spec/services/shared/errors'
 
 describe Services::Shopping::PaymentMethods do
   describe 'put /:id' do
