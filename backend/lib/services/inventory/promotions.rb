@@ -46,9 +46,8 @@ module Services
       end
 
       get '/:id/batches' do
-        check_id!
-        batches = paginate(Batch.joins(:promotion)
-          .where(promotions: { id: id }).readonly(true)).all
+        promotion = Promotion.find(id)
+        batches = paginate(promotion.batches).all
         respond_with(batches.map do |batch|
           BatchSerializer.new(batch)
         end)
@@ -70,12 +69,6 @@ module Services
         respond_with(batches.map do |batch|
           BatchSerializer.new(batch)
         end)
-      end
-
-      protected
-
-      def check_id!
-        Promotion.exists?(id) || not_found!(meta: 'Promotion id is not valid')
       end
     end
   end

@@ -19,14 +19,4 @@ describe Shipment do
   it { should validate_presence_of(:shipping_address) }
 
   it { should ensure_inclusion_of(:item_type).in_array(%w(PhysicalItem)) }
-
-  describe '.for_user' do
-    before :each do
-      model.save!
-    end
-
-    it 'returns shipments of a user' do
-      expect(described_class.for_user(model.user.id)).to include(model)
-    end
-  end
 end

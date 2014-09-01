@@ -347,27 +347,6 @@ describe Services::Accounts::Users do
     end
   end
 
-  describe 'get /:id/orders' do
-    let(:method) { :get }
-    let(:path) { "/#{id}/orders" }
-
-    include_examples 'invalid id'
-
-    context 'valid id' do
-      before :each do
-        FactoryGirl.create :order, purchase: FactoryGirl.create(:purchase, user: user)
-      end
-
-      it 'returns the orders' do
-        send_request
-        expect_status(200)
-        expect_response(user.purchases.map(&:orders).flatten.map do |order|
-          OrderSerializer.new(order)
-        end.to_json)
-      end
-    end
-  end
-
   describe 'get /:id/purchases' do
     let(:method) { :get }
     let(:path) { "/#{id}/purchases" }

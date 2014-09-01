@@ -41,24 +41,24 @@ module Services
       end
 
       get '/:id/ownerships' do
-        check_id!
-        ownerships = Ownership.for_user(id)
+        user = User.find(id)
+        ownerships = user.ownerships
         respond_with(ownerships.map do |ownership|
           OwnershipSerializer.new(ownership)
         end)
       end
 
       get '/:id/shipments' do
-        check_id!
-        shipments = Shipment.for_user(id)
+        user = User.find(id)
+        shipments = user.shipments
         respond_with(shipments.map do |shipment|
           ShipmentSerializer.new(shipment)
         end)
       end
 
       get '/:id/coupons' do
-        check_id!
-        coupons = Coupon.for_user(id)
+        user = User.find(id)
+        coupons = user.coupons
         respond_with(coupons.map do |coupon|
           CouponSerializer.new(coupon)
         end)
@@ -77,40 +77,28 @@ module Services
       end
 
       get '/:id/transactions' do
-        check_id!
-        transactions = Transaction.for_user(id)
+        user = User.find(id)
+        transactions = user.transactions
         respond_with(transactions.map do |transaction|
           TransactionSerializer.new(transaction)
         end)
       end
 
-      get '/:id/orders' do
-        check_id!
-        orders = Order.for_user(id)
-        respond_with(orders.map do |order|
-          OrderSerializer.new(order)
-        end)
-      end
-
       get '/:id/purchases' do
-        check_id!
-        purchases = Purchase.for_user(id)
+        user = User.find(id)
+        purchases = user.purchases
         respond_with(purchases.map do |purchase|
           PurchaseSerializer.new(purchase)
         end)
       end
 
       post '/:id/purchases' do
-        check_id!
-        purchase = Purchase.where(user_id: id).create!(params[:purchase])
+        user = User.find(id)
+        purchase = user.purchases.create!(params[:purchase])
         respond_with(PurchaseSerializer.new(purchase))
       end
 
       protected
-
-      def check_id!
-        User.exists?(id) || not_found!(meta: 'User id is not valid')
-      end
 
       def user_params
         params[:user] || {}

@@ -9,9 +9,8 @@ module Services
       end
 
       get '/:id/coupons' do
-        check_id!
-        coupons = paginate(Coupon.joins(:batch)
-          .where(batches: { id: id }).readonly(true)).all
+        batch = Batch.find(id)
+        coupons = paginate(batch.coupons).all
         respond_with(coupons.map do |coupon|
           CouponSerializer.new(coupon)
         end)
@@ -45,12 +44,6 @@ module Services
           meta: 'The batch is not deletable or not allowed for deletion'
         )
         respond_with(BatchSerializer.new(batch))
-      end
-
-      protected
-
-      def check_id!
-        Batch.exists?(id) || not_found!(meta: 'Batch id is not valid')
       end
     end
   end

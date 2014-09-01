@@ -23,7 +23,6 @@ class Purchase < ActiveRecord::Base
 
   delegate :currency, to: :payment_method, prefix: true, allow_nil: true
 
-  scope :for_user, -> user_id { joins(:user).where(users: { id: user_id }).readonly(true) }
   scope :current, -> user { pending.where(user_id: user.id) }
 
   after_save :reload

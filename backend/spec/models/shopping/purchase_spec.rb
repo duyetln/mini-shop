@@ -24,16 +24,6 @@ describe Purchase do
 
   it { should validate_presence_of(:user) }
 
-  describe '.for_user' do
-    before :each do
-      model.save!
-    end
-
-    it 'returns purchases of a user' do
-      expect(described_class.for_user(model.user.id)).to include(model)
-    end
-  end
-
   context 'pending' do
     let(:subject) { model }
 

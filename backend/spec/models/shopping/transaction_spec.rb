@@ -27,16 +27,6 @@ describe Transaction do
   it { should have_readonly_attribute(:amount) }
   it { should have_readonly_attribute(:currency_id) }
 
-  describe '.for_user' do
-    before :each do
-      model.save!
-    end
-
-    it 'returns transactions of a user' do
-      expect(described_class.for_user(model.user.id)).to include(model)
-    end
-  end
-
   describe '#payment_method_currency' do
     it 'delegates to #payment_method' do
       expect(model.payment_method_currency).to eq(model.payment_method.currency)

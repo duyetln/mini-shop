@@ -21,7 +21,6 @@ class Coupon < ActiveRecord::Base
 
   scope :used, -> { where(used: true) }
   scope :unused, -> { where(used: false) }
-  scope :for_user, -> user_id { joins(:user).where(users: { id: user_id }).readonly(true) }
 
   after_initialize :set_values
 

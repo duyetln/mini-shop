@@ -24,18 +24,6 @@ describe Coupon do
   it { should validate_presence_of(:batch) }
   it { should validate_uniqueness_of(:code) }
 
-  describe '.for_user' do
-    before :each do
-      user.save!
-      model.save!
-      model.used_by!(user)
-    end
-
-    it 'returns coupons of a user' do
-      expect(described_class.for_user(model.user.id)).to include(model)
-    end
-  end
-
   context 'new model' do
     it 'correctly sets code, used, used_by, and used_at' do
       expect(model).to_not be_persisted
