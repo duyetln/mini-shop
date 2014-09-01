@@ -53,11 +53,28 @@ describe BackendClient::User do
   end
 
   shared_examples 'association retreiving' do
-    it 'returns association collection' do
-      expect_http_action(:get, { path: "/#{bare_model.id}/#{association}" }, [parse(association_payload)])
-      expect(
-        bare_model.send(association).map(&:class).uniq
-      ).to contain_exactly(association_class)
+    context 'not paginated' do
+      it 'returns association collection' do
+        expect_http_action(:get, { path: "/#{bare_model.id}/#{association}", payload: {} }, [parse(association_payload)])
+        expect(
+          bare_model.send(association).map(&:class).uniq
+        ).to contain_exactly(association_class)
+      end
+    end
+
+    context 'paginated' do
+      let(:page) { 1 }
+      let(:size) { qty }
+      let(:padn) { rand_num }
+      let(:sort) { :asc }
+      let(:params) { { page: page, size: size, padn: padn, sort: sort } }
+
+      it 'returns association collection' do
+        expect_http_action(:get, { path: "/#{bare_model.id}/#{association}", payload: params }, [parse(association_payload)])
+        expect(
+          bare_model.send(association, params).map(&:class).uniq
+        ).to contain_exactly(association_class)
+      end
     end
   end
 
@@ -89,14 +106,6 @@ describe BackendClient::User do
     let(:association) { :transactions }
     let(:association_class) { BackendClient::Transaction }
     let(:association_payload) { transaction_payload }
-
-    include_examples 'association retreiving'
-  end
-
-  describe '#orders' do
-    let(:association) { :orders }
-    let(:association_class) { BackendClient::Order }
-    let(:association_payload) { order_payload }
 
     include_examples 'association retreiving'
   end

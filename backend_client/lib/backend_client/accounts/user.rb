@@ -7,11 +7,12 @@ module BackendClient
     include DefaultCreate
     include DefaultUpdate
 
-    [:ownerships, :shipments, :coupons, :transactions, :orders, :purchases].each do |association|
-      define_method "#{association}" do
+    [:ownerships, :shipments, :coupons, :transactions, :purchases].each do |association|
+      define_method "#{association}" do |pagination = {}|
         klass = BackendClient.const_get(association.to_s.classify)
         self.class.get(
-          path: "/#{id}/#{association}"
+          path: "/#{id}/#{association}",
+          payload: pagination.slice(:page, :size, :padn, :sort)
         ).map do |hash|
           klass.instantiate(hash)
         end
