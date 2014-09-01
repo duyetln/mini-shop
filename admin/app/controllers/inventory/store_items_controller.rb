@@ -1,11 +1,11 @@
 module Inventory
   class StoreItemsController < ApplicationController
     def index
-      @store_items = resource_class.all(sort: :desc)
-      @physical_items = BackendClient::PhysicalItem.all(sort: :desc)
-      @digital_items = BackendClient::DigitalItem.all(sort: :desc)
-      @bundles = BackendClient::Bundle.all(sort: :desc)
-      @prices = BackendClient::Price.all(sort: :desc)
+      @store_items = resource_class.all
+      @physical_items = BackendClient::PhysicalItem.all
+      @digital_items = BackendClient::DigitalItem.all
+      @bundles = BackendClient::Bundle.all
+      @prices = BackendClient::Price.all
     end
 
     def create

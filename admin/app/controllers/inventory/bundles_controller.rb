@@ -1,9 +1,9 @@
 module Inventory
   class BundlesController < ApplicationController
     def index
-      @bundles = resource_class.all(sort: :desc)
-      @physical_items = BackendClient::PhysicalItem.all(sort: :desc)
-      @digital_items = BackendClient::DigitalItem.all(sort: :desc)
+      @bundles = resource_class.all
+      @physical_items = BackendClient::PhysicalItem.all
+      @digital_items = BackendClient::DigitalItem.all
     end
 
     def create
@@ -25,8 +25,8 @@ module Inventory
 
     def show
       @bundle = resource
-      @physical_items = BackendClient::PhysicalItem.all(sort: :desc)
-      @digital_items = BackendClient::DigitalItem.all(sort: :desc)
+      @physical_items = BackendClient::PhysicalItem.all
+      @digital_items = BackendClient::DigitalItem.all
     end
 
     def update

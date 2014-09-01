@@ -2,7 +2,7 @@ module Inventory
   class BatchesController < ApplicationController
     def show
       @batch   = resource
-      @coupons = @batch.coupons(sort: :desc)
+      @coupons = @batch.coupons
     end
 
     def update

@@ -1,9 +1,9 @@
 module Inventory
   class PricesController < ApplicationController
     def index
-      @prices = resource_class.all(sort: :desc)
-      @pricepoints = BackendClient::Pricepoint.all(sort: :desc)
-      @discounts = BackendClient::Discount.all(sort: :desc)
+      @prices = resource_class.all
+      @pricepoints = BackendClient::Pricepoint.all
+      @discounts = BackendClient::Discount.all
     end
 
     def create

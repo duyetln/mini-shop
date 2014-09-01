@@ -1,11 +1,11 @@
 module Inventory
   class PromotionsController < ApplicationController
     def index
-      @promotions = resource_class.all(sort: :desc)
-      @physical_items = BackendClient::PhysicalItem.all(sort: :desc)
-      @digital_items = BackendClient::DigitalItem.all(sort: :desc)
-      @bundles = BackendClient::Bundle.all(sort: :desc)
-      @prices = BackendClient::Price.all(sort: :desc)
+      @promotions = resource_class.all
+      @physical_items = BackendClient::PhysicalItem.all
+      @digital_items = BackendClient::DigitalItem.all
+      @bundles = BackendClient::Bundle.all
+      @prices = BackendClient::Price.all
     end
 
     def create
@@ -19,8 +19,8 @@ module Inventory
 
     def show
       @promotion = resource
-      @batches = @promotion.batches(sort: :desc)
-      @prices = BackendClient::Price.all(sort: :desc)
+      @batches = @promotion.batches
+      @prices = BackendClient::Price.all
     end
 
     def update

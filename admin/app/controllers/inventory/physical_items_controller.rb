@@ -1,7 +1,7 @@
 module Inventory
   class PhysicalItemsController < ApplicationController
     def index
-      @physical_items = resource_class.all(sort: :desc)
+      @physical_items = resource_class.all
     end
 
     def create

@@ -1,7 +1,7 @@
 module Inventory
   class PricepointsController < ApplicationController
     def index
-      @pricepoints = BackendClient::Pricepoint.all(sort: :desc)
+      @pricepoints = BackendClient::Pricepoint.all
       @currencies = BackendClient::Currency.all
     end
 
