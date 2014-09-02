@@ -11,7 +11,7 @@ module Inventory
         params.require(:bundle).permit(:title, :description)
       )
 
-      (params[:bundleds] || []).map { |bundled| bundled.permit(:item, :qty) }.each do |bundled|
+      params.fetch(:bundleds, []).map { |bundled| bundled.permit(:item, :qty) }.each do |bundled|
         if bundled[:item].present? && bundled[:qty].present?
           @bundle.add_or_update_bundled(
             bundled.permit(:qty).merge(
@@ -35,7 +35,7 @@ module Inventory
         params.require(:bundle).permit(:title, :description)
       )
 
-      (params[:bundleds] || []).map { |bundled| bundled.permit(:item, :qty) }.each do |bundled|
+      params.fetch(:bundleds, []).map { |bundled| bundled.permit(:item, :qty) }.each do |bundled|
         if bundled[:item].present? && bundled[:qty].present?
           @bundle.add_or_update_bundled(
             bundled.permit(:qty).merge(

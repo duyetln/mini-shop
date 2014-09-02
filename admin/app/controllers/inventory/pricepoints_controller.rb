@@ -10,7 +10,7 @@ module Inventory
         params.require(:pricepoint).permit(:name)
       )
 
-      params.require(:pricepoint_prices).each do |value|
+      params.fetch(:pricepoint_prices, []).each do |value|
         @pricepoint.create_pricepoint_price(
           value.permit(:amount, :currency_id)
         )
@@ -24,7 +24,7 @@ module Inventory
         params.require(:pricepoint).permit(:name)
       )
 
-      params.require(:pricepoint_prices).each do |value|
+      params.fetch(:pricepoint_prices, []).each do |value|
         pricepoint_price = @pricepoint.pricepoint_prices.find do |pp|
           pp.id == value.require(:id).to_i
         end
