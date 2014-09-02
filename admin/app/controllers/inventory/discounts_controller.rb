@@ -8,7 +8,7 @@ module Inventory
       @discount = Discount.create(
         params.require(:discount).permit(:name, :rate, :start_at, :end_at)
       )
-      go_back
+      flash[:success] = 'Discount created successfully' and go_back
     end
 
     def update
@@ -30,13 +30,13 @@ module Inventory
         end
       rescue ArgumentError
         flash[:error] = 'Date must conform to 2014/11/25 17:30 format'
-        redirect_to(:back) and return
+        go_back and return
       end
       @discount = update_resource(
         resource,
         update_params
       )
-      go_back
+      flash[:success] = 'Discount updated successfully' and go_back
     end
   end
 end

@@ -14,7 +14,7 @@ module Inventory
           Yajl::Parser.parse params.require(:promotion).require(:item)
         )
       )
-      go_back
+      flash[:success] = 'Promotion created successfully' and go_back
     end
 
     def show
@@ -28,19 +28,19 @@ module Inventory
         Promotion.find(id),
         params.require(:promotion).permit(:name, :title, :description, :price_id)
       )
-      go_back
+      flash[:success] = 'Promotion updated successfully' and go_back
     end
 
     def activate
       @promotion = Promotion.find(id)
       @promotion.activate!
-      go_back
+      flash[:success] = 'Promotion activated successfully' and go_back
     end
 
     def destroy
       @promotion = Promotion.find(id)
       @promotion.delete!
-      go_back
+      flash[:success] = 'Promotion deleted successfully' and go_back
     end
 
     def batches

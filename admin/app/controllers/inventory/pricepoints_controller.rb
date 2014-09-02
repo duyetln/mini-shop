@@ -15,7 +15,7 @@ module Inventory
           value.permit(:amount, :currency_id)
         )
       end
-      go_back
+      flash[:success] = 'Pricepoint created successfully' and go_back
     end
 
     def update
@@ -40,7 +40,7 @@ module Inventory
           )
         end
       end
-      go_back
+      flash[:success] = 'Pricepoint updated successfully' and go_back
     end
   end
 end

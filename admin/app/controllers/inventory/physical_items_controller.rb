@@ -8,7 +8,7 @@ module Inventory
       @physical_item = PhysicalItem.create(
         params.require(:physical_item).permit(:title, :description, :qty)
       )
-      go_back
+      flash[:success] = 'Physical item created successfully' and go_back
     end
 
     def update
@@ -16,19 +16,19 @@ module Inventory
         PhysicalItem.find(id),
         params.require(:physical_item).permit(:title, :description, :qty)
       )
-      go_back
+      flash[:success] = 'Physical item updated successfully' and go_back
     end
 
     def activate
       @physical_item = PhysicalItem.find(id)
       @physical_item.activate!
-      go_back
+      flash[:success] = 'Physical item activated successfully' and go_back
     end
 
     def destroy
       @physical_item = PhysicalItem.find(id)
       @physical_item.delete!
-      go_back
+      flash[:success] = 'Physical item deleted successfully' and go_back
     end
   end
 end

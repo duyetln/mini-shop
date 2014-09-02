@@ -3,7 +3,7 @@ module Inventory
     def destroy
       @bundle = Bundle.find(params.require(:bundle_id))
       @bundle.delete_bundled(id)
-      go_back
+      flash[:success] = 'Item removed from bundle' and go_back
     end
   end
 end

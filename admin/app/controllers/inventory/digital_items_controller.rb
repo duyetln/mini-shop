@@ -8,7 +8,7 @@ module Inventory
       @digital_item = DigitalItem.create(
         params.require(:digital_item).permit(:title, :description)
       )
-      go_back
+      flash[:success] = 'Digital item created successfully' and go_back
     end
 
     def update
@@ -16,19 +16,19 @@ module Inventory
         DigitalItem.find(id),
         params.require(:digital_item).permit(:title, :description)
       )
-      go_back
+      flash[:success] = 'Digital item updated successfully' and go_back
     end
 
     def activate
       @digital_item = DigitalItem.find(id)
       @digital_item.activate!
-      go_back
+      flash[:success] = 'Digital item activated successfully' and go_back
     end
 
     def destroy
       @digital_item = DigitalItem.find(id)
       @digital_item.delete!
-      go_back
+      flash[:success] = 'Digital item deleted successfully' and go_back
     end
   end
 end

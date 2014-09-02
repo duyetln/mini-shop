@@ -14,7 +14,7 @@ module Inventory
           Yajl::Parser.parse params.require(:store_item).require(:item)
         )
       )
-      go_back
+      flash[:success] = 'Store item created successfully' and go_back
     end
 
     def update
@@ -22,13 +22,13 @@ module Inventory
         StoreItem.find(id),
         params.require(:store_item).permit(:name, :price_id)
       )
-      go_back
+      flash[:success] = 'Store item updated successfully' and go_back
     end
 
     def destroy
       @store_item = StoreItem.find(id)
       @store_item.delete!
-      go_back
+      flash[:success] = 'Store item deleted successfully' and go_back
     end
   end
 end

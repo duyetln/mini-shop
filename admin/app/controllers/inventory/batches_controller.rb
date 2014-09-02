@@ -10,19 +10,19 @@ module Inventory
         Batch.find(id),
         params.require(:batch).permit(:name)
       )
-      go_back
+      flash[:success] = 'Batch updated successfully' and go_back
     end
 
     def activate
       @batch = Batch.find(id)
       @batch.activate!
-      go_back
+      flash[:success] = 'Batch activated successfully' and go_back
     end
 
     def destroy
       @batch = Batch.find(id)
       @batch.delete!
-      go_back
+      flash[:success] = 'Batch deleted successfully' and go_back
     end
 
     def coupons

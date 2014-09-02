@@ -4,7 +4,7 @@ module Inventory
       @currency = Currency.create(
         params.require(:currency).permit(:code, :sign)
       )
-      go_back
+      flash[:success] = 'Currency created successfully' and go_back
     end
   end
 end

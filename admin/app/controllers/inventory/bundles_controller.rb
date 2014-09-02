@@ -20,7 +20,7 @@ module Inventory
           )
         end
       end
-      go_back
+      flash[:success] = 'Bundle created successfully' and go_back
     end
 
     def show
@@ -44,19 +44,19 @@ module Inventory
           )
         end
       end
-      go_back
+      flash[:success] = 'Bundle created successfully' and go_back
     end
 
     def activate
       @bundle = Bundle.find(id)
       @bundle.activate!
-      go_back
+      flash[:success] = 'Bundle activated successfully' and go_back
     end
 
     def destroy
       @bundle = Bundle.find(id)
       @bundle.delete!
-      go_back
+      flash[:success] = 'Bundle deleted successfully' and go_back
     end
   end
 end
