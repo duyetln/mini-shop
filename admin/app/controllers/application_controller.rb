@@ -7,12 +7,12 @@ class ApplicationController < ActionController::Base
 
   rescue_from BackendClient::APIError do |error|
     flash[:error] = error.meta.present? ? error.meta : error.message
-    redirect_to :back
+    redirect_to (error.is_a? BackendClient::NotFound ? root_path : :back)
   end
 
   rescue_from BackendClient::RequestError do |error|
     flash[:error] = 'Something unexpected occurred while sending the request. Please contact techincal support'
-    redirect_to :back
+    go_back
   end
 
   def index
@@ -28,5 +28,9 @@ class ApplicationController < ActionController::Base
     resource.merge!(update_params)
     resource.update!(*update_params.keys)
     resource
+  end
+
+  def go_back(back = nil)
+    redirect_to (back || params[:back] || :back)
   end
 end

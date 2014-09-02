@@ -10,19 +10,19 @@ module Inventory
         Batch.find(id),
         params.require(:batch).permit(:name)
       )
-      redirect_to :back
+      go_back
     end
 
     def activate
       @batch = Batch.find(id)
       @batch.activate!
-      redirect_to :back
+      go_back
     end
 
     def destroy
       @batch = Batch.find(id)
       @batch.delete!
-      redirect_to :back
+      go_back
     end
 
     def coupons
@@ -30,7 +30,7 @@ module Inventory
       @batch.create_coupons(
         params.require(:qty)
       )
-      redirect_to :back
+      go_back
     end
   end
 end

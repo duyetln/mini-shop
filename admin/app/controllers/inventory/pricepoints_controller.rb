@@ -15,7 +15,7 @@ module Inventory
           value.permit(:amount, :currency_id)
         )
       end
-      redirect_to :back
+      go_back
     end
 
     def update
@@ -40,7 +40,7 @@ module Inventory
           )
         end
       end
-      redirect_to :back
+      go_back
     end
   end
 end

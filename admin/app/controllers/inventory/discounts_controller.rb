@@ -8,7 +8,7 @@ module Inventory
       @discount = Discount.create(
         params.require(:discount).permit(:name, :rate, :start_at, :end_at)
       )
-      redirect_to :back
+      go_back
     end
 
     def update
@@ -36,7 +36,7 @@ module Inventory
         resource,
         update_params
       )
-      redirect_to :back
+      go_back
     end
   end
 end

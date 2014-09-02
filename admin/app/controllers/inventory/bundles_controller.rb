@@ -20,7 +20,7 @@ module Inventory
           )
         end
       end
-      redirect_to :back
+      go_back
     end
 
     def show
@@ -44,19 +44,19 @@ module Inventory
           )
         end
       end
-      redirect_to :back
+      go_back
     end
 
     def activate
       @bundle = Bundle.find(id)
       @bundle.activate!
-      redirect_to :back
+      go_back
     end
 
     def destroy
       @bundle = Bundle.find(id)
       @bundle.delete!
-      redirect_to :back
+      go_back
     end
   end
 end

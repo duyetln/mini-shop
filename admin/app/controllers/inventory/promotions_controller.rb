@@ -14,7 +14,7 @@ module Inventory
           Yajl::Parser.parse params.require(:promotion).require(:item)
         )
       )
-      redirect_to :back
+      go_back
     end
 
     def show
@@ -28,19 +28,19 @@ module Inventory
         Promotion.find(id),
         params.require(:promotion).permit(:name, :title, :description, :price_id)
       )
-      redirect_to :back
+      go_back
     end
 
     def activate
       @promotion = Promotion.find(id)
       @promotion.activate!
-      redirect_to :back
+      go_back
     end
 
     def destroy
       @promotion = Promotion.find(id)
       @promotion.delete!
-      redirect_to :back
+      go_back
     end
 
     def batches
@@ -49,7 +49,7 @@ module Inventory
         params.require(:qty),
         params.require(:batch).require(:size)
       )
-      redirect_to :back
+      go_back
     end
   end
 end

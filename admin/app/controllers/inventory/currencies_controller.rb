@@ -4,7 +4,7 @@ module Inventory
       @currency = Currency.create(
         params.require(:currency).permit(:code, :sign)
       )
-      redirect_to :back
+      go_back
     end
   end
 end

@@ -16,7 +16,7 @@ div.row
               i.fa.fa-check
               |  Activate
           div.btn-group
-            = button_to inventory_batch_path(@batch.id), method: :delete, disabled: !@batch.deletable?, class: 'btn btn-danger', title: 'Delete' do
+            = button_to inventory_batch_path(@batch.id), method: :delete, disabled: !@batch.deletable?, class: 'btn btn-danger', title: 'Delete', params: { back: inventory_promotion_path(@batch.promotion_id) } do
               i.fa.fa-trash-o
               |  Delete
       table.table.table-condensed

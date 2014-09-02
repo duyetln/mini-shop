@@ -14,7 +14,7 @@ module Inventory
           Yajl::Parser.parse params.require(:store_item).require(:item)
         )
       )
-      redirect_to :back
+      go_back
     end
 
     def update
@@ -22,13 +22,13 @@ module Inventory
         StoreItem.find(id),
         params.require(:store_item).permit(:name, :price_id)
       )
-      redirect_to :back
+      go_back
     end
 
     def destroy
       @store_item = StoreItem.find(id)
       @store_item.delete!
-      redirect_to :back
+      go_back
     end
   end
 end

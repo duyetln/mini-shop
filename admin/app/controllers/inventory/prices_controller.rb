@@ -10,7 +10,7 @@ module Inventory
       @price = Price.create(
         params.require(:price).permit(:name, :pricepoint_id, :discount_id)
       )
-      redirect_to :back
+      go_back
     end
 
     def update
@@ -18,7 +18,7 @@ module Inventory
         Price.find(id),
         params.require(:price).permit(:name, :pricepoint_id, :discount_id)
       )
-      redirect_to :back
+      go_back
     end
   end
 end
