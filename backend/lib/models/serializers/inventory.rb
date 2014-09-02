@@ -97,7 +97,7 @@ end
 class BatchSerializer < ResourceSerializer
   include DeletableSerializer
   include ActivableSerializer
-  attributes :name, :coupon_count, :used_coupon_count
+  attributes :name, :promotion_id, :coupon_count, :used_coupon_count
 
   def coupon_count
     object.coupons.count

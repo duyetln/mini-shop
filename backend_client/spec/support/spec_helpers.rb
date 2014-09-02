@@ -104,7 +104,7 @@ module SpecHelpers
       end
 
       def batch_payload
-        "{\"id\":1,\"resource_type\":\"Batch\",\"resource_id\":1,\"created_at\":\"2014-07-31T17:26:50-07:00\",\"updated_at\":null,\"deleted\":false,\"deletable\":false,\"active\":true,\"activable\":false,\"name\":\"Auto generated batch 1\",\"coupon_count\":10,\"used_coupon_count\":1}"
+        "{\"id\":20,\"resource_type\":\"Batch\",\"resource_id\":20,\"created_at\":\"2014-09-02T00:12:16-07:00\",\"updated_at\":null,\"deleted\":false,\"deletable\":false,\"active\":true,\"activable\":false,\"name\":\"Auto generated batch 20\",\"promotion_id\":1,\"coupon_count\":10,\"used_coupon_count\":0}"
       end
 
       def coupon_payload
