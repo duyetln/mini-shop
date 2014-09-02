@@ -1,39 +1,36 @@
 module Inventory
   class BatchesController < ApplicationController
     def show
-      @batch   = resource
+      @batch   = Batch.find(id)
       @coupons = @batch.coupons
     end
 
     def update
-      @batch = update_resource(:batch, :name)
+      @batch = update_resource(
+        Batch.find(id),
+        params.require(:batch).permit(:name)
+      )
       redirect_to :back
     end
 
     def activate
-      @batch = resource
+      @batch = Batch.find(id)
       @batch.activate!
       redirect_to :back
     end
 
     def destroy
-      @batch = resource
+      @batch = Batch.find(id)
       @batch.delete!
       redirect_to :back
     end
 
     def coupons
-      @batch = resource
+      @batch = Batch.find(id)
       @batch.create_coupons(
-        scoped_params(:qty)
+        params.require(:qty)
       )
       redirect_to :back
-    end
-
-    private
-
-    def set_resource_class
-      @resource_class = BackendClient::Batch
     end
   end
 end

@@ -1,21 +1,15 @@
 module Accounts
   class UsersController < ApplicationController
     def index
-      @users = resource_class.all
+      @users = User.all
     end
 
     def show
-      @user         = resource
-      @purchases    = @user.purchases
-      @coupons      = @user.coupons
-      @ownerships   = @user.ownerships
-      @shipments    = @user.shipments
-    end
-
-    private
-
-    def set_resource_class
-      @resource_class = BackendClient::User
+      @user = User.find(id)
+      @purchases = @user.purchases
+      @coupons = @user.coupons
+      @ownerships = @user.ownerships
+      @shipments = @user.shipments
     end
   end
 end

@@ -1,58 +1,55 @@
 module Inventory
   class PromotionsController < ApplicationController
     def index
-      @promotions = resource_class.all
-      @physical_items = BackendClient::PhysicalItem.all
-      @digital_items = BackendClient::DigitalItem.all
-      @bundles = BackendClient::Bundle.all
-      @prices = BackendClient::Price.all
+      @promotions = Promotion.all
+      @physical_items = PhysicalItem.all
+      @digital_items = DigitalItem.all
+      @bundles = Bundle.all
+      @prices = Price.all
     end
 
     def create
-      @promotion = resource_class.create(
-        scoped_params(:promotion, :name, :title, :description, :price_id).merge(
-          Yajl::Parser.parse scoped_params(:promotion).require(:item)
+      @promotion = Promotion.create(
+        params.require(:promotion).permit(:name, :title, :description, :price_id).merge(
+          Yajl::Parser.parse params.require(:promotion).require(:item)
         )
       )
       redirect_to :back
     end
 
     def show
-      @promotion = resource
+      @promotion = Promotion.find(id)
       @batches = @promotion.batches
-      @prices = BackendClient::Price.all
+      @prices = Price.all
     end
 
     def update
-      @promotion = update_resource(:promotion, :name, :title, :description, :price_id)
+      @promotion = update_resource(
+        Promotion.find(id),
+        params.require(:promotion).permit(:name, :title, :description, :price_id)
+      )
       redirect_to :back
     end
 
     def activate
-      @promotion = resource
+      @promotion = Promotion.find(id)
       @promotion.activate!
       redirect_to :back
     end
 
     def destroy
-      @promotion = resource
+      @promotion = Promotion.find(id)
       @promotion.delete!
       redirect_to :back
     end
 
     def batches
-      @promotion = resource
+      @promotion = Promotion.find(id)
       @promotion.create_batches(
-        scoped_params(:qty),
-        scoped_params(:batch).require(:size)
+        params.require(:qty),
+        params.require(:batch).require(:size)
       )
       redirect_to :back
-    end
-
-    private
-
-    def set_resource_class
-      @resource_class = BackendClient::Promotion
     end
   end
 end
