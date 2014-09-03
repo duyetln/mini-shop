@@ -25,15 +25,16 @@ div.panel.panel-default
           label Signed Up On
       tbody
         - @users.each do |user|
-          tr class="#{user.confirmed? ? 'success' : 'danger'}"
-            td =       user.id
-            td =       user.first_name
-            td =       user.last_name
-            td =       user.email
+          tr id="user-#{user.id}" class="#{user.confirmed? ? 'success' : 'danger'}"
+            td
+              label = user.id
+            td = user.first_name
+            td = user.last_name
+            td = user.email
             td = yesno(user.confirmed?)
-            td =       user.addresses.count
-            td =       user.payment_methods.count
-            td =       user.created_at.to_formatted_s(:long)
+            td = user.addresses.count
+            td = user.payment_methods.count
+            td = user.created_at.to_formatted_s(:long)
             td = link_to accounts_user_path(user.id), class: 'btn btn-info', title: 'View' do
               i.fa.fa-eye
 
