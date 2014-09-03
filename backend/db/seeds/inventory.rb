@@ -69,7 +69,7 @@ promotion = Promotion.create!(
   item: deluxe_ed,
   price: deluxe_ed_promo_price
 )
-promotion.create_batches(20, 10)
+promotion.create_batches(5, 30)
 
 PhysicalItem.all.each(&:activate!)
 DigitalItem.all.each(&:activate!)

@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from BackendClient::APIError do |error|
     flash[:error] = error.meta.present? ? error.meta : error.message
-    redirect_to (error.is_a? BackendClient::NotFound ? root_path : :back)
+    redirect_to (error.is_a?(::BackendClient::NotFound) ? root_path : :back)
   end
 
   rescue_from BackendClient::RequestError do |error|
