@@ -1,4 +1,4 @@
-h2.page-header
+h2.page-header.text-primary
   | Store Items
 
 div
@@ -7,8 +7,8 @@ div
       h4.pull-left Listings
       div.pull-right.btn-toolbar
         div.btn-group
-          button.btn.btn-success data-toggle='modal' data-target='#create-store-item'
-            i.fa.fa-plus
+          button.btn.btn-primary data-toggle='modal' data-target='#create-store-item'
+            i.fa.fa-plus-circle
             |  Store Item
     table.table.table-hover.table-condensed
       thead
@@ -41,8 +41,8 @@ div
             td
               = yesno(store_item.active?)
             td
-              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-store-item-#{store_item.id}"
-                i.fa.fa-pencil
+              button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-store-item-#{store_item.id}"
+                i.fa.fa-pencil-square-o
             td
               = button_to inventory_store_item_path(store_item.id), method: :delete, disabled: !store_item.deletable?, class: 'btn btn-danger' do
                 i.fa.fa-trash-o
@@ -54,7 +54,7 @@ div
           div.modal-header
             button.close data-dismiss='modal'
               i.fa.fa-times
-            h4.text-success New Store Item
+            h3.text-primary New Store Item
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Name
@@ -74,9 +74,7 @@ div
           div.modal-footer
             div.form-group
               div.col-md-8.col-md-offset-4
-                button.btn.btn-default data-dismiss='modal'
-                  | Cancel
-                = button_tag class: 'btn btn-success', name: nil do
+                = button_tag class: 'btn btn-primary btn-lg', name: nil do
                   | Create
   - @store_items.each do |store_item|
     div.modal id="edit-store-item-#{store_item.id}" role='dialog'
@@ -86,7 +84,7 @@ div
             div.modal-header
               button.close data-dismiss='modal'
                 i.fa.fa-times
-              h4.text-warning Edit Store Item
+              h3.text-success Edit Store Item
             div.modal-body
               div.form-group
                 label.control-label.col-md-4 Name
@@ -99,7 +97,5 @@ div
             div.modal-footer
               div.form-group
                 div.col-md-8.col-md-offset-4
-                  button.btn.btn-default data-dismiss='modal'
-                    | Cancel
-                  = button_tag class: 'btn btn-warning', name: nil do
+                  = button_tag class: 'btn btn-success btn-lg', name: nil do
                     | Update

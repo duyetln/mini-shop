@@ -1,4 +1,4 @@
-h2.page-header
+h2.page-header.text-primary
   | Pricepoints
 
 div
@@ -7,12 +7,12 @@ div
       h4.pull-left Listings
       div.pull-right.btn-toolbar
         div.btn-group
-          button.btn.btn-success data-toggle='modal' data-target='#create-pricepoint'
-            i.fa.fa-plus
+          button.btn.btn-primary data-toggle='modal' data-target='#create-pricepoint'
+            i.fa.fa-plus-circle
             |  Pricepoint
         div.btn-group
-          button.btn.btn-success data-toggle='modal' data-target='#create-currency'
-            i.fa.fa-plus
+          button.btn.btn-primary data-toggle='modal' data-target='#create-currency'
+            i.fa.fa-plus-circle
             |  Currency
     table.table.table-hover.table-condensed
       thead
@@ -35,8 +35,8 @@ div
               td
                 = pricepoint.amount(currency)
             td
-              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-pricepoint-#{pricepoint.id}"
-                i.fa.fa-pencil
+              button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-pricepoint-#{pricepoint.id}"
+                i.fa.fa-pencil-square-o
 div
   div.modal id='create-currency' role='dialog'
     div.modal-dialog
@@ -45,7 +45,7 @@ div
           div.modal-header
             button.close data-dismiss='modal'
               i.fa.fa-times
-            h4.text-success New Currency
+            h3.text-primary New Currency
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Code
@@ -58,9 +58,7 @@ div
           div.modal-footer
             div.form-group
               div.col-md-8.col-md-offset-4
-                button.btn.btn-default data-dismiss='modal'
-                  | Cancel
-                = button_tag class: 'btn btn-success', name: nil do
+                = button_tag class: 'btn btn-primary btn-lg', name: nil do
                   | Create
   div.modal id='create-pricepoint' role='dialog'
     div.modal-dialog
@@ -69,7 +67,7 @@ div
           div.modal-header
             button.close data-dismiss='modal'
               i.fa.fa-times
-            h4.text-success New Pricepoint
+            h3.text-primary New Pricepoint
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Name
@@ -85,9 +83,7 @@ div
           div.modal-footer
             div.form-group
               div.col-md-8.col-md-offset-4
-                button.btn.btn-default data-dismiss='modal'
-                  | Cancel
-                = button_tag class: 'btn btn-success', name: nil do
+                = button_tag class: 'btn btn-primary btn-lg', name: nil do
                   | Create
   - @pricepoints.each do |pricepoint|
     div.modal id="edit-pricepoint-#{pricepoint.id}" role='dialog'
@@ -97,7 +93,7 @@ div
             div.modal-header
               button.close data-dismiss='modal'
                 i.fa.fa-times
-              h4.text-warning Edit Pricepoint
+              h3.text-success Edit Pricepoint
             div.modal-body
               div.form-group
                 label.control-label.col-md-4 Name
@@ -115,7 +111,5 @@ div
             div.modal-footer
               div.form-group
                 div.col-md-8.col-md-offset-4
-                  button.btn.btn-default data-dismiss='modal'
-                    | Cancel
-                  = button_tag class: 'btn btn-warning', name: nil do
+                  = button_tag class: 'btn btn-success btn-lg', name: nil do
                     | Update

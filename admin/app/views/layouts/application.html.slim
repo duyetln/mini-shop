@@ -12,8 +12,8 @@ html
         div.navbar-header
           div.btn-group
             = link_to root_path, class: 'btn btn-primary navbar-btn' do
-              i.fa.fa-home
-              |  Home
+              i.fa.fa-dashboard
+              |  Dashboard
             button.btn.btn-primary.navbar-btn.dropdown-toggle data-toggle='dropdown'
               span.caret
             ul.dropdown-menu role='menu'
@@ -29,6 +29,11 @@ html
               li.divider
               li = link_to 'Store Items', inventory_store_items_path
               li = link_to 'Promotions', inventory_promotions_path
+        ul.nav.navbar-nav.navbar-right
+          li
+            = link_to '#' do
+              i.fa.fa-life-saver
+              |  Manual
 
     div.container
       div.message

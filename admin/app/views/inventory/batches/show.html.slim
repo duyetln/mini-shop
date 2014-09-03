@@ -1,19 +1,19 @@
-h2.page-header
+h2.page-header.text-primary
   = @batch.name
 
 div.row
   div.col-md-5
-    div.panel.panel-default
+    div.panel.panel-info
       div.panel-heading.clearfix
         h4.pull-left Information
         div.pull-right.btn-toolbar
           div.btn-group
-            button.btn.btn-warning data-toggle='modal' data-target="#edit-batch-#{@batch.id}"
-              i.fa.fa-pencil
+            button.btn.btn-success data-toggle='modal' data-target="#edit-batch-#{@batch.id}"
+              i.fa.fa-pencil-square-o
               |  Edit
           div.btn-group
             = button_to activate_inventory_batch_path(@batch.id), method: :put, disabled: !@batch.activable?, class: 'btn btn-warning', title: 'Activate' do
-              i.fa.fa-check
+              i.fa.fa-check-square-o
               |  Activate
           div.btn-group
             = button_to inventory_batch_path(@batch.id), method: :delete, disabled: !@batch.deletable?, class: 'btn btn-danger', title: 'Delete', params: { back: inventory_promotion_path(@batch.promotion_id) } do
@@ -42,8 +42,8 @@ div.row
         h4.pull-left Coupons
         div.pull-right.btn-toolbar
           div.btn-group
-            button.btn.btn-success data-toggle='modal' data-target='#create-coupons'
-              i.fa.fa-plus
+            button.btn.btn-primary data-toggle='modal' data-target='#create-coupons'
+              i.fa.fa-plus-circle
               |  Coupons
       table.table.table-condensed
         thead
@@ -79,7 +79,7 @@ div
           div.modal-header
             button.close data-dismiss='modal'
               i.fa.fa-times
-            h4.text-warning Edit Batch
+            h3.text-success Edit Batch
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Name
@@ -88,9 +88,7 @@ div
           div.modal-footer
             div.form-group
               div.col-md-8.col-md-offset-4
-                button.btn.btn-default data-dismiss='modal'
-                  | Cancel
-                = button_tag class: 'btn btn-warning', name: nil do
+                = button_tag class: 'btn btn-success btn-lg', name: nil do
                   | Update
   div.modal id='create-coupons' role='dialog'
     div.modal-dialog
@@ -99,7 +97,7 @@ div
           div.modal-header
             button.close data-dismiss='modal'
               i.fa.fa-times
-            h4.text-success New Coupons
+            h3.text-primary New Coupons
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Qty
@@ -108,7 +106,5 @@ div
           div.modal-footer
             div.form-group
               div.col-md-8.col-md-offset-4
-                button.btn.btn-default data-dismiss='modal'
-                  | Cancel
-                = button_tag class: 'btn btn-success', name: nil do
+                = button_tag class: 'btn btn-primary btn-lg', name: nil do
                   | Create

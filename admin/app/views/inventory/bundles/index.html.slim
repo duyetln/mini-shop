@@ -7,8 +7,8 @@ div
       h4.pull-left Listings
       div.pull-right.btn-toolbar
         div.btn-group
-          button.btn.btn-success data-toggle='modal' data-target='#create-bundle'
-            i.fa.fa-plus
+          button.btn.btn-primary data-toggle='modal' data-target='#create-bundle'
+            i.fa.fa-plus-circle
             |  Bundle
     table.table.table-hover.table-condensed
       thead
@@ -41,14 +41,14 @@ div
             td
               = yesno(bundle.active?)
             td
-              = link_to inventory_bundle_path(bundle.id), class: 'btn btn-primary', title: 'View' do
+              = link_to inventory_bundle_path(bundle.id), class: 'btn btn-info', title: 'View' do
                 i.fa.fa-eye
             td
-              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-bundle-#{bundle.id}"
-                i.fa.fa-pencil
+              button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-bundle-#{bundle.id}"
+                i.fa.fa-pencil-square-o
             td
               = button_to activate_inventory_bundle_path(bundle.id), method: :put, disabled: !bundle.activable?, class: 'btn btn-warning', title: 'Activate' do
-                i.fa.fa-check
+                i.fa.fa-check-square-o
             td
               = button_to inventory_bundle_path(bundle.id), method: :delete, disabled: !bundle.deletable?, class: 'btn btn-danger' do
                 i.fa.fa-trash-o
@@ -60,7 +60,7 @@ div
           div.modal-header
             button.close data-dismiss='modal'
               i.fa.fa-times
-            h4.text-success New Bundle
+            h3.text-primary New Bundle
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Title
@@ -84,9 +84,7 @@ div
           div.modal-footer
             div.form-group
               div.col-md-8.col-md-offset-4
-                button.btn.btn-default data-dismiss='modal'
-                  | Cancel
-                = button_tag class: 'btn btn-success', name: nil do
+                = button_tag class: 'btn btn-primary btn-lg', name: nil do
                   | Create
   - @bundles.each do |bundle|
     div.modal id="edit-bundle-#{bundle.id}" role='dialog'
@@ -96,7 +94,7 @@ div
             div.modal-header
               button.close data-dismiss='modal'
                 i.fa.fa-times
-              h4.text-warning Edit Bundle
+              h3.text-success Edit Bundle
             div.modal-body
               div.form-group
                 label.control-label.col-md-4 Title
@@ -131,7 +129,5 @@ div
             div.modal-footer
               div.form-group
                 div.col-md-8.col-md-offset-4
-                  button.btn.btn-default data-dismiss='modal'
-                    | Cancel
-                  = button_tag class: 'btn btn-warning', name: nil do
+                  = button_tag class: 'btn btn-success btn-lg', name: nil do
                     | Update

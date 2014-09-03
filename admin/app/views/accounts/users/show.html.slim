@@ -1,9 +1,9 @@
-h2.page-header
+h2.page-header.text-primary
   = @user.first_name + ' ' + @user.last_name
 
 div.row
   div.col-md-8
-    div.panel.panel-default
+    div.panel.panel-info
       div.panel-heading
         h4 User Information
       table.table.table-condensed
@@ -56,7 +56,7 @@ div.row
               td = yesno(purchase.committed?)
               td = purchase.committed_at.present? ? purchase.committed_at.to_formatted_s(:long) : 'N/A'
               td
-                = link_to shopping_purchase_path(purchase.id), class: 'btn btn-primary', title: 'View' do
+                = link_to shopping_purchase_path(purchase.id), class: 'btn btn-info', title: 'View' do
                   i.fa.fa-eye
     div.panel.panel-default
       div.panel-heading

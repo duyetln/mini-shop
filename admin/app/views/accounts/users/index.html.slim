@@ -1,4 +1,4 @@
-h2.page-header
+h2.page-header.text-primary
   | Users
 
 div.panel.panel-default
@@ -34,6 +34,6 @@ div.panel.panel-default
             td =       user.addresses.count
             td =       user.payment_methods.count
             td =       user.created_at.to_formatted_s(:long)
-            td = link_to accounts_user_path(user.id), class: 'btn btn-primary', title: 'View' do
+            td = link_to accounts_user_path(user.id), class: 'btn btn-info', title: 'View' do
               i.fa.fa-eye
 

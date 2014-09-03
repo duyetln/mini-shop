@@ -1,4 +1,4 @@
-h2.page-header
+h2.page-header.text-primary
   | Prices
 
 div
@@ -7,8 +7,8 @@ div
       h4.pull-left Listings
       div.pull-right.btn-toolbar
         div.btn-group
-          button.btn.btn-success data-toggle='modal' data-target='#create-price'
-            i.fa.fa-plus
+          button.btn.btn-primary data-toggle='modal' data-target='#create-price'
+            i.fa.fa-plus-circle
             |  Price
     table.table.table-hover.table-condensed
       thead
@@ -33,8 +33,8 @@ div
             td
               = price.discount.name
             td
-              button.btn.btn-warning title='Edit' data-toggle='modal' data-target="#edit-price-#{price.id}"
-                i.fa.fa-pencil
+              button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-price-#{price.id}"
+                i.fa.fa-pencil-square-o
 div
   div.modal id='create-price' role='dialog'
     div.modal-dialog
@@ -43,7 +43,7 @@ div
           div.modal-header
             button.close data-dismiss='modal'
               i.fa.fa-times
-            h4.text-success New Price
+            h3.text-primary New Price
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Name
@@ -60,9 +60,7 @@ div
           div.modal-footer
             div.form-group
               div.col-md-8.col-md-offset-4
-                button.btn.btn-default data-dismiss='modal'
-                  | Cancel
-                = button_tag class: 'btn btn-success', name: nil do
+                = button_tag class: 'btn btn-primary btn-lg', name: nil do
                   | Create
   - @prices.each do |price|
     div.modal id="edit-price-#{price.id}" role='dialog'
@@ -72,7 +70,7 @@ div
             div.modal-header
               button.close data-dismiss='modal'
                 i.fa.fa-times
-              h4.text-warning Edit Pricepoint
+              h3.text-success Edit Pricepoint
             div.modal-body
               div.form-group
                 label.control-label.col-md-4 Name
@@ -89,7 +87,5 @@ div
             div.modal-footer
               div.form-group
                 div.col-md-8.col-md-offset-4
-                  button.btn.btn-default data-dismiss='modal'
-                    | Cancel
-                  = button_tag class: 'btn btn-warning', name: nil do
+                  = button_tag class: 'btn btn-success btn-lg', name: nil do
                     | Update

@@ -1,19 +1,19 @@
-h2.page-header
+h2.page-header.text-primary
   = @promotion.name
 
 div.row
   div.col-md-5
-    div.panel.panel-default
+    div.panel.panel-info
       div.panel-heading.clearfix
         h4.pull-left Information
         div.pull-right.btn-toolbar
           div.btn-group
-            button.btn.btn-warning data-toggle='modal' data-target="#edit-promotion-#{@promotion.id}"
-              i.fa.fa-pencil
+            button.btn.btn-success data-toggle='modal' data-target="#edit-promotion-#{@promotion.id}"
+              i.fa.fa-pencil-square-o
               |  Edit
           div.btn-group
             = button_to activate_inventory_promotion_path(@promotion.id), method: :put, disabled: !@promotion.activable?, class: 'btn btn-warning', title: 'Activate' do
-              i.fa.fa-check
+              i.fa.fa-check-square-o
               |  Activate
           div.btn-group
             = button_to inventory_promotion_path(@promotion.id), method: :delete, disabled: !@promotion.deletable?, class: 'btn btn-danger', title: 'Delete', params: { back: inventory_promotions_path } do
@@ -67,8 +67,8 @@ div.row
         h4.pull-left Batches
         div.pull-right.btn-toolbar
           div.btn-group
-            button.btn.btn-success data-toggle='modal' data-target='#create-batches'
-              i.fa.fa-plus
+            button.btn.btn-primary data-toggle='modal' data-target='#create-batches'
+              i.fa.fa-plus-circle
               |  Batches
       table.table.table-condensed
         thead
@@ -89,11 +89,11 @@ div.row
               td
                 = "#{batch.used_coupon_count}/#{batch.coupon_count}"
               td
-                = link_to inventory_batch_path(batch.id), class: 'btn btn-primary', title: 'View' do
+                = link_to inventory_batch_path(batch.id), class: 'btn btn-info', title: 'View' do
                   i.fa.fa-eye
               td
                 = button_to activate_inventory_batch_path(batch.id), method: :put, disabled: !batch.activable?, class: 'btn btn-warning', title: 'Activate' do
-                  i.fa.fa-check
+                  i.fa.fa-check-square-o
               td
                 = button_to inventory_batch_path(batch.id), method: :delete, disabled: !batch.deletable?, class: 'btn btn-danger', title: 'Delete' do
                   i.fa.fa-trash-o
@@ -105,7 +105,7 @@ div
           div.modal-header
             button.close data-dismiss='modal'
               i.fa.fa-times
-            h4.text-warning Edit Promotion
+            h3.text-success Edit Promotion
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Name
@@ -126,9 +126,7 @@ div
           div.modal-footer
             div.form-group
               div.col-md-8.col-md-offset-4
-                button.btn.btn-default data-dismiss='modal'
-                  | Cancel
-                = button_tag class: 'btn btn-warning', name: nil do
+                = button_tag class: 'btn btn-success btn-lg', name: nil do
                   | Update
   div.modal id='create-batches' role='dialog'
     div.modal-dialog
@@ -137,7 +135,7 @@ div
           div.modal-header
             button.close data-dismiss='modal'
               i.fa.fa-times
-            h4.text-success New Batches
+            h3.text-primary New Batches
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Qty
@@ -150,7 +148,5 @@ div
           div.modal-footer
             div.form-group
               div.col-md-8.col-md-offset-4
-                button.btn.btn-default data-dismiss='modal'
-                  | Cancel
-                = button_tag class: 'btn btn-success', name: nil do
+                = button_tag class: 'btn btn-primary btn-lg', name: nil do
                   | Create
