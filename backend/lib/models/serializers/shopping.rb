@@ -14,6 +14,8 @@ class TransactionSerializer < ResourceSerializer
   include CommittableSerializer
   attributes :user_id, :uuid, :payment_method_id, :billing_address_id, :amount, :currency_id
   has_one :currency, serializer: 'CurrencySerializer'
+  has_one :payment_method, serializer: 'PaymentMethodSerializer'
+  has_one :billing_address, serializer: 'AddressSerializer'
 end
 
 class OrderSerializer < ResourceSerializer

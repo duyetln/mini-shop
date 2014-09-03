@@ -52,4 +52,12 @@ describe BackendClient::Order do
       ).to contain_exactly(BackendClient::Status)
     end
   end
+
+  describe '#status' do
+    it 'returns status' do
+      expect(
+        full_model.status
+      ).to eq(full_model.statuses.find { |status| status.id == full_model.status_id })
+    end
+  end
 end

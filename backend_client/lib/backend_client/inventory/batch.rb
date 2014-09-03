@@ -7,6 +7,10 @@ module BackendClient
     include DefaultActivate
     include DefaultDelete
 
+    def promotion
+      Promotion.find(promotion_id)
+    end
+
     def coupons(pagination = {})
       self.class.get(
         path: "/#{id}/coupons",

@@ -19,6 +19,10 @@ module BackendClient
       end
     end
 
+    def user
+      User.find(user_id)
+    end
+
     def add_or_update_order(order = {})
       if order.present?
         load!(

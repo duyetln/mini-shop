@@ -1,6 +1,7 @@
 module BackendClient
   class Order
     include APIModel
+    STATUS = { failed: -2, invalid: -1, fulfilled: 1, reversed: 2 }
 
     def self.build_attributes(hash = {})
       super do |order|
@@ -13,6 +14,10 @@ module BackendClient
         order.refund = Transaction.instantiate(order.refund)
         order.statuses.map! { |status| Status.instantiate(status) }
       end
+    end
+
+    def status
+      statuses.find { |status| status.id == status_id }
     end
   end
 end

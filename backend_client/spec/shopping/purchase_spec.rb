@@ -62,6 +62,19 @@ describe BackendClient::Purchase do
     end
   end
 
+  describe '#user' do
+    let(:user) { BackendClient::User.instantiate parse(user_payload) }
+
+    before :each do
+      bare_model.user_id = rand_str
+    end
+
+    it 'returns user' do
+      expect(BackendClient::User).to receive(:find).with(bare_model.user_id).and_return(user)
+      expect(bare_model.user).to eq(user)
+    end
+  end
+
   describe '#add_or_update_order' do
     context 'params emtpy' do
       it 'does nothing' do

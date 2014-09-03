@@ -34,6 +34,19 @@ describe BackendClient::Batch do
     end
   end
 
+  describe '#promotion' do
+    let(:promotion) { BackendClient::Promotion.instantiate parse(promotion_payload) }
+
+    before :each do
+      bare_model.promotion_id = rand_str
+    end
+
+    it 'returns promotion' do
+      expect(BackendClient::Promotion).to receive(:find).with(bare_model.promotion_id).and_return(promotion)
+      expect(bare_model.promotion).to eq(promotion)
+    end
+  end
+
   describe '.create_coupons' do
     it 'creates coupons' do
       expect_http_action(:post, { path: "/#{bare_model.id}/coupons/generate", payload: { qty: qty } })
