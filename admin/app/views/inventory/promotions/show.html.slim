@@ -24,43 +24,43 @@ div.row
           tr
             td
               label ID
-            td
-              = @promotion.id
+            td = @promotion.id
           tr
             td
               label Name
-            td
-              = @promotion.name
+            td = @promotion.name
           tr
             td
               label Title
-            td
-              = @promotion.title
+            td = @promotion.title
           tr
             td
               label Description
-            td
-              = @promotion.description
+            td = @promotion.description
           tr
             td
               label Item
-            td
-              = @promotion.item.title
+            td = @promotion.item.title
           tr
             td
               label Price
+            td = @promotion.price.name
+          tr
             td
-              = @promotion.price.name
+              label Available
+            td = yesno(@promotion.available?)
+          tr
+            td
+              label Active
+            td = yesno(@promotion.active?)
           tr
             td
               label Batches
-            td
-              = @promotion.batch_count
+            td = @promotion.batch_count
           tr
             td
               label Used Coupons
-            td
-              = "#{@promotion.used_coupon_count}/#{@promotion.coupon_count}"
+            td = "#{@promotion.used_coupon_count}/#{@promotion.coupon_count}"
   div.col-md-7
     div.panel.panel-default
       div.panel-heading.clearfix
@@ -82,20 +82,14 @@ div.row
         tbody
           - @batches.each do |batch|
             tr
-              td
-                = batch.id
-              td
-                = batch.name
-              td
-                = "#{batch.used_coupon_count}/#{batch.coupon_count}"
-              td
-                = link_to inventory_batch_path(batch.id), class: 'btn btn-info', title: 'View' do
+              td = batch.id
+              td = batch.name
+              td = "#{batch.used_coupon_count}/#{batch.coupon_count}"
+              td = link_to inventory_batch_path(batch.id), class: 'btn btn-info', title: 'View' do
                   i.fa.fa-eye
-              td
-                = button_to activate_inventory_batch_path(batch.id), method: :put, disabled: !batch.activable?, class: 'btn btn-warning', title: 'Activate' do
+              td = button_to activate_inventory_batch_path(batch.id), method: :put, disabled: !batch.activable?, class: 'btn btn-warning', title: 'Activate' do
                   i.fa.fa-check-square-o
-              td
-                = button_to inventory_batch_path(batch.id), method: :delete, disabled: !batch.deletable?, class: 'btn btn-danger', title: 'Delete' do
+              td = button_to inventory_batch_path(batch.id), method: :delete, disabled: !batch.deletable?, class: 'btn btn-danger', title: 'Delete' do
                   i.fa.fa-trash-o
 div
   div.modal id="edit-promotion-#{@promotion.id}" role='dialog'

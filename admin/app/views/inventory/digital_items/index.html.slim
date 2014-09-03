@@ -28,22 +28,16 @@ div
           tr id="digital-item-#{digital_item.id}" class="#{digital_item.active? ? 'success' : 'danger' }"
             td
               label = digital_item.id
-            td
-              = digital_item.title
-            td
-              = digital_item.description
-            td
-              = yesno(digital_item.active?)
-            td
-              = yesno(digital_item.available?)
+            td = digital_item.title
+            td = digital_item.description
+            td = yesno(digital_item.active?)
+            td = yesno(digital_item.available?)
             td
               button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-digital-item-#{digital_item.id}"
                 i.fa.fa-pencil-square-o
-            td
-              = button_to activate_inventory_digital_item_path(digital_item.id), method: :put, disabled: !digital_item.activable?, class: 'btn btn-warning' do
+            td = button_to activate_inventory_digital_item_path(digital_item.id), method: :put, disabled: !digital_item.activable?, class: 'btn btn-warning' do
                 i.fa.fa-check-square-o
-            td
-              = button_to inventory_digital_item_path(digital_item.id), method: :delete, disabled: !digital_item.deletable?, class: 'btn btn-danger' do
+            td = button_to inventory_digital_item_path(digital_item.id), method: :delete, disabled: !digital_item.deletable?, class: 'btn btn-danger' do
                 i.fa.fa-trash-o
 div
   div.modal id='create-digital-item' role='dialog'

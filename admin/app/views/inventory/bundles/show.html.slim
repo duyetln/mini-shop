@@ -24,23 +24,28 @@ div.row
           tr
             td
               label ID
-            td
-              = @bundle.id
+            td = @bundle.id
           tr
             td
               label Title
-            td
-              = @bundle.title
+            td = @bundle.title
           tr
             td
               label Description
-            td
-              = @bundle.description
+            td = @bundle.description
           tr
             td
               label Item Qty
+            td = @bundle.bundleds.count
+          tr
             td
-              = @bundle.bundleds.count
+              label Available
+            td = yesno(@bundle.available?)
+          tr
+            td
+              label Active
+            td = yesno(@bundle.active?)
+
   div.col-md-7
     div.panel.panel-default
       div.panel-heading.clearfix
@@ -61,18 +66,12 @@ div.row
         tbody
           - @bundle.bundleds.each do |bundled|
             tr class="#{bundled.item.active? ? 'success' : 'danger'}"
-              td
-                = bundled.item.title
-              td
-                = bundled.item.description
-              td
-                = bundled.qty
-              td
-                = yesno(bundled.item.available?)
-              td
-                = yesno(bundled.item.active?)
-              td
-                = button_to inventory_bundle_bundled_path(@bundle.id, bundled.id), method: :delete, disabled: !@bundle.changeable?, class: 'btn btn-danger', title: 'Delete' do
+              td = bundled.item.title
+              td = bundled.item.description
+              td = bundled.qty
+              td = yesno(bundled.item.available?)
+              td = yesno(bundled.item.active?)
+              td = button_to inventory_bundle_bundled_path(@bundle.id, bundled.id), method: :delete, disabled: !@bundle.changeable?, class: 'btn btn-danger', title: 'Delete' do
                   i.fa.fa-trash-o
 div
   div.modal id="edit-bundle-#{@bundle.id}" role='dialog'

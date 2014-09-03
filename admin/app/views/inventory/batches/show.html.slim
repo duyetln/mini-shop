@@ -24,18 +24,19 @@ div.row
           tr
             td
               label ID
-            td
-              = @batch.id
+            td = @batch.id
           tr
             td
               label Name
+            td = @batch.name
+          tr
             td
-              = @batch.name
+              label Active
+            td = yesno(@batch.active?)
           tr
             td
               label Used Coupons
-            td
-              = "#{@batch.used_coupon_count}/#{@batch.coupon_count}"
+            td = "#{@batch.used_coupon_count}/#{@batch.coupon_count}"
   div.col-md-7
     div.panel.panel-default
       div.panel-heading.clearfix
@@ -61,16 +62,11 @@ div.row
         tbody
           - @coupons.each do |coupon|
             tr class="#{coupon.used? ? 'success' : '' }"
-              td
-                = coupon.id
-              td
-                = coupon.code
-              td
-                = yesno(coupon.used?)
-              td
-                = coupon.used? ? coupon.used_at.to_formatted_s(:long) : 'N/A'
-              td
-                = coupon.used? ? coupon.used_by : 'N/A'
+              td = coupon.id
+              td = coupon.code
+              td = yesno(coupon.used?)
+              td = coupon.used? ? coupon.used_at.to_formatted_s(:long) : nil
+              td = coupon.used? ? coupon.used_by : nil
 div
   div.modal id="edit-batch-#{@batch.id}" role='dialog'
     div.modal-dialog

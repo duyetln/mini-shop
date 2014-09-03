@@ -24,8 +24,7 @@ div.row
           tr
             td
               label Confirmed
-            td
-              = yesno(@user.confirmed?)
+            td = yesno(@user.confirmed?)
     div.panel.panel-default
       div.panel-heading.clearfix
         h4.pull-left Payment Methods
@@ -95,7 +94,7 @@ div.row
               td = number_to_currency(purchase.total, unit: (purchase.payment_method.try(:currency).try(:sign) || '&#36;').html_safe)
               td = purchase.orders.count
               td = yesno(purchase.committed?)
-              td = purchase.committed_at.present? ? purchase.committed_at.to_formatted_s(:long) : 'N/A'
+              td = purchase.committed_at.present? ? purchase.committed_at.to_formatted_s(:long) : nil
               td
                 = link_to shopping_purchase_path(purchase.id), class: 'btn btn-info', title: 'View' do
                   i.fa.fa-eye

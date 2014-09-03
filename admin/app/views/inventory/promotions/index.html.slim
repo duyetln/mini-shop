@@ -32,33 +32,22 @@ div
       tbody
         - @promotions.each do |promotion|
           tr id="promotion-#{promotion.id}" class="#{promotion.active? ? 'success' : 'danger'}"
-            td
-              = promotion.id
-            td
-              = promotion.name
-            td
-              = promotion.title
-            td
-              = promotion.description
-            td
-              = promotion.item.title
-            td
-              = promotion.price.name
-            td
-              = yesno(promotion.available?)
-            td
-              = yesno(promotion.active?)
-            td
-              = link_to inventory_promotion_path(promotion.id), class: 'btn btn-info', title: 'View' do
+            td = promotion.id
+            td = promotion.name
+            td = promotion.title
+            td = promotion.description
+            td = promotion.item.title
+            td = promotion.price.name
+            td = yesno(promotion.available?)
+            td = yesno(promotion.active?)
+            td = link_to inventory_promotion_path(promotion.id), class: 'btn btn-info', title: 'View' do
                 i.fa.fa-eye
             td
               button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-promotion-#{promotion.id}"
                 i.fa.fa-pencil-square-o
-            td
-              = button_to activate_inventory_promotion_path(promotion.id), method: :put, disabled: !promotion.activable?, class: 'btn btn-warning', title: 'Activate' do
+            td = button_to activate_inventory_promotion_path(promotion.id), method: :put, disabled: !promotion.activable?, class: 'btn btn-warning', title: 'Activate' do
                 i.fa.fa-check-square-o
-            td
-              = button_to inventory_promotion_path(promotion.id), method: :delete, disabled: !promotion.deletable?, class: 'btn btn-danger' do
+            td = button_to inventory_promotion_path(promotion.id), method: :delete, disabled: !promotion.deletable?, class: 'btn btn-danger' do
                 i.fa.fa-trash-o
 div
   div.modal id='create-promotion' role='dialog'

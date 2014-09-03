@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
     redirect_to (error.is_a?(::BackendClient::NotFound) ? root_path : :back)
   end
 
-  rescue_from BackendClient::RequestError do |error|
+  rescue_from BackendClient::RequestError do
     flash[:error] = 'Something unexpected occurred while sending the request. Please contact techincal support'
     go_back
   end

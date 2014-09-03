@@ -28,23 +28,16 @@ div
       tbody
         - @store_items.each do |store_item|
           tr id="store-item-#{store_item.id}" class="#{store_item.active? ? 'success' : 'danger'}"
-            td
-              = store_item.id
-            td
-              = store_item.name
-            td
-              = store_item.item.title
-            td
-              = store_item.price.name
-            td
-              = yesno(store_item.available?)
-            td
-              = yesno(store_item.active?)
+            td = store_item.id
+            td = store_item.name
+            td = store_item.item.title
+            td = store_item.price.name
+            td = yesno(store_item.available?)
+            td = yesno(store_item.active?)
             td
               button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-store-item-#{store_item.id}"
                 i.fa.fa-pencil-square-o
-            td
-              = button_to inventory_store_item_path(store_item.id), method: :delete, disabled: !store_item.deletable?, class: 'btn btn-danger' do
+            td = button_to inventory_store_item_path(store_item.id), method: :delete, disabled: !store_item.deletable?, class: 'btn btn-danger' do
                 i.fa.fa-trash-o
 div
   div.modal id='create-store-item' role='dialog'

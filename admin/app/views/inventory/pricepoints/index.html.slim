@@ -29,11 +29,9 @@ div
           tr id="pricepoint-#{pricepoint.id}"
             td
               label = pricepoint.id
-            td
-              = pricepoint.name
+            td = pricepoint.name
             - @currencies.each do |currency|
-              td
-                = pricepoint.amount(currency)
+              td = pricepoint.amount(currency)
             td
               button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-pricepoint-#{pricepoint.id}"
                 i.fa.fa-pencil-square-o

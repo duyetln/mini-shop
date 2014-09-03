@@ -28,29 +28,20 @@ div
       tbody
         - @bundles.each do |bundle|
           tr id="bundle-#{bundle.id}" class="#{bundle.active? ? 'success' : 'danger'}"
-            td
-              = bundle.id
-            td
-              = bundle.title
-            td
-              = bundle.description
-            td
-              = bundle.bundleds.count
-            td
-              = yesno(bundle.available?)
-            td
-              = yesno(bundle.active?)
-            td
-              = link_to inventory_bundle_path(bundle.id), class: 'btn btn-info', title: 'View' do
+            td = bundle.id
+            td = bundle.title
+            td = bundle.description
+            td = bundle.bundleds.count
+            td = yesno(bundle.available?)
+            td = yesno(bundle.active?)
+            td = link_to inventory_bundle_path(bundle.id), class: 'btn btn-info', title: 'View' do
                 i.fa.fa-eye
             td
               button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-bundle-#{bundle.id}"
                 i.fa.fa-pencil-square-o
-            td
-              = button_to activate_inventory_bundle_path(bundle.id), method: :put, disabled: !bundle.activable?, class: 'btn btn-warning', title: 'Activate' do
+            td = button_to activate_inventory_bundle_path(bundle.id), method: :put, disabled: !bundle.activable?, class: 'btn btn-warning', title: 'Activate' do
                 i.fa.fa-check-square-o
-            td
-              = button_to inventory_bundle_path(bundle.id), method: :delete, disabled: !bundle.deletable?, class: 'btn btn-danger' do
+            td = button_to inventory_bundle_path(bundle.id), method: :delete, disabled: !bundle.deletable?, class: 'btn btn-danger' do
                 i.fa.fa-trash-o
 div
   div.modal id='create-bundle' role='dialog'

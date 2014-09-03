@@ -26,12 +26,9 @@ div
           tr id="price-#{price.id}"
             td
               label = price.id
-            td
-              = price.name
-            td
-              = price.pricepoint.name
-            td
-              = price.discount.name
+            td = price.name
+            td = price.pricepoint.name
+            td = price.discount.name
             td
               button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-price-#{price.id}"
                 i.fa.fa-pencil-square-o
