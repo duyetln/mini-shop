@@ -3,7 +3,7 @@ module Shopping
     def return
       @purchase = Purchase.find(params.require(:purchase_id))
       @purchase.return_order(id)
-      render nothing: true
+      flash[:success] = 'Order refunded successfully' and go_back
     end
   end
 end

@@ -7,13 +7,13 @@ module Shopping
       @shipping_address = @purchase.shipping_address
       @orders = @purchase.orders
       @payment = @purchase.payment
-      render nothing: true
+      @user = @purchase.user
     end
 
     def return
       @purchase = Purchase.find(id)
       @purchase.return!
-      render nothing: true
+      flash[:success] = 'Purchase refunded successfuly' and go_back
     end
   end
 end

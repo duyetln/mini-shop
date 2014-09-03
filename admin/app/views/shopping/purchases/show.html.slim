@@ -1,0 +1,153 @@
+h2.page-header.text-primary
+  | Purchase #{@purchase.id}
+
+div.row
+  div.col-md-6
+    div.panel.panel-info
+      div.panel-heading.clearfix
+        h4.pull-left Information
+        div.pull-right.btn-toolbar
+          div.btn-group
+            = button_to return_shopping_purchase_path(@purchase.id), method: :put, disabled: !@purchase.paid? || @orders.all?(&:reversed?), class: 'btn btn-danger', title: 'Refund' do
+              i.fa.fa-bank
+              |  Refund
+      table.table.table-condensed
+        tbody
+          tr
+            td
+              label ID
+            td = @purchase.id
+          tr
+            td
+              label User
+            td = @user.first_name + ' ' + @user.last_name
+          tr
+            td
+              label Payment Method
+            td = @payment_method.present? && @payment_method.name || nil
+          tr
+            td
+              label Billing Address
+            td
+              - address = @billing_address
+              address
+                p = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
+                p = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
+          tr
+            td
+              label Shiping Address
+            td
+              - address = @shipping_address
+              address
+                p = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
+                p = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
+          tr
+            td
+              label Committed
+            td = yesno(@purchase.committed?)
+          tr
+            td
+              label Committed At
+            td = @purchase.committed_at.present? ? @purchase.committed_at.to_formatted_s(:long) : nil
+          tr
+            td
+              label Paid
+            td = yesno(@purchase.paid?)
+          tr
+            td
+              label Free
+            td = yesno(@purchase.free?)
+          tr
+            td
+              label Amount
+            td = number_to_currency(@purchase.amount, unit: (@purchase.payment_method.try(:currency).try(:sign) || '&#36;').html_safe)
+          tr
+            td
+              label Tax
+            td = number_to_currency(@purchase.tax, unit: (@purchase.payment_method.try(:currency).try(:sign) || '&#36;').html_safe)
+          tr
+            td
+              label Total
+            td = number_to_currency(@purchase.total, unit: (@purchase.payment_method.try(:currency).try(:sign) || '&#36;').html_safe)
+  - if @purchase.paid?
+    div.col-md-6
+      div.panel.panel-success
+        div.panel-heading.clearfix
+          h4.pull-left Payment Information
+        table.table.table-condensed
+          tbody
+            tr
+              td
+                label ID
+              td = @payment.id
+            tr
+              td
+                label Amount
+              td = number_to_currency(@payment.amount, unit: @payment.currency.sign.html_safe)
+            tr
+              td
+                label Payment Method
+              td = @payment.payment_method.name
+            tr
+              td
+                label Billing Address
+              td
+                - address = @payment.billing_address
+                address
+                  p = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
+                  p = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
+            tr
+              td
+                label Committed
+              td = yesno(@payment.committed?)
+            tr
+              td
+                label Committed At
+              td = @payment.committed_at.present? ? @payment.committed_at.to_formatted_s(:long) : nil
+div.panel.panel-default
+  div.panel-heading.clearfix
+    h4.pull-left Orders
+  table.table.table-condensed
+    thead
+      tr
+        td
+          label ID
+        td
+          label UUID
+        td
+          label Item
+        td
+          label Qty
+        td
+          label Amount
+        td
+          label Tax Rate
+        td
+          label Tax
+        td
+          label Total
+        td
+          label Fulfilled
+        td
+          label Refunded
+        td
+          label Failed
+    tbody
+      - @orders.each do |order|
+        tr class="#{order.marked? ? (order.fulfilled? ? 'success' : 'danger') : '' }"
+          td
+            label = order.id
+          td = order.uuid
+          td = order.item.title
+          td = order.qty
+          td = number_to_currency(order.amount, unit: order.currency.sign.html_safe)
+          td = order.tax_rate
+          td = number_to_currency(order.tax, unit: order.currency.sign.html_safe)
+          td = number_to_currency(order.total, unit: order.currency.sign.html_safe)
+          td = yesno(order.fulfilled?)
+          td = yesno(order.reversed?)
+          td = yesno(order.failed?)
+          td = button_to return_shopping_purchase_order_path(@purchase.id, order.id), method: :put, disabled: !@purchase.paid? || order.reversed?, class: 'btn btn-danger', title: 'Refund' do
+            i.fa.fa-bank
+
+
