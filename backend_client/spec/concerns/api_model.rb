@@ -48,4 +48,15 @@ shared_examples 'api model' do
       expect(obj1.eql?(obj2)).to eq(obj1 == obj2)
     end
   end
+
+  describe '#hash' do
+    let(:obj1) { described_class.new parsed_payload.merge(id: 'id') }
+    let(:obj2) { described_class.new parsed_payload.merge(id: 'id') }
+
+    context 'same class, same id' do
+      it 'produces same hash values' do
+        expect(obj1.hash).to eq(obj2.hash)
+      end
+    end
+  end
 end

@@ -22,6 +22,10 @@ module BackendClient
       self.==(other)
     end
 
+    def hash
+      [self.class.name, self.id].hash
+    end
+
     def initialize(hash = {})
       @attributes = self.class.build_attributes(hash)
     end
