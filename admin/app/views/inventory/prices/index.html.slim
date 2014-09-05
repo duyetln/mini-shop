@@ -21,6 +21,8 @@ div
             label Pricepoint Name
           td
             label Discount Name
+          td.col-md-1
+            label Actions
       tbody
         - @prices.each do |price|
           tr id="price-#{price.id}"
@@ -30,8 +32,10 @@ div
             td = price.pricepoint.name
             td = price.discount.name
             td
-              button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-price-#{price.id}"
-                i.fa.fa-pencil-square-o
+              div.btn-toolbar
+                div.btn-group title='Edit' data-toggle='tooltip' data-placement='top'
+                  button.btn.btn-success data-toggle='modal' data-target="#edit-price-#{price.id}"
+                    i.fa.fa-pencil-square-o
 div
   div.modal id='create-price' role='dialog'
     div.modal-dialog

@@ -82,8 +82,8 @@ div.row
               label Orders
             td
               label Committed
-            td
-              label Committed At
+            td.col-md-1
+              label Actions
         tbody
           - @purchases.each do |purchase|
             tr class="#{purchase.committed? ? 'success' : ''}"
@@ -93,11 +93,12 @@ div.row
               td = number_to_currency(purchase.tax, unit: (purchase.payment_method.try(:currency).try(:sign) || '&#36;').html_safe)
               td = number_to_currency(purchase.total, unit: (purchase.payment_method.try(:currency).try(:sign) || '&#36;').html_safe)
               td = purchase.orders.count
-              td = yesno(purchase.committed?)
-              td = purchase.committed_at.present? ? purchase.committed_at.to_formatted_s(:long) : nil
+              td = purchase.committed? && purchase.committed_at.present? ? purchase.committed_at.to_formatted_s(:long) : nil
               td
-                = link_to shopping_purchase_path(purchase.id), class: 'btn btn-info', title: 'View' do
-                  i.fa.fa-eye
+                div.btn-toolbar
+                  div.btn-group title='View' data-toggle='tooltip' data-placement='top'
+                    = link_to shopping_purchase_path(purchase.id), class: 'btn btn-info' do
+                      i.fa.fa-eye
     div.panel.panel-default
       div.panel-heading.clearfix
         h4.pull-left Coupons

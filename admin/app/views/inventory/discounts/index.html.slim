@@ -27,6 +27,8 @@ div
             label Start At
           td
             label End At
+          td.col-md-1
+            label Actions
       tbody
         - @discounts.each do |discount|
           tr id="discount-#{discount.id}" class="#{discount.current_active? ? 'success' : 'danger' }"
@@ -39,8 +41,10 @@ div
             td = discount.start_at.present? && discount.start_at.strftime('%m/%d/%Y %H:%M') || nil
             td = discount.end_at.present? && discount.end_at.strftime('%m/%d/%Y %H:%M') || nil
             td
-              button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-discount-#{discount.id}"
-                i.fa.fa-pencil-square-o
+              div.btn-toolbar
+                div.btn-group title='Edit' data-toggle='tooltip' data-placement='top'
+                  button.btn.btn-success data-toggle='modal' data-target="#edit-discount-#{discount.id}"
+                    i.fa.fa-pencil-square-o
 div
   div.modal id='create-discount' role='dialog'
     div.modal-dialog

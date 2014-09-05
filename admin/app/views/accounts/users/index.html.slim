@@ -1,40 +1,46 @@
 h2.page-header.text-primary
   | Users
 
-div.panel.panel-default
-  div.panel-heading.clearfix
-    h4.pull-left Listings
-  table.table.table-hover.table-condensed
-    thead
-      tr
-        td
-          label ID
-        td
-          label First Name
-        td
-          label Last Name
-        td
-          label Email
-        td
-          label Confirmed
-        td
-          label Addresses
-        td
-          label Payment Methods
-        td
-          label Signed Up On
-      tbody
-        - @users.each do |user|
-          tr id="user-#{user.id}" class="#{user.confirmed? ? 'success' : 'danger'}"
-            td
-              label = user.id
-            td = user.first_name
-            td = user.last_name
-            td = user.email
-            td = yesno(user.confirmed?)
-            td = user.addresses.count
-            td = user.payment_methods.count
-            td = user.created_at.to_formatted_s(:long)
-            td = link_to accounts_user_path(user.id), class: 'btn btn-info', title: 'View' do
-              i.fa.fa-eye
+div
+  div.panel.panel-default
+    div.panel-heading.clearfix
+      h4.pull-left Listings
+    table.table.table-hover.table-condensed
+      thead
+        tr
+          td
+            label ID
+          td
+            label First Name
+          td
+            label Last Name
+          td
+            label Email
+          td
+            label Confirmed
+          td
+            label Addresses
+          td
+            label Payment Methods
+          td
+            label Signed Up On
+          td.col-md-1
+            label Actions
+        tbody
+          - @users.each do |user|
+            tr id="user-#{user.id}" class="#{user.confirmed? ? 'success' : 'danger'}"
+              td
+                label = user.id
+              td = user.first_name
+              td = user.last_name
+              td = user.email
+              td = yesno(user.confirmed?)
+              td = user.addresses.count
+              td = user.payment_methods.count
+              td = user.created_at.to_formatted_s(:long)
+              td
+                div.btn-toolbar
+                  div.btn-group title='View' data-toggle='tooltip' data-placement='top'
+                    = link_to accounts_user_path(user.id), class: 'btn btn-info' do
+                      i.fa.fa-eye
 

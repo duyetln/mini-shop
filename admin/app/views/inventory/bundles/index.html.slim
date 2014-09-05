@@ -1,4 +1,4 @@
-h2.page-header
+h2.page-header.text-primary
   | Bundles
 
 div
@@ -25,6 +25,8 @@ div
             label Available
           td
             label Active
+          td.col-md-2
+            label Actions
       tbody
         - @bundles.each do |bundle|
           tr id="bundle-#{bundle.id}" class="#{bundle.active? ? 'success' : 'danger'}"
@@ -34,15 +36,20 @@ div
             td = bundle.bundleds.count
             td = yesno(bundle.available?)
             td = yesno(bundle.active?)
-            td = link_to inventory_bundle_path(bundle.id), class: 'btn btn-info', title: 'View' do
-                i.fa.fa-eye
             td
-              button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-bundle-#{bundle.id}"
-                i.fa.fa-pencil-square-o
-            td = button_to activate_inventory_bundle_path(bundle.id), method: :put, disabled: !bundle.activable?, class: 'btn btn-warning', title: 'Activate' do
-                i.fa.fa-check-square-o
-            td = button_to inventory_bundle_path(bundle.id), method: :delete, disabled: !bundle.deletable?, class: 'btn btn-danger' do
-                i.fa.fa-trash-o
+              div.btn-toolbar
+                div.btn-group title='View' data-toggle='tooltip' data-placement='top'
+                  = link_to inventory_bundle_path(bundle.id), class: 'btn btn-info' do
+                    i.fa.fa-eye
+                div.btn-group title='Edit' data-toggle='tooltip' data-placement='top'
+                  button.btn.btn-success data-toggle='modal' data-target="#edit-bundle-#{bundle.id}"
+                    i.fa.fa-pencil-square-o
+                div.btn-group title='Activate' data-toggle='tooltip' data-placement='top'
+                  = button_to activate_inventory_bundle_path(bundle.id), method: :put, disabled: !bundle.activable?, class: 'btn btn-warning' do
+                    i.fa.fa-check-square-o
+                div.btn-group title='Delete' data-toggle='tooltip' data-placement='top'
+                  = button_to inventory_bundle_path(bundle.id), method: :delete, disabled: !bundle.deletable?, class: 'btn btn-danger' do
+                    i.fa.fa-trash-o
 div
   div.modal id='create-bundle' role='dialog'
     div.modal-dialog

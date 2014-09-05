@@ -25,6 +25,8 @@ div
             label Active
           td
             label Available
+          td.col-md-2
+            label Actions
       tbody
         - @physical_items.each do |physical_item|
           tr id="physical-item-#{physical_item.id}" class="#{physical_item.active? ? 'success' : 'danger' }"
@@ -36,12 +38,16 @@ div
             td = yesno(physical_item.active?)
             td = yesno(physical_item.available?)
             td
-              button.btn.btn-success title='Edit' data-toggle='modal' data-target="#edit-physical-item-#{physical_item.id}"
-                i.fa.fa-pencil-square-o
-            td = button_to activate_inventory_physical_item_path(physical_item.id), method: :put, disabled: !physical_item.activable?, class: 'btn btn-warning' do
-                i.fa.fa-check-square-o
-            td = button_to inventory_physical_item_path(physical_item.id), method: :delete, disabled: !physical_item.deletable?, class: 'btn btn-danger' do
-                i.fa.fa-trash-o
+              div.btn-toolbar
+                div.btn-group title='Edit' data-toggle='tooltip' data-placement='top'
+                  button.btn.btn-success data-toggle='modal' data-target="#edit-physical-item-#{physical_item.id}"
+                    i.fa.fa-pencil-square-o
+                div.btn-group title='Activate' data-toggle='tooltip' data-placement='top'
+                  = button_to activate_inventory_physical_item_path(physical_item.id), method: :put, disabled: !physical_item.activable?, class: 'btn btn-warning' do
+                    i.fa.fa-check-square-o
+                div.btn-group title='Delete' data-toggle='tooltip' data-placement='top'
+                  = button_to inventory_physical_item_path(physical_item.id), method: :delete, disabled: !physical_item.deletable?, class: 'btn btn-danger' do
+                    i.fa.fa-trash-o
 div
   div.modal id='create-physical-item' role='dialog'
     div.modal-dialog

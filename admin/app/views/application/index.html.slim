@@ -3,16 +3,16 @@ h2.page-header.text-primary
 
 div.row
   div.col-md-3
-    div.panel.panel-danger
+    div.panel.panel-danger title='Accounts Management' data-toggle='tooltip' data-placement='top'
       div.panel-heading.text-center
-        i.fa.fa-users.fa-fw.fa-5x title='Accounts Management'
+        i.fa.fa-users.fa-fw.fa-5x
       div.list-group
         = link_to accounts_users_path, class: 'list-group-item' do
           h4.text-danger Users
   div.col-md-3
-    div.panel.panel-success
+    div.panel.panel-success title='Price Management' data-toggle='tooltip' data-placement='top'
       div.panel-heading.text-center
-        i.fa.fa-money.fa-fw.fa-5x title='Price Management'
+        i.fa.fa-money.fa-fw.fa-5x
       div.list-group
         = link_to inventory_pricepoints_path, class: 'list-group-item' do
           h4.text-success Pricepoints
@@ -21,9 +21,9 @@ div.row
         = link_to inventory_prices_path, class: 'list-group-item' do
           h4.text-success Prices
   div.col-md-3
-    div.panel.panel-info
+    div.panel.panel-info title='Inventory Management' data-toggle='tooltip' data-placement='top'
       div.panel-heading.text-center
-        i.fa.fa-truck.fa-fw.fa-5x title='Inventory Management'
+        i.fa.fa-truck.fa-fw.fa-5x
       div.list-group
         = link_to inventory_physical_items_path, class: 'list-group-item' do
           h4.text-info Physical Items
@@ -32,9 +32,9 @@ div.row
         = link_to inventory_bundles_path, class: 'list-group-item' do
           h4.text-info Bundles
   div.col-md-3
-    div.panel.panel-warning
+    div.panel.panel-warning title='Store & Promotions Management' data-toggle='tooltip' data-placement='top'
       div.panel-heading.text-center
-        i.fa.fa-shopping-cart.fa-fw.fa-5x title='Store & Promotions Management'
+        i.fa.fa-shopping-cart.fa-fw.fa-5x
       div.list-group
         = link_to inventory_store_items_path, class: 'list-group-item' do
           h4.text-warning Store Items

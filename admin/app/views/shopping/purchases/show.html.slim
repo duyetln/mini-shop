@@ -132,6 +132,8 @@ div.panel.panel-default
           label Refunded
         td
           label Failed
+        td.col-md-1
+          label Actions
     tbody
       - @orders.each do |order|
         tr class="#{order.marked? ? (order.fulfilled? ? 'success' : 'danger') : '' }"
@@ -147,7 +149,10 @@ div.panel.panel-default
           td = yesno(order.fulfilled?)
           td = yesno(order.reversed?)
           td = yesno(order.failed?)
-          td = button_to return_shopping_purchase_order_path(@purchase.id, order.id), method: :put, disabled: !@purchase.paid? || order.reversed?, class: 'btn btn-danger', title: 'Refund' do
-            i.fa.fa-bank
+          td
+            div.btn-toolbar
+              div.btn-group title='Refund' data-toggle='tooltip' data-placement='top'
+                = button_to return_shopping_purchase_order_path(@purchase.id, order.id), method: :put, disabled: !@purchase.paid? || order.reversed?, class: 'btn btn-danger' do
+                  i.fa.fa-bank
 
 
