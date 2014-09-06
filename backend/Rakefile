@@ -96,7 +96,7 @@ namespace :serializers do
     puts 'Keys'
     ResourceSerializer.descendants.each do |klass|
       resource = klass.name.gsub('Serializer','')
-      serializer = klass.new(resource.constantize.last)
+      serializer = klass.new(resource.constantize.first)
       puts resource
       puts serializer.as_json.keys.inspect
       puts
@@ -105,9 +105,10 @@ namespace :serializers do
     puts 'Payloads'
     ResourceSerializer.descendants.each do |klass|
       resource = klass.name.gsub('Serializer','')
-      serializer = klass.new(resource.constantize.last)
-      puts resource
+      serializer = klass.new(resource.constantize.first)
+      puts "def #{resource.underscore}_payload"
       puts serializer.to_json.inspect
+      puts "end"
       puts
     end
 

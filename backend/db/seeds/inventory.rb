@@ -22,11 +22,12 @@ eur = Currency.create!(code: 'EUR', sign: '&#128;')
 krw = Currency.create!(code: 'KRW', sign: '&#8361;')
 gbp = Currency.create!(code: 'GBP', sign: '&#163;')
 
-half_discount = Discount.create!(name: 'Half Discount', rate: 0.5)
-no_discount   = Discount.create!(name: 'No Discount', rate: 0.0)
-Discount.create!(name: 'Full Discount', rate: 1.0)
 Discount.create!(name: 'Black Friday Discount', rate: 0.75, start_at: DateTime.new(2013, 11, 25), end_at: DateTime.new(2013, 12, 9))
 Discount.create!(name: 'Christmas Discount', rate: 0.5, start_at: DateTime.new(2013, 12, 23), end_at: DateTime.new(2013, 12, 30))
+Discount.create!(name: 'Full Discount', rate: 1.0)
+half_discount = Discount.create!(name: 'Half Discount', rate: 0.5)
+no_discount   = Discount.create!(name: 'No Discount', rate: 0.0)
+
 
 free_pp         = Pricepoint.create!(name: 'Free Pricepoint')
 sc2_standard_pp = Pricepoint.create!(name: 'SC2 Standard Pricepoint')

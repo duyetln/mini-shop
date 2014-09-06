@@ -21,6 +21,8 @@ StoreItem.first(3).each do |store_item|
   purchase.fulfill!
 end
 
+Purchase.first.reverse!
+
 # 2nd purchase
 purchase = user.purchases.create!
 purchase.payment_method   = payment_method

@@ -13,6 +13,8 @@ require 'backend_client/fulfillment/ownership'
 require 'backend_client/fulfillment/shipment'
 
 require 'backend_client/shared/status'
+require 'backend_client/shared/spec'
+
 require 'backend_client/accounts/user'
 require 'backend_client/mailing/email'
 
