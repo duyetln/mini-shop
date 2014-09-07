@@ -26,7 +26,7 @@ module Inventory
 
       params.fetch(:pricepoint_prices, []).each do |value|
         pricepoint_price = @pricepoint.pricepoint_prices.find do |pp|
-          pp.id == value.require(:id).to_i
+          pp.id == value[:id].to_i
         end
 
         if pricepoint_price.present?

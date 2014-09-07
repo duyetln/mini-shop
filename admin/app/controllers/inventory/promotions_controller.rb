@@ -49,7 +49,7 @@ module Inventory
         params.require(:qty),
         params.require(:batch).require(:size)
       )
-      go_back
+      flash[:success] = 'Batches created successfully' and go_back
     end
   end
 end

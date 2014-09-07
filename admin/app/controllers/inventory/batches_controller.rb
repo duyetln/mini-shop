@@ -30,7 +30,7 @@ module Inventory
       @batch.create_coupons(
         params.require(:qty)
       )
-      go_back
+      flash[:success] = 'Coupons created successfully' and go_back
     end
   end
 end

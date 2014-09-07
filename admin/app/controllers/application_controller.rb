@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
 
   def update_resource(resource, update_params)
     resource.merge!(update_params)
-    resource.update!(*update_params.keys)
+    resource.update!(*update_params.keys.map(&:to_sym))
     resource
   end
 

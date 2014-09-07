@@ -10,16 +10,7 @@ module Inventory
       @bundle = Bundle.create(
         params.require(:bundle).permit(:title, :description)
       )
-
-      params.fetch(:bundleds, []).map { |bundled| bundled.permit(:item, :qty) }.each do |bundled|
-        if bundled[:item].present? && bundled[:qty].present?
-          @bundle.add_or_update_bundled(
-            bundled.permit(:qty).merge(
-              Yajl::Parser.parse bundled.require(:item)
-            )
-          )
-        end
-      end
+      add_or_update_bundleds
       flash[:success] = 'Bundle created successfully' and go_back
     end
 
@@ -34,17 +25,8 @@ module Inventory
         Bundle.find(id),
         params.require(:bundle).permit(:title, :description)
       )
-
-      params.fetch(:bundleds, []).map { |bundled| bundled.permit(:item, :qty) }.each do |bundled|
-        if bundled[:item].present? && bundled[:qty].present?
-          @bundle.add_or_update_bundled(
-            bundled.permit(:qty).merge(
-              Yajl::Parser.parse bundled.require(:item)
-            )
-          )
-        end
-      end
-      flash[:success] = 'Bundle created successfully' and go_back
+      add_or_update_bundleds
+      flash[:success] = 'Bundle updated successfully' and go_back
     end
 
     def activate
@@ -57,6 +39,20 @@ module Inventory
       @bundle = Bundle.find(id)
       @bundle.delete!
       flash[:success] = 'Bundle deleted successfully' and go_back
+    end
+
+    protected
+
+    def add_or_update_bundleds
+      params.fetch(:bundleds, []).map { |bundled| bundled.permit(:item, :qty) }.each do |bundled|
+        if bundled[:item].present? && bundled[:qty].present?
+          @bundle.add_or_update_bundled(
+            bundled.permit(:qty).merge(
+              Yajl::Parser.parse bundled.require(:item)
+            )
+          )
+        end
+      end
     end
   end
 end
