@@ -64,7 +64,13 @@ div.row
   div.col-md-7
     div.panel.panel-default
       div.panel-heading.clearfix
-        h4.pull-left Batches
+        h4.pull-left
+          ' Batches
+          small title='Legend' data-toggle='tooltip' data-placement='top'
+            i.fa.fa-square.text-danger
+            '  Coupons out of Stock
+            i.fa.fa-square.text-success
+            '  Coupons in Stock, Active
         div.pull-right.btn-toolbar
           div.btn-group
             button.btn.btn-primary data-toggle='modal' data-target='#create-batches'
@@ -83,7 +89,7 @@ div.row
               label Actions
         tbody
           - @batches.each do |batch|
-            tr
+            tr class="#{batch.used_coupon_count >= batch.coupon_count ? 'danger' : (batch.active? ? 'success' : '')}"
               td = batch.id
               td = batch.name
               td = "#{batch.used_coupon_count}/#{batch.coupon_count}"

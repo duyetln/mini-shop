@@ -40,7 +40,13 @@ div.row
   div.col-md-7
     div.panel.panel-default
       div.panel-heading.clearfix
-        h4.pull-left Coupons
+        h4.pull-left
+          ' Coupons
+          small title='Legend' data-toggle='tooltip' data-placement='top'
+            i.fa.fa-square.text-danger
+            '  Not Available
+            i.fa.fa-square.text-success
+            '  Used/Redeemed
         div.pull-right.btn-toolbar
           div.btn-group
             button.btn.btn-primary data-toggle='modal' data-target='#create-coupons'
@@ -61,7 +67,7 @@ div.row
               label User
         tbody
           - @coupons.each do |coupon|
-            tr class="#{coupon.used? ? 'success' : '' }"
+            tr class="#{coupon.used? ? 'success' : (!coupon.available? ? 'danger' : '') }"
               td = coupon.id
               td = coupon.code
               td = yesno(coupon.used?)

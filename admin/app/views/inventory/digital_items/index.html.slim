@@ -4,7 +4,13 @@ h2.page-header.text-primary
 div
   div.panel.panel-default
     div.panel-heading.clearfix
-      h4.pull-left Listings
+      h4.pull-left
+        ' Listings
+        small title='Legend' data-toggle='tooltip' data-placement='top'
+          i.fa.fa-square.text-danger
+          '  Not Available
+          i.fa.fa-square.text-success
+          '  Available, Active
       div.pull-right.btn-toolbar
         div.btn-group
           button.btn.btn-primary data-toggle='modal' data-target='#create-digital-item'
@@ -27,7 +33,7 @@ div
             label Actions
       tbody
         - @digital_items.each do |digital_item|
-          tr id="digital-item-#{digital_item.id}" class="#{digital_item.active? ? 'success' : 'danger' }"
+          tr id="digital-item-#{digital_item.id}" class="#{!digital_item.available? ? 'danger' : (digital_item.active? ? 'success' : '')}"
             td
               label = digital_item.id
             td = digital_item.title

@@ -4,7 +4,13 @@ h2.page-header.text-primary
 div
   div.panel.panel-default
     div.panel-heading.clearfix
-      h4.pull-left Listings
+      h4.pull-left
+        ' Listings
+        small title='Legend' data-toggle='tooltip' data-placement='top'
+          i.fa.fa-square.text-danger
+          '  Not Active
+          i.fa.fa-square.text-success
+          '  Active
       div.pull-right.btn-toolbar
         div.btn-group
           button.btn.btn-primary data-toggle='modal' data-target='#create-discount'

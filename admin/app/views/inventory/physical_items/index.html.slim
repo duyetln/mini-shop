@@ -4,7 +4,13 @@ h2.page-header.text-primary
 div
   div.panel.panel-default
     div.panel-heading.clearfix
-      h4.pull-left Listings
+      h4.pull-left
+        ' Listings
+        small title='Legend' data-toggle='tooltip' data-placement='top'
+          i.fa.fa-square.text-danger
+          '  Not Available
+          i.fa.fa-square.text-success
+          '  Available, Active
       div.pull-right.btn-toolbar
         div.btn-group
           button.btn.btn-primary data-toggle='modal' data-target='#create-physical-item'
@@ -29,7 +35,7 @@ div
             label Actions
       tbody
         - @physical_items.each do |physical_item|
-          tr id="physical-item-#{physical_item.id}" class="#{physical_item.active? ? 'success' : 'danger' }"
+          tr id="physical-item-#{physical_item.id}" class="#{!physical_item.available? ? 'danger' : (physical_item.active? ? 'success' : '')}"
             td
               label = physical_item.id
             td = physical_item.title

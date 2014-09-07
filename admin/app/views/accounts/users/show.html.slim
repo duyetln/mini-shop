@@ -65,8 +65,14 @@ div.row
                   p = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
   div.col-md-7
     div.panel.panel-default
-      div.panel-heading
-        h4 Purchases
+      div.panel-heading.clearfix
+        h4.pull-left
+          ' Purchases
+          small title='Legend' data-toggle='tooltip' data-placement='top'
+            i.fa.fa-square.text-danger
+            '  Fully Refunded
+            i.fa.fa-square.text-success
+            '  Committed
       table.table.table-condensed
         thead
           tr
@@ -86,7 +92,7 @@ div.row
               label Actions
         tbody
           - @purchases.each do |purchase|
-            tr class="#{purchase.committed? ? 'success' : ''}"
+            tr class="#{purchase.orders.all?(&:reversed?) ? 'danger' : (purchase.committed? ? 'success' : '')}"
               td
                 label = purchase.id
               td = number_to_currency(purchase.amount, unit: (purchase.payment_method.try(:currency).try(:sign) || '&#36;').html_safe)

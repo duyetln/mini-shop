@@ -106,7 +106,13 @@ div.row
               td = @payment.committed_at.present? ? @payment.committed_at.to_formatted_s(:long) : nil
 div.panel.panel-default
   div.panel-heading.clearfix
-    h4.pull-left Orders
+    h4.pull-left
+      ' Orders
+      small title='Legend' data-toggle='tooltip' data-placement='top'
+        i.fa.fa-square.text-danger
+        '  Refunded/Errored
+        i.fa.fa-square.text-success
+        '  Fulfilled
   table.table.table-condensed
     thead
       tr

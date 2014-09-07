@@ -49,7 +49,13 @@ div.row
   div.col-md-7
     div.panel.panel-default
       div.panel-heading.clearfix
-        h4.pull-left Items
+        h4.pull-left
+          ' Items
+          small title='Legend' data-toggle='tooltip' data-placement='top'
+            i.fa.fa-square.text-danger
+            '  Not Available
+            i.fa.fa-square.text-success
+            '  Available & Active
       table.table.table-condensed
         thead
           tr
@@ -67,7 +73,7 @@ div.row
               label Actions
         tbody
           - @bundle.bundleds.each do |bundled|
-            tr class="#{bundled.item.active? ? 'success' : 'danger'}"
+            tr class="#{!bundled.item.available? ? 'danger' : (bundled.item.active? ? 'success' : '') }"
               td = bundled.item.title
               td = bundled.item.description
               td = bundled.qty

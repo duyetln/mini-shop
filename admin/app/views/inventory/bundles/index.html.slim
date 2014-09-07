@@ -4,7 +4,13 @@ h2.page-header.text-primary
 div
   div.panel.panel-default
     div.panel-heading.clearfix
-      h4.pull-left Listings
+      h4.pull-left
+        ' Listings
+        small title='Legend' data-toggle='tooltip' data-placement='top'
+          i.fa.fa-square.text-danger
+          '  Not Available
+          i.fa.fa-square.text-success
+          '  Available, Active
       div.pull-right.btn-toolbar
         div.btn-group
           button.btn.btn-primary data-toggle='modal' data-target='#create-bundle'
@@ -29,7 +35,7 @@ div
             label Actions
       tbody
         - @bundles.each do |bundle|
-          tr id="bundle-#{bundle.id}" class="#{bundle.active? ? 'success' : 'danger'}"
+          tr id="bundle-#{bundle.id}" class="#{!bundle.available? ? 'danger' : (bundle.active? ? 'success' : '')}"
             td = bundle.id
             td = bundle.title
             td = bundle.description

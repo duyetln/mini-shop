@@ -4,7 +4,13 @@ h2.page-header.text-primary
 div
   div.panel.panel-default
     div.panel-heading.clearfix
-      h4.pull-left Listings
+      h4.pull-left
+        ' Listings
+        small title='Legend' data-toggle='tooltip' data-placement='top'
+          i.fa.fa-square.text-danger
+          '  Not Available
+          i.fa.fa-square.text-success
+          '  Available, Active
       div.pull-right.btn-toolbar
         div.btn-group
           button.btn.btn-primary data-toggle='modal' data-target='#create-store-item'
@@ -29,7 +35,7 @@ div
             label Actions
       tbody
         - @store_items.each do |store_item|
-          tr id="store-item-#{store_item.id}" class="#{store_item.active? ? 'success' : 'danger'}"
+          tr id="store-item-#{store_item.id}" class="#{!store_item.available? ? 'danger' : (store_item.active? ? 'success' : '')}"
             td = store_item.id
             td = store_item.name
             td = store_item.item.title
