@@ -49,3 +49,9 @@ Here are the goals set for this project:
     - Remove endpoint to retreive user's addresses.
     - Add nicer error messages to both backend and client.
     - Add additional attributes to response payloads of a few resources.
+  * 0.7.0
+    - Paginate endpoints that return user's transactions, shipments, ownerships, coupons, and purchases.
+    - Sort paginated result by id in descending order.
+    - Improve backend client.
+    - Add admin interface to manage the system.
+
