@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from BackendClient::RequestError do
     flash[:error] = 'Something unexpected occurred while sending the request. Please contact techincal support'
-    go_back
+    redirect_to root_path
   end
 
   def index
