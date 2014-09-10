@@ -47,7 +47,7 @@ module BackendClient
         when (500..599) then raise BackendClient::BackendError.new(e)
         else                 raise BackendClient::APIError.new(e)
         end
-      rescue RestClient::Exception => e
+      rescue RestClient::Exception, Errno::ECONNREFUSED => e
         raise BackendClient::RequestError, e.message
       end
     end
