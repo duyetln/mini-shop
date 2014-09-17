@@ -14,6 +14,14 @@ Here are the goals set for this project:
   * Good design patterns.
   * Mastery of the Ruby language.
 
+## Screenshots
+
+### Admin
+![](images/admin_index.png)
+![](images/admin_physical_items.png)
+![](images/admin_create_bundle.png)
+![](images/admin_promotion.png)
+
 ## Releases
 
   * 0.1.0:
