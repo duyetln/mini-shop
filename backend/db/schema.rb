@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141007204148) do
+ActiveRecord::Schema.define(:version => 20141007211914) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "user_id"
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(:version => 20141007204148) do
 
   create_table "bundles", :force => true do |t|
     t.string   "title"
-    t.string   "description"
+    t.text     "description"
     t.boolean  "active"
     t.datetime "created_at",  :null => false
     t.boolean  "deleted"
@@ -85,7 +85,7 @@ ActiveRecord::Schema.define(:version => 20141007204148) do
 
   create_table "digital_items", :force => true do |t|
     t.string   "title"
-    t.string   "description"
+    t.text     "description"
     t.boolean  "active"
     t.datetime "created_at",  :null => false
     t.boolean  "deleted"
@@ -164,7 +164,7 @@ ActiveRecord::Schema.define(:version => 20141007204148) do
 
   create_table "physical_items", :force => true do |t|
     t.string   "title"
-    t.string   "description"
+    t.text     "description"
     t.boolean  "active"
     t.integer  "qty"
     t.datetime "created_at",  :null => false
@@ -205,7 +205,7 @@ ActiveRecord::Schema.define(:version => 20141007204148) do
   create_table "promotions", :force => true do |t|
     t.string   "name"
     t.string   "title"
-    t.string   "description"
+    t.text     "description"
     t.string   "item_type"
     t.integer  "item_id"
     t.boolean  "active"

@@ -73,7 +73,7 @@ div
             div.form-group
               label.control-label.col-md-4 Description
               div.col-md-8
-                = f.text_field :description, class: 'form-control', placeholder: 'Bundle Description'
+                = f.text_area :description, rows: 5, class: 'form-control', placeholder: 'Bundle Description'
             - physical_items_select_options = @physical_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
             - digital_items_select_options = @digital_items.map { |item| [item.title, { item_type: item.resource_type, item_id: item.resource_id }.to_json] }
             - select_options = { 'Physical Items' => physical_items_select_options, 'Digital Items' => digital_items_select_options }
@@ -107,7 +107,7 @@ div
               div.form-group
                 label.control-label.col-md-4 Description
                 div.col-md-8
-                  = f.text_field :description, class: 'form-control', value: bundle.description, placeholder: 'Bundle Description'
+                  = f.text_area :description, rows: 5, class: 'form-control', value: bundle.description, placeholder: 'Bundle Description'
               - if bundle.changeable?
                 - bundle.bundleds.each do |bundled|
                   div.form-group

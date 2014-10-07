@@ -71,7 +71,7 @@ div
             div.form-group
               label.control-label.col-md-4 Description
               div.col-md-8
-                = f.text_field :description, class: 'form-control', placeholder: 'Physical Item Description'
+                = f.text_area :description, rows: 5, class: 'form-control', placeholder: 'Physical Item Description'
             div.form-group
               label.control-label.col-md-4 Qty
               div.col-md-8
@@ -98,7 +98,7 @@ div
               div.form-group
                 label.control-label.col-md-4 Description
                 div.col-md-8
-                  = f.text_field :description, class: 'form-control', value: physical_item.description, placeholder: 'Physical Item Description'
+                  = f.text_area :description, rows: 5, class: 'form-control', value: physical_item.description, placeholder: 'Physical Item Description'
               div.form-group
                 label.control-label.col-md-4 Qty
                 div.col-md-8

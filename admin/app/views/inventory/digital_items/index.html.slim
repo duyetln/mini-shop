@@ -68,7 +68,7 @@ div
             div.form-group
               label.control-label.col-md-4 Description
               div.col-md-8
-                = f.text_field :description, class: 'form-control', placeholder: 'Digital Item Description'
+                = f.text_area :description, rows: 5, class: 'form-control', placeholder: 'Digital Item Description'
           div.modal-footer
             div.form-group
               div.col-md-8.col-md-offset-4
@@ -91,7 +91,7 @@ div
               div.form-group
                 label.control-label.col-md-4 Description
                 div.col-md-8
-                  = f.text_field :description, class: 'form-control', value: digital_item.description, placeholder: 'Digital Item Description'
+                  = f.text_area :description, rows: 5, class: 'form-control', value: digital_item.description, placeholder: 'Digital Item Description'
             div.modal-footer
               div.form-group
                 div.col-md-8.col-md-offset-4

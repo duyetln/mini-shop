@@ -83,7 +83,7 @@ div
             div.form-group
               label.control-label.col-md-4 Description
               div.col-md-8
-                = f.text_field :description, class: 'form-control', placeholder: 'Promotion Description'
+                = f.text_area :description, rows: 5, class: 'form-control', placeholder: 'Promotion Description'
             div.form-group
               label.control-label.col-md-4 Item
               div.col-md-8
@@ -121,7 +121,7 @@ div
               div.form-group
                 label.control-label.col-md-4 Description
                 div.col-md-8
-                  = f.text_field :description, class: 'form-control', value: promotion.description, placeholder: 'Promotion Description'
+                  = f.text_area :description, rows: 5, class: 'form-control', value: promotion.description, placeholder: 'Promotion Description'
               div.form-group
                 label.control-label.col-md-4 Price
                 div.col-md-8
