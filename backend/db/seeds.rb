@@ -1,4 +1,4 @@
-if Application.env == 'test'
+if Application.env == 'test' || ENV['SEED'] == 'true'
   begin
     ActiveRecord::Base.transaction do
       require 'database_cleaner'
