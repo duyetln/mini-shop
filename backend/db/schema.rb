@@ -11,17 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140614000402) do
+ActiveRecord::Schema.define(:version => 20141007204148) do
 
   create_table "addresses", :force => true do |t|
-    t.integer "user_id"
-    t.string  "line1"
-    t.string  "line2"
-    t.string  "line3"
-    t.string  "city"
-    t.string  "region"
-    t.string  "postal_code"
-    t.string  "country"
+    t.integer  "user_id"
+    t.string   "line1"
+    t.string   "line2"
+    t.string   "line3"
+    t.string   "city"
+    t.string   "region"
+    t.string   "postal_code"
+    t.string   "country"
+    t.datetime "updated_at"
+    t.datetime "created_at"
   end
 
   add_index "addresses", ["user_id"], :name => "index_addresses_on_user_id"
@@ -32,15 +34,18 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.boolean  "active"
     t.boolean  "deleted"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "batches", ["promotion_id"], :name => "index_batches_on_promotion_id"
 
   create_table "bundleds", :force => true do |t|
-    t.integer "bundle_id"
-    t.integer "item_id"
-    t.string  "item_type"
-    t.integer "qty"
+    t.integer  "bundle_id"
+    t.integer  "item_id"
+    t.string   "item_type"
+    t.integer  "qty"
+    t.datetime "updated_at"
+    t.datetime "created_at"
   end
 
   add_index "bundleds", ["bundle_id"], :name => "index_bundleds_on_bundle_id"
@@ -52,6 +57,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.boolean  "active"
     t.datetime "created_at",  :null => false
     t.boolean  "deleted"
+    t.datetime "updated_at"
   end
 
   create_table "coupons", :force => true do |t|
@@ -61,6 +67,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.integer  "used_by"
     t.datetime "used_at"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "coupons", ["batch_id"], :name => "index_coupons_on_batch_id"
@@ -68,8 +75,10 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
   add_index "coupons", ["used_by"], :name => "index_coupons_on_used_by"
 
   create_table "currencies", :force => true do |t|
-    t.string "code"
-    t.string "sign"
+    t.string   "code"
+    t.string   "sign"
+    t.datetime "updated_at"
+    t.datetime "created_at"
   end
 
   add_index "currencies", ["code"], :name => "index_currencies_on_code"
@@ -80,6 +89,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.boolean  "active"
     t.datetime "created_at",  :null => false
     t.boolean  "deleted"
+    t.datetime "updated_at"
   end
 
   create_table "discounts", :force => true do |t|
@@ -88,6 +98,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.datetime "start_at"
     t.datetime "end_at"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "discounts", ["name"], :name => "index_discounts_on_name"
@@ -99,6 +110,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.integer  "item_id"
     t.integer  "qty"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "fulfillments", ["item_type", "item_id"], :name => "index_fulfillments_on_item_type_and_item_id"
@@ -118,6 +130,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.integer  "refund_id"
     t.datetime "created_at"
     t.decimal  "tax_rate",    :precision => 5,  :scale => 4
+    t.datetime "updated_at"
   end
 
   add_index "orders", ["item_type", "item_id"], :name => "index_orders_on_item_type_and_item_id"
@@ -132,6 +145,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.integer  "qty"
     t.boolean  "deleted"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "ownerships", ["item_type", "item_id"], :name => "index_ownerships_on_item_type_and_item_id"
@@ -143,6 +157,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.decimal  "balance",     :precision => 20, :scale => 2
     t.datetime "created_at"
     t.integer  "currency_id"
+    t.datetime "updated_at"
   end
 
   add_index "payment_methods", ["user_id"], :name => "index_payment_methods_on_user_id"
@@ -154,12 +169,15 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.integer  "qty"
     t.datetime "created_at",  :null => false
     t.boolean  "deleted"
+    t.datetime "updated_at"
   end
 
   create_table "pricepoint_prices", :force => true do |t|
-    t.decimal "amount",        :precision => 20, :scale => 2
-    t.integer "pricepoint_id"
-    t.integer "currency_id"
+    t.decimal  "amount",        :precision => 20, :scale => 2
+    t.integer  "pricepoint_id"
+    t.integer  "currency_id"
+    t.datetime "updated_at"
+    t.datetime "created_at"
   end
 
   add_index "pricepoint_prices", ["currency_id"], :name => "index_pricepoint_prices_on_currency_id"
@@ -168,6 +186,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
   create_table "pricepoints", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "pricepoints", ["name"], :name => "index_pricepoints_on_name"
@@ -177,6 +196,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.integer  "pricepoint_id"
     t.integer  "discount_id"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "prices", ["discount_id"], :name => "index_prices_on_discount_id"
@@ -192,6 +212,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.boolean  "deleted"
     t.integer  "price_id"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "promotions", ["item_type", "item_id"], :name => "index_promotions_on_item_type_and_item_id"
@@ -205,6 +226,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.boolean  "committed"
     t.datetime "committed_at"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "purchases", ["user_id"], :name => "index_purchases_on_user_id"
@@ -217,6 +239,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.integer  "qty"
     t.integer  "shipping_address_id"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "shipments", ["item_type", "item_id"], :name => "index_shipments_on_item_type_and_item_id"
@@ -227,6 +250,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.string   "source_type"
     t.integer  "status"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "statuses", ["source_id", "source_type"], :name => "index_statuses_on_source_id_and_source_type"
@@ -238,6 +262,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.datetime "created_at", :null => false
     t.boolean  "deleted"
     t.integer  "price_id"
+    t.datetime "updated_at"
   end
 
   add_index "store_items", ["item_type", "item_id"], :name => "index_store_items_on_item_type_and_item_id"
@@ -253,6 +278,7 @@ ActiveRecord::Schema.define(:version => 20140614000402) do
     t.boolean  "committed"
     t.datetime "committed_at"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "transactions", ["user_id"], :name => "index_transactions_on_user_id"
