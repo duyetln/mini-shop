@@ -12,6 +12,12 @@ describe BackendClient::PaymentMethod do
       ).to be_instance_of(BigDecimal)
     end
 
+    it 'sets pending balance correctly' do
+      expect(
+        full_model.pending_balance
+      ).to be_instance_of(BigDecimal)
+    end
+
     it 'sets currency correctly' do
       expect(
         full_model.currency

@@ -8,6 +8,7 @@ module BackendClient
       super do |payment_method|
         payment_method.currency = Currency.instantiate(payment_method.currency)
         payment_method.balance = BigDecimal.new(payment_method.balance)
+        payment_method.pending_balance = BigDecimal.new(payment_method.pending_balance)
       end
     end
   end

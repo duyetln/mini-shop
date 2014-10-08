@@ -6,7 +6,7 @@ class AddressSerializer < ResourceSerializer
 end
 
 class PaymentMethodSerializer < ResourceSerializer
-  attributes :user_id, :name, :balance, :currency_id
+  attributes :user_id, :name, :balance, :pending_balance, :currency_id
   has_one :currency, serializer: 'CurrencySerializer'
 end
 
