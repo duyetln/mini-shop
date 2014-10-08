@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141008214647) do
+ActiveRecord::Schema.define(:version => 20141008232845) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "user_id"
@@ -154,10 +154,11 @@ ActiveRecord::Schema.define(:version => 20141008214647) do
   create_table "payment_methods", :force => true do |t|
     t.integer  "user_id"
     t.string   "name"
-    t.decimal  "balance",     :precision => 20, :scale => 2
+    t.decimal  "balance",            :precision => 20, :scale => 2
     t.datetime "created_at"
     t.integer  "currency_id"
     t.datetime "updated_at"
+    t.integer  "billing_address_id"
   end
 
   add_index "payment_methods", ["user_id"], :name => "index_payment_methods_on_user_id"
@@ -220,7 +221,6 @@ ActiveRecord::Schema.define(:version => 20141008214647) do
   create_table "purchases", :force => true do |t|
     t.integer  "user_id"
     t.integer  "payment_method_id"
-    t.integer  "billing_address_id"
     t.integer  "shipping_address_id"
     t.integer  "payment_transaction_id"
     t.boolean  "committed"
@@ -272,8 +272,7 @@ ActiveRecord::Schema.define(:version => 20141008214647) do
     t.string   "uuid"
     t.integer  "user_id"
     t.integer  "payment_method_id"
-    t.integer  "billing_address_id"
-    t.decimal  "amount",             :precision => 20, :scale => 2
+    t.decimal  "amount",            :precision => 20, :scale => 2
     t.integer  "currency_id"
     t.boolean  "committed"
     t.datetime "committed_at"
