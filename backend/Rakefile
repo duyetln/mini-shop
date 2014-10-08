@@ -107,7 +107,7 @@ namespace :serializers do
       resource = klass.name.gsub('Serializer','')
       serializer = klass.new(resource.constantize.first)
       puts "def #{resource.underscore}_payload"
-      puts serializer.to_json.inspect
+      puts "  #{serializer.to_json.inspect}"
       puts "end"
       puts
     end

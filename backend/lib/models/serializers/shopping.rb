@@ -10,12 +10,12 @@ class PaymentMethodSerializer < ResourceSerializer
   has_one :currency, serializer: 'CurrencySerializer'
 end
 
-class TransactionSerializer < ResourceSerializer
-  include CommittableSerializer
-  attributes :user_id, :uuid, :payment_method_id, :billing_address_id, :amount, :currency_id
-  has_one :currency, serializer: 'CurrencySerializer'
-  has_one :payment_method, serializer: 'PaymentMethodSerializer'
-  has_one :billing_address, serializer: 'AddressSerializer'
+class RefundTransactionSerializer < ResourceSerializer
+  include TransactionSerializer
+end
+
+class PaymentTransactionSerializer < ResourceSerializer
+  include TransactionSerializer
 end
 
 class OrderSerializer < ResourceSerializer
@@ -23,7 +23,7 @@ class OrderSerializer < ResourceSerializer
   include DeletableSerializer
   attributes :uuid, :purchase_id, :currency_id, :amount, :tax, :tax_rate, :total, :qty, :refund_id, :status_id
   has_one :currency, serializer: 'CurrencySerializer'
-  has_one :refund, serializer: 'TransactionSerializer'
+  has_one :refund, serializer: 'RefundTransactionSerializer'
   has_many :statuses, serializer: 'StatusSerializer'
 
   def status_id
@@ -44,7 +44,7 @@ class PurchaseSerializer < ResourceSerializer
   has_one :payment_method, serializer: 'PaymentMethodSerializer'
   has_one :billing_address, serializer: 'AddressSerializer'
   has_one :shipping_address, serializer: 'AddressSerializer'
-  has_one :payment, serializer: 'TransactionSerializer'
+  has_one :payment, serializer: 'PaymentTransactionSerializer'
   has_many :orders, serializer: 'OrderSerializer'
 
   def paid

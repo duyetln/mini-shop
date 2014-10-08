@@ -80,7 +80,7 @@ module Services
         user = User.find(id)
         transactions = paginate(user.transactions).all
         respond_with(transactions.map do |transaction|
-          TransactionSerializer.new(transaction)
+          DynamicSerializer.new(transaction)
         end)
       end
 

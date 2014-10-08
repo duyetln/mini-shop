@@ -88,3 +88,15 @@ module ItemCombinableSerializer
   include ItemableSerializer
   include QuantifiableSerializer
 end
+
+module TransactionSerializer
+  extend ActiveSupport::Concern
+  include CommittableSerializer
+
+  included do
+    attributes :user_id, :uuid, :payment_method_id, :billing_address_id, :amount, :currency_id
+    has_one :currency, serializer: 'CurrencySerializer'
+    has_one :payment_method, serializer: 'PaymentMethodSerializer'
+    has_one :billing_address, serializer: 'AddressSerializer'
+  end
+end

@@ -312,7 +312,7 @@ describe Services::Accounts::Users do
 
       context 'pagination' do
         let(:scope) { user.transactions }
-        let(:serializer) { TransactionSerializer }
+        let(:serializer) { DynamicSerializer }
 
         include_examples 'pagination'
       end
