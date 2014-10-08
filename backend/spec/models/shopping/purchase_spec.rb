@@ -19,7 +19,7 @@ describe Purchase do
   it { should belong_to(:payment_method) }
   it { should belong_to(:billing_address).class_name('Address') }
   it { should belong_to(:shipping_address).class_name('Address') }
-  it { should belong_to(:payment).class_name('Transaction') }
+  it { should belong_to(:payment).class_name('PaymentTransaction') }
   it { should belong_to(:user).inverse_of(:purchases) }
 
   it { should validate_presence_of(:user) }
@@ -217,6 +217,7 @@ describe Purchase do
 
     it 'sets correct information' do
       model.pay!
+      expect(model.payment.class).to eq(PaymentTransaction)
       expect(model.payment.user).to eq(model.user)
       expect(model.payment.amount).to eq(model.total)
       expect(model.payment.currency).to eq(model.payment_method_currency)
@@ -273,7 +274,7 @@ describe Purchase do
 
   describe 'fulfillment methods' do
     let(:transaction) do
-      FactoryGirl.build :transaction,
+      FactoryGirl.build :payment_transaction,
                         user: model.user,
                         amount: model.total,
                         currency: model.payment_method_currency,

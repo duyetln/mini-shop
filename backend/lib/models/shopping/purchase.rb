@@ -11,7 +11,7 @@ class Purchase < ActiveRecord::Base
   belongs_to :payment_method
   belongs_to :billing_address,  class_name: 'Address'
   belongs_to :shipping_address, class_name: 'Address'
-  belongs_to :payment, class_name: 'Transaction'
+  belongs_to :payment, class_name: 'PaymentTransaction'
   belongs_to :user, inverse_of: :purchases
 
   validates :user,             presence: true

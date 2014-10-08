@@ -13,7 +13,7 @@ describe Order do
 
   it { should belong_to(:purchase).inverse_of(:orders) }
   it { should belong_to(:currency) }
-  it { should belong_to(:refund).class_name('Transaction') }
+  it { should belong_to(:refund).class_name('RefundTransaction') }
   it { should have_many(:fulfillments).inverse_of(:order) }
 
   it { should have_readonly_attribute(:uuid) }
@@ -294,8 +294,9 @@ describe Order do
 
     it 'sets correct information' do
       model.send(:refund!)
+      expect(model.refund.class).to eq(RefundTransaction)
       expect(model.refund.user).to eq(model.user)
-      expect(model.refund.amount).to eq(-model.total)
+      expect(model.refund.amount).to eq(model.total)
       expect(model.refund.currency).to eq(model.currency)
       expect(model.refund.payment_method).to eq(model.payment_method)
       expect(model.refund.billing_address).to eq(model.billing_address)

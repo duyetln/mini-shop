@@ -13,7 +13,7 @@ class Order < ActiveRecord::Base
 
   belongs_to :purchase, inverse_of: :orders
   belongs_to :currency
-  belongs_to :refund, class_name: 'Transaction'
+  belongs_to :refund, class_name: 'RefundTransaction'
   has_many :fulfillments, inverse_of: :order
 
   validates :purchase, presence: true
@@ -128,7 +128,7 @@ class Order < ActiveRecord::Base
       if refund.blank? && purchase_paid? && total > 0
         build_refund
         refund.user = user
-        refund.amount = -total
+        refund.amount = total
         refund.currency = currency
         refund.payment_method = payment_method
         refund.billing_address = billing_address
