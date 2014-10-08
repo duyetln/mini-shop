@@ -104,8 +104,8 @@ describe BackendClient::User do
 
   describe 'transactions' do
     let(:association) { :transactions }
-    let(:association_class) { BackendClient::Transaction }
-    let(:association_payload) { transaction_payload }
+    let(:association_class) { BackendClient::PaymentTransaction }
+    let(:association_payload) { payment_transaction_payload }
 
     include_examples 'association retreiving'
   end

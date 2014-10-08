@@ -1,6 +1,4 @@
-require 'spec_setup'
-
-describe BackendClient::Transaction do
+shared_examples 'transaction' do
   include_examples 'api model'
 
   describe '.initialize' do

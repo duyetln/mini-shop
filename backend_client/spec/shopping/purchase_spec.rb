@@ -28,7 +28,7 @@ describe BackendClient::Purchase do
     it 'sets payment correctly' do
       expect(
         full_model.payment
-      ).to be_instance_of(BackendClient::Transaction)
+      ).to be_instance_of(BackendClient::PaymentTransaction)
     end
 
     it 'sets orders correctly' do

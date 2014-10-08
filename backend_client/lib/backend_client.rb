@@ -35,6 +35,8 @@ require 'backend_client/inventory/promotion'
 require 'backend_client/shopping/address'
 require 'backend_client/shopping/payment_method'
 require 'backend_client/shopping/transaction'
+require 'backend_client/shopping/payment_transaction'
+require 'backend_client/shopping/refund_transaction'
 require 'backend_client/shopping/order'
 require 'backend_client/shopping/purchase'
 

@@ -9,12 +9,11 @@ module BackendClient
 
     [:ownerships, :shipments, :coupons, :transactions, :purchases].each do |association|
       define_method "#{association}" do |pagination = {}|
-        klass = BackendClient.const_get(association.to_s.classify)
         self.class.get(
           path: "/#{id}/#{association}",
           payload: pagination.slice(:page, :size, :padn, :sort)
         ).map do |hash|
-          klass.instantiate(hash)
+          APIModel.instantiate(hash)
         end
       end
     end
@@ -22,11 +21,10 @@ module BackendClient
     [:address, :payment_method].each do |association|
       define_method "create_#{association}" do |object = {}|
         if object.present?
-          klass = BackendClient.const_get(association.to_s.classify)
           load!(
             self.class.post(
               path: "/#{id}/#{association.to_s.pluralize}",
-              payload: klass.params(object)
+              payload: BackendClient.const_get(association.to_s.classify).params(object)
             )
           )
         end

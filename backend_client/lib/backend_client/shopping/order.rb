@@ -11,7 +11,7 @@ module BackendClient
         order.tax = BigDecimal.new(order.tax)
         order.tax_rate = BigDecimal.new(order.tax_rate)
         order.total = BigDecimal.new(order.total)
-        order.refund = Transaction.instantiate(order.refund)
+        order.refund = RefundTransaction.instantiate(order.refund)
         order.statuses.map! { |status| Status.instantiate(status) }
       end
     end
