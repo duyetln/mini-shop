@@ -8,10 +8,10 @@ shared_examples 'failed order fulfillment' do
   end
 
   it 'has a refund' do
-    expect(order.refund).to be_present
-    expect(order.refund.class).to eq(RefundTransaction)
-    expect(order.refund.amount).to eq(order.total)
-    expect(order.refund.currency).to eq(order.currency)
+    expect(order.refund_transaction).to be_present
+    expect(order.refund_transaction.class).to eq(RefundTransaction)
+    expect(order.refund_transaction.amount).to eq(order.total)
+    expect(order.refund_transaction.currency).to eq(order.currency)
   end
 
   it 'has no fulfillments' do
@@ -29,7 +29,7 @@ shared_examples 'successful order fulfillment' do
   end
 
   it 'does not have a refund' do
-    expect(order.refund).to be_blank
+    expect(order.refund_transaction).to be_blank
   end
 
   it 'has fulfilled fulfillments' do
@@ -49,7 +49,7 @@ shared_examples 'successful order reversal' do
   end
 
   it 'has a refund' do
-    expect(order.refund.present?).to eq(order.total > 0 && order.purchase.paid?)
+    expect(order.refund_transaction.present?).to eq(order.total > 0 && order.purchase.paid?)
   end
 
   it 'has reversed fulfillments' do

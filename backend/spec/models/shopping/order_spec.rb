@@ -13,7 +13,7 @@ describe Order do
 
   it { should belong_to(:purchase).inverse_of(:orders) }
   it { should belong_to(:currency) }
-  it { should belong_to(:refund).class_name('RefundTransaction') }
+  it { should belong_to(:refund_transaction).class_name('RefundTransaction') }
   it { should have_many(:fulfillments).inverse_of(:order) }
 
   it { should have_readonly_attribute(:uuid) }
@@ -263,7 +263,7 @@ describe Order do
       end
 
       it 'does not do anything' do
-        expect { model.send(:refund!) }.to_not change { model.refund }
+        expect { model.send(:refund!) }.to_not change { model.refund_transaction }
       end
     end
 
@@ -273,7 +273,7 @@ describe Order do
       end
 
       it 'does not do anything' do
-        expect { model.send(:refund!) }.to_not change { model.refund }
+        expect { model.send(:refund!) }.to_not change { model.refund_transaction }
       end
     end
 
@@ -283,28 +283,28 @@ describe Order do
       end
 
       it 'does not do anything' do
-        expect { model.send(:refund!) }.to_not change { model.refund }
+        expect { model.send(:refund!) }.to_not change { model.refund_transaction }
       end
     end
 
     it 'creates new refund' do
-      expect { model.send(:refund!) }.to change { model.refund }
-      expect(model.refund).to be_present
+      expect { model.send(:refund!) }.to change { model.refund_transaction }
+      expect(model.refund_transaction).to be_present
     end
 
     it 'sets correct information' do
       model.send(:refund!)
-      expect(model.refund.class).to eq(RefundTransaction)
-      expect(model.refund.user).to eq(model.user)
-      expect(model.refund.amount).to eq(model.total)
-      expect(model.refund.currency).to eq(model.currency)
-      expect(model.refund.payment_method).to eq(model.payment_method)
-      expect(model.refund.billing_address).to eq(model.billing_address)
+      expect(model.refund_transaction.class).to eq(RefundTransaction)
+      expect(model.refund_transaction.user).to eq(model.user)
+      expect(model.refund_transaction.amount).to eq(model.total)
+      expect(model.refund_transaction.currency).to eq(model.currency)
+      expect(model.refund_transaction.payment_method).to eq(model.payment_method)
+      expect(model.refund_transaction.billing_address).to eq(model.billing_address)
     end
 
     it 'does not create a new refund' do
       model.send(:refund!)
-      expect(model.refund).to eq(model.send(:refund!))
+      expect(model.refund_transaction).to eq(model.send(:refund!))
     end
   end
 
@@ -322,7 +322,7 @@ describe Order do
 
   describe '#purchase_payment' do
     it 'delegates to #purchase' do
-      expect(model.purchase_payment).to eq(model.purchase.payment)
+      expect(model.purchase_payment_transaction).to eq(model.purchase.payment_transaction)
     end
   end
 

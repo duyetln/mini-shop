@@ -15,11 +15,11 @@ describe Purchase do
   it { should have_readonly_attribute(:user_id) }
 
   it { should have_many(:orders).inverse_of(:purchase) }
-  it { should have_many(:refunds).through(:orders) }
+  it { should have_many(:refund_transactions).through(:orders) }
   it { should belong_to(:payment_method) }
   it { should belong_to(:billing_address).class_name('Address') }
   it { should belong_to(:shipping_address).class_name('Address') }
-  it { should belong_to(:payment).class_name('PaymentTransaction') }
+  it { should belong_to(:payment_transaction).class_name('PaymentTransaction') }
   it { should belong_to(:user).inverse_of(:purchases) }
 
   it { should validate_presence_of(:user) }
@@ -176,7 +176,7 @@ describe Purchase do
       end
 
       it 'does not do anything' do
-        expect { model.pay! }.to_not change { model.payment }
+        expect { model.pay! }.to_not change { model.payment_transaction }
       end
     end
 
@@ -186,7 +186,7 @@ describe Purchase do
       end
 
       it 'does nothing' do
-        expect { model.pay! }.to_not change { model.payment }
+        expect { model.pay! }.to_not change { model.payment_transaction }
       end
     end
 
@@ -196,7 +196,7 @@ describe Purchase do
       end
 
       it 'does not do anything' do
-        expect { model.pay! }.to_not change { model.payment }
+        expect { model.pay! }.to_not change { model.payment_transaction }
       end
     end
 
@@ -206,23 +206,23 @@ describe Purchase do
       end
 
       it 'does not do anything' do
-        expect { model.pay! }.to_not change { model.payment }
+        expect { model.pay! }.to_not change { model.payment_transaction }
       end
     end
 
     it 'creates new payment' do
-      expect { model.pay! }.to change { model.payment }
-      expect(model.payment).to be_present
+      expect { model.pay! }.to change { model.payment_transaction }
+      expect(model.payment_transaction).to be_present
     end
 
     it 'sets correct information' do
       model.pay!
-      expect(model.payment.class).to eq(PaymentTransaction)
-      expect(model.payment.user).to eq(model.user)
-      expect(model.payment.amount).to eq(model.total)
-      expect(model.payment.currency).to eq(model.payment_method_currency)
-      expect(model.payment.payment_method).to eq(model.payment_method)
-      expect(model.payment.billing_address).to eq(model.billing_address)
+      expect(model.payment_transaction.class).to eq(PaymentTransaction)
+      expect(model.payment_transaction.user).to eq(model.user)
+      expect(model.payment_transaction.amount).to eq(model.total)
+      expect(model.payment_transaction.currency).to eq(model.payment_method_currency)
+      expect(model.payment_transaction.payment_method).to eq(model.payment_method)
+      expect(model.payment_transaction.billing_address).to eq(model.billing_address)
     end
 
     it 'does not create a new payment' do
@@ -232,13 +232,13 @@ describe Purchase do
       model.unstub(:total)
 
       model.pay!
-      expect(model.payment).to eq(model.pay!)
+      expect(model.payment_transaction).to eq(model.pay!)
     end
   end
 
   describe '#transactions' do
     it 'returns all related transactions' do
-      expect(model.transactions).to eq([model.orders.map(&:refund), model.payment].flatten.compact)
+      expect(model.transactions).to eq([model.orders.map(&:refund_transaction), model.payment_transaction].flatten.compact)
     end
   end
 
@@ -250,7 +250,7 @@ describe Purchase do
 
   describe '#paid?' do
     it 'checks the presence of #payment' do
-      expect(model.paid?).to eq(model.payment.present?)
+      expect(model.paid?).to eq(model.payment_transaction.present?)
     end
   end
 

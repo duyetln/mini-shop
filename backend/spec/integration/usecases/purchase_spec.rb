@@ -157,7 +157,7 @@ describe 'purchase flow' do
 
     it 'cannot be paid' do
       expect(purchase.pay!).to be_nil
-      expect(purchase.payment).to_not be_present
+      expect(purchase.payment_transaction).to_not be_present
     end
 
     it 'cannot be fulfilled' do
@@ -278,10 +278,10 @@ describe 'purchase flow' do
 
   describe 'transactions' do
     it 'includes payment' do
-      expect(purchase.payment).to be_present
-      expect(purchase.payment.class).to eq(PaymentTransaction)
-      expect(purchase.payment.amount).to eq(purchase.total(pmethod.currency))
-      expect(purchase.payment.currency).to eq(pmethod.currency)
+      expect(purchase.payment_transaction).to be_present
+      expect(purchase.payment_transaction.class).to eq(PaymentTransaction)
+      expect(purchase.payment_transaction.amount).to eq(purchase.total(pmethod.currency))
+      expect(purchase.payment_transaction.currency).to eq(pmethod.currency)
     end
 
     it 'includes refunds' do
