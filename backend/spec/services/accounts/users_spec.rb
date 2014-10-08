@@ -307,7 +307,7 @@ describe Services::Accounts::Users do
 
     context 'valid id' do
       before :each do
-        FactoryGirl.create :transaction, user: user
+        FactoryGirl.create :payment_transaction, user: user
       end
 
       context 'pagination' do

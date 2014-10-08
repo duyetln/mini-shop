@@ -22,7 +22,7 @@ describe PaymentMethod do
 
   it { should validate_numericality_of(:balance).is_greater_than_or_equal_to(0) }
 
-  let(:transaction) { FactoryGirl.create(:transaction, payment_method: model) }
+  let(:transaction) { FactoryGirl.create(:payment_transaction, payment_method: model) }
 
   describe '#pending_balance' do
     context 'no transactions' do

@@ -279,12 +279,13 @@ describe 'purchase flow' do
   describe 'transactions' do
     it 'includes payment' do
       expect(purchase.payment).to be_present
+      expect(purchase.payment.class).to eq(PaymentTransaction)
       expect(purchase.payment.amount).to eq(purchase.total(pmethod.currency))
       expect(purchase.payment.currency).to eq(pmethod.currency)
     end
 
     it 'includes refunds' do
-      expect(purchase.transactions.any?(&:refund?)).to be_true
+      expect(purchase.transactions.any? { |t| t.class == RefundTransaction }).to be_true
     end
 
     it 'is committed' do

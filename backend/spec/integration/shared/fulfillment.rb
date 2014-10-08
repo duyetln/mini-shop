@@ -9,7 +9,8 @@ shared_examples 'failed order fulfillment' do
 
   it 'has a refund' do
     expect(order.refund).to be_present
-    expect(order.refund.amount).to eq(-order.total)
+    expect(order.refund.class).to eq(RefundTransaction)
+    expect(order.refund.amount).to eq(order.total)
     expect(order.refund.currency).to eq(order.currency)
   end
 
