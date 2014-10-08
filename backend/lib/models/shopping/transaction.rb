@@ -24,18 +24,9 @@ class Transaction < ActiveRecord::Base
 
   def commit!
     if pending? && super
-      method = payment? ? :withdraw! : :deposit!
-      payment_method.send(method, amount, currency)
+      process_transaction!
     end
     committed?
-  end
-
-  def payment?
-    amount >= 0
-  end
-
-  def refund?
-    !payment?
   end
 
   protected
@@ -44,5 +35,9 @@ class Transaction < ActiveRecord::Base
     if new_record?
       self.uuid = SecureRandom.hex.upcase
     end
+  end
+
+  def process_transaction!
+    fail 'Must be implemented in derived classes'
   end
 end
