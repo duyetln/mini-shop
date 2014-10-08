@@ -42,7 +42,7 @@ describe BackendClient::Order do
 
     it 'sets refund correctly' do
       expect(
-        full_model.refund
+        full_model.refund_transaction
       ).to be_instance_of(BackendClient::RefundTransaction)
     end
 

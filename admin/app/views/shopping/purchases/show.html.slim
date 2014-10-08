@@ -79,31 +79,31 @@ div.row
             tr
               td
                 label ID
-              td = @payment.id
+              td = @payment_transaction.id
             tr
               td
                 label Amount
-              td = number_to_currency(@payment.amount, unit: @payment.currency.sign.html_safe)
+              td = number_to_currency(@payment_transaction.amount, unit: @payment_transaction.currency.sign.html_safe)
             tr
               td
                 label Payment Method
-              td = @payment.payment_method.name
+              td = @payment_transaction.payment_method.name
             tr
               td
                 label Billing Address
               td
-                - address = @payment.billing_address
+                - address = @payment_transaction.billing_address
                 address
                   p = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
                   p = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
             tr
               td
                 label Committed
-              td = yesno(@payment.committed?)
+              td = yesno(@payment_transaction.committed?)
             tr
               td
                 label Committed At
-              td = @payment.committed_at.present? ? @payment.committed_at.to_formatted_s(:long) : nil
+              td = @payment_transaction.committed_at.present? ? @payment_transaction.committed_at.to_formatted_s(:long) : nil
 div.panel.panel-default
   div.panel-heading.clearfix
     h4.pull-left
