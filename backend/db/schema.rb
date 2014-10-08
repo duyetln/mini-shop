@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141008185422) do
+ActiveRecord::Schema.define(:version => 20141008214647) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "user_id"
@@ -123,13 +123,13 @@ ActiveRecord::Schema.define(:version => 20141008185422) do
     t.string   "item_type"
     t.integer  "item_id"
     t.integer  "currency_id"
-    t.decimal  "amount",      :precision => 20, :scale => 2
-    t.decimal  "tax",         :precision => 20, :scale => 2
+    t.decimal  "amount",                :precision => 20, :scale => 2
+    t.decimal  "tax",                   :precision => 20, :scale => 2
     t.integer  "qty"
     t.boolean  "deleted"
-    t.integer  "refund_id"
+    t.integer  "refund_transaction_id"
     t.datetime "created_at"
-    t.decimal  "tax_rate",    :precision => 5,  :scale => 4
+    t.decimal  "tax_rate",              :precision => 5,  :scale => 4
     t.datetime "updated_at"
   end
 
@@ -222,7 +222,7 @@ ActiveRecord::Schema.define(:version => 20141008185422) do
     t.integer  "payment_method_id"
     t.integer  "billing_address_id"
     t.integer  "shipping_address_id"
-    t.integer  "payment_id"
+    t.integer  "payment_transaction_id"
     t.boolean  "committed"
     t.datetime "committed_at"
     t.datetime "created_at"
