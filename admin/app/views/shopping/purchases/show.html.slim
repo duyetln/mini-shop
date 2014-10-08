@@ -9,7 +9,7 @@ div.row
         div.pull-right.btn-toolbar
           div.btn-group
             = button_to return_shopping_purchase_path(@purchase.id), method: :put, disabled: !@purchase.paid? || @orders.all?(&:reversed?), class: 'btn btn-danger', title: 'Refund' do
-              i.fa.fa-bank
+              i.fa.fa-credit-card
               |  Refund
       table.table.table-condensed
         tbody
@@ -159,6 +159,6 @@ div.panel.panel-default
             div.btn-toolbar
               div.btn-group title='Refund' data-toggle='tooltip' data-placement='top'
                 = button_to return_shopping_purchase_order_path(@purchase.id, order.id), method: :put, disabled: !@purchase.paid? || order.reversed?, class: 'btn btn-danger' do
-                  i.fa.fa-bank
+                  i.fa.fa-credit-card
 
 
