@@ -6,12 +6,12 @@ class Purchase < ActiveRecord::Base
   attr_readonly :user_id
 
   has_many :orders, inverse_of: :purchase
-  has_many :refunds, through: :orders
+  has_many :refund_transactions, through: :orders
 
   belongs_to :payment_method
   belongs_to :billing_address,  class_name: 'Address'
   belongs_to :shipping_address, class_name: 'Address'
-  belongs_to :payment, class_name: 'PaymentTransaction'
+  belongs_to :payment_transaction, class_name: 'PaymentTransaction'
   belongs_to :user, inverse_of: :purchases
 
   validates :user,             presence: true
@@ -99,7 +99,7 @@ class Purchase < ActiveRecord::Base
   end
 
   def transactions
-    (refunds + [payment]).compact
+    (refund_transactions + [payment_transaction]).compact
   end
 
   def commit!
@@ -122,22 +122,22 @@ class Purchase < ActiveRecord::Base
   end
 
   def paid?
-    payment.present?
+    payment_transaction.present?
   end
 
   def pay!
     if committed?
       if !free? && !paid? && payment_method.enough?(total)
-        build_payment
-        payment.user = user
-        payment.amount = total
-        payment.currency = payment_method_currency
-        payment.payment_method = payment_method
-        payment.billing_address = billing_address
-        payment.save!
+        build_payment_transaction
+        payment_transaction.user = user
+        payment_transaction.amount = total
+        payment_transaction.currency = payment_method_currency
+        payment_transaction.payment_method = payment_method
+        payment_transaction.billing_address = billing_address
+        payment_transaction.save!
         save!
       end
-      payment
+      payment_transaction
     end
   end
 

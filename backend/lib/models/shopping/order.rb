@@ -13,7 +13,7 @@ class Order < ActiveRecord::Base
 
   belongs_to :purchase, inverse_of: :orders
   belongs_to :currency
-  belongs_to :refund, class_name: 'RefundTransaction'
+  belongs_to :refund_transaction, class_name: 'RefundTransaction'
   has_many :fulfillments, inverse_of: :order
 
   validates :purchase, presence: true
@@ -29,15 +29,15 @@ class Order < ActiveRecord::Base
   after_initialize :initialize_values
   before_save :update_amount_and_tax
 
-  delegate :user,             to: :purchase
-  delegate :payment_method,   to: :purchase
-  delegate :billing_address,  to: :purchase
-  delegate :shipping_address, to: :purchase
-  delegate :committed?,       to: :purchase, prefix: true
-  delegate :pending?,         to: :purchase, prefix: true
-  delegate :paid?,            to: :purchase, prefix: true
-  delegate :free?,            to: :purchase, prefix: true
-  delegate :payment,          to: :purchase, prefix: true
+  delegate :user,                 to: :purchase
+  delegate :payment_method,       to: :purchase
+  delegate :billing_address,      to: :purchase
+  delegate :shipping_address,     to: :purchase
+  delegate :committed?,           to: :purchase, prefix: true
+  delegate :pending?,             to: :purchase, prefix: true
+  delegate :paid?,                to: :purchase, prefix: true
+  delegate :free?,                to: :purchase, prefix: true
+  delegate :payment_transaction,  to: :purchase, prefix: true
 
   def deletable?
     purchase_pending? && super
@@ -125,17 +125,17 @@ class Order < ActiveRecord::Base
 
   def refund!
     if purchase_committed?
-      if refund.blank? && purchase_paid? && total > 0
-        build_refund
-        refund.user = user
-        refund.amount = total
-        refund.currency = currency
-        refund.payment_method = payment_method
-        refund.billing_address = billing_address
-        refund.save!
+      if refund_transaction.blank? && purchase_paid? && total > 0
+        build_refund_transaction
+        refund_transaction.user = user
+        refund_transaction.amount = total
+        refund_transaction.currency = currency
+        refund_transaction.payment_method = payment_method
+        refund_transaction.billing_address = billing_address
+        refund_transaction.save!
         save!
       end
-      refund
+      refund_transaction
     end
   end
 end
