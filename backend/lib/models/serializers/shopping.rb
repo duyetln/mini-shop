@@ -10,13 +10,16 @@ class PaymentMethodSerializer < ResourceSerializer
   has_one :currency, serializer: 'CurrencySerializer'
 end
 
-class RefundTransactionSerializer < ResourceSerializer
-  include TransactionSerializer
+class TransactionSerializer < ResourceSerializer
+  include CommittableSerializer
+  attributes :user_id, :uuid, :payment_method_id, :billing_address_id, :amount, :currency_id
+  has_one :currency, serializer: 'CurrencySerializer'
+  has_one :payment_method, serializer: 'PaymentMethodSerializer'
+  has_one :billing_address, serializer: 'AddressSerializer'
 end
 
-class PaymentTransactionSerializer < ResourceSerializer
-  include TransactionSerializer
-end
+class RefundTransactionSerializer < TransactionSerializer; end
+class PaymentTransactionSerializer < TransactionSerializer; end
 
 class OrderSerializer < ResourceSerializer
   include ItemCombinableSerializer
