@@ -27,14 +27,6 @@ div.row
             td = @payment_method.present? && @payment_method.name || nil
           tr
             td
-              label Billing Address
-            td
-              - address = @billing_address
-              address
-                p = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
-                p = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
-          tr
-            td
               label Shiping Address
             td
               - address = @shipping_address
@@ -92,7 +84,7 @@ div.row
               td
                 label Billing Address
               td
-                - address = @payment_transaction.billing_address
+                - address = @payment_method.billing_address
                 address
                   p = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
                   p = [address.region, address.postal_code, address.country].select(&:present?).join(', ')

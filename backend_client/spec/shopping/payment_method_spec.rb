@@ -23,5 +23,11 @@ describe BackendClient::PaymentMethod do
         full_model.currency
       ).to be_instance_of(BackendClient::Currency)
     end
+
+    it 'sets billing address correctly' do
+      expect(
+        full_model.billing_address
+      ).to be_instance_of(BackendClient::Address)
+    end
   end
 end

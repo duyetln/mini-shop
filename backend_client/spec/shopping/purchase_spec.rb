@@ -13,12 +13,6 @@ describe BackendClient::Purchase do
       ).to be_instance_of(BackendClient::PaymentMethod)
     end
 
-    it 'sets billing_address correctly' do
-      expect(
-        full_model.billing_address
-      ).to be_instance_of(BackendClient::Address)
-    end
-
     it 'sets shipping_address correctly' do
       expect(
         full_model.shipping_address

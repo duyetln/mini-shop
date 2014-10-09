@@ -8,12 +8,6 @@ shared_examples 'transaction' do
       ).to be_instance_of(BackendClient::PaymentMethod)
     end
 
-    it 'sets billing address correctly' do
-      expect(
-        full_model.billing_address
-      ).to be_instance_of(BackendClient::Address)
-    end
-
     it 'sets amount correctly' do
       expect(
         full_model.amount

@@ -3,7 +3,6 @@ module Shopping
     def show
       @purchase = Purchase.find(id)
       @payment_method = @purchase.payment_method
-      @billing_address = @purchase.billing_address
       @shipping_address = @purchase.shipping_address
       @orders = @purchase.orders
       @payment_transaction = @purchase.payment_transaction
