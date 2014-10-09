@@ -6,16 +6,16 @@ class AddressSerializer < ResourceSerializer
 end
 
 class PaymentMethodSerializer < ResourceSerializer
-  attributes :user_id, :name, :balance, :pending_balance, :currency_id
+  attributes :user_id, :name, :balance, :pending_balance, :currency_id, :billing_address_id
   has_one :currency, serializer: 'CurrencySerializer'
+  has_one :billing_address, serializer: 'AddressSerializer'
 end
 
 class TransactionSerializer < ResourceSerializer
   include CommittableSerializer
-  attributes :user_id, :uuid, :payment_method_id, :billing_address_id, :amount, :currency_id
+  attributes :user_id, :uuid, :payment_method_id, :amount, :currency_id
   has_one :currency, serializer: 'CurrencySerializer'
   has_one :payment_method, serializer: 'PaymentMethodSerializer'
-  has_one :billing_address, serializer: 'AddressSerializer'
 end
 
 class RefundTransactionSerializer < TransactionSerializer; end
@@ -43,9 +43,8 @@ end
 
 class PurchaseSerializer < ResourceSerializer
   include ChangeableSerializer
-  attributes :user_id, :payment_method_id, :billing_address_id, :shipping_address_id, :payment_transaction_id, :committed, :committed_at, :amount, :tax, :total, :paid, :free
+  attributes :user_id, :payment_method_id, :shipping_address_id, :payment_transaction_id, :committed, :committed_at, :amount, :tax, :total, :paid, :free
   has_one :payment_method, serializer: 'PaymentMethodSerializer'
-  has_one :billing_address, serializer: 'AddressSerializer'
   has_one :shipping_address, serializer: 'AddressSerializer'
   has_one :payment_transaction, serializer: 'PaymentTransactionSerializer'
   has_many :orders, serializer: 'OrderSerializer'

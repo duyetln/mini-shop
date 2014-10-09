@@ -72,7 +72,7 @@ html
                   td
                     strong Shipping address
                 tr
-                  - [@purchase.billing_address, @purchase.shipping_address].each do |address|
+                  - [@purchase.payment_method.billing_address, @purchase.shipping_address].each do |address|
                     td
                       - [address.line1,
                          address.line2,
