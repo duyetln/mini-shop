@@ -31,7 +31,6 @@ class Order < ActiveRecord::Base
 
   delegate :user,                 to: :purchase
   delegate :payment_method,       to: :purchase
-  delegate :billing_address,      to: :purchase
   delegate :shipping_address,     to: :purchase
   delegate :committed?,           to: :purchase, prefix: true
   delegate :pending?,             to: :purchase, prefix: true
@@ -131,7 +130,6 @@ class Order < ActiveRecord::Base
         refund_transaction.amount = total
         refund_transaction.currency = currency
         refund_transaction.payment_method = payment_method
-        refund_transaction.billing_address = billing_address
         refund_transaction.save!
         save!
       end

@@ -4,19 +4,17 @@ class Transaction < ActiveRecord::Base
   include Committable
 
   attr_protected :uuid
-  attr_readonly :uuid, :user_id, :payment_method_id, :billing_address_id, :amount, :currency_id
+  attr_readonly :uuid, :user_id, :payment_method_id, :amount, :currency_id
 
   belongs_to :payment_method, inverse_of: :transactions
-  belongs_to :billing_address, class_name: 'Address'
   belongs_to :user, inverse_of: :transactions
   belongs_to :currency
 
-  validates :user,            presence: true
-  validates :payment_method,  presence: true
-  validates :billing_address, presence: true
+  validates :payment_method, presence: true
   validates :currency, presence: true
-  validates :amount,   presence: true
+  validates :amount, presence: true
   validates :uuid, uniqueness: true
+  validates :user, presence: true
 
   after_initialize :initialize_values
 
