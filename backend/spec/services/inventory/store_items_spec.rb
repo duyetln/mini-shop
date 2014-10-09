@@ -27,7 +27,7 @@ describe Services::Inventory::StoreItems do
       let(:store_item) { FactoryGirl.create :store_item }
       let(:id) { store_item.id }
 
-      it 'returns the user' do
+      it 'returns the store item' do
         send_request
         expect_status(200)
         expect_response(StoreItemSerializer.new(store_item).to_json)

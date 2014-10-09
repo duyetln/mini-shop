@@ -369,19 +369,6 @@ describe 'service api' do
   end
 
   describe Services::Accounts::Users do
-    it 'creates new payment method' do
-      expect do
-        post "/#{user.id}/payment_methods",
-             payment_method: {
-               name: rand_str,
-               balance: 0,
-               currency_id: usd.id
-             }
-      end.to change { PaymentMethod.count }.by(1)
-      expect_status(200)
-      ids[:pmethod] = parsed_response[:payment_methods].last[:id]
-    end
-
     it 'creates new address' do
       expect do
         post "/#{user.id}/addresses",
@@ -397,12 +384,25 @@ describe 'service api' do
       ids[:address] = parsed_response[:addresses].last[:id]
     end
 
+    it 'creates new payment method' do
+      expect do
+        post "/#{user.id}/payment_methods",
+             payment_method: {
+               name: rand_str,
+               balance: 0,
+               currency_id: usd.id,
+               billing_address_id: address.id
+             }
+      end.to change { PaymentMethod.count }.by(1)
+      expect_status(200)
+      ids[:pmethod] = parsed_response[:payment_methods].last[:id]
+    end
+
     it 'creates new purchase' do
       expect do
         post "/#{user.id}/purchases",
              purchase: {
                payment_method_id: pmethod.id,
-               billing_address_id: address.id,
                shipping_address_id: address.id
              }
       end.to change { Purchase.count }.by(1)

@@ -4,5 +4,6 @@ FactoryGirl.define do
     balance { 1_000_000 }
     user { build :user }
     currency { build :usd }
+    billing_address { build :address, user: user }
   end
 end

@@ -17,7 +17,6 @@ describe Purchase do
   it { should have_many(:orders).inverse_of(:purchase) }
   it { should have_many(:refund_transactions).through(:orders) }
   it { should belong_to(:payment_method) }
-  it { should belong_to(:billing_address).class_name('Address') }
   it { should belong_to(:shipping_address).class_name('Address') }
   it { should belong_to(:payment_transaction).class_name('PaymentTransaction') }
   it { should belong_to(:user).inverse_of(:purchases) }
@@ -29,7 +28,6 @@ describe Purchase do
 
     it { should be_pending }
     it { should_not validate_presence_of(:payment_method) }
-    it { should_not validate_presence_of(:billing_address) }
     it { should_not validate_presence_of(:shipping_address) }
   end
 
@@ -41,7 +39,6 @@ describe Purchase do
 
     it { should be_committed }
     it { should validate_presence_of(:payment_method) }
-    it { should validate_presence_of(:billing_address) }
     it { should validate_presence_of(:shipping_address) }
   end
 
@@ -222,7 +219,6 @@ describe Purchase do
       expect(model.payment_transaction.amount).to eq(model.total)
       expect(model.payment_transaction.currency).to eq(model.payment_method_currency)
       expect(model.payment_transaction.payment_method).to eq(model.payment_method)
-      expect(model.payment_transaction.billing_address).to eq(model.billing_address)
     end
 
     it 'does not create a new payment' do
@@ -278,8 +274,7 @@ describe Purchase do
                         user: model.user,
                         amount: model.total,
                         currency: model.payment_method_currency,
-                        payment_method: model.payment_method,
-                        billing_address: model.billing_address
+                        payment_method: model.payment_method
     end
 
     before :each do

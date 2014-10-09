@@ -299,7 +299,6 @@ describe Order do
       expect(model.refund_transaction.amount).to eq(model.total)
       expect(model.refund_transaction.currency).to eq(model.currency)
       expect(model.refund_transaction.payment_method).to eq(model.payment_method)
-      expect(model.refund_transaction.billing_address).to eq(model.billing_address)
     end
 
     it 'does not create a new refund' do
@@ -335,12 +334,6 @@ describe Order do
   describe '#payment_method' do
     it 'delegates to #purchase' do
       expect(model.payment_method).to eq(model.purchase.payment_method)
-    end
-  end
-
-  describe '#billing_address' do
-    it 'delegates to #purchase' do
-      expect(model.billing_address).to eq(model.purchase.billing_address)
     end
   end
 

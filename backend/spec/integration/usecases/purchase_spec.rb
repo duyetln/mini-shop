@@ -142,7 +142,6 @@ describe 'purchase flow' do
     it 'commits purchase' do
       purchase = self.purchase
       purchase.payment_method = pmethod
-      purchase.billing_address = address
       purchase.shipping_address = address
       expect { purchase.commit! }.to change { purchase.committed? }.to(true)
     end

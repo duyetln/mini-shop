@@ -286,8 +286,11 @@ describe Services::Accounts::Users do
       end
 
       context 'valid parameters' do
+        let(:address) { FactoryGirl.create :address, user: user }
         let :params do
-          { payment_method: FactoryGirl.build(:payment_method).attributes }
+          {
+            payment_method: FactoryGirl.build(:payment_method, billing_address: address).attributes
+          }
         end
 
         it 'creates a new payment method' do
@@ -348,7 +351,7 @@ describe Services::Accounts::Users do
     context 'valid id' do
       context 'valid parameters' do
         let(:address) { FactoryGirl.create :address, user: user }
-        let(:params) { { purchase: { billing_address_id: address.id } } }
+        let(:params) { { purchase: { shipping_address_id: address.id } } }
 
         it 'creates new purchase' do
           expect { send_request }.to change { user.purchases.count }.by(1)
@@ -358,7 +361,7 @@ describe Services::Accounts::Users do
 
         it 'sets the attributes' do
           send_request
-          expect(user.purchases.last.billing_address).to eq(address)
+          expect(user.purchases.last.shipping_address).to eq(address)
           expect(user.purchases.last).to be_pending
         end
       end

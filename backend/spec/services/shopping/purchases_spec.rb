@@ -62,11 +62,11 @@ describe Services::Shopping::Purchases do
 
         context 'valid parameters' do
           let(:address) { FactoryGirl.create :address }
-          let(:params) { { purchase: { billing_address_id: address.id } } }
+          let(:params) { { purchase: { shipping_address_id: address.id } } }
 
           it 'updates the current purchase' do
             send_request
-            expect(purchase.reload.billing_address).to eq(address)
+            expect(purchase.reload.shipping_address).to eq(address)
           end
 
           it 'returns the current purchase' do
@@ -90,7 +90,7 @@ describe Services::Shopping::Purchases do
 
         context 'valid parameters' do
           let(:address) { FactoryGirl.create :address, user: user }
-          let(:params) { { purchase: { billing_address_id: address.id } } }
+          let(:params) { { purchase: { shipping_address_id: address.id } } }
 
           include_examples 'unprocessable'
 
