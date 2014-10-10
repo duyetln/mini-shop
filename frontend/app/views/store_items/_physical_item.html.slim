@@ -1,0 +1,9 @@
+div.media
+  div.pull-left
+    = image_tag 'box.png', class: 'img-thumbnail'
+  div.media-body
+    h2.media-heading
+      strong = store_item.title
+      small.text-success
+        == " #{@usd.sign}#{store_item.amount(@usd)}"
+    p = store_item.description
