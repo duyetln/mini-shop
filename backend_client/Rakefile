@@ -7,4 +7,6 @@ desc 'Update backend client in admin'
 task :update do
   system('rm -rf ../admin/lib/backend_client/*; rm -rf ../admin/lib/backend_client.rb')
   system('cp -R ./lib/ ../admin/lib/')
+  system('rm -rf ../frontend/lib/backend_client/*; rm -rf ../frontend/lib/backend_client.rb')
+  system('cp -R ./lib/ ../frontend/lib/')
 end

@@ -1,0 +1,46 @@
+doctype html
+html
+  head
+    title Mini Shop
+    = favicon_link_tag '/favicon.ico'
+    = stylesheet_link_tag 'application', media: 'all'
+    = javascript_include_tag 'application'
+    = csrf_meta_tags
+  body
+    div.navbar.navbar-default.navbar-static-top role='navigation'
+      div.container
+        div.navbar-header
+          = link_to 'Mini Shop', root_path, class: 'navbar-brand'
+        ul.nav.navbar-nav.navbar-right
+          li
+            = link_to '#' do
+              i.fa.fa-sign-in
+              |  Sign In
+    div.container
+      div.message
+        - if flash[:info].present?
+          div.alert.alert-info.alert-dismissible role='alert'
+            button.close data-dismiss='alert'
+              i.fa.fa-times
+            strong Sup?
+            |  #{flash[:info]}
+        - if flash[:success].present?
+          div.alert.alert-success.alert-dismissible role='alert'
+            button.close data-dismiss='alert'
+              i.fa.fa-times
+            strong Yep!
+            |  #{flash[:success]}
+        - if flash[:warning].present?
+          div.alert.alert-warning.alert-dismissible role='alert'
+            button.close data-dismiss='alert'
+              i.fa.fa-times
+            strong Err...
+            |  #{flash[:warning]}
+        - if flash[:error].present?
+          div.alert.alert-danger.alert-dismissible role='alert'
+            button.close data-dismiss='alert'
+              i.fa.fa-times
+            strong Nope!
+            |  #{flash[:error]}
+      div.content.table-responsive
+        = yield
