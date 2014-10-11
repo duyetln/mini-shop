@@ -109,10 +109,10 @@ div
     div.modal-dialog
       div.modal-content
         = form_for :promotion, url: inventory_promotion_path(@promotion.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
-          div.modal-header
-            button.close data-dismiss='modal'
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
               i.fa.fa-times
-            h3.text-success Edit Promotion
+            h3.text-success.pull-left Edit Promotion
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Name
@@ -139,10 +139,10 @@ div
     div.modal-dialog
       div.modal-content
         = form_for :batch, url: batches_inventory_promotion_path(@promotion.id), html: { role: 'form', class: 'form-horizontal' } do |f|
-          div.modal-header
-            button.close data-dismiss='modal'
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
               i.fa.fa-times
-            h3.text-primary New Batches
+            h3.text-primary.pull-left New Batches
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Qty

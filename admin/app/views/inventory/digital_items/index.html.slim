@@ -56,10 +56,10 @@ div
     div.modal-dialog
       div.modal-content
         = form_for :digital_item, url: inventory_digital_items_path, html: { role: 'form', class: 'form-horizontal' } do |f|
-          div.modal-header
-            button.close data-dismiss='modal'
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
               i.fa.fa-times
-            h3.text-primary New Digital Item
+            h3.text-primary.pull-left New Digital Item
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Title
@@ -79,10 +79,10 @@ div
       div.modal-dialog
         div.modal-content
           = form_for :digital_item, url: inventory_digital_item_path(digital_item.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
-            div.modal-header
-              button.close data-dismiss='modal'
+            div.modal-header.clearfix
+              button.close.pull-right data-dismiss='modal'
                 i.fa.fa-times
-              h3.text-success Edit Digital Item
+              h3.text-success.pull-left Edit Digital Item
             div.modal-body
               div.form-group
                 label.control-label.col-md-4 Title

@@ -78,10 +78,10 @@ div
     div.modal-dialog
       div.modal-content
         = form_for :batch, url: inventory_batch_path(@batch.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
-          div.modal-header
-            button.close data-dismiss='modal'
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
               i.fa.fa-times
-            h3.text-success Edit Batch
+            h3.text-success.pull-left Edit Batch
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Name
@@ -96,10 +96,10 @@ div
     div.modal-dialog
       div.modal-content
         = form_tag coupons_inventory_batch_path(@batch.id), role: 'form', class: 'form-horizontal' do
-          div.modal-header
-            button.close data-dismiss='modal'
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
               i.fa.fa-times
-            h3.text-primary New Coupons
+            h3.text-primary.pull-left New Coupons
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Qty

@@ -44,10 +44,10 @@ div
     div.modal-dialog
       div.modal-content
         = form_for :currency, url: inventory_currencies_path, html: { role: 'form', class: 'form-horizontal' } do |f|
-          div.modal-header
-            button.close data-dismiss='modal'
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
               i.fa.fa-times
-            h3.text-primary New Currency
+            h3.text-primary.pull-left New Currency
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Code
@@ -66,10 +66,10 @@ div
     div.modal-dialog
       div.modal-content
         = form_for :pricepoint, url: inventory_pricepoints_path, html: { role: 'form', class: 'form-horizontal' } do |f|
-          div.modal-header
-            button.close data-dismiss='modal'
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
               i.fa.fa-times
-            h3.text-primary New Pricepoint
+            h3.text-primary.pull-left New Pricepoint
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Name
@@ -92,10 +92,10 @@ div
       div.modal-dialog
         div.modal-content
           = form_for :pricepoint, url: inventory_pricepoint_path(pricepoint.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
-            div.modal-header
-              button.close data-dismiss='modal'
+            div.modal-header.clearfix
+              button.close.pull-right data-dismiss='modal'
                 i.fa.fa-times
-              h3.text-success Edit Pricepoint
+              h3.text-success.pull-left Edit Pricepoint
             div.modal-body
               div.form-group
                 label.control-label.col-md-4 Name

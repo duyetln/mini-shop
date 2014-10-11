@@ -55,10 +55,10 @@ div
     div.modal-dialog
       div.modal-content
         = form_for :store_item, url: inventory_store_items_path, html: { role: 'form', class: 'form-horizontal' } do |f|
-          div.modal-header
-            button.close data-dismiss='modal'
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
               i.fa.fa-times
-            h3.text-primary New Store Item
+            h3.text-primary.pull-left New Store Item
           div.modal-body
             div.form-group
               label.control-label.col-md-4 Name
@@ -85,10 +85,10 @@ div
       div.modal-dialog
         div.modal-content
           = form_for :store_item, url: inventory_store_item_path(store_item.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
-            div.modal-header
-              button.close data-dismiss='modal'
+            div.modal-header.clearfix
+              button.close.pull-right data-dismiss='modal'
                 i.fa.fa-times
-              h3.text-success Edit Store Item
+              h3.text-success.pull-left Edit Store Item
             div.modal-body
               div.form-group
                 label.control-label.col-md-4 Name
