@@ -14,8 +14,10 @@ html
         ul.nav.navbar-nav.navbar-right
           li
             = link_to '#' do
-              i.fa.fa-sign-in
-              |  Sign In
+              i.fa.fa-shopping-cart.fa-lg
+              '
+              span.badge.text-success 5
+          li = link_to 'Account', '#'
     div.container
       div.message
         - if flash[:info].present?
