@@ -1,0 +1,19 @@
+div.row
+  div.col-md-4.col-md-offset-4
+    div.panel.panel-default
+      div.panel-heading.text-center
+        h3
+          strong Go to Your Account
+      div.panel-body
+        = form_for :user, url: verify_account_path, html: { role: 'form' } do |f|
+          div.form-group title='Email' data-toggle='tooltip' data-placement='right'
+            = f.text_field :email, class: 'form-control input-lg', placeholder: 'user@email.com'
+          div.form-group title='Password' data-toggle='tooltip' data-placement='right'
+            = f.password_field :password, class: 'form-control input-lg', placeholder: '**********'
+          div.form-group
+            = button_tag class: 'btn btn-success btn-lg btn-block', name: nil do
+              | Sign In
+      div.panel-footer.text-center
+        ' New customer?
+        span
+          = link_to 'Sign up', signup_account_path

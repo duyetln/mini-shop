@@ -21,25 +21,25 @@ html
     div.container
       div.message
         - if flash[:info].present?
-          div.alert.alert-info.alert-dismissible role='alert'
+          div.alert.alert-info.alert-dismissible.fade.in role='alert'
             button.close data-dismiss='alert'
               i.fa.fa-times
             strong Sup?
             |  #{flash[:info]}
         - if flash[:success].present?
-          div.alert.alert-success.alert-dismissible role='alert'
+          div.alert.alert-success.alert-dismissible.fade.in role='alert'
             button.close data-dismiss='alert'
               i.fa.fa-times
             strong Yep!
             |  #{flash[:success]}
         - if flash[:warning].present?
-          div.alert.alert-warning.alert-dismissible role='alert'
+          div.alert.alert-warning.alert-dismissible.fade.in role='alert'
             button.close data-dismiss='alert'
               i.fa.fa-times
             strong Err...
             |  #{flash[:warning]}
         - if flash[:error].present?
-          div.alert.alert-danger.alert-dismissible role='alert'
+          div.alert.alert-danger.alert-dismissible.fade.in role='alert'
             button.close data-dismiss='alert'
               i.fa.fa-times
             strong Nope!
