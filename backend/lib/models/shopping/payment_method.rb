@@ -1,5 +1,5 @@
 class PaymentMethod < ActiveRecord::Base
-  attr_readonly :user_id, :name, :currency_id
+  attr_readonly :user_id, :name, :currency_id, :billing_address_id
 
   belongs_to :currency
   belongs_to :user, inverse_of: :payment_methods

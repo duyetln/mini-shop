@@ -5,10 +5,12 @@ describe PaymentMethod do
   it { should allow_mass_assignment_of(:name) }
   it { should allow_mass_assignment_of(:currency_id) }
   it { should allow_mass_assignment_of(:balance) }
+  it { should allow_mass_assignment_of(:billing_address_id) }
 
   it { should have_readonly_attribute(:user_id) }
   it { should have_readonly_attribute(:name) }
   it { should have_readonly_attribute(:currency_id) }
+  it { should have_readonly_attribute(:billing_address_id) }
 
   it { should belong_to(:user).inverse_of(:payment_methods) }
   it { should belong_to(:billing_address).class_name('Address') }
