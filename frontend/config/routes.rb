@@ -4,8 +4,8 @@ Rails.application.routes.draw do
 
   resource :store, controller: :store, only: [:show]
   resource :account, controller: :account, only: [:show, :create] do
-    get :signin
-    get :signup
+    get :sign_in
+    get :sign_up
     post :verify
   end
 end

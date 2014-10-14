@@ -5,10 +5,10 @@ class AccountController < ApplicationController
   def show
   end
 
-  def signin
+  def sign_in
   end
 
-  def signup
+  def sign_up
   end
 
   def verify
