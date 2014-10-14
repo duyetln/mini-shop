@@ -11,7 +11,8 @@ module Services
       end
 
       get '/:id' do
-        user = User.find(id)
+        user = User.find_by_id(id) || User.find_by_email(id)
+        not_found!(meta: 'Invalid id or email') if user.blank?
         respond_with(UserSerializer.new(user))
       end
 

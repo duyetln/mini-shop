@@ -37,6 +37,16 @@ describe Services::Accounts::Users do
         expect_response(UserSerializer.new(user).to_json)
       end
     end
+
+    context 'valid email' do
+      let(:id) { email }
+
+      it 'returns the user' do
+        send_request
+        expect_status(200)
+        expect_response(UserSerializer.new(user).to_json)
+      end
+    end
   end
 
   describe 'post /' do
