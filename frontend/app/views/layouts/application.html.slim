@@ -7,17 +7,26 @@ html
     = javascript_include_tag 'application'
     = csrf_meta_tags
   body
-    div.navbar.navbar-default.navbar-static-top role='navigation'
+    div.navbar.navbar-inverse.navbar-static-top role='navigation'
       div.container
         div.navbar-header
           = link_to 'Mini Shop', root_path, class: 'navbar-brand'
-        ul.nav.navbar-nav.navbar-right
-          li
-            = link_to '#' do
-              i.fa.fa-shopping-cart.fa-lg
-              '
-              span.badge.text-success 5
-          li = link_to 'Account', sign_in_account_path
+        - if logged_out?
+          = link_to sign_in_account_path, class: 'btn btn-success navbar-btn navbar-right' do
+            i.fa.fa-sign-in
+            |  Sign in
+        - else
+          ul.nav.navbar-nav
+            li = link_to 'Store', store_path
+            li = link_to 'Account', account_path
+            li
+              = link_to '#' do
+                i.fa.fa-shopping-cart.fa-lg
+                '
+                span.badge 5
+          = button_to sign_out_account_path, class: 'btn btn-warning navbar-btn navbar-right' do
+            i.fa.fa-sign-out
+            |  Sign out
     div.container
       div.message
         - if flash[:info].present?
