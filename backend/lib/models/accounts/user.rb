@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   scope :unconfirmed, -> { where(confirmed: false) }
 
   def self.authenticate!(email, password)
-    user = confirmed.find_by_email!(email)
+    user = find_by_email!(email)
     BCrypt::Password.new(user.password) == password && user
   end
 

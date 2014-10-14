@@ -108,38 +108,21 @@ describe User do
   end
 
   describe '.authenticate!' do
-    context 'unconfirmed user' do
-      before :each do
-        expect(user).to_not be_confirmed
-      end
-
-      it 'raise an error' do
-        expect(user).to_not be_confirmed
-        expect { User.authenticate!(user.email, password) }.to raise_error(ActiveRecord::RecordNotFound)
+    context 'wrong email' do
+      it 'raises an error' do
+        expect { User.authenticate!(rand_str, password) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
-    context 'confirmed user' do
-      before :each do
-        expect { user.confirm! }.to change { user.confirmed? }.to(true)
+    context 'wrong password' do
+      it 'returns false' do
+        expect(User.authenticate!(user.email, rand_str)).to be_false
       end
+    end
 
-      context 'wrong email' do
-        it 'raises an error' do
-          expect { User.authenticate!(rand_str, password) }.to raise_error(ActiveRecord::RecordNotFound)
-        end
-      end
-
-      context 'wrong password' do
-        it 'returns false' do
-          expect(User.authenticate!(user.email, rand_str)).to be_false
-        end
-      end
-
-      context 'matching email, matching password' do
-        it 'returns the user' do
-          expect(User.authenticate!(user.email, password)).to eq(user)
-        end
+    context 'matching email, matching password' do
+      it 'returns the user' do
+        expect(User.authenticate!(user.email, password)).to eq(user)
       end
     end
   end

@@ -101,37 +101,23 @@ describe Services::Accounts::Users do
     let(:input_email) { email }
     let(:input_password) { password }
 
-    context 'unconfirmed' do
-      before :each do
-        expect(user).to_not be_confirmed
-      end
+    context 'wrong email' do
+      let(:input_email) { rand_str }
 
       include_examples 'not found'
     end
 
-    context 'confirmed' do
-      before :each do
-        expect { user.confirm! }.to change { user.confirmed? }.to(true)
-      end
+    context 'wrong password' do
+      let(:input_password) { password + rand_str }
 
-      context 'wrong email' do
-        let(:input_email) { rand_str }
+      include_examples 'unauthorized'
+    end
 
-        include_examples 'not found'
-      end
-
-      context 'wrong password' do
-        let(:input_password) { password + rand_str }
-
-        include_examples 'unauthorized'
-      end
-
-      context 'correct credentials' do
-        it 'authenticates the user' do
-          send_request
-          expect_status(200)
-          expect_response(UserSerializer.new(user).to_json)
-        end
+    context 'correct credentials' do
+      it 'authenticates the user' do
+        send_request
+        expect_status(200)
+        expect_response(UserSerializer.new(user).to_json)
       end
     end
   end
