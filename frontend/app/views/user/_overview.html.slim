@@ -1,0 +1,216 @@
+div.row
+  div.col-md-5
+    div.panel.panel-info
+      div.panel-heading.clearfix
+        div.btn-toolbar
+          div.btn-group
+            button.btn.btn-success data-toggle='modal' data-target='#edit-user'
+              i.fa.fa-pencil-square-o
+              |  Edit Account
+          div.btn-group
+            button.btn.btn-danger data-toggle='modal' data-target='#change-password'
+              i.fa.fa-lock
+              |  Change Password
+      table.table.table-bordered.table-hover.table-condensed
+        tbody
+          tr
+            td
+              label First Name
+            td = @user.first_name
+          tr
+            td
+              label Last Name
+            td = @user.last_name
+          tr
+            td
+              label Email
+            td = @user.email
+          tr
+            td
+              label Birthdate
+            td = @user.birthdate.to_date.to_formatted_s(:long)
+  div.col-md-7
+    div.panel.panel-default
+      div.panel-heading.clearfix
+        button.btn.btn-primary data-toggle='modal' data-target='#create-payment-method'
+          i.fa.fa-plus-circle
+          |  Payment Method
+      table.table.table-bordered.table-hover.table-condensed
+        thead
+          tr
+            td
+              label Name
+            td
+              label Balance
+            td.col-md-1
+        tbody
+          - @user.payment_methods.each do |payment_method|
+            tr
+              td = payment_method.name
+              td = number_to_currency(payment_method.balance, unit: payment_method.currency.sign.html_safe)
+              td rowspan=2
+                button.btn.btn-success data-toggle='modal' data-target="#edit-payment-method-#{payment_method.id}"
+                  i.fa.fa-money
+            tr
+              td colspan=2
+                - address = payment_method.billing_address
+                = [address.line1, address.line2, address.line3, address.city, address.region, address.postal_code, address.country].select(&:present?).compact.join(', ')
+    div.panel.panel-default
+      div.panel-heading.clearfix
+        button.btn.btn-primary data-toggle='modal' data-target='#create-address'
+          i.fa.fa-plus-circle
+          |  Address
+      table.table.table-bordered.table-hover.table-condensed
+        tbody
+          - @user.addresses.each do |address|
+            tr
+              td
+                = [address.line1, address.line2, address.line3, address.city, address.region, address.postal_code, address.country].select(&:present?).compact.join(', ')
+div
+  div.modal.fade id='edit-user' role='dialog'
+    div.modal-dialog
+      div.modal-content
+        = form_for :user, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
+              i.fa.fa-times
+            h3.text-primary.pull-left Edit Account
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 First Name
+              div.col-md-8
+                = f.text_field :first_name, class: 'form-control', value: @user.first_name, placeholder: 'John'
+            div.form-group
+              label.control-label.col-md-4 Last Name
+              div.col-md-8
+                = f.text_field :last_name, class: 'form-control', value: @user.last_name, placeholder: 'Smith'
+            div.form-group
+              label.control-label.col-md-4 Email
+              div.col-md-8
+                = f.text_field :email, class: 'form-control', value: @user.email, placeholder: 'user@email.com'
+            div.form-group
+              label.control-label.col-md-4 Birthdate
+              div.col-md-8
+                = f.text_field :birthdate, class: 'form-control', value: @user.birthdate.strftime('%m/%d/%Y'), placeholder: '07/04/1989'
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                = button_tag class: 'btn btn-success btn-lg', name: nil do
+                  | Change
+  div.modal.fade id='change-password' role='dialog'
+    div.modal-dialog
+      div.modal-content
+        = form_for :user, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
+              i.fa.fa-times
+            h3.text-primary.pull-left Change Password
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-5 Password
+              div.col-md-7
+                = f.password_field :password, class: 'form-control', placeholder: '**********'
+            div.form-group
+              label.control-label.col-md-5 New Password
+              div.col-md-7
+                = f.password_field :new_password, class: 'form-control', placeholder: '**********'
+            div.form-group
+              label.control-label.col-md-5 Confirm New Password
+              div.col-md-7
+                = f.password_field :new_password_confirmation, class: 'form-control', placeholder: '**********'
+          div.modal-footer
+            div.form-group
+              div.col-md-7.col-md-offset-5
+                = button_tag class: 'btn btn-danger btn-lg', name: nil do
+                  | Change
+  div.modal.fade id='create-payment-method' role='dialog'
+    div.modal-dialog
+      div.modal-content
+        = form_for :payment_method, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
+              i.fa.fa-times
+            h3.text-primary.pull-left Create Payment Method
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 Name
+              div.col-md-8
+                = f.text_field :name, class: 'form-control', placeholder: 'My Online Pocket'
+            div.form-group
+              label.control-label.col-md-4 Balance
+              div.col-md-8
+                = f.text_field :balance, class: 'form-control', placeholder: '100.00'
+            div.form-group
+              label.control-label.col-md-4 Currency
+              div.col-md-8
+                = f.select :currency_id, @currencies.map { |currency| ["#{currency.sign} #{currency.code}".html_safe, currency.id] }, { include_blank: true }, { class: 'form-control' }
+            div.form-group
+              label.control-label.col-md-4 Billing Address
+              div.col-md-8
+                = f.select :billing_address_id, @user.addresses.map { |address| [[address.line1, address.line2, address.line3, address.city, address.region, address.postal_code, address.country].select(&:present?).join(', ').html_safe, address.id] }, { include_blank: true }, { class: 'form-control' }
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                = button_tag class: 'btn btn-primary btn-lg', name: nil do
+                  | Create
+  - @user.payment_methods.each do |payment_method|
+    div.modal.fade id="edit-payment-method-#{payment_method.id}" role='dialog'
+      div.modal-dialog
+        div.modal-content
+          = form_for :payment_method, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
+            div.modal-header.clearfix
+              button.close.pull-right data-dismiss='modal'
+                i.fa.fa-times
+              h3.text-primary.pull-left Edit Payment Method
+            div.modal-body
+              div.form-group
+                label.control-label.col-md-4 Balance
+                div.col-md-8
+                  = f.text_field :balance, class: 'form-control', value: payment_method.balance, placeholder: '100.00'
+            div.modal-footer
+              div.form-group
+                div.col-md-8.col-md-offset-4
+                  = button_tag class: 'btn btn-success btn-lg', name: nil do
+                    | Update
+  div.modal.fade id='create-address' role='dialog'
+    div.modal-dialog
+      div.modal-content
+        = form_for :address, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
+          div.modal-header.clearfix
+            button.close.pull-right data-dismiss='modal'
+              i.fa.fa-times
+            h3.text-primary.pull-left Create Address
+          div.modal-body
+            div.form-group
+              label.control-label.col-md-4 Line 1
+              div.col-md-8
+                = f.text_field :line1, class: 'form-control', placeholder: '512 Faraway Road'
+            div.form-group
+              label.control-label.col-md-4 Line 2
+              div.col-md-8
+                = f.text_field :line2, class: 'form-control'
+            div.form-group
+              label.control-label.col-md-4 Line 3
+              div.col-md-8
+                = f.text_field :line3, class: 'form-control'
+            div.form-group
+              label.control-label.col-md-4 City
+              div.col-md-8
+                = f.text_field :city, class: 'form-control', placeholder: 'Village Town'
+            div.form-group
+              label.control-label.col-md-4 Region
+              div.col-md-8
+                = f.text_field :region, class: 'form-control', placeholder: 'Farmergrad'
+            div.form-group
+              label.control-label.col-md-4 Postal Code
+              div.col-md-8
+                = f.text_field :postal_code, class: 'form-control', placeholder: '123456'
+            div.form-group
+              label.control-label.col-md-4 Country
+              div.col-md-8
+                = f.text_field :country, class: 'form-control', placeholder: 'Meadow Country'
+          div.modal-footer
+            div.form-group
+              div.col-md-8.col-md-offset-4
+                = button_tag class: 'btn btn-primary btn-lg', name: nil do
+                  | Create

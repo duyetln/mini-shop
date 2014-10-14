@@ -10,7 +10,7 @@ ul.nav.nav-tabs role='tablist'
 
 div.tab-content
   div.tab-pane.fade.in.active#overview role='tab' data-toggle='tab'
-    = render partial: 'user/overview', locals: { user: @user, currencies: @currencies }
+    = render 'user/overview'
   div.tab-pane.fade#purchases role='tab' data-toggle='tab'
   div.tab-pane.fade#coupons role='tab' data-toggle='tab'
   div.tab-pane.fade#inventory role='tab' data-toggle='tab'
