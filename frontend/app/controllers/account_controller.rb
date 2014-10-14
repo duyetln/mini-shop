@@ -21,15 +21,21 @@ class AccountController < ApplicationController
   end
 
   def show
-    redirect_to sign_in_account_path unless logged_in?
+    redirect_to sign_in_account_path and return unless logged_in?
+    @user = current_user
+    @purchases = @user.purchases
+    @coupons = @user.coupons
+    @ownerships = @user.ownerships
+    @shipments = @user.shipments
+    @currencies = Currency.all
   end
 
   def sign_in
-    redirect_to account_path unless logged_out?
+    redirect_to account_path and return unless logged_out?
   end
 
   def sign_up
-    redirect_to account_path unless logged_out?
+    redirect_to account_path and return unless logged_out?
   end
 
   def sign_out
