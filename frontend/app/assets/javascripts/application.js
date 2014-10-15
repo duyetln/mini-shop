@@ -4,6 +4,7 @@
 //= require bootstrap/modal
 //= require bootstrap/tooltip
 //= require bootstrap/tab
+//= require bootstrap/collapse
 //= require bootstrap/transition
 
 $(document).ready(

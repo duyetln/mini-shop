@@ -1,0 +1,82 @@
+div.panel-group#accordion
+  - @purchases.select(&:committed?).each do |purchase|
+    div.panel.panel-default
+      div.panel-heading.clearfix
+        h4.pull-left
+          = link_to "#purchase-#{purchase.id}", data: { toggle: 'collapse', parent: '#accordion' } do
+            | Bought #{purchase.orders.count} items on #{purchase.committed_at.to_formatted_s(:long)}
+        button.btn.btn-danger.pull-right
+          i.fa.fa-credit-card
+          |  Return
+      div.panel-collapse.collapse id="purchase-#{purchase.id}"
+        div.panel-body
+          table.table.table-bordered.table-hover.table-condensed
+            tbody
+              tr
+                td
+                  label Payment Method
+                td colspan=3
+                  = purchase.payment_method.name
+                td
+                  label Transaction
+                td colspan=5
+                  = purchase.payment_transaction.uuid
+              tr
+                td
+                  label Billing Address
+                td colspan=3
+                  - address = purchase.payment_method.billing_address
+                  = [address.line1, address.line2, address.line3, address.city, address.region, address.postal_code, address.country].select(&:present?).compact.join(', ')
+                td
+                  label Total
+                td colspan=5
+                  == "#{purchase.payment_transaction.currency.sign}#{purchase.payment_transaction.amount}"
+              tr
+                td
+                  label Shipping Address
+                td colspan=3
+                  - address = purchase.shipping_address
+                  = [address.line1, address.line2, address.line3, address.city, address.region, address.postal_code, address.country].select(&:present?).compact.join(', ')
+                td
+                  label Processed
+                td colspan=5
+                  = "#{purchase.payment_transaction.committed_at.to_formatted_s(:long)}"
+              tr
+                td
+                  label Order
+                td
+                  label Item
+                td
+                  label Qty
+                td
+                  label Fulfilled
+                td
+                  label Refunded
+                td
+                  label Failed
+                td
+                  label Amount
+                td
+                  label Tax
+                td colspan=2
+                  label Total
+              - purchase.orders.each do |order|
+                tr
+                  td = order.uuid
+                  td = order.item.title
+                  td = order.qty
+                  td = yesno(order.fulfilled?)
+                  td = yesno(order.reversed?)
+                  td = yesno(order.failed?)
+                  td == "#{order.currency.sign}#{order.amount}"
+                  td == "#{order.currency.sign}#{order.tax}"
+                  td == "#{order.currency.sign}#{order.total}"
+                  td
+                    button.btn.btn-danger title='Return Order' data-toggle='tooltip' data-placement='right'
+                      i.fa.fa-credit-card
+              tr
+                td colspan=6
+                td == "#{purchase.currency.sign}#{purchase.amount}"
+                td == "#{purchase.currency.sign}#{purchase.tax}"
+                td colspan=2
+                  == "#{purchase.currency.sign}#{purchase.total}"
