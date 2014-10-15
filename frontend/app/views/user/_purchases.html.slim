@@ -5,7 +5,7 @@ div.panel-group
         h4.pull-left
           = link_to "#purchase-#{purchase.id}", data: { toggle: 'collapse' } do
             | Bought #{purchase.orders.count} items on #{purchase.committed_at.to_formatted_s(:long)}
-        button.btn.btn-danger.pull-right
+        = button_to return_purchase_path(purchase.id), method: :put, disabled: !purchase.paid? || purchase.orders.all?(&:reversed?), class: 'btn btn-danger pull-right' do
           i.fa.fa-credit-card
           |  Return
       div.panel-collapse.collapse id="purchase-#{purchase.id}" class="#{index == 0 ? 'in' : ''}"
@@ -72,7 +72,7 @@ div.panel-group
                   td == "#{order.currency.sign}#{order.tax}"
                   td == "#{order.currency.sign}#{order.total}"
                   td
-                    button.btn.btn-danger title='Return Order' data-toggle='tooltip' data-placement='right'
+                    = button_to return_purchase_order_path(purchase.id, order.id), method: :put, disabled: !purchase.paid? || order.reversed?, class: 'btn btn-danger' do
                       i.fa.fa-credit-card
               tr
                 td colspan=6

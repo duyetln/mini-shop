@@ -14,4 +14,10 @@ Rails.application.routes.draw do
   end
 
   resources :payment_methods, only: [:update]
+  resources :purchases, only: [] do
+    put :return, on: :member
+    resources :orders, only: [] do
+      put :return, on: :member
+    end
+  end
 end

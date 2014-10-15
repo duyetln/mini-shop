@@ -7,9 +7,9 @@ ul.nav.nav-tabs role='tablist'
   li = link_to 'Fulfillment', '#fulfillment', role: 'tab', data: { toggle: 'tab' }
 
 div.tab-content
-  div.tab-pane.active#overview role='tab' data-toggle='tab'
+  div.tab-pane.active#overview role='tab'
     = render 'user/overview'
-  div.tab-pane#purchases role='tab' data-toggle='tab'
+  div.tab-pane#purchases role='tab'
     = render 'user/purchases'
-  div.tab-pane#fulfillment role='tab' data-toggle='tab'
+  div.tab-pane#fulfillment role='tab'
     = render 'user/fulfillment'
