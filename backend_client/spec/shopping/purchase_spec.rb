@@ -31,6 +31,12 @@ describe BackendClient::Purchase do
       ).to contain_exactly(BackendClient::Order)
     end
 
+    it 'sets currency correctly' do
+      expect(
+        full_model.currency
+      ).to be_instance_of(BackendClient::Currency)
+    end
+
     it 'sets amount correctly' do
       expect(
         full_model.amount

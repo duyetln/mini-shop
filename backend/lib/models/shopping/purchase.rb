@@ -20,6 +20,7 @@ class Purchase < ActiveRecord::Base
   validate :pending
 
   delegate :currency, to: :payment_method, prefix: true, allow_nil: true
+  delegate :currency, to: :payment_method, allow_nil: true
 
   scope :current, -> user { pending.where(user_id: user.id) }
 

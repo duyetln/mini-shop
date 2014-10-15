@@ -63,6 +63,12 @@ describe Purchase do
     end
   end
 
+  describe '#currency' do
+    it 'delegates to #payment_method' do
+      expect(model.currency).to eq(model.payment_method.currency)
+    end
+  end
+
   describe '#add_or_update' do
     let(:currency) { FactoryGirl.build :eur }
 

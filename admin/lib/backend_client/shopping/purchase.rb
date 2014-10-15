@@ -11,6 +11,7 @@ module BackendClient
         purchase.shipping_address = Address.instantiate(purchase.shipping_address)
         purchase.payment_transaction = PaymentTransaction.instantiate(purchase.payment_transaction)
         purchase.orders.map! { |order| Order.instantiate(order) }
+        purchase.currency = Currency.instantiate(purchase.currency)
         purchase.amount = BigDecimal.new(purchase.amount)
         purchase.tax = BigDecimal.new(purchase.tax)
         purchase.total = BigDecimal.new(purchase.total)

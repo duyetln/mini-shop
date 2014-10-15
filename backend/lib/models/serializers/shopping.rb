@@ -47,6 +47,7 @@ class PurchaseSerializer < ResourceSerializer
   has_one :payment_method, serializer: 'PaymentMethodSerializer'
   has_one :shipping_address, serializer: 'AddressSerializer'
   has_one :payment_transaction, serializer: 'PaymentTransactionSerializer'
+  has_one :currency, serializer: 'CurrencySerializer'
   has_many :orders, serializer: 'OrderSerializer'
 
   def paid
