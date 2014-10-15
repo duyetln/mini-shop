@@ -9,5 +9,6 @@ Rails.application.routes.draw do
     post :sign_out
     post :verify
     put :password
+    post :payment_methods
   end
 end

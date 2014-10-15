@@ -67,6 +67,14 @@ class AccountController < ApplicationController
     redirect_to :back
   end
 
+  def payment_methods
+    redirect_to sign_in_account_path and return unless logged_in?
+    @params = params.require(:payment_method).permit(:name, :balance, :currency_id, :billing_address_id)
+    @user = current_user
+    @user.create_payment_method(@params)
+    redirect_to :back
+  end
+
   def sign_in
     redirect_to account_path and return unless logged_out?
   end
