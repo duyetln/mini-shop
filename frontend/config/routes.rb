@@ -12,4 +12,6 @@ Rails.application.routes.draw do
     post :payment_methods
     post :addresses
   end
+
+  resources :payment_methods, only: [:update]
 end

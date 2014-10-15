@@ -158,7 +158,7 @@ div.row
     div.modal id="edit-payment-method-#{payment_method.id}" role='dialog'
       div.modal-dialog
         div.modal-content
-          = form_for :payment_method, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
+          = form_for :payment_method, url: payment_method_path(payment_method.id), method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
             div.modal-header.clearfix
               button.close.pull-right data-dismiss='modal'
                 i.fa.fa-times
