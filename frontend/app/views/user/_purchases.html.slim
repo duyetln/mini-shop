@@ -1,14 +1,14 @@
-div.panel-group#accordion
-  - @purchases.select(&:committed?).each do |purchase|
+div.panel-group
+  - @purchases.select(&:committed?).each_with_index do |purchase, index|
     div.panel.panel-default
       div.panel-heading.clearfix
         h4.pull-left
-          = link_to "#purchase-#{purchase.id}", data: { toggle: 'collapse', parent: '#accordion' } do
+          = link_to "#purchase-#{purchase.id}", data: { toggle: 'collapse' } do
             | Bought #{purchase.orders.count} items on #{purchase.committed_at.to_formatted_s(:long)}
         button.btn.btn-danger.pull-right
           i.fa.fa-credit-card
           |  Return
-      div.panel-collapse.collapse id="purchase-#{purchase.id}"
+      div.panel-collapse.collapse id="purchase-#{purchase.id}" class="#{index == 0 ? 'in' : ''}"
         div.panel-body
           table.table.table-bordered.table-hover.table-condensed
             tbody
