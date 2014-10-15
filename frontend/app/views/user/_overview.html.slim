@@ -66,7 +66,8 @@ div.row
             tr
               td
                 = [address.line1, address.line2, address.line3, address.city, address.region, address.postal_code, address.country].select(&:present?).compact.join(', ')
-div
+
+- content_for :modals do
   div.modal id='edit-user' role='dialog'
     div.modal-dialog
       div.modal-content

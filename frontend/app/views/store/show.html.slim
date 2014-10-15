@@ -18,7 +18,7 @@ div
               button.btn.btn-block.btn-danger.disabled
                 strong Out of Stock
 
-div
+- content_for :modals do
   - @store_items.each do |store_item|
     div.modal id="store-item-#{store_item.id}" role='dialog'
       div.modal-dialog.modal-lg
