@@ -4,15 +4,12 @@ h2.page-header.text-primary
 ul.nav.nav-tabs role='tablist'
   li.active = link_to 'Overview', '#overview', role: 'tab', data: { toggle: 'tab' }
   li = link_to 'Purchases', '#purchases', role: 'tab', data: { toggle: 'tab' }
-  li = link_to 'Coupons', '#coupons', role: 'tab', data: { toggle: 'tab' }
-  li = link_to 'Inventory', '#inventory', role: 'tab', data: { toggle: 'tab' }
-  li = link_to 'Shipments', '#shipments', role: 'tab', data: { toggle: 'tab' }
+  li = link_to 'Fulfillment', '#fulfillment', role: 'tab', data: { toggle: 'tab' }
 
 div.tab-content
   div.tab-pane.active#overview role='tab' data-toggle='tab'
     = render 'user/overview'
   div.tab-pane#purchases role='tab' data-toggle='tab'
     = render 'user/purchases'
-  div.tab-pane#coupons role='tab' data-toggle='tab'
-  div.tab-pane#inventory role='tab' data-toggle='tab'
-  div.tab-pane#shipments role='tab' data-toggle='tab'
+  div.tab-pane#fulfillment role='tab' data-toggle='tab'
+    = render 'user/fulfillment'

@@ -28,6 +28,13 @@ class AccountController < ApplicationController
     @ownerships = @user.ownerships
     @shipments = @user.shipments
     @currencies = Currency.all
+
+    @promotions = []
+    @coupons.each do |coupon|
+      unless @promotions.find { |promotion| promotion.id == coupon.promotion_id }
+        @promotions << coupon.promotion
+      end
+    end
   end
 
   def sign_in
