@@ -104,7 +104,7 @@ div.row
                   div.btn-group title='Delete' data-toggle='tooltip' data-placement='top'
                     = button_to inventory_batch_path(batch.id), method: :delete, disabled: !batch.deletable?, class: 'btn btn-danger' do
                       i.fa.fa-trash-o
-div
+- content_for :modals do
   div.modal id="edit-promotion-#{@promotion.id}" role='dialog'
     div.modal-dialog
       div.modal-content

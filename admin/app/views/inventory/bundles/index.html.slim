@@ -56,7 +56,7 @@ div
                 div.btn-group title='Delete' data-toggle='tooltip' data-placement='top'
                   = button_to inventory_bundle_path(bundle.id), method: :delete, disabled: !bundle.deletable?, class: 'btn btn-danger' do
                     i.fa.fa-trash-o
-div
+- content_for :modals do
   div.modal id='create-bundle' role='dialog'
     div.modal-dialog
       div.modal-content

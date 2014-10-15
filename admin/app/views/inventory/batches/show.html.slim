@@ -73,7 +73,7 @@ div.row
               td = yesno(coupon.used?)
               td = coupon.used? ? coupon.used_at.to_formatted_s(:long) : nil
               td = coupon.used? ? coupon.used_by : nil
-div
+- content_for :modals do
   div.modal id="edit-batch-#{@batch.id}" role='dialog'
     div.modal-dialog
       div.modal-content

@@ -36,7 +36,7 @@ div
                 div.btn-group title='Edit' data-toggle='tooltip' data-placement='top'
                   button.btn.btn-success data-toggle='modal' data-target="#edit-price-#{price.id}"
                     i.fa.fa-pencil-square-o
-div
+- content_for :modals do
   div.modal id='create-price' role='dialog'
     div.modal-dialog
       div.modal-content
