@@ -40,10 +40,15 @@ div.row
         tbody
           - @user.payment_methods.each do |payment_method|
             tr
-              td
+              td rowspan=2
                 label = payment_method.id
               td = payment_method.name
               td = number_to_currency(payment_method.balance, unit: payment_method.currency.sign.html_safe)
+            tr
+              - address = payment_method.billing_address
+              td colspan=2
+                div = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
+                div = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
     div.panel.panel-default
       div.panel-heading.clearfix
         h4.pull-left Addresses
@@ -60,9 +65,8 @@ div.row
               td
                 label = address.id
               td
-                address
-                  p = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
-                  p = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
+                div = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
+                dib = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
   div.col-md-7
     div.panel.panel-default
       div.panel-heading.clearfix
@@ -162,7 +166,6 @@ div.row
               td = shipment.qty
               td
                 - address = shipment.shipping_address
-                address
-                  p = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
-                  p = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
+                div = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
+                div = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
 
