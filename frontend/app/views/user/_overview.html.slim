@@ -67,7 +67,7 @@ div.row
               td
                 = [address.line1, address.line2, address.line3, address.city, address.region, address.postal_code, address.country].select(&:present?).compact.join(', ')
 div
-  div.modal.fade id='edit-user' role='dialog'
+  div.modal id='edit-user' role='dialog'
     div.modal-dialog
       div.modal-content
         = form_for :user, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
@@ -97,7 +97,7 @@ div
               div.col-md-8.col-md-offset-4
                 = button_tag class: 'btn btn-success btn-lg', name: nil do
                   | Change
-  div.modal.fade id='change-password' role='dialog'
+  div.modal id='change-password' role='dialog'
     div.modal-dialog
       div.modal-content
         = form_for :user, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
@@ -123,7 +123,7 @@ div
               div.col-md-7.col-md-offset-5
                 = button_tag class: 'btn btn-danger btn-lg', name: nil do
                   | Change
-  div.modal.fade id='create-payment-method' role='dialog'
+  div.modal id='create-payment-method' role='dialog'
     div.modal-dialog
       div.modal-content
         = form_for :payment_method, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
@@ -154,7 +154,7 @@ div
                 = button_tag class: 'btn btn-primary btn-lg', name: nil do
                   | Create
   - @user.payment_methods.each do |payment_method|
-    div.modal.fade id="edit-payment-method-#{payment_method.id}" role='dialog'
+    div.modal id="edit-payment-method-#{payment_method.id}" role='dialog'
       div.modal-dialog
         div.modal-content
           = form_for :payment_method, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
@@ -172,7 +172,7 @@ div
                 div.col-md-8.col-md-offset-4
                   = button_tag class: 'btn btn-success btn-lg', name: nil do
                     | Update
-  div.modal.fade id='create-address' role='dialog'
+  div.modal id='create-address' role='dialog'
     div.modal-dialog
       div.modal-content
         = form_for :address, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
