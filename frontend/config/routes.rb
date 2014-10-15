@@ -10,5 +10,6 @@ Rails.application.routes.draw do
     post :verify
     put :password
     post :payment_methods
+    post :addresses
   end
 end

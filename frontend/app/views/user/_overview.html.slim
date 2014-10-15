@@ -176,7 +176,7 @@ div.row
   div.modal id='create-address' role='dialog'
     div.modal-dialog
       div.modal-content
-        = form_for :address, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
+        = form_for :address, url: addresses_account_path, html: { role: 'form', class: 'form-horizontal' } do |f|
           div.modal-header.clearfix
             button.close.pull-right data-dismiss='modal'
               i.fa.fa-times

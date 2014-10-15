@@ -75,6 +75,14 @@ class AccountController < ApplicationController
     redirect_to :back
   end
 
+  def addresses
+    redirect_to sign_in_account_path and return unless logged_in?
+    @params = params.require(:address).permit(:line1, :line2, :line3, :city, :region, :postal_code, :country)
+    @user = current_user
+    @user.create_address(@params)
+    redirect_to :back
+  end
+
   def sign_in
     redirect_to account_path and return unless logged_out?
   end
