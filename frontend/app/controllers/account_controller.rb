@@ -1,23 +1,21 @@
 class AccountController < ApplicationController
   def create
-    begin
-      @params = params.require(:user).permit(:first_name, :last_name, :email, :birthdate, :password, :password_confirmation)
-      @params[:birthdate] = DateTime.strptime(@params[:birthdate], '%m/%d/%Y')
+    @params = params.require(:user).permit(:first_name, :last_name, :email, :birthdate, :password, :password_confirmation)
+    @params[:birthdate] = DateTime.strptime(@params[:birthdate], '%m/%d/%Y')
 
-      if @params[:password] != @params[:password_confirmation]
-        flash[:error] = 'Please confirm your password'
-        redirect_to :back and return
-      end
-
-      @user = User.create(@params.except(:password_confirmation))
-      @user = User.confirm(@user.uuid, @user.actv_code)
-      log_in!(@user)
-      flash[:success] = 'User created'
-      redirect_to :back
-    rescue ArgumentError
-      flash[:error] = 'Birthdate must conform to 11/25/2014 format'
-      redirect_to :back
+    if @params[:password] != @params[:password_confirmation]
+      flash[:error] = 'Please confirm your password'
+      redirect_to :back and return
     end
+
+    @user = User.create(@params.except(:password_confirmation))
+    @user = User.confirm(@user.uuid, @user.actv_code)
+    log_in!(@user)
+    flash[:success] = 'User created'
+    redirect_to :back
+  rescue ArgumentError
+    flash[:error] = 'Birthdate must conform to 11/25/2014 format'
+    redirect_to :back
   end
 
   def show
@@ -35,6 +33,19 @@ class AccountController < ApplicationController
         @promotions << coupon.promotion
       end
     end
+  end
+
+  def update
+    redirect_to sign_in_account_path and return unless logged_in?
+    @params = params.require(:user).permit(:first_name, :last_name, :email, :birthdate)
+    @params[:birthdate] = DateTime.strptime(@params[:birthdate], '%m/%d/%Y')
+    @user = current_user
+    @user.merge!(@params)
+    @user.update!(:first_name, :last_name, :email, :birthdate)
+    redirect_to :back
+  rescue ArgumentError
+    flash[:error] = 'Birthdate must conform to 11/25/2014 format'
+    redirect_to :back
   end
 
   def sign_in

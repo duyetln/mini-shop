@@ -71,7 +71,7 @@ div.row
   div.modal id='edit-user' role='dialog'
     div.modal-dialog
       div.modal-content
-        = form_for :user, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
+        = form_for :user, url: account_path, method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
           div.modal-header.clearfix
             button.close.pull-right data-dismiss='modal'
               i.fa.fa-times
@@ -215,3 +215,4 @@ div.row
               div.col-md-8.col-md-offset-4
                 = button_tag class: 'btn btn-primary btn-lg', name: nil do
                   | Create
+
