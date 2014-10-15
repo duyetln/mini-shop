@@ -48,6 +48,25 @@ class AccountController < ApplicationController
     redirect_to :back
   end
 
+  def password
+    redirect_to sign_in_account_path and return unless logged_in?
+    @params = params.require(:user).permit(:password, :new_password, :new_password_confirmation)
+    @user = current_user
+    User.authenticate(@user.email, @params.require(:password))
+
+    if @params[:new_password] != @params[:new_password_confirmation]
+      flash[:error] = 'Please confirm your new password'
+      redirect_to :back and return
+    end
+
+    @user.password = @params[:new_password]
+    @user.update!(:password)
+    redirect_to :back
+  rescue BackendClient::Unauthorized
+    flash[:error] = 'Invalid password'
+    redirect_to :back
+  end
+
   def sign_in
     redirect_to account_path and return unless logged_out?
   end
@@ -62,15 +81,13 @@ class AccountController < ApplicationController
   end
 
   def verify
-    begin
-      @params = params.require(:user).permit(:email, :password)
-      @user = User.authenticate(@params[:email], @params[:password])
-      log_in!(@user)
-      flash[:success] = 'Welcome back!'
-      redirect_to :back
-    rescue BackendClient::Unauthorized, BackendClient::NotFound
-      flash[:error] = 'Invalid email or password'
-      redirect_to :back
-    end
+    @params = params.require(:user).permit(:email, :password)
+    @user = User.authenticate(@params[:email], @params[:password])
+    log_in!(@user)
+    flash[:success] = 'Welcome back!'
+    redirect_to :back
+  rescue BackendClient::Unauthorized, BackendClient::NotFound
+    flash[:error] = 'Invalid email or password'
+    redirect_to :back
   end
 end

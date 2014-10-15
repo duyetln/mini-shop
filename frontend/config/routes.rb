@@ -8,5 +8,6 @@ Rails.application.routes.draw do
     get :sign_up
     post :sign_out
     post :verify
+    put :password
   end
 end

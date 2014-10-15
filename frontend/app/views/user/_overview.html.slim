@@ -101,7 +101,7 @@ div.row
   div.modal id='change-password' role='dialog'
     div.modal-dialog
       div.modal-content
-        = form_for :user, url: '#', html: { role: 'form', class: 'form-horizontal' } do |f|
+        = form_for :user, url: password_account_path, method: :put, html: { role: 'form', class: 'form-horizontal' } do |f|
           div.modal-header.clearfix
             button.close.pull-right data-dismiss='modal'
               i.fa.fa-times
