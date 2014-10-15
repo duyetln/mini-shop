@@ -19,7 +19,7 @@ div.row
             = button_to inventory_bundle_path(@bundle.id), method: :delete, disabled: !@bundle.deletable?, class: 'btn btn-danger', title: 'Delete', params: { back: inventory_bundles_path } do
               i.fa.fa-trash-o
               |  Delete
-      table.table.table-condensed
+      table.table.table-bordered.table-condensed
         tbody
           tr
             td
@@ -56,7 +56,7 @@ div.row
             '  Not Available
             i.fa.fa-square.text-success
             '  Available & Active
-      table.table.table-condensed
+      table.table.table-bordered.table-condensed
         thead
           tr
             td

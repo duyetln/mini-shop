@@ -19,7 +19,7 @@ div.row
             = button_to inventory_promotion_path(@promotion.id), method: :delete, disabled: !@promotion.deletable?, class: 'btn btn-danger', title: 'Delete', params: { back: inventory_promotions_path } do
               i.fa.fa-trash-o
               |  Delete
-      table.table.table-condensed
+      table.table.table-bordered.table-condensed
         tbody
           tr
             td
@@ -76,7 +76,7 @@ div.row
             button.btn.btn-primary data-toggle='modal' data-target='#create-batches'
               i.fa.fa-plus-circle
               |  Batches
-      table.table.table-condensed
+      table.table.table-bordered.table-condensed
         thead
           tr
             td

@@ -11,7 +11,7 @@ div.row
             = button_to return_shopping_purchase_path(@purchase.id), method: :put, disabled: !@purchase.paid? || @orders.all?(&:reversed?), class: 'btn btn-danger', title: 'Refund' do
               i.fa.fa-credit-card
               |  Refund
-      table.table.table-condensed
+      table.table.table-bordered.table-condensed
         tbody
           tr
             td
@@ -31,7 +31,7 @@ div.row
             td
               - address = @shipping_address
               address
-                p = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
+                p = [address.line1, address.line2, address.line3, address.city].select(&:present?).join(', ')
                 p = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
           tr
             td
@@ -66,7 +66,7 @@ div.row
       div.panel.panel-success
         div.panel-heading.clearfix
           h4.pull-left Payment Information
-        table.table.table-condensed
+        table.table.table-bordered.table-condensed
           tbody
             tr
               td
@@ -86,7 +86,7 @@ div.row
               td
                 - address = @payment_method.billing_address
                 address
-                  p = [address.line1, address.line2, address.line3, address.city].compact.join(', ')
+                  p = [address.line1, address.line2, address.line3, address.city].select(&:present?).join(', ')
                   p = [address.region, address.postal_code, address.country].select(&:present?).join(', ')
             tr
               td
@@ -105,7 +105,7 @@ div.panel.panel-default
         '  Refunded/Errored
         i.fa.fa-square.text-success
         '  Fulfilled
-  table.table.table-condensed
+  table.table.table-bordered.table-condensed
     thead
       tr
         td
