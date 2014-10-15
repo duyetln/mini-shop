@@ -7,12 +7,17 @@ class ApplicationController < ActionController::Base
 
   rescue_from BackendClient::APIError do |error|
     flash[:error] = error.meta.present? ? error.meta : error.message
-    redirect_to (error.is_a?(::BackendClient::NotFound) ? root_path : :back)
+    go_back(error.is_a?(::BackendClient::NotFound) ? root_path : :back)
   end
 
   rescue_from BackendClient::RequestError do
     flash[:error] = 'Something unexpected occurred while sending the request. Please contact techincal support'
-    redirect_to root_path
+    go_bac root_path
+  end
+
+  rescue_from ActionController::ParameterMissing do |error|
+    flash[:error] = 'Required fields must be filled out. Please consult the manual'
+    go_back
   end
 
   def index
