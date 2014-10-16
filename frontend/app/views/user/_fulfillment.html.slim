@@ -5,77 +5,89 @@ div.panel-group
         = link_to 'Ownerships', '#ownerships', data: { toggle: 'collapse' }
     div.panel-collapse.collapse.in id='ownerships'
       div.panel-body
-        table.table.table-bordered.table-hover.table-condensed
-          tbody
-            tr
-              td
-                label Item
-              td
-                label Qty
-              td
-                label Order
-              td
-                label Bought On
-            - @ownerships.each do |ownership|
+        - if @ownerships.present?
+          table.table.table-bordered.table-hover.table-condensed
+            tbody
               tr
-                td = ownership.item.title
-                td = ownership.qty
-                - purchase = @purchases.find { |purchase| purchase.id == ownership.purchase_id }
-                - order = purchase.orders.find { |order| order.id == ownership.order_id }
-                td = order.uuid
-                td = purchase.committed_at.to_formatted_s(:long)
+                td
+                  label Item
+                td
+                  label Qty
+                td
+                  label Order
+                td
+                  label Bought On
+              - @ownerships.each do |ownership|
+                tr
+                  td = ownership.item.title
+                  td = ownership.qty
+                  - purchase = @purchases.find { |purchase| purchase.id == ownership.purchase_id }
+                  - order = purchase.orders.find { |order| order.id == ownership.order_id }
+                  td = order.uuid
+                  td = purchase.committed_at.to_formatted_s(:long)
+        - else
+          div.text-center.text-danger
+            | Nothing here yet
   div.panel.panel-default
     div.panel-heading.clearfix
       h4.pull-left
         = link_to 'Shipments', '#shipments', data: { toggle: 'collapse' }
     div.panel-collapse.collapse id='shipments'
       div.panel-body
-        table.table.table-bordered.table-hover.table-condensed
-          tbody
-            tr
-              td
-                label Item
-              td
-                label Qty
-              td
-                label Shipping Address
-              td
-                label Order
-              td
-                label Bought On
-            - @shipments.each do |shipment|
+        - if @shipments.present?
+          table.table.table-bordered.table-hover.table-condensed
+            tbody
               tr
-                td = shipment.item.title
-                td = shipment.qty
                 td
-                  - address = shipment.shipping_address
-                  = [address.line1, address.line2, address.line3, address.city, address.region, address.postal_code, address.country].select(&:present?).compact.join(', ')
-                - purchase = @purchases.find { |purchase| purchase.id == shipment.purchase_id }
-                - order = purchase.orders.find { |order| order.id == shipment.order_id }
-                td = order.uuid
-                td = purchase.committed_at.to_formatted_s(:long)
+                  label Item
+                td
+                  label Qty
+                td
+                  label Shipping Address
+                td
+                  label Order
+                td
+                  label Bought On
+              - @shipments.each do |shipment|
+                tr
+                  td = shipment.item.title
+                  td = shipment.qty
+                  td
+                    - address = shipment.shipping_address
+                    = print_address(address)
+                  - purchase = @purchases.find { |purchase| purchase.id == shipment.purchase_id }
+                  - order = purchase.orders.find { |order| order.id == shipment.order_id }
+                  td = order.uuid
+                  td = purchase.committed_at.to_formatted_s(:long)
+        - else
+          div.text-center.text-danger
+            | Nothing here yet
   div.panel.panel-default
     div.panel-heading.clearfix
       h4.pull-left
-        = link_to 'Coupons', '#coupons', data: { toggle: 'collapse', parent: '#fulfillment' }
+        = link_to 'Coupons', '#coupons', data: { toggle: 'collapse' }
     div.panel-collapse.collapse id='coupons'
       div.panel-body
-        table.table.table-bordered.table-hover.table-condensed
-          tbody
-            tr
-              td
-                label Code
-              td
-                label Promotion
-              td
-                label Item
-              td
-                label Redeemed On
-            - @coupons.each do |coupon|
+        - if @coupons.present?
+          table.table.table-bordered.table-hover.table-condensed
+            tbody
               tr
-                td = coupon.code
                 td
-                  - promotion = @promotions.find { |promotion| promotion.id == coupon.promotion_id }
-                  = promotion.name
-                td = promotion.item.title
-                td = coupon.used_at.to_formatted_s(:long)
+                  label Code
+                td
+                  label Promotion
+                td
+                  label Item
+                td
+                  label Redeemed On
+              - @coupons.each do |coupon|
+                tr
+                  td = coupon.code
+                  td
+                    - promotion = @promotions.find { |promotion| promotion.id == coupon.promotion_id }
+                    = promotion.name
+                  td = promotion.item.title
+                  td = coupon.used_at.to_formatted_s(:long)
+        - else
+          div.text-center.text-danger
+            | Nothing here yet

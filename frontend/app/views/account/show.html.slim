@@ -1,15 +1,23 @@
-h2.page-header.text-primary
+h2.page-header.text-primary.clearfix
   | Hello, #{@user.first_name}!
 
-ul.nav.nav-tabs role='tablist'
-  li.active = link_to 'Overview', '#overview', role: 'tab', data: { toggle: 'tab' }
-  li = link_to 'Purchases', '#purchases', role: 'tab', data: { toggle: 'tab' }
-  li = link_to 'Fulfillment', '#fulfillment', role: 'tab', data: { toggle: 'tab' }
-
-div.tab-content
-  div.tab-pane.active#overview role='tab'
-    = render 'user/overview'
-  div.tab-pane#purchases role='tab'
-    = render 'user/purchases'
-  div.tab-pane#fulfillment role='tab'
-    = render 'user/fulfillment'
+div.row
+  div.col-md-3
+    div.list-group role='tablist'
+      = link_to '#profile', role: 'tab', data: { toggle: 'tab' }, class: 'list-group-item' do
+        i.fa.fa-user.fa-fw
+        |  Profile
+      = link_to '#purchases', role: 'tab', data: { toggle: 'tab' }, class: 'list-group-item' do
+        i.fa.fa-truck.fa-fw
+        |  Purchases
+      = link_to '#fulfillment', role: 'tab', data: { toggle: 'tab' }, class: 'list-group-item' do
+        i.fa.fa-trophy.fa-fw
+        |  Fulfillment
+  div.col-md-9
+    div.tab-content
+      div.tab-pane.fade.in.active#profile role='tab'
+        = render 'user/profile'
+      div.tab-pane.fade#purchases role='tab'
+        = render 'user/purchases'
+      div.tab-pane.fade#fulfillment role='tab'
+        = render 'user/fulfillment'

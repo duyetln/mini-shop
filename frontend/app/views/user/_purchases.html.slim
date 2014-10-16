@@ -1,76 +1,93 @@
-div.panel-group
-  - @purchases.select(&:committed?).each_with_index do |purchase, index|
-    div.panel.panel-default
-      div.panel-heading.clearfix
-        h4.pull-left
-          - text_class = purchase.orders.all?(&:reversed?) ? 'text-danger' : (purchase.committed? ? 'text-success' : '')
-          = link_to "#purchase-#{purchase.id}", class: text_class,  data: { toggle: 'collapse' } do
-            | Bought #{purchase.orders.count} items on #{purchase.committed_at.to_formatted_s(:long)}
-      div.panel-collapse.collapse id="purchase-#{purchase.id}" class="#{index == 0 ? 'in' : ''}"
-        div.panel-body
-          div.row
-            div.col-md-7
-              div
-                strong Payment Method:
-                |  #{purchase.payment_method.name}
-              div
-                strong Billing Address:
-                - address = purchase.payment_method.billing_address
-                |  #{[address.line1, address.line2, address.line3, address.city, address.region, address.postal_code, address.country].select(&:present?).compact.join(', ')}
-              div
-                strong Shipping Address:
-                - address = purchase.shipping_address
-                |  #{[address.line1, address.line2, address.line3, address.city, address.region, address.postal_code, address.country].select(&:present?).compact.join(', ')}
-            div.col-md-5
-              div
-                strong Placed On:
-                |  #{purchase.committed_at.to_formatted_s(:long)}
-              div
-                strong Charged:
-                == " #{purchase.payment_transaction.currency.sign}#{purchase.payment_transaction.amount}"
-              div
-                strong Transaction:
-                |  #{purchase.payment_transaction.uuid}
-          br
-          table.table.table-bordered.table-hover.table-condensed
-            tr
-              td
-                label Order
-              td
-                label Item
-              td
-                label Qty
-              td
-                label Fulfilled
-              td
-                label Refunded
-              td
-                label Failed
-              td
-                label Amount
-              td
-                label Tax
-              td
-                label Total
-              td
-                = button_to return_purchase_path(purchase.id), method: :put, disabled: !purchase.paid? || purchase.orders.all?(&:reversed?), class: 'btn btn-danger btn-block', title: 'Return all orders', data: { toggle: 'tooltip', placement: 'right' } do
-                  i.fa.fa-credit-card
-            - purchase.orders.each do |order|
-              tr class="#{order.marked? ? (order.fulfilled? ? 'text-success' : 'text-danger') : '' }"
-                td = order.uuid
-                td = order.item.title
-                td = order.qty
-                td = yesno(order.fulfilled?)
-                td = yesno(order.reversed?)
-                td = yesno(order.failed?)
-                td == "#{order.currency.sign}#{order.amount}"
-                td == "#{order.currency.sign}#{order.tax}"
-                td == "#{order.currency.sign}#{order.total}"
+- if @purchases.present?
+  div.panel-group
+    - @purchases.each_with_index do |purchase, index|
+      div.panel.panel-default
+        div.panel-heading.clearfix
+          h4.pull-left
+            - text_class = purchase.orders.all?(&:reversed?) ? 'text-danger' : (purchase.committed? ? 'text-success' : '')
+            = link_to "#purchase-#{purchase.id}", class: text_class,  data: { toggle: 'collapse' } do
+              | Bought #{purchase.orders.count} items on #{purchase.committed_at.to_formatted_s(:long)}
+        div.panel-collapse.collapse id="purchase-#{purchase.id}" class="#{index == 0 ? 'in' : ''}"
+          div.panel-body
+            div.row
+              div.col-md-9
+                div
+                  strong Payment Method:
+                  |  #{purchase.payment_method.name}
+                div
+                  strong Billing Address:
+                  - address = purchase.payment_method.billing_address
+                  |  #{print_address(address)}
+                div
+                  strong Shipping Address:
+                  - address = purchase.shipping_address
+                  |  #{print_address(address)}
+              div.col-md-3
+                - currency = purchase.currency
+                - total = purchase.payment_transaction.amount
+                - refund = purchase.orders.map(&:refund_transaction).compact.map(&:amount).reduce(0, &:+)
+                - charge = total - refund
+                div
+                  strong Initial Total:
+                  span.text-primary
+                    |  #{number_to_currency(total, unit: currency.sign.html_safe)}
+                div
+                  strong Refund:
+                  span.text-danger
+                    |  #{number_to_currency(refund, unit: currency.sign.html_safe)}
+                div
+                  strong Final Charge:
+                  span.text-success
+                    |  #{number_to_currency(charge, unit: currency.sign.html_safe)}
+            br
+            table.table.table-bordered.table-hover.table-condensed
+              tr
                 td
-                  = button_to return_purchase_order_path(purchase.id, order.id), method: :put, disabled: !purchase.paid? || order.reversed?, class: 'btn btn-warning btn-block', title: 'Return this order', data: { toggle: 'tooltip', placement: 'right' } do
+                  label Order
+                td
+                  label Item
+                td
+                  label Qty
+                td
+                  label Fulfilled
+                td
+                  label Refunded
+                td
+                  label Failed
+                td
+                  label Amount
+                td
+                  label Tax
+                td
+                  label Total
+                td
+                  = button_to return_purchase_path(purchase.id), method: :put, disabled: !purchase.paid? || purchase.orders.all?(&:reversed?), class: 'btn btn-danger btn-block', title: 'Return all orders', data: { toggle: 'tooltip', placement: 'right' } do
                     i.fa.fa-credit-card
-            tr
-              td colspan=6
-              td == "#{purchase.currency.sign}#{purchase.amount}"
-              td == "#{purchase.currency.sign}#{purchase.tax}"
-              td == "#{purchase.currency.sign}#{purchase.total}"
+              - purchase.orders.each do |order|
+                tr class="#{order.marked? ? (order.fulfilled? ? 'text-success' : 'text-danger') : '' }"
+                  td = order.uuid
+                  td = order.item.title
+                  td = order.qty
+                  td = yesno(order.fulfilled?)
+                  td = yesno(order.reversed?)
+                  td = yesno(order.failed?)
+                  td
+                    | #{number_to_currency(order.amount, unit: order.currency.sign.html_safe)}
+                  td
+                    | #{number_to_currency(order.tax, unit: order.currency.sign.html_safe)}
+                  td
+                    | #{number_to_currency(order.total, unit: order.currency.sign.html_safe)}
+                  td
+                    = button_to return_purchase_order_path(purchase.id, order.id), method: :put, disabled: !purchase.paid? || order.reversed?, class: 'btn btn-warning btn-block', title: 'Return this order', data: { toggle: 'tooltip', placement: 'right' } do
+                      i.fa.fa-credit-card
+              tr
+                td colspan=6
+                td.text-primary
+                  | #{number_to_currency(purchase.amount, unit: purchase.currency.sign.html_safe)}
+                td.text-primary
+                  | #{number_to_currency(purchase.tax, unit: purchase.currency.sign.html_safe)}
+                td.text-primary
+                  | #{number_to_currency(purchase.total, unit: purchase.currency.sign.html_safe)}
+- else
+  div.text-center.text-danger
+    | Nothing here yet

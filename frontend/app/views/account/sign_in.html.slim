@@ -6,14 +6,13 @@ div.row
           strong Go to Your Account
       div.panel-body
         = form_for :user, url: verify_account_path, html: { role: 'form' } do |f|
-          div.form-group title='Email' data-toggle='tooltip' data-placement='right'
-            = f.text_field :email, class: 'form-control input-lg', placeholder: 'user@email.com'
-          div.form-group title='Password' data-toggle='tooltip' data-placement='right'
-            = f.password_field :password, class: 'form-control input-lg', placeholder: '**********'
+          div.form-group
+            = f.text_field :email, class: 'form-control input-lg', placeholder: email_placeholder
+          div.form-group
+            = f.password_field :password, class: 'form-control input-lg', placeholder: password_placeholder
           div.form-group
             = button_tag class: 'btn btn-success btn-lg btn-block', name: nil do
               | Sign In
       div.panel-footer.text-center
         ' New customer?
-        span
-          = link_to 'Sign up', sign_up_account_path
+        = link_to 'Sign up', sign_up_account_path

@@ -21,7 +21,9 @@ class AccountController < ApplicationController
   def show
     redirect_to sign_in_account_path and return unless logged_in?
     @user = current_user
-    @purchases = @user.purchases
+    @addresses = @user.addresses
+    @payment_methods = @user.payment_methods
+    @purchases = @user.purchases.select(&:committed?)
     @coupons = @user.coupons
     @ownerships = @user.ownerships
     @shipments = @user.shipments
