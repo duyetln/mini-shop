@@ -31,7 +31,7 @@ class Transaction < ActiveRecord::Base
 
   def initialize_values
     if new_record?
-      self.uuid = SecureRandom.hex.upcase
+      self.uuid = SecureRandom.hex(8).upcase
     end
   end
 
