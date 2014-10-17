@@ -27,8 +27,8 @@ module BackendClient
     end
 
     def initialize(hash = {})
+      @attributes ||= Hashie::Mash.new
       @backup_attributes ||= {}
-      @attributes ||= {}
       load!(hash)
     end
 
