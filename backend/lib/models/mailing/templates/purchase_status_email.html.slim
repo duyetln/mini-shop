@@ -54,19 +54,19 @@ html
                   tr
                     td colspan=3
                       strong Subtotal
-                    td.text-right == number_with_currency @purchase.amount, @purchase.payment_method_currency
+                    td.text-right == number_with_currency @purchase.amount, @purchase.currency
                   tr
                     td colspan=3
                       strong Tax
-                    td.text-right == number_with_currency @purchase.tax, @purchase.payment_method_currency
+                    td.text-right == number_with_currency @purchase.tax, @purchase.currency
                   tr
                     td colspan=3
                       strong Total
-                    td.text-right == number_with_currency @purchase.total, @purchase.payment_method_currency
+                    td.text-right == number_with_currency @purchase.total, @purchase.currency
                   tr.bg-info
                     td colspan=3
-                      strong Actual charge (plus refunds)
-                    td.text-right == number_with_currency @purchase.transactions.map(&:amount).reduce(BigDecimal.new('0.0'), &:+), @purchase.payment_method_currency
+                      strong Actual charge (minus refunds)
+                    td.text-right == number_with_currency @purchase.total - @purchase.refund_transactions.map(&:amount).reduce(BigDecimal.new('0.0'), &:+), @purchase.currency
             p
               small * Green indicates an order has been fulfilled. Yellow indicates an order has been returned. Red indicates an order failed to fulfill.
             br
