@@ -27,17 +27,26 @@ module BackendClient
     end
 
     def initialize(hash = {})
-      @attributes = self.class.build_attributes(hash)
+      @backup_attributes ||= {}
+      @attributes ||= {}
+      load!(hash)
     end
 
     def to_params(*slices)
       self.class.params(attributes.symbolize_keys.slice(*slices.map(&:to_sym)))
     end
 
+    def reload!
+      load!(@backup_attributes)
+    end
+
     protected
 
     def load!(hash = {})
-      attributes.replace(self.class.build_attributes(hash)) if hash.present?
+      if hash.present?
+        attributes.replace(self.class.build_attributes(hash))
+        @backup_attributes = hash
+      end
       self
     end
 

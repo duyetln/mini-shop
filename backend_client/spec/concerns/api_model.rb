@@ -49,6 +49,21 @@ shared_examples 'api model' do
     end
   end
 
+  describe '#reload!' do
+    let!(:key) { full_model.attributes.keys.sample }
+    let!(:value) { full_model[key] }
+
+    before :each do
+      full_model[key] = rand_str
+    end
+
+    it 'resets model attributes' do
+      expect do
+        expect(full_model.reload!).to eq(full_model)
+      end.to change { full_model[key] }.to(value)
+    end
+  end
+
   describe '#hash' do
     let(:obj1) { described_class.new parsed_payload.merge(id: 'id') }
     let(:obj2) { described_class.new parsed_payload.merge(id: 'id') }
