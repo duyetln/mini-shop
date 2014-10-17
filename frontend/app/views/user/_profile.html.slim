@@ -1,66 +1,98 @@
 div.row
-  div.col-md-5
-    div.panel.panel-info
-      div.panel-heading.clearfix
-        div.btn-toolbar
-          div.btn-group
-            button.btn.btn-success data-toggle='modal' data-target='#edit-user'
-              i.fa.fa-pencil-square-o
-              |  Update Account
-          div.btn-group
-            button.btn.btn-danger data-toggle='modal' data-target='#change-password'
-              i.fa.fa-lock
-              |  Change Password
-      table.table.table-bordered.table-hover.table-condensed
-        tbody
-          tr
-            td
-              label First Name
-            td = @user.first_name
-          tr
-            td
-              label Last Name
-            td = @user.last_name
-          tr
-            td
-              label Email
-            td = @user.email
-          tr
-            td
-              label Birthdate
-            td = @user.birthdate.to_date.to_formatted_s(:long)
-  div.col-md-7
+  div.col-md-4
     div.panel.panel-default
-      div.panel-heading.clearfix
-        button.btn.btn-primary data-toggle='modal' data-target='#create-payment-method'
-          i.fa.fa-plus-circle
+      div.panel-heading
+        div.btn-group
+          button.btn.btn-primary.dropdown-toggle data-toggle='dropdown'
+            i.fa.fa-wrench
+            '  Settings
+            span.caret
+          ul.dropdown-menu role='menu'
+            li = link_to '', data: { toggle: 'modal', target: '#edit-user' } do
+              i.fa.fa-fw.fa-pencil-square-o
+              |  Update Account
+            li = link_to '', data: { toggle: 'modal', target: '#change-password' } do
+              i.fa.fa-fw.fa-lock
+              |  Change Password
+      div.panel-body
+        p
+          strong
+            ' First Name:
+          = @user.first_name
+        p
+          strong
+            ' Last Name:
+          = @user.last_name
+        p
+          strong
+            ' Email:
+          = @user.email
+        p
+          strong
+            ' Birthdate:
+          = @user.birthdate.to_date.to_formatted_s(:long)
+        p
+          strong
+            ' Purchases:
+          = @purchases.count
+        p
+          strong
+            ' Sign Up:
+          = @user.created_at.to_formatted_s(:long)
+  div.col-md-4
+    div.panel.panel-default
+      div.panel-heading
+        button.btn.btn-link data-toggle='modal' data-target='#create-payment-method'
+          i.fa.fa-plus
           |  Payment Method
       - if @payment_methods.present?
-        table.table.table-bordered.table-hover.table-condensed
-          tbody
-            - @payment_methods.each do |payment_method|
-              tr
-                td = payment_method.name
-                td = number_to_currency(payment_method.balance, unit: payment_method.currency.sign.html_safe)
-                td rowspan=2
-                  button.btn.btn-success data-toggle='modal' data-target="#edit-payment-method-#{payment_method.id}"
-                    i.fa.fa-money
-              tr
-                td colspan=2
+        ul.list-group
+          - @payment_methods.each do |payment_method|
+            li.list-group-item
+              p
+                strong
+                  ' Name:
+                = payment_method.name
+              p
+                strong
+                  ' Balance:
+                = link_to number_to_currency(payment_method.balance, unit: payment_method.currency.sign.html_safe), '', data: { toggle: 'modal', target: "#edit-payment-method-#{payment_method.id}" }
+              p
+                div
+                  strong
+                    ' Billing Address:
+                address
                   - address = payment_method.billing_address
-                  = print_address(address)
+                  = [address.line1, address.line2, address.line3].select(&:present?).join(', ')
+                  br
+                  = [address.city, address.region, address.postal_code].select(&:present?).join(', ')
+                  br
+                  = address.country
+      - else
+        div.panel-body
+          div.text-center.text-danger
+            | Nothing here yet
+  div.col-md-4
     div.panel.panel-default
-      div.panel-heading.clearfix
-        button.btn.btn-primary data-toggle='modal' data-target='#create-address'
-          i.fa.fa-plus-circle
+      div.panel-heading
+        button.btn.btn-link data-toggle='modal' data-target='#create-address'
+          i.fa.fa-plus
           |  Address
       - if @addresses.present?
-        table.table.table-bordered.table-hover.table-condensed
-          tbody
-            - @addresses.each do |address|
-              tr
-                td
-                  = print_address(address)
+        ul.list-group
+          - @addresses.each do |address|
+            li.list-group-item
+              p
+                address
+                  = [address.line1, address.line2, address.line3].select(&:present?).join(', ')
+                  br
+                  = [address.city, address.region, address.postal_code].select(&:present?).join(', ')
+                  br
+                  = address.country
+      - else
+        div.panel-body
+          div.text-center.text-danger
+            | Nothing here yet
 
 - content_for :modals do
   div.modal id='edit-user' role='dialog'
@@ -103,7 +135,7 @@ div.row
             h3.text-primary.pull-left Change Password
           div.modal-body
             div.form-group
-              label.control-label.col-md-5 Password
+              label.control-label.col-md-5 Current Password
               div.col-md-7
                 = f.password_field :password, class: 'form-control'
             div.form-group
