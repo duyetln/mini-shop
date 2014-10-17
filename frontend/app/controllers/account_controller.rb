@@ -1,111 +1,115 @@
 class AccountController < ApplicationController
+  before_action :sign_in!, only: [:show, :update, :password, :payment_methods, :addresses]
+
   def create
-    @params = params.require(:user).permit(:first_name, :last_name, :email, :birthdate, :password, :password_confirmation)
-    @params[:birthdate] = DateTime.strptime(@params[:birthdate], '%m/%d/%Y')
-
-    if @params[:password] != @params[:password_confirmation]
-      flash[:error] = 'Please confirm your password'
-      redirect_to :back and return
-    end
-
+    @params = create_user_params
+    go_back and return unless parse_birthdate
+    go_back and return unless confirm_password
     @user = User.create(@params.except(:password_confirmation))
     @user = User.confirm(@user.uuid, @user.actv_code)
-    log_in!(@user)
-    flash[:success] = 'User created'
-    redirect_to :back
-  rescue ArgumentError
-    flash[:error] = 'Birthdate must conform to 11/25/2014 format'
-    redirect_to :back
+    flash[:success] = 'Your account has been created!'
+    go_back
   end
 
   def show
-    redirect_to sign_in_account_path and return unless logged_in?
-    @user = current_user
-    @addresses = @user.addresses
-    @payment_methods = @user.payment_methods
     @purchases = @user.purchases.select(&:committed?)
-    @coupons = @user.coupons
+    @payment_methods = @user.payment_methods
+    @addresses = @user.addresses
     @ownerships = @user.ownerships
     @shipments = @user.shipments
-    @currencies = Currency.all
-
-    @promotions = []
-    @coupons.each do |coupon|
-      unless @promotions.find { |promotion| promotion.id == coupon.promotion_id }
-        @promotions << coupon.promotion
-      end
+    @coupons = @user.coupons
+    @promotions = @coupons.map do |coupon|
+      coupon.promotion_id
+    end.uniq.map do |promotion_id|
+      Promotion.find(promotion_id)
     end
   end
 
   def update
-    redirect_to sign_in_account_path and return unless logged_in?
-    @params = params.require(:user).permit(:first_name, :last_name, :email, :birthdate)
-    @params[:birthdate] = DateTime.strptime(@params[:birthdate], '%m/%d/%Y')
-    @user = current_user
-    @user.merge!(@params)
-    @user.update!(:first_name, :last_name, :email, :birthdate)
-    redirect_to :back
-  rescue ArgumentError
-    flash[:error] = 'Birthdate must conform to 11/25/2014 format'
-    redirect_to :back
+    begin
+      @params = update_user_params
+      go_back and return unless parse_birthdate
+      @user.merge!(@params)
+      @user.update!(:first_name, :last_name, :email, :birthdate)
+      go_back
+    rescue
+      @user.reload!
+      raise
+    end
   end
 
   def password
-    redirect_to sign_in_account_path and return unless logged_in?
-    @params = params.require(:user).permit(:password, :new_password, :new_password_confirmation)
-    @user = current_user
-    User.authenticate(@user.email, @params.require(:password))
-
-    if @params[:new_password] != @params[:new_password_confirmation]
-      flash[:error] = 'Please confirm your new password'
-      redirect_to :back and return
-    end
-
+    @params = update_password_confirmation
+    go_back and return unless confirm_new_password
+    User.authenticate(@user.email, @params[:password])
     @user.password = @params[:new_password]
     @user.update!(:password)
-    redirect_to :back
+    go_back
   rescue BackendClient::Unauthorized
-    flash[:error] = 'Invalid password'
-    redirect_to :back
+    flash[:error] = 'Please check your password'
+    go_back
   end
 
   def payment_methods
-    redirect_to sign_in_account_path and return unless logged_in?
-    @params = params.require(:payment_method).permit(:name, :balance, :currency_id, :billing_address_id)
-    @user = current_user
-    @user.create_payment_method(@params)
-    redirect_to :back
+    @user.create_payment_method(create_payment_method_params)
+    flash[:success] = 'New payment method has been added to your account'
+    go_back
   end
 
   def addresses
-    redirect_to sign_in_account_path and return unless logged_in?
-    @params = params.require(:address).permit(:line1, :line2, :line3, :city, :region, :postal_code, :country)
-    @user = current_user
-    @user.create_address(@params)
-    redirect_to :back
+    @user.create_address(create_address_params)
+    flash[:success] = 'New address has been added to your account'
+    go_back
   end
 
   def sign_in
-    redirect_to account_path and return unless logged_out?
+    if logged_in?
+      flash[:info] = 'You have already logged in'
+      redirect_to account_path
+    end
   end
 
   def sign_up
-    redirect_to account_path and return unless logged_out?
+    if logged_in?
+      flash[:info] = 'You have already logged in'
+      redirect_to account_path
+    end
   end
 
   def sign_out
     log_out!
+    flash[:info] = 'Hope to see you again soon!'
     redirect_to sign_in_account_path
   end
 
   def verify
-    @params = params.require(:user).permit(:email, :password)
+    @params = verify_user_params
     @user = User.authenticate(@params[:email], @params[:password])
     log_in!(@user)
-    flash[:success] = 'Welcome back!'
-    redirect_to :back
+    flash[:success] = "Welcome back, #{@user.first_name}!"
+    go_back account_path
   rescue BackendClient::Unauthorized, BackendClient::NotFound
-    flash[:error] = 'Invalid email or password'
-    redirect_to :back
+    flash[:error] = 'Please check your email or password'
+    go_back
+  end
+
+  protected
+
+  def parse_birthdate
+    @params[:birthdate] = DateTime.strptime(@params[:birthdate], '%m/%d/%Y')
+    true
+  rescue ArgumentError
+    flash[:error] = 'Please follow mm/dd/yyyy format for your birthdate'
+    false
+  end
+
+  def confirm_password
+    @params[:password] == @params[:password_confirmation] ||
+    (flash[:error] = 'Please confirm your password') && false
+  end
+
+  def confirm_new_password
+    @params[:new_password] == @params[:new_password_confirmation] ||
+    (flash[:error] = 'Please confirm your new password') && false
   end
 end

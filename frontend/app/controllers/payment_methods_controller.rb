@@ -1,15 +1,21 @@
 class PaymentMethodsController < ApplicationController
+  before_action :sign_in!
+
   def update
-    redirect_to sign_in_account_path and return unless logged_in?
-    @params = params.require(:payment_method).permit(:balance)
-    @user = current_user
-    @payment_method = @user.payment_methods.find { |payment_method| payment_method.id == params.require(:id).to_i }
-
-    if @payment_method.present?
-      @payment_method.merge!(@params)
-      @payment_method.update!(:balance)
+    @params = update_payment_method_params
+    @payment_method = @user.payment_methods.find do |payment_method|
+      payment_method.id == id.to_i
     end
-
-    redirect_to :back
+    begin
+      if @payment_method.present?
+        @payment_method.merge!(@params)
+        @payment_method.update!(:balance)
+        flash[:success] = 'Your payment method balance has been updated'
+      end
+      go_back
+    rescue
+      @payment_method.reload!
+      raise
+    end
   end
 end

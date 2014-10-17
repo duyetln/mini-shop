@@ -1,9 +1,18 @@
 class OrdersController < ApplicationController
+  before_action :sign_in!
+
   def return
-    redirect_to sign_in_account_path and return unless logged_in?
-    @user = current_user
-    @purchase = @user.purchases.find { |purchase| purchase.id == params.require(:purchase_id).to_i }
-    @purchase.return_order(params.require(:id))
-    redirect_to :back
+    @purchase = @user.purchases.find { |purchase| purchase.id == purchase_id.to_i }
+    if @purchase.present?
+      @purchase.return_order(id)
+      flash[:success] = 'Your order has been returned'
+    end
+    go_back
+  end
+
+  protected
+
+  def purchase_id
+    params.require(:purchase_id)
   end
 end

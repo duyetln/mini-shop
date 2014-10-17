@@ -22,4 +22,10 @@ module Authentication
   def log_out!
     self.current_user = nil
   end
+
+  def sign_in!
+    if logged_out?
+      redirect_to sign_in_account_path
+    end
+  end
 end

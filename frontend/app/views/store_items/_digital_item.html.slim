@@ -5,5 +5,5 @@ div.media
     h2.media-heading
       strong = store_item.title
       small.text-success
-        == " #{@usd.sign}#{store_item.amount(@usd)}"
+        == " #{@currency.sign}#{store_item.amount(@currency)}"
     p = store_item.description

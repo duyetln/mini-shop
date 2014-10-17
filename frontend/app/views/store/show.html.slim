@@ -7,7 +7,7 @@ div.row
           p.text-center
             strong = store_item.title
           p.text-center
-            span.text-success == "#{@usd.sign}#{store_item.amount(@usd)}"
+            span.text-success == "#{@currency.sign}#{store_item.amount(@currency)}"
           button.btn.btn-block.btn-primary data-toggle='modal' data-target="#store-item-#{store_item.id}"
             | Learn More
           - if store_item.available?
