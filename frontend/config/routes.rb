@@ -13,6 +13,12 @@ Rails.application.routes.draw do
     post :addresses
   end
 
+  resource :cart, controller: :cart, only: [:show, :update] do
+    put :add
+    put :remove
+    put :clear
+  end
+
   resources :payment_methods, only: [:update]
   resources :purchases, only: [] do
     put :return, on: :member

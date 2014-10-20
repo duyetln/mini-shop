@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
     go_back(error.is_a?(::BackendClient::NotFound) ? root_path : :back)
   end
 
-  rescue_from BackendClient::RequestError do
+  rescue_from BackendClient::RequestError, StandardError do
     flash[:error] = 'Something is broken. Please try again'
     go_back root_path
   end
@@ -30,8 +30,8 @@ class ApplicationController < ActionController::Base
   protected
 
   def load_data
-    @currencies = (session[:currencies] ||= Currency.all)
-    @currency = @currencies.find { |currency| currency.code == 'USD' }
+    @currencies = currencies
+    @currency = current_currency
     @user = current_user
     @cart = current_cart
   end
