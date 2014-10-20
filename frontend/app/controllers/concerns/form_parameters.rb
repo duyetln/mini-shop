@@ -1,6 +1,10 @@
 module FormParameters
   protected
 
+  def id
+    params.require(:id)
+  end
+
   def create_user_params
     scope = :user
     not_required_keys = []

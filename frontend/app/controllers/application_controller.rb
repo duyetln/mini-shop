@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   include BackendClient
   include Authentication
   include FormParameters
+  include Shopping
 
   before_action :load_data
 
@@ -32,12 +33,7 @@ class ApplicationController < ActionController::Base
     @currencies = (session[:currencies] ||= Currency.all)
     @currency = @currencies.find { |currency| currency.code == 'USD' }
     @user = current_user
-    @payment_methods = @user.try(:payment_methods)
-    @addresses = @user.try(:addresses)
-  end
-
-  def id
-    params.require(:id)
+    @cart = current_cart
   end
 
   def go_back(back = nil)
