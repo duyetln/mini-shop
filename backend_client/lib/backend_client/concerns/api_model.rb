@@ -27,8 +27,9 @@ module BackendClient
     end
 
     def initialize(hash = {})
-      @attributes ||= Hashie::Mash.new
-      @backup_attributes ||= {}
+      @attributes = Hashie::Mash.new
+      @backup_attributes = {}
+      @cache = {}
       load!(hash)
     end
 
@@ -46,6 +47,7 @@ module BackendClient
       if hash.present?
         attributes.replace(self.class.build_attributes(hash))
         @backup_attributes = hash
+        @cache = {}
       end
       self
     end

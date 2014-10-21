@@ -62,6 +62,11 @@ shared_examples 'api model' do
         expect(full_model.reload!).to eq(full_model)
       end.to change { full_model[key] }.to(value)
     end
+
+    it 'clears internal cache' do
+      full_model.instance_variable_set(:@cache, rand_str)
+      expect { full_model.reload! }.to change { full_model.instance_variable_get(:@cache) }.to({})
+    end
   end
 
   describe '#hash' do

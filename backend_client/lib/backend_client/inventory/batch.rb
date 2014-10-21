@@ -8,7 +8,7 @@ module BackendClient
     include DefaultDelete
 
     def promotion
-      Promotion.find(promotion_id)
+      @cache[:promotion] ||= Promotion.find(promotion_id)
     end
 
     def coupons(pagination = {})
