@@ -4,18 +4,18 @@ class Cart
     attr_reader :orderable
     attr_reader :item
     attr_reader :qty
+    attr_reader :price
     attr_reader :amount
-    attr_reader :total
     attr_reader :currency
 
     def initialize(cart, orderable, qty)
       @cart = cart
       @qty = qty
-      @currency = currency
+      @currency = cart.currency
       @orderable = orderable
       @item = @orderable.item
-      @amount = @orderable.amount(cart.currency)
-      @total = @amount * @qty
+      @price = @orderable.amount(currency)
+      @amount = @price * @qty
     end
   end
 
@@ -35,9 +35,9 @@ class Cart
     @items = []
   end
 
-  def add(orderable, qty)
+  def update(orderable, qty)
     remove(orderable)
-    items << Cart::Item.new(self, orderable, qty)
+    items << Cart::Item.new(self, orderable, qty) if qty > 0
     self
   end
 
@@ -48,9 +48,5 @@ class Cart
 
   def amount
     items.reduce(BigDecimal.new('0.0')) { |amount, item| amount += item.amount }
-  end
-
-  def total
-    items.reduce(BigDecimal.new('0.0')) { |total, item| total += item.total }
   end
 end

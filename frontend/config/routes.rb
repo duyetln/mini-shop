@@ -14,7 +14,6 @@ Rails.application.routes.draw do
   end
 
   resource :cart, controller: :cart, only: [:show, :update] do
-    put :add
     put :remove
     put :clear
   end

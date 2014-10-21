@@ -2,25 +2,25 @@ class CartController < ApplicationController
   def show
   end
 
-  def add
+  def update
     unless orderable.available?
       flash[:error] = 'The item you selected is not available for purchase'
       go_back and return
     end
-    current_cart.add(orderable, qty)
-    flash[:success] = "You have added #{orderable.title}"
+    current_cart.update(orderable, qty)
+    flash[:info] = qty > 0 ? "You have added #{orderable.title}" : "You have removed #{orderable.title}"
     go_back
   end
 
   def remove
     current_cart.remove(orderable)
-    flash[:success] = "You have removed #{orderable.title}"
+    flash[:info] = "You have removed #{orderable.title}"
     go_back
   end
 
   def clear
     current_cart.clear
-    flash[:success] = 'You have cleared your cart'
+    flash[:info] = 'You have cleared your cart'
     go_back
   end
 

@@ -11,7 +11,7 @@ div.row
           button.btn.btn-block.btn-primary data-toggle='modal' data-target="#store-item-#{store_item.id}"
             | Learn More
           - if store_item.available?
-            = button_to add_cart_path, method: :put, form_class: 'btn-block', class: 'btn btn-success btn-block', params: { orderable_type: store_item.resource_type, orderable_id: store_item.id } do
+            = button_to cart_path, method: :put, form_class: 'btn-block', class: 'btn btn-success btn-block', params: { orderable_type: store_item.resource_type, orderable_id: store_item.id } do
               strong Add to Cart
           - else
             button.btn.btn-block.btn-danger.disabled
@@ -29,7 +29,7 @@ div.row
             = render partial: "store/store_items/#{store_item.item.resource_type.underscore}", locals: { store_item: store_item }
           div.modal-footer
             - if store_item.available?
-              = button_to add_cart_path, method: :put, class: 'btn btn-block btn-success btn-lg', params: { orderable_type: store_item.resource_type, orderable_id: store_item.id } do
+              = button_to cart_path, method: :put, class: 'btn btn-block btn-success btn-lg', params: { orderable_type: store_item.resource_type, orderable_id: store_item.id } do
                 strong Add to Cart
             - else
               button.btn.btn-block.btn-danger.btn-lg.disabled
