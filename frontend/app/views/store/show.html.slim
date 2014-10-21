@@ -26,7 +26,7 @@ div.row
             button.close.pull-right data-dismiss='modal'
               i.fa.fa-times
           div.modal-body
-            = render partial: "store_items/#{store_item.item.resource_type.underscore}", locals: { store_item: store_item }
+            = render partial: "store/store_items/#{store_item.item.resource_type.underscore}", locals: { store_item: store_item }
           div.modal-footer
             - if store_item.available?
               = button_to add_cart_path, method: :put, class: 'btn btn-block btn-success btn-lg', params: { orderable_type: store_item.resource_type, orderable_id: store_item.id } do
