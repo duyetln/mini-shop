@@ -5,6 +5,7 @@ module BackendClient
     include DefaultFind
 
     delegate :amount, to: :promotion
+    delegate :item, to: :promotion
 
     def self.build_attributes(hash = {})
       super do |coupon|
@@ -13,7 +14,7 @@ module BackendClient
     end
 
     def promotion
-      Promotion.find(promotion_id)
+      @cache[:promotion] ||= Promotion.find(promotion_id)
     end
   end
 end

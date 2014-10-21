@@ -10,7 +10,7 @@ module BackendClient
     end
 
     def purchase
-      Purchase.find(purchase_id)
+      @cache[:purchase] ||= Purchase.find(purchase_id)
     end
 
     def order
