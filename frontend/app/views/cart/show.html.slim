@@ -1,0 +1,62 @@
+h2.page-header.text-primary.clearfix
+  | Your Shopping Cart
+
+div.row
+  div.col-md-9
+    table.table.table-hover
+      thead
+        tr
+          td.col-md-8.text-center
+            label Item
+          td.col-md-1
+            label Price
+          td.col-md-1
+            label Qty
+          td.col-md-1
+          td.col-md-1
+      tbody
+        - if @cart.size > 0
+          - @cart.items.reverse.each do |item|
+            = render partial: "cart/items/#{item.orderable.resource_type.underscore}", locals: { item: item }
+        - else
+          tr
+            td.text-center.text-danger colspan=5
+              p
+                ' Nothing here yet.
+                span
+                  = link_to 'Buy something!', store_path
+      tfoot
+        tr
+          td.clearfix colspan=5
+            div.pull-right
+              = form_tag cart_path, method: :put, role: 'form' do
+                = hidden_field_tag :orderable_type, 'Coupon'
+                div.input-group
+                  = text_field_tag :orderable_id, nil, placeholder: 'Coupon Code', class: 'form-control'
+                  span.input-group-btn
+                    = button_tag class: 'btn btn-primary', name: nil do
+                      i.fa.fa-plus
+  - if @cart.size > 0
+    div.col-md-3
+      div.panel.panel-default
+        div.panel-heading
+          h4
+            strong Summary
+        div.panel-body
+          p
+            strong
+              ' Sub Total:
+            == "#{@cart.currency.sign}#{@cart.amount}"
+          p
+            strong
+              ' Tax:
+            == "#{@cart.currency.sign}0.0"
+          p
+            strong
+              ' Total:
+            == "#{@cart.currency.sign}#{@cart.amount}"
+        div.panel-footer
+          = button_to clear_cart_path, method: :put, form_class: 'btn-block', class: 'btn btn-danger btn-block' do
+            | Clear Cart
+          button.btn.btn-success.btn-block
+            | Checkout

@@ -39,6 +39,6 @@ class CartController < ApplicationController
   end
 
   def qty
-    (orderable_type == 'Coupon' ? 1 : (params[:qty] || 1)).to_i
+    (orderable_type == 'Coupon' && params[:qty].to_i >= 1 ? 1 : (params[:qty] || 1)).to_i
   end
 end

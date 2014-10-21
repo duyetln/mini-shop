@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
     go_back(error.is_a?(::BackendClient::NotFound) ? root_path : :back)
   end
 
-  rescue_from BackendClient::RequestError, StandardError do
+  rescue_from BackendClient::RequestError do
     flash[:error] = 'Something is broken. Please try again'
     go_back root_path
   end

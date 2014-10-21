@@ -1,0 +1,22 @@
+tr
+  = form_tag cart_path, method: :put, role: 'form' do
+    = hidden_field_tag :orderable_type, item.orderable.resource_type
+    = hidden_field_tag :orderable_id, item.orderable.resource_id
+    td
+      div.media
+        div.pull-left
+          = image_tag 'box.png', class: 'img-thumbnail media-object', height: 64, width: 64
+        div.media-body
+          div.media-heading
+            strong = item.orderable.title
+          = item.orderable.description
+    td
+      == "#{item.currency.sign}#{item.price}"
+    td
+      = text_field_tag :qty, item.qty, class: 'form-control'
+    td
+      = button_tag class: 'btn btn-primary btn-block', name: nil do
+        i.fa.fa-check
+  td
+    = button_to remove_cart_path, method: :put, class: 'btn btn-danger btn-block', params: { orderable_type: item.orderable.resource_type, orderable_id: item.orderable.resource_id } do
+      i.fa.fa-trash

@@ -1,0 +1,18 @@
+tr
+  td
+    div.media
+      div.pull-left
+        = image_tag 'box.png', class: 'img-thumbnail media-object', height: 64, width: 64
+      div.media-body
+        div.media-heading
+          strong
+            | Coupon #{item.orderable.code}
+        = item.orderable.title
+  td
+    == "#{item.currency.sign}#{item.price}"
+  td
+    = item.qty
+  td
+  td
+    = button_to remove_cart_path, method: :put, class: 'btn btn-danger btn-block', params: { orderable_type: item.orderable.resource_type, orderable_id: item.orderable.code } do
+      i.fa.fa-trash
