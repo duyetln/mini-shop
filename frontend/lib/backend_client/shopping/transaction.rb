@@ -12,7 +12,7 @@ module BackendClient
     end
 
     def user
-      User.find(user_id)
+      @cache[:user] ||= User.find(user_id)
     end
   end
 end

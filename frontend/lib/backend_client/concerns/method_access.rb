@@ -7,13 +7,14 @@ module BackendClient
       delegate :key?, to: :attributes
       delegate :[], to: :attributes
       delegate :[]=, to: :attributes
-      delegate :merge!, to: :attributes
+      attr_reader :attributes
 
       protected :key?
     end
 
-    def attributes
-      @attributes ||= {}
+    def merge!(*args)
+      attributes.merge!(*args)
+      self
     end
   end
 end

@@ -20,7 +20,7 @@ module BackendClient
     end
 
     def user
-      User.find(user_id)
+      @cache[:user] ||= User.find(user_id)
     end
 
     def add_or_update_order(order = {})
