@@ -14,6 +14,10 @@ Rails.application.routes.draw do
   end
 
   resource :cart, controller: :cart, only: [:show, :update] do
+    get :payment
+    put :prepare
+    get :review
+    put :submit
     put :remove
     put :clear
   end

@@ -56,5 +56,4 @@ div.row
         div.panel-footer
           = button_to clear_cart_path, method: :put, form_class: 'btn-block', class: 'btn btn-danger btn-block' do
             | Clear Cart
-          button.btn.btn-success.btn-block
-            | Checkout
+          = link_to 'Checkout', payment_cart_path, class: 'btn btn-success btn-block'

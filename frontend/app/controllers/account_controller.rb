@@ -78,6 +78,8 @@ class AccountController < ApplicationController
 
   def sign_out
     log_out!
+    @cart.payment_method = nil
+    @cart.shipping_address = nil
     flash[:info] = 'Hope to see you again soon!'
     redirect_to sign_in_account_path
   end
