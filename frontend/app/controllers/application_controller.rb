@@ -34,6 +34,11 @@ class ApplicationController < ActionController::Base
     @currency = current_currency
     @user = current_user
     @cart = current_cart
+
+    if logged_in?
+      @payment_methods = @user.payment_methods
+      @addresses = @user.addresses
+    end
   end
 
   def go_back(back = nil)

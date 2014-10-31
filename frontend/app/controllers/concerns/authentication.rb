@@ -25,6 +25,7 @@ module Authentication
 
   def sign_in!
     if logged_out?
+      session[:back] = request.fullpath if request.get?
       redirect_to sign_in_account_path
     end
   end

@@ -87,7 +87,7 @@ class AccountController < ApplicationController
     @user = User.authenticate(@params[:email], @params[:password])
     log_in!(@user)
     flash[:success] = "Welcome back, #{@user.first_name}!"
-    go_back account_path
+    go_back session[:back]
   rescue BackendClient::Unauthorized, BackendClient::NotFound
     flash[:error] = 'Please check your email or password'
     go_back
