@@ -16,6 +16,12 @@ class Cart
       @item = @orderable.item
       @price = @orderable.amount(currency)
       @amount = @price * @qty
+
+      # hackery
+      if @orderable.resource_type == 'Coupon'
+        @qty = 1
+        @item = @orderable
+      end
     end
   end
 
