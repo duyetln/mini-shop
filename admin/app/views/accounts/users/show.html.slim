@@ -96,7 +96,7 @@ div.row
               label Actions
         tbody
           - @purchases.each do |purchase|
-            tr class="#{purchase.orders.all?(&:reversed?) ? 'danger' : (purchase.committed? ? 'success' : '')}"
+            tr class="#{purchase.orders.all?(&:reversed?) || purchase.orders.all?(&:failed?) ? 'danger' : (purchase.committed? ? 'success' : '')}"
               td
                 label = purchase.id
               td = number_to_currency(purchase.amount, unit: (purchase.payment_method.try(:currency).try(:sign) || '&#36;').html_safe)

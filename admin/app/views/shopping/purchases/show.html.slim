@@ -8,7 +8,7 @@ div.row
         h4.pull-left Information
         div.pull-right.btn-toolbar
           div.btn-group
-            = button_to return_shopping_purchase_path(@purchase.id), method: :put, disabled: !@purchase.paid? || @orders.all?(&:reversed?), class: 'btn btn-danger', title: 'Refund' do
+            = button_to return_shopping_purchase_path(@purchase.id), method: :put, disabled: !@purchase.paid? || @orders.all?(&:reversed?) || @orders.all?(&:failed?), class: 'btn btn-danger', title: 'Refund' do
               i.fa.fa-credit-card
               |  Refund
       table.table.table-bordered.table-condensed
@@ -150,7 +150,7 @@ div.panel.panel-default
           td
             div.btn-toolbar
               div.btn-group title='Refund' data-toggle='tooltip' data-placement='top'
-                = button_to return_shopping_purchase_order_path(@purchase.id, order.id), method: :put, disabled: !@purchase.paid? || order.reversed?, class: 'btn btn-danger' do
+                = button_to return_shopping_purchase_order_path(@purchase.id, order.id), method: :put, disabled: !@purchase.paid? || order.reversed? || order.failed?, class: 'btn btn-danger' do
                   i.fa.fa-credit-card
 
 
