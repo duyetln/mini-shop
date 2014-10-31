@@ -1,0 +1,73 @@
+h2.text-primary.page-header.text-center Review your order
+div.row
+  div.col-md-3
+    div.list-group
+      = link_to cart_path, class: 'list-group-item' do
+        i.fa.fa-pencil-square-o.fa-fw
+        |  Edit Cart
+      = link_to payment_cart_path, class: 'list-group-item' do
+        i.fa.fa-credit-card.fa-fw
+        |  Change Payment Method
+  div.col-md-3
+    div.panel.panel-default
+      div.panel-heading
+        h4
+          strong Payment Method
+      div.panel-body
+        p
+          strong
+            ' Name:
+          = @payment_method.name
+        p
+          strong
+            ' Balance:
+          = number_to_currency(@payment_method.balance, unit: @payment_method.currency.sign.html_safe)
+        p
+          div
+            strong
+              ' Billing Address:
+          address
+            - address = @payment_method.billing_address
+            = [address.line1, address.line2, address.line3].select(&:present?).join(', ')
+            br
+            = [address.city, address.region, address.postal_code].select(&:present?).join(', ')
+            br
+            = address.country
+  div.col-md-3
+    div.panel.panel-default
+      div.panel-heading
+        h4
+          strong Shipping Address
+      div.panel-body
+        p
+          address
+            = [address.line1, address.line2, address.line3].select(&:present?).join(', ')
+            br
+            = [address.city, address.region, address.postal_code].select(&:present?).join(', ')
+            br
+            = address.country
+  div.col-md-3
+    div.panel.panel-default
+      div.panel-heading
+        h4
+          strong Summary
+      div.panel-body
+        p
+          strong
+            ' Items:
+          | #{@purchase.orders.count}
+        p
+          strong
+            ' Sub Total:
+          = number_to_currency(@purchase.amount, unit: @purchase.currency.sign.html_safe)
+        p
+          strong
+            ' Tax:
+          = number_to_currency(@purchase.tax, unit: @purchase.currency.sign.html_safe)
+        p
+          strong
+            ' Total:
+          = number_to_currency(@purchase.total, unit: @purchase.currency.sign.html_safe)
+      div.panel-footer
+        = button_to submit_cart_path, method: :put, form_class: 'btn-block', class: 'btn btn-primary btn-block' do
+          | Sumbit

@@ -44,15 +44,15 @@ div.row
           p
             strong
               ' Sub Total:
-            == "#{@cart.currency.sign}#{@cart.amount}"
+            = number_to_currency(@cart.amount, unit: @cart.currency.sign.html_safe)
           p
             strong
               ' Tax:
-            == "#{@cart.currency.sign}0.0"
+            = number_to_currency(0.0, unit: @cart.currency.sign.html_safe)
           p
             strong
               ' Total:
-            == "#{@cart.currency.sign}#{@cart.amount}"
+            = number_to_currency(@cart.amount, unit: @cart.currency.sign.html_safe)
         div.panel-footer
           = button_to clear_cart_path, method: :put, form_class: 'btn-block', class: 'btn btn-danger btn-block' do
             | Clear Cart
