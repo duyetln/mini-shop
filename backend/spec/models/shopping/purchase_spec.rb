@@ -163,6 +163,47 @@ describe Purchase do
     end
   end
 
+  describe '#paid_amount' do
+    context 'not paid' do
+      before :each do
+        expect(model).to_not be_paid
+      end
+
+      it 'equals 0' do
+        expect(model.paid_amount).to eq(0.0)
+      end
+    end
+
+    context 'paid' do
+      before :each do
+        model.save!
+        model.commit!
+        model.pay!
+      end
+
+      before :each do
+        expect(model).to be_paid
+      end
+
+      it 'equals payment transaction amount' do
+        expect(model.paid_amount).to eq(model.payment_transaction.amount)
+      end
+    end
+  end
+
+  describe '#refund_amount' do
+    it 'sums refund transaction amount' do
+      expected_amount = model.refund_transactions.map(&:amount).reduce(BigDecimal.new('0.0'), &:+)
+      expect(model.refund_amount).to eq(expected_amount)
+    end
+  end
+
+  describe '#charge_amount' do
+    it 'subtracts refund amount from paid amount' do
+      expect(model.charge_amount).to eq(model.paid_amount - model.refund_amount)
+    end
+  end
+
   describe '#pay!' do
     before :each do
       model.save!

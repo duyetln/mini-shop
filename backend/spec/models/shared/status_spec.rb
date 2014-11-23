@@ -54,7 +54,7 @@ describe Status do
     describe '#brand_new?' do
       it 'checks the status correctly' do
         expect(test_instance.brand_new?).to eq(
-          test_instance.status &&
+          test_instance.marked? &&
           test_instance.status.status == TestItem::STATUS[:brand_new]
         )
       end
@@ -63,7 +63,7 @@ describe Status do
     describe '#used?' do
       it 'checks the status correctly' do
         expect(test_instance.brand_new?).to eq(
-          test_instance.status &&
+          test_instance.marked? &&
           test_instance.status.status == TestItem::STATUS[:used]
         )
       end
