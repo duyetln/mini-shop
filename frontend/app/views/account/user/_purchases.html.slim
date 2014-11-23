@@ -37,53 +37,55 @@
                     |  #{number_to_currency(purchase.charge_amount, unit: purchase.currency.sign.html_safe)}
             br
             table.table.table-bordered.table-hover.table-condensed
-              tr
-                td
-                  label Order
-                td
-                  label Item
-                td
-                  label Qty
-                td
-                  label Fulfilled
-                td
-                  label Refunded
-                td
-                  label Failed
-                td
-                  label Amount
-                td
-                  label Tax
-                td
-                  label Total
-                td
-                  = button_to return_purchase_path(purchase.id), method: :put, disabled: !purchase.paid? || !purchase.orders.any?(&:fulfilled?), class: 'btn btn-danger btn-block', title: 'Return all orders', data: { toggle: 'tooltip', placement: 'right' } do
-                    i.fa.fa-credit-card
-              - purchase.orders.each do |order|
-                tr class="#{order.marked? ? (order.fulfilled? ? 'text-success' : 'text-danger') : '' }"
-                  td = order.uuid
-                  td = order.item.title
-                  td = order.qty
-                  td = yesno(order.fulfilled?)
-                  td = yesno(order.reversed?)
-                  td = yesno(order.failed?)
+              thead
+                tr
                   td
-                    | #{number_to_currency(order.amount, unit: order.currency.sign.html_safe)}
+                    label Order
                   td
-                    | #{number_to_currency(order.tax, unit: order.currency.sign.html_safe)}
+                    label Item
                   td
-                    | #{number_to_currency(order.total, unit: order.currency.sign.html_safe)}
+                    label Qty
                   td
-                    = button_to return_purchase_order_path(purchase.id, order.id), method: :put, disabled: !purchase.paid? || !order.fulfilled?, class: 'btn btn-warning btn-block', title: 'Return this order', data: { toggle: 'tooltip', placement: 'right' } do
+                    label Fulfilled
+                  td
+                    label Refunded
+                  td
+                    label Failed
+                  td
+                    label Amount
+                  td
+                    label Tax
+                  td
+                    label Total
+                  td
+                    = button_to return_purchase_path(purchase.id), method: :put, disabled: !purchase.paid? || !purchase.orders.any?(&:fulfilled?), class: 'btn btn-danger btn-block', title: 'Return all orders', data: { toggle: 'tooltip', placement: 'right' } do
                       i.fa.fa-credit-card
-              tr
-                td colspan=6
-                td.text-primary
-                  | #{number_to_currency(purchase.amount, unit: purchase.currency.sign.html_safe)}
-                td.text-primary
-                  | #{number_to_currency(purchase.tax, unit: purchase.currency.sign.html_safe)}
-                td.text-primary
-                  | #{number_to_currency(purchase.total, unit: purchase.currency.sign.html_safe)}
+              tbody
+                - purchase.orders.each do |order|
+                  tr class="#{order.marked? ? (order.fulfilled? ? 'text-success' : 'text-danger') : '' }"
+                    td = order.uuid
+                    td = order.item.title
+                    td = order.qty
+                    td = yesno(order.fulfilled?)
+                    td = yesno(order.reversed?)
+                    td = yesno(order.failed?)
+                    td
+                      | #{number_to_currency(order.amount, unit: order.currency.sign.html_safe)}
+                    td
+                      | #{number_to_currency(order.tax, unit: order.currency.sign.html_safe)}
+                    td
+                      | #{number_to_currency(order.total, unit: order.currency.sign.html_safe)}
+                    td
+                      = button_to return_purchase_order_path(purchase.id, order.id), method: :put, disabled: !purchase.paid? || !order.fulfilled?, class: 'btn btn-warning btn-block', title: 'Return this order', data: { toggle: 'tooltip', placement: 'right' } do
+                        i.fa.fa-credit-card
+                tr
+                  td colspan=6
+                  td.text-primary
+                    | #{number_to_currency(purchase.amount, unit: purchase.currency.sign.html_safe)}
+                  td.text-primary
+                    | #{number_to_currency(purchase.tax, unit: purchase.currency.sign.html_safe)}
+                  td.text-primary
+                    | #{number_to_currency(purchase.total, unit: purchase.currency.sign.html_safe)}
 - else
   div.text-center.text-danger
     | Nothing here yet
