@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   end
 
   namespace :shopping do
-    resources :purchases, only: :show do
+    resources :purchases, only: [] do
       put :return, on: :member
       resources :orders, only: [] do
         put :return, on: :member
