@@ -15,7 +15,7 @@ class Status < ActiveRecord::Base
       self::STATUS.each do |key, value|
         class_eval <<-EOF
           def #{key}?
-            status && status.status == #{value}
+            marked? && status.status == #{value}
           end
 
           def mark_#{key}!
