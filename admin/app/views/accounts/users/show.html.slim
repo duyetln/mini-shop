@@ -150,7 +150,7 @@ div.panel-group
                 td
                   | #{number_to_currency(order.total, unit: order.currency.sign.html_safe)}
                 td
-                  = button_to return_shopping_purchase_order_path(purchase.id, order.id), method: :put, disabled: !purchase.paid? || order.reversed? || order.failed?, class: 'btn btn-warning btn-block', title: 'Return this order', data: { toggle: 'tooltip', placement: 'right' } do
+                  = button_to return_shopping_purchase_order_path(purchase.id, order.id), method: :put, disabled: !purchase.paid? || !order.fulfilled?, class: 'btn btn-warning btn-block', title: 'Return this order', data: { toggle: 'tooltip', placement: 'right' } do
                     i.fa.fa-credit-card
             tr
               td colspan=6
