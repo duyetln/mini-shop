@@ -58,6 +58,18 @@ class Purchase < ActiveRecord::Base
     end
   end
 
+  def paid_amount
+    paid? ? payment_transaction.amount : BigDecimal.new('0.0')
+  end
+
+  def refund_amount
+    refund_transactions.map(&:amount).reduce(BigDecimal.new('0.0'), &:+)
+  end
+
+  def charge_amount
+    paid_amount - refund_amount
+  end
+
   def fulfillable?
     committed? && (free? || paid?)
   end

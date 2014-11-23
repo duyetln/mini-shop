@@ -15,6 +15,9 @@ module BackendClient
         purchase.amount = BigDecimal.new(purchase.amount)
         purchase.tax = BigDecimal.new(purchase.tax)
         purchase.total = BigDecimal.new(purchase.total)
+        purchase.paid_amount = BigDecimal.new(purchase.paid_amount)
+        purchase.refund_amount = BigDecimal.new(purchase.refund_amount)
+        purchase.charge_amount = BigDecimal.new(purchase.charge_amount)
         purchase.committed_at = DateTime.parse(purchase.committed_at) if purchase.committed_at.present?
       end
     end

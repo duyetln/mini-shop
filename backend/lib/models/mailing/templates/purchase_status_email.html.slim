@@ -66,7 +66,7 @@ html
                   tr.bg-info
                     td colspan=3
                       strong Actual charge (minus refunds)
-                    td.text-right == number_with_currency @purchase.total - @purchase.refund_transactions.map(&:amount).reduce(BigDecimal.new('0.0'), &:+), @purchase.currency
+                    td.text-right == number_with_currency @purchase.charge_amount, @purchase.currency
             p
               small * Green indicates an order has been fulfilled. Yellow indicates an order has been returned. Red indicates an order failed to fulfill.
             br

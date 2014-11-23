@@ -43,7 +43,7 @@ end
 
 class PurchaseSerializer < ResourceSerializer
   include ChangeableSerializer
-  attributes :user_id, :payment_method_id, :shipping_address_id, :payment_transaction_id, :committed, :committed_at, :amount, :tax, :total, :paid, :free
+  attributes :user_id, :payment_method_id, :shipping_address_id, :payment_transaction_id, :committed, :committed_at, :amount, :tax, :total, :paid_amount, :refund_amount, :charge_amount, :paid, :free
   has_one :payment_method, serializer: 'PaymentMethodSerializer'
   has_one :shipping_address, serializer: 'AddressSerializer'
   has_one :payment_transaction, serializer: 'PaymentTransactionSerializer'
