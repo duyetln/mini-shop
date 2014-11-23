@@ -57,7 +57,7 @@
                 td
                   label Total
                 td
-                  = button_to return_purchase_path(purchase.id), method: :put, disabled: !purchase.paid? || purchase.orders.all?(&:reversed?) || purchase.orders.all?(&:failed?), class: 'btn btn-danger btn-block', title: 'Return all orders', data: { toggle: 'tooltip', placement: 'right' } do
+                  = button_to return_purchase_path(purchase.id), method: :put, disabled: !purchase.paid? || !purchase.orders.any?(&:fulfilled?), class: 'btn btn-danger btn-block', title: 'Return all orders', data: { toggle: 'tooltip', placement: 'right' } do
                     i.fa.fa-credit-card
               - purchase.orders.each do |order|
                 tr class="#{order.marked? ? (order.fulfilled? ? 'text-success' : 'text-danger') : '' }"
@@ -74,7 +74,7 @@
                   td
                     | #{number_to_currency(order.total, unit: order.currency.sign.html_safe)}
                   td
-                    = button_to return_purchase_order_path(purchase.id, order.id), method: :put, disabled: !purchase.paid? || order.reversed? || order.failed?, class: 'btn btn-warning btn-block', title: 'Return this order', data: { toggle: 'tooltip', placement: 'right' } do
+                    = button_to return_purchase_order_path(purchase.id, order.id), method: :put, disabled: !purchase.paid? || !order.fulfilled?, class: 'btn btn-warning btn-block', title: 'Return this order', data: { toggle: 'tooltip', placement: 'right' } do
                       i.fa.fa-credit-card
               tr
                 td colspan=6
