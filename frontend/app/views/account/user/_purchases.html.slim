@@ -23,22 +23,18 @@
                   - address = purchase.shipping_address
                   |  #{print_address(address)}
               div.col-md-3
-                - currency = purchase.currency
-                - total = purchase.payment_transaction.amount
-                - refund = purchase.orders.map(&:refund_transaction).compact.map(&:amount).reduce(0, &:+)
-                - charge = total - refund
                 div
-                  strong Initial Total:
+                  strong Paid Amount:
                   span.text-primary
-                    |  #{number_to_currency(total, unit: currency.sign.html_safe)}
+                    |  #{number_to_currency(purchase.paid_amount, unit: purchase.currency.sign.html_safe)}
                 div
-                  strong Refund:
+                  strong Refund Amount:
                   span.text-danger
-                    |  #{number_to_currency(refund, unit: currency.sign.html_safe)}
+                    |  #{number_to_currency(purchase.refund_amount, unit: purchase.currency.sign.html_safe)}
                 div
                   strong Final Charge:
                   span.text-success
-                    |  #{number_to_currency(charge, unit: currency.sign.html_safe)}
+                    |  #{number_to_currency(purchase.charge_amount, unit: purchase.currency.sign.html_safe)}
             br
             table.table.table-bordered.table-hover.table-condensed
               tr
