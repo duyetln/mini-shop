@@ -62,4 +62,10 @@ Here are the goals set for this project:
     - Sort paginated result by id in descending order.
     - Improve backend client.
     - Add admin interface to manage the system.
+  * 0.8.0
+    - Separate transaction models into two types.
+    - Add timestamps to all resource payloads.
+    - Associate billing address with payment method instead transaction.
+    - Add additional fields to purchase, order, payment method, and transaction payloads.
+    - Update and add in-memory caching to backend client.
 
