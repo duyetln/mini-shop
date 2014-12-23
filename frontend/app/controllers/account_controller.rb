@@ -63,17 +63,11 @@ class AccountController < ApplicationController
   end
 
   def sign_in
-    if logged_in?
-      flash[:info] = 'You have already logged in'
-      redirect_to account_path
-    end
+    redirect_to account_path if logged_in?
   end
 
   def sign_up
-    if logged_in?
-      flash[:info] = 'You have already logged in'
-      redirect_to account_path
-    end
+    redirect_to account_path if logged_in?
   end
 
   def sign_out
