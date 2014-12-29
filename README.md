@@ -18,9 +18,13 @@ Here are the goals set for this project:
 
 ### Admin
 ![](images/admin_index.png)
-![](images/admin_physical_items.png)
 ![](images/admin_create_bundle.png)
-![](images/admin_promotion.png)
+
+### Frontend
+![](images/frontend_index.png)
+![](images/frontend_purchases.png)
+
+See more [here](./images).
 
 ## Releases
 
@@ -68,4 +72,6 @@ Here are the goals set for this project:
     - Associate billing address with payment method instead transaction.
     - Add additional fields to purchase, order, payment method, and transaction payloads.
     - Update and add in-memory caching to backend client.
+  * 0.9.0
+    - Add frontend component to display and purchase products.
 
