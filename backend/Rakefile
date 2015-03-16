@@ -20,6 +20,28 @@ namespace :db do
     require 'db/seeds'
   end
 
+  desc 'Create a migration (parameters: NAME, VERSION)'
+  task :migration => :boot do
+    name    = ENV['NAME'] || 'new_migration'
+    version = ENV['VERSION'] || Time.now.utc.strftime("%Y%m%d%H%M%S")
+
+    filename = "#{version}_#{name}.rb"
+    dirname  = ActiveRecord::Migrator.migrations_path
+    path     = File.join(dirname, filename)
+
+    File.write path, <<-MIGRATION.strip_heredoc
+      class #{name.camelize} < ActiveRecord::Migration
+        def up
+        end
+
+        def down
+        end
+      end
+    MIGRATION
+
+    puts path
+  end
+
   namespace :schema do
     desc 'Dump database schema'
     task :dump => :boot do
